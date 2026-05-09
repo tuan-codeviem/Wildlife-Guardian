@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width , initial-scale=1.0 , user-scalable=yes">
+     <title> Rescue Map - Animal Rescue Tracker</title>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+     <link rel="stylesheet" href="style1.css">
+    </head>
+    <body>
+        <div class="rescue-container">
+            <div class="header">
+                <h1>
+                    <i class="fas fa-map-marked-alt"></i>
+                    Rescue Map
+                </h1>
+                <p> Track and report injured animals in your area</p>
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Search by animal or location  " autocomplete="off" >
+                    <button id="searchBtn"><i class="fas fa-arrow-right"></i> Search</button> 
+                </div>
+            </div>
+            <div class="tabs">
+      <button class="tab-btn active" data-tab="all">All Reports</button>
+      <button class="tab-btn" data-tab="emergency">Emergency</button>
+      <button class="tab-btn" data-tab="progress">In Progress</button>
+      <button class="tab-btn" data-tab="rescued">Rescued</button>
+      <button class="tab-btn" data-tab="map">Map</button>
+      <button class="tab-btn" data-tab="list">List</button>
+    </div>
+    <div class="main-content">
+        <div class="reports-panel" id="reportsPanel">
+        </div>
+         <div class="map-panel" id="mapPanel">
+        <div class="map-legend">
+          <div class="legend-title"><i class="fas fa-map-pin"></i> Map Legend</div>
+          <div class="legend-items">
+            <span><i class="fas fa-user-friends" style="color:#2c7da0;"></i> Volunteers</span>
+            <span><i class="fas fa-hospital-user" style="color:#e76f51;"></i> Clinics</span>
+            <span><i class="fas fa-circle" style="color:#d62828;"></i> Injured</span>
+            <span><i class="fas fa-circle" style="color:#2a9d8f;"></i> Rescued</span>
+            <span><i class="fas fa-circle" style="color:#3b82f6;"></i> Active</span>
+          </div>
+        </div>
+        <div class="map-canvas" id="interactiveMap">
+                </div>
+        <div class="nearby-helpers">
+          <div class="helpers-header">
+            <i class="fas fa-hand-holding-heart"></i> Nearby Helpers (10km)
+          </div>
+          <div id="helpersList" class="helpers-list">
+          </div>
+        </div>
+        <div class="status-legend-bottom">
+          <div><span class="status-badge injured"></span> Red: Injured Animals</div>
+          <div><span class="status-badge rescued"></span> Green: Rescued Animals</div>
+          <div><span class="status-badge active"></span> Blue: Active Cases</div>
+        </div>
+      </div>
+    </div>
+        </div>
+        <script src="script1.js"></script>
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    </body>
+</html>
