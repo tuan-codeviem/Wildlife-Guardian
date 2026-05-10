@@ -4,11 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Wildlife Guardian - Social</title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;600;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="nav.css" />
-    <link rel="stylesheet" href="Home.css">
+    <link rel="stylesheet" href="css/nav.css" />
+    <link rel="stylesheet" href="css/Home.css">
   </head>
   <body>
     <header class="navbar">
@@ -203,8 +204,53 @@
     </main>
     <!-- //////////////////////-->
     <footer>
+        <div class="ChatBotAI">
+            <div class="draggable-widget">
+    <div class="AIassit">
+        <svg class="pixel-phoenix" viewBox="0 0 32 32" width="50" height="50">
+        <rect x="12" y="16" width="8" height="8" fill="#FF6B35" />
+        <rect x="14" y="12" width="4" height="4" fill="#FF6B35" />
+        <rect x="18" y="13" width="2" height="2" fill="#FFD93D" />
+        <rect x="15" y="13" width="2" height="2" fill="#1a1a1a" />
+        <rect class="wing" x="8" y="16" width="4" height="6" fill="#FF8C42" />
+        <rect class="wing" x="20" y="16" width="4" height="6" fill="#FF8C42" />
+        <rect x="10" y="24" width="2" height="4" fill="#FF6B35" />
+        <rect x="14" y="24" width="2" height="6" fill="#FFD93D" />
+        <rect x="18" y="24" width="2" height="4" fill="#FF6B35" />
+        <rect x="13" y="8" width="2" height="4" fill="#FFD93D" />
+        <rect x="15" y="6" width="2" height="6" fill="#FF6B35" />
+        <rect x="17" y="8" width="2" height="4" fill="#FFD93D" />
+    </svg>
+    </svg>
+    </div>
+  
+    <div class="chatwindow">
+        <button class="close">x</button>
+        <div class="chat">
+            <div class="model">
+                <p>Bạn cần hỗ trợ gì?</p>
+            </div>
+            
+    
+        </div>
 
+        <div class="inputarea">
+            <input type="text"><button>send</button>
+        </div>
+    </div>
+    </div>
+        </div>
     </footer>
+    <script type="importmap">  
+  {
+    "imports": {
+      "@google/genai": "https://esm.run/@google/genai"
+    }
+  }
+</script>
+
+    <script type="module" src="js/chatbotai.js"></script>
+
   </body>
 </html>
 
