@@ -93,7 +93,7 @@ closeBtn.addEventListener("click", () => {
 //Hàm và thư viện xử lý ChatBot
 import {GoogleGenAI} from "@google/genai";
 
-const API_KEY = "AIzaSyCHYL5aG1abNdEJvitsptjjFUi-lDkvqEs";
+const API_KEY = "KeyODay";
 const ai = new GoogleGenAI({apiKey : API_KEY});
 
 document.querySelector(".inputarea button").addEventListener("click",sendMessage);
