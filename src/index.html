@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wildlife Guardian </title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  
+  <body>
+    <!-- 1. THANH NAVBAR -->
+    <nav class="navbar">
+      <div class="mobile-nav" id="mobileNav">
+        <a href="#">Home</a>
+        <a href="#">Rescue Map</a>
+        <a href="#" class="active-mobile">Social</a>
+        <a href="#">Species</a>
+        <a href="#">Contact</a>
+        <div class="mobile-actions">
+          <button class="btn-report">Report Now</button>
+          <button class="btn-login" style="justify-content: center">
+            Login
+          </button>
+        </div>
+      </div>
+      <div class="nav-container">
+        <!-- Logo -->
+        <div class="logo-area">
+          <div class="logo-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <rect x="4" y="8" width="4" height="4"></rect>
+              <rect x="16" y="8" width="4" height="4"></rect>
+              <rect x="8" y="4" width="4" height="4"></rect>
+              <rect x="12" y="4" width="4" height="4"></rect>
+              <rect x="6" y="14" width="12" height="6" rx="2"></rect>
+            </svg>
+          </div>
+          <span class="logo-text">Wildlife Guardian</span>
+        </div>
+
+        <!-- Menu Desktop (Sẽ biến mất khi màn hình nhỏ) -->
+        <div class="nav-menu" id="navMenu">
+          <a href="#" class="nav-item">Home</a>
+          <a href="#" class="nav-item">Rescue Map</a>
+          <a href="#" class="nav-item active">Social</a>
+          <a href="#" class="nav-item">Species</a>
+          <a href="#" class="nav-item">Contact</a>
+          <!-- Hai nút này sẽ chỉ hiện trong menu 3 gạch khi màn hình cực nhỏ -->
+          <div class="mobile-only-buttons">
+            <button class="btn-report">Report Now</button>
+            <button class="btn-login">→] Login</button>
+          </div>
+        </div>
+
+        <!-- Cụm nút bên phải -->
+        <div class="nav-actions">
+          <button class="btn-report">Report Now</button>
+          <button class="btn-login">→] Login</button>
+          <!-- Nút 3 gạch (Mặc định ẩn) -->
+          <button class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <script src="script.js"></script>
+  </body>
+</html>

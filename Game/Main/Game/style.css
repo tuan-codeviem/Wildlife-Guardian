@@ -1,0 +1,300 @@
+/* =======================================================
+                      1. THANH NAVBAR
+======================================================= */
+:root {
+  --primary-green: #16a34a;
+  --orange: #f97316;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  margin: 0;
+  background: #f8f9fa;
+}
+
+.navbar {
+  background: white;
+  border-bottom: 1px solid #eeeeee;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.nav-container {
+  max-width: 1350px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Căn chỉnh thẳng hàng tuyệt đối */
+.logo-area,
+.nav-menu,
+.nav-actions {
+  display: flex;
+  align-items: center;
+}
+
+.logo-area {
+  gap: 10px;
+  cursor: pointer;
+}
+
+.logo-icon {
+  background: var(--primary-green);
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.logo-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.logo-text {
+  font-weight: 700;
+  font-size: 19px;
+  letter-spacing: -0.5px;
+}
+
+/* Desktop Menu */
+.nav-menu {
+  gap: 30px;
+}
+
+.nav-item {
+  text-decoration: none;
+  color: #64748b;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 8px 12px;
+  transition: 0.3s;
+}
+
+.nav-item.active {
+  background: #eefdf4;
+  color: var(--primary-green);
+  border-radius: 12px;
+  border: 1px solid #bbf7d0;
+  padding: 8px 20px;
+}
+
+/* Nút bấm & Hiệu ứng */
+.nav-actions {
+  gap: 12px;
+}
+
+.btn-report {
+  background: #f97316;
+  color: #000000; /* Chữ đen chuẩn */
+  border: none;
+  padding: 10px 22px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease; /* Đây là lệnh tạo độ mượt khi nhún */
+}
+
+/* Hiệu ứng nhún xuống khi di chuột vào */
+.btn-report:hover {
+  transform: scale(0.95);
+}
+
+@keyframes shake {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(3deg);
+  }
+  50% {
+    transform: rotate(-3deg);
+  }
+  75% {
+    transform: rotate(3deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.btn-login {
+  background: #f8fafc;
+  color: #000000; /* Chữ đen chuẩn */
+  border: 1px solid #e2e8f0;
+  padding: 10px 22px;
+  border-radius: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.3s ease; /* Đây là lệnh tạo độ mượt khi đổi màu */
+}
+
+/* Hiệu ứng đổi sang màu cam khi di chuột vào */
+.btn-login:hover {
+  background: #f97316;
+  border-color: #f97316;
+}
+
+/* Responsive: Nút 3 gạch */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.hamburger span {
+  width: 25px;
+  height: 3px;
+  background: #333;
+  border-radius: 2px;
+}
+
+.mobile-only-buttons {
+  display: none;
+}
+
+/* --- KHUNG MENU XỔ XUỐNG VÀ 3 GẠCH --- */
+.mobile-nav {
+  position: fixed;
+  top: 72px;
+  left: 0;
+  width: 100%;
+  background: white;
+  display: none;
+  flex-direction: column;
+  border-bottom: 1px solid #eee;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.05);
+  z-index: 999;
+}
+.mobile-nav.show {
+  display: flex;
+}
+.mobile-nav a {
+  padding: 15px 24px;
+  text-decoration: none;
+  color: #64748b;
+  font-weight: 500;
+  border-bottom: 1px solid #f8f9fa;
+}
+.mobile-nav a:hover {
+  background: #f0fdf4;
+  color: var(--primary-green);
+}
+
+.mobile-actions {
+  display: none;
+  padding: 20px 24px;
+  flex-direction: column;
+  gap: 10px;
+}
+.mobile-actions .btn-report {
+  width: 100%;
+  margin-bottom: 0;
+}
+.mobile-actions .btn-login {
+  width: 100%;
+  justify-content: center;
+}
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+}
+.hamburger span {
+  width: 25px;
+  height: 3px;
+  background: #333;
+  border-radius: 2px;
+  transition: 0.3s;
+}
+.hamburger.active span:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+.hamburger.active span:nth-child(2) {
+  opacity: 0;
+}
+.hamburger.active span:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+/* 3 GIAI ĐOẠN */
+
+/* 1. MÀN HÌNH TO (Desktop: > 1024px) */
+@media (min-width: 1025px) {
+  .mobile-nav {
+    display: none !important;
+  }
+  .hamburger {
+    display: none !important;
+  }
+  .nav-menu {
+    display: flex !important;
+  }
+  .nav-actions .btn-report,
+  .nav-actions .btn-login {
+    display: flex !important;
+  }
+}
+
+/* 2. MÀN HÌNH VỪA (Tablet: Từ 769px đến 1024px) */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .nav-menu {
+    display: none;
+  }
+  .hamburger {
+    display: flex;
+  }
+  .mobile-actions {
+    display: none !important;
+  }
+}
+
+/* 3. MÀN HÌNH ĐIỆN THOẠI (Mobile: Nhỏ hơn 768px) */
+@media (max-width: 768px) {
+  .nav-menu {
+    display: none;
+  }
+  .hamburger {
+    display: flex;
+  }
+  .nav-actions .btn-report,
+  .nav-actions .btn-login {
+    display: none !important;
+  }
+  .mobile-actions {
+    display: flex !important;
+  }
+}
+
+/* =======================================================
+                      2. Game Screen
+======================================================= */
+.unity-screen{
+  min-height: 135vh;
+  margin-top: 7%;
+  margin-left: 5%;
+  
+}
