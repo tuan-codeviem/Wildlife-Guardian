@@ -1,105 +1,89 @@
-const emailInput = document.getElementById('email');
+// Lấy các phần tử từ giao diện
+const emailInput = document.getElementById('email'); // Đây là ô nhập username
 const passwordInput = document.getElementById('password');
-const emailGroup = document.getElementById('emailGroup');
-const passwordGroup = document.getElementById('passwordGroup');
 const loginForm = document.getElementById('loginForm');
+const loginBtn = document.getElementById('loginBtn');
 const togglePasswordBtn = document.getElementById('togglePassword');
-const googleBtn = document.getElementById('googleBtn');
-const zaloBtn = document.getElementById('zaloBtn');
 const toast = document.getElementById('toast');
 
+// Hàm hiển thị thông báo (Toast)
 function showToast(message, type = 'success') {
-    toast.textContent = message;
-    toast.className = `toast ${type} show`;
-    setTimeout(() => toast.classList.remove('show'), 3000);
-}
-
-function clearError(groupElement) {
-    groupElement.classList.remove('error');
-    const errorSpan = groupElement.querySelector('.error-message');
-    if (errorSpan) errorSpan.textContent = '';
-}
-
-function showErrorOnGroup(groupElement, message) {
-    groupElement.classList.add('error');
-    const errorSpan = groupElement.querySelector('.error-message');
-    if (errorSpan) errorSpan.textContent = message;
-}
-
-function validateEmail() {
-    const email = emailInput.value.trim();
-    clearError(emailGroup);
-    if (email === '') {
-        showErrorOnGroup(emailGroup, 'Email cannot be empty');
-        return false;
+    if (toast) {
+        toast.textContent = message;   //Hàm showToast: Hiển thị thông báo dạng cửa sổ nhỏ (toast message) rồi tự ẩn sau 3 giây bằng setTimeout.
+        toast.className = `toast ${type} show`;
+        setTimeout(() => toast.classList.remove('show'), 3000);
+    } else {
+        alert(message); // Backup nếu không có thẻ toast trong HTML
     }
-    const emailRegex = /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-        showErrorOnGroup(emailGroup, 'Please enter a valid email address');
-        return false;
-    }
-    return true;
 }
 
-function validatePassword() {
-    const password = passwordInput.value;
-    clearError(passwordGroup);
-    if (password === '') {
-        showErrorOnGroup(passwordGroup, 'Password cannot be empty');
-        return false;
-    }
-    return true;
+// Xử lý ẩn/hiện mật khẩu
+if (togglePasswordBtn) {
+    togglePasswordBtn.addEventListener('click', () => {
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+        togglePasswordBtn.textContent = type === 'password' ? '👁️' : '🙈';
+    });
 }
-
+//async/await: Giúp viết mã xử lý mạng nhìn giống như mã chạy tuần tự, dễ đọc và bảo trì hơn.
 async function handleLoginSubmit(event) {
     event.preventDefault();
     
-    if (!validateEmail() || !validatePassword()) {
-        showToast('Please fix the errors before signing in', 'error');
+    const username = emailInput.value.trim();
+    const password = passwordInput.value;
+
+    if (!username || !password) {
+        showToast('Vui lòng nhập đầy đủ tài khoản và mật khẩu', 'error');
         return;
     }
     
-    const loginBtn = document.getElementById('loginBtn');
     loginBtn.disabled = true;
     loginBtn.textContent = 'Signing in...';
     
     try {
-        const response = await fetch('api/login.php', {
+
+        const response = await fetch('/api/login', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 
+                'Content-Type': 'application/json' 
+            },
             body: JSON.stringify({
-                email: emailInput.value.trim(),
-                password: passwordInput.value
+                username: username, // Gửi 'username' thay vì 'email' để khớp với server.js
+                password: password
             })
         });
         
         const data = await response.json();
         
-        if (data.success) {
-            showToast('✅ Login successful! Welcome ' + data.user.fullname, 'success');
-            localStorage.setItem('user', JSON.stringify(data.user));
+        // 3. Xử lý kết quả trả về từ Server
+        if (response.ok && data.success) {
+            showToast('✅ ' + data.message, 'success');
+            
+            // Lưu thông tin đăng nhập vào trình duyệt (nếu cần)
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('username', username);
+
+            // Chuyển hướng sau 1.5 giây
             setTimeout(() => {
-                window.location.href = 'dashboard.html';
+                window.location.href = 'rescuemap.html'; 
             }, 1500);
         } else {
-            showToast('❌ ' + data.message, 'error');
+            // Hiển thị lỗi từ server (ví dụ: Sai tài khoản hoặc mật khẩu)
+            showToast('❌ ' + (data.message || 'Đăng nhập thất bại'), 'error');
         }
     } catch (error) {
-        showToast('Connection error. Please make sure XAMPP is running.', 'error');
+        console.error('Fetch Error:', error);
+        showToast('Kết nối thất bại! Hãy chắc chắn Server Node.js đang chạy.', 'error');
     } finally {
+
         loginBtn.disabled = false;
         loginBtn.textContent = 'Sign In';
     }
 }
 
-togglePasswordBtn.addEventListener('click', () => {
-    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-    passwordInput.setAttribute('type', type);
-    togglePasswordBtn.textContent = type === 'password' ? '👁️' : '🙈';
-});
+// Gán sự kiện submit cho Form
+if (loginForm) {
+    loginForm.addEventListener('submit', handleLoginSubmit);
+}
 
-loginForm.addEventListener('submit', handleLoginSubmit);
-googleBtn.addEventListener('click', () => window.open('https://accounts.google.com/signin', '_blank'));
-zaloBtn.addEventListener('click', () => window.open('https://zalo.me/', '_blank'));
-
-console.log('🦁 Login page ready - Connected to database "login"');
+console.log('🦁 Wildlife Guardian Login System - Connected to Node.js Backend');
