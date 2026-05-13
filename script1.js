@@ -127,9 +127,9 @@ function updateMapMarkers() {
       iconAnchor: [12, 12],
       popupAnchor: [0, -12]
     });
-    
+    // cho phép kích vào các dấu chấm
     const marker = L.marker([report.lat, report.lng], { icon: markerIcon }).addTo(markersLayer);
-    
+    // nội dung hiện ra khi kích vào chấm 
     const popupContent = `
       <div style="min-width: 240px; font-family: 'Segoe UI', sans-serif;">
         <div style="font-weight: bold; font-size: 16px; margin-bottom: 8px; color: ${markerColor};">
@@ -380,7 +380,7 @@ window.updateReportStatus = function(reportId) {
   }
 };
 
-// Lấy vị trí hiện tại
+// Lấy vị trí hiện tại để lấy tọa độ 
 function getCurrentLocation() {
   return new Promise((resolve, reject) => {
     if (!navigator.geolocation) {
@@ -453,7 +453,7 @@ async function initCamera() {
       });
     }
     
-    video.srcObject = stream;
+    video.srcObject = stream; // dòng này gắn dữ liệu đó vào 1 thẻ <video> trên html do đó hình ảnh hiển thị trực tiếp từ màn hình
     video.setAttribute('playsinline', true); // Quan trọng cho iOS
     await video.play();
     return true;
@@ -527,8 +527,8 @@ async function fetchLocationAndAddress() {
   const locationInfo = document.getElementById('locationInfo');
   const addressText = document.getElementById('addressText');
   
-  locationLoading.style.display = 'block';
-  locationInfo.style.display = 'none';
+  locationLoading.style.display = 'block'; // hiển thị biểu tượng đang tải 
+  locationInfo.style.display = 'none'; // ẩn thông tin vị trí di 
   
   try {
     const position = await getCurrentLocation();
