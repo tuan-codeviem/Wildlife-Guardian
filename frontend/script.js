@@ -130,12 +130,12 @@ async function loadPosts(category = "all posts") {
                     
                     <div class="post-header" style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px;">
                         <div style="display: flex; gap: 12px; align-items: center;">
-                            <img src="https://i.pravatar.cc/150?u=${post._id}" alt="Avatar" style="width: 45px; height: 45px; border-radius: 50%; object-fit: cover;">
-                            <div>
-                                <h4 style="margin: 0; font-size: 15px; color: #333; font-weight: bold;">Người dùng Wildlife</h4>
-                                <span style="font-size: 12px; color: #888;">${new Date(post.createdAt).toLocaleString("vi-VN")}</span>
-                            </div>
-                        </div>
+    <img src="${post.authorAvatar || "https://i.pravatar.cc/150?img=11"}" alt="Avatar" style="width: 45px; height: 45px; border-radius: 50%; object-fit: cover;">
+    <div>
+        <h4 style="margin: 0 0 4px 0; font-size: 15px; color: #333; font-weight: bold;">${post.authorName || "Người dùng ẩn danh"}</h4>
+        <span style="font-size: 12px; color: #888;">${new Date(post.createdAt).toLocaleString("vi-VN")}</span>
+    </div>
+</div>
                         <div style="display: flex; align-items: center; gap: 15px;">
                             <span style="background: #e6f4ea; color: #1e8e3e; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; text-transform: lowercase;">${post.category}</span>
                             <button class="btn-menu" data-id="${post._id}" style="background: none; border: none; color: #888; cursor: pointer; padding: 0; display: flex; align-items: center;">
@@ -226,6 +226,17 @@ postBtn.addEventListener("click", async function () {
   formData.append("category", category);
   if (file) {
     formData.append("media", file);
+  }
+
+  // --- ĐOẠN CODE LẤY THÔNG TIN NGƯỜI DÙNG ĐỂ GỬI KÈM BÀI VIẾT ---
+  const meString = localStorage.getItem("currentUser");
+  if (meString) {
+    const me = JSON.parse(meString);
+    formData.append("authorName", me.fullName);
+    formData.append(
+      "authorAvatar",
+      me.avatar || "https://i.pravatar.cc/150?img=11",
+    );
   }
 
   try {
@@ -541,6 +552,7 @@ async function loadUsersForChat(searchKeyword = "") {
 
         // Mở khung chat (Dúi nhớ check biến chatBox xem có đúng tên không nhé)
         if (typeof chatBox !== "undefined") chatBox.style.display = "flex";
+        document.getElementById("chatName").innerText = user.fullName;
 
         // Gọi hàm tải tin nhắn cũ
         if (typeof loadChatMessages === "function") loadChatMessages();
@@ -569,3 +581,15 @@ if (searchInput) {
   // Tự động gọi lần đầu tiên khi vừa vào web
   loadUsersForChat();
 }
+
+// Tự động load Avatar của mình khi vào web
+document.addEventListener("DOMContentLoaded", () => {
+  const meString = localStorage.getItem("currentUser");
+  if (meString) {
+    const me = JSON.parse(meString);
+    const myAvatarImg = document.getElementById("myAvatar");
+    if (myAvatarImg) {
+      myAvatarImg.src = me.avatar || "https://i.pravatar.cc/150?img=11";
+    }
+  }
+});

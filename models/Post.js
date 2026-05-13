@@ -4,6 +4,8 @@ const postSchema = new mongoose.Schema({
   content: String,
   category: String,
   media_url: String, // Ngăn này để lưu link ảnh/video nè Dúi
+  authorName: String,
+  authorAvatar: String,
   likes: { type: [String], default: [] }, // THÊM DÒNG NÀY ĐỂ LƯU TIM
   comments: [
     {

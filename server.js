@@ -91,6 +91,10 @@ app.post("/api/posts", upload.single("media"), async (req, res) => {
     const newPost = new Post({
       content: req.body.content,
       category: req.body.category,
+
+      authorName: req.body.authorName || "Người dùng ẩn danh",
+      authorAvatar: req.body.authorAvatar || "https://i.pravatar.cc/150?img=11",
+
       // Nếu có up ảnh thì lưu đường dẫn, không thì để trống
       media_url: req.file
         ? `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`
