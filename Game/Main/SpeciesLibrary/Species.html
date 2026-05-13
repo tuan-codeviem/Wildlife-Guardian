@@ -4,11 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Wildlife Guardian </title>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="Species.css" />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;600;800&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/1ca16433b6.js" crossorigin="anonymous"></script>
   </head>
   
   <body>
@@ -69,7 +73,37 @@
         </div>
       </div>
     </nav>
+    <!-- Species Library -->
+    <div class = "Species_Block1">
+        <div class = "Block1_Title">
+            <span class = "Block1_Title_NavName">
+                     Species Library 
+            </span>
+            <span class = "Block1_Title_Description"> 
+                Explore our comprehensive encyclopedia of wildlife species 
+            </span>
+        </div>
+    </div>
 
-    <script src="script.js"></script>
+    <div class = "Species_Block2">
+        <div class = "Block2_Top">
+            <div class = "Block2_Top_Search">
+                <span class = "Top_Search_Icon"><i class="fa-solid fa-magnifying-glass" style="color: rgba(0, 0, 0, 0.449);"></i> </span>
+                <input type = "text" placeholder ="Search species by name...">
+            </div>
+            <div class = "Block2_Top_LeftTools">
+                  <button> All </button>
+                  <button> Mammals </button>
+                  <button> Birds </button>
+                  <button> Reptiles </button>
+                  <button> Amphibians</button>
+                  <button> Fish </button>
+                  <button> Insects </button>
+            </div>
+        </div>
+    </div>
+
+    
+    <script src="Species.js"></script>
   </body>
 </html>

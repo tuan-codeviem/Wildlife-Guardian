@@ -1,15 +1,19 @@
+
 /* =======================================================
                       1. THANH NAVBAR
 ======================================================= */
 :root {
   --primary-green: #16a34a;
   --orange: #f97316;
+  --background: #f3f8f5;
+  --textcolor: #6b7280;
 }
 
 body {
-  font-family: "Inter", sans-serif;
+  font-family: "Geist", system-ui, -apple-system, sans-serif;
   margin: 0;
   background: #f8f9fa;
+  background-color: var(--background);
 }
 
 .navbar {
@@ -292,3 +296,79 @@ body {
 /* =======================================================
                       2. Species Library
 ======================================================= */
+.Species_Block1{
+    width:  70vw;
+    min-height: 20vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    .Block1_Title{
+        width: 80%;
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+        padding: 20px 0px;
+        .Block1_Title_NavName{
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .Block1_Title_Description{
+            color: var(--textcolor);
+            font-size: 14px;
+        }
+    }
+}
+
+.Species_Block2
+{
+    min-height: 10vh;
+    border: 1px solid;
+    margin-left: 7%;
+    margin-right: 10%;
+    .Block2_Top
+    {
+        padding: 5vh 0;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 10px;
+        .Block2_Top_Search{
+            width: 50%;
+            height: 5vh;
+            border: 1px solid black;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: row;
+            justify-content: left;
+            .Top_Search_Icon{
+                padding: 5px;
+            }
+            input{
+                border: none;
+                background-color: var(--background);
+                outline: none;
+                width: 92%
+            }
+        }
+        .Block2_Top_Search:focus-within{
+          border: solid 1.5px #16a34a;
+        }
+        
+        .Block2_Top_LeftTools{
+            width: 50%;
+            border: 1px solid black ;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            button{
+              padding: 0 15px;
+              border: 1px solid #e1f0e3;
+              border-radius: 10px;
+            }
+            button:focus{
+              color: white;
+              background-color: #16a34a;
+            }
+        }
+    }
+}
