@@ -32,8 +32,8 @@ const port = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json()); // Giúp server đọc được dữ liệu dạng chữ
 
-// Mở cửa sổ cho thư mục 'uploads' để Frontend lấy ảnh ra xem được
-app.use("/uploads", express.static("uploads"));
+// Cho phép lấy ảnh từ thư mục uploads
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // ==========================================
 // 2. KẾT NỐI MONGODB (Trái tim hệ thống của bạn)
@@ -324,6 +324,34 @@ app.get("/api/messages/:user1/:user2", async (req, res) => {
     res.json({ success: true, messages });
   } catch (error) {
     res.status(500).json({ success: false, message: "Lỗi tải tin nhắn!" });
+  }
+});
+
+// ==========================================
+// API: ĐĂNG KÝ TÀI KHOẢN MỚI
+// ==========================================
+app.post("/api/auth/register", async (req, res) => {
+  try {
+    const { fullName, email, password } = req.body;
+
+    // 1. Kiểm tra xem Email này đã có ai đăng ký chưa
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: "Email này đã được sử dụng!" });
+    }
+
+    // 2. Tạo tài khoản mới và lưu vào Database
+    const newUser = new User({
+      fullName: fullName,
+      email: email,
+      password: password,
+    });
+    await newUser.save();
+
+    res.status(201).json({ message: "Tạo tài khoản thành công!" });
+  } catch (error) {
+    console.error("Lỗi đăng ký:", error);
+    res.status(500).json({ message: "Lỗi hệ thống khi đăng ký!" });
   }
 });
 

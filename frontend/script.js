@@ -150,7 +150,7 @@ async function loadPosts(category = "all posts") {
 
                     <div class="post-content" style="margin-bottom: 15px;">
                         <p style="margin: 0 0 15px 0; font-size: 15px; color: #333; line-height: 1.5;">${post.content}</p>
-                        ${post.media_url ? `<img src="${post.media_url}" style="width: 100%; max-height: 400px; object-fit: cover; border-radius: 12px; display: block; border: 1px solid #eee;">` : ""}
+                        ${post.media_url ? `<img src="${post.media_url.includes("http") ? post.media_url : "http://localhost:3000/" + post.media_url.replace(/\\/g, "/")}" style="width: 100%; max-height: 400px; object-fit: cover; border-radius: 10px;">` : ""}
                     </div>
 
                     <div class="post-actions" style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #eee; padding-top: 15px;">
