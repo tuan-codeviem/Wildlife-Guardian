@@ -4,12 +4,15 @@
 :root {
   --primary-green: #16a34a;
   --orange: #f97316;
+  --background: #f3f8f5;
+  --textcolor: #6b7280;
 }
 
 body {
-  font-family: "Inter", sans-serif;
+  font-family: "Geist", system-ui, -apple-system, sans-serif;
   margin: 0;
   background: #f8f9fa;
+  background-color: var(--background);
 }
 
 .navbar {
@@ -22,6 +25,7 @@ body {
   top: 0;
   z-index: 1000;
 }
+
 
 .nav-container {
   max-width: 1350px;
@@ -168,7 +172,7 @@ body {
 }
 
 .mobile-only-buttons {
-  display: none;
+display: none;
 }
 
 /* --- KHUNG MENU XỔ XUỐNG VÀ 3 GẠCH --- */
@@ -288,7 +292,3 @@ body {
     display: flex !important;
   }
 }
-
-/* =======================================================
-                      2. 
-======================================================= */
