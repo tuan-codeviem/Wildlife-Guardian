@@ -1101,6 +1101,33 @@
     <script type="module" src="../ChatBotAI/chatbotai.js"></script>
     <script src="js/nav.js"></script>
     <script src="js/scroll.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const user = localStorage.getItem("currentUser") || localStorage.getItem("isLoggedIn");
+            const loginBtns = document.querySelectorAll(".btn-login");
+
+            if (user) {
+                loginBtns.forEach((btn) => {
+                    btn.innerHTML = `← Log out`;
+                    btn.onclick = (e) => {
+                        e.preventDefault();
+                        localStorage.removeItem("currentUser");
+                        localStorage.removeItem("isLoggedIn");
+                        localStorage.removeItem("username");
+                        window.location.reload();
+                    };
+                });
+            } else {
+                loginBtns.forEach((btn) => {
+                    btn.innerHTML = `→ Log in`;
+                    btn.onclick = (e) => {
+                        e.preventDefault();
+                        window.location.href = "../Auth/login.html"; // Chuyển về login chung
+                    };
+                });
+            }
+        });
+    </script>
     <style>
       @media screen and (max-width: 768px) {
         /* CHỐNG TRÀN MÀN HÌNH CHUNG */

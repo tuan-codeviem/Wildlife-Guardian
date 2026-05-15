@@ -21,16 +21,9 @@ if (userString) {
   });
 } else {
   // TRƯỜNG HỢP 2: CHƯA ĐĂNG NHẬP
-  loginBtns.forEach((btn) => {
-    // 1. Đổi icon thành mũi tên phải (→ Login)
-    btn.innerHTML = `→ Log in`;
-
-    // 2. Cài đặt hành động: Bấm vào thì chở qua trang Đăng nhập
-    btn.onclick = (e) => {
-      e.preventDefault();
-      window.location.href = "login/login.html";
-    };
-  });
+    // Đá văng ra trang Login chung của hệ thống
+    sessionStorage.setItem("redirectAfterLogin", window.location.href);
+    window.location.href = "../../Auth/login.html";
 }
 
 // ==========================================

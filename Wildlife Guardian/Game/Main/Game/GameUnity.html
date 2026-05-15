@@ -28,7 +28,8 @@
         <a href="GameUnity.html" class="active-mobile">Game</a>
         <div class="mobile-actions">
           <button class="btn-report">Report Now</button>
-          <button class="btn-login" style="justify-content: center">
+          
+          <button class="btn-login" style="justify-content: center" onclick="window.location.href='../../../Auth/login.html'">
             Log in
           </button>
         </div>
@@ -65,14 +66,16 @@
           <!-- Hai nút này sẽ chỉ hiện trong menu 3 gạch khi màn hình cực nhỏ -->
           <div class="mobile-only-buttons">
             <button class="btn-report">Report Now</button>
-            <button class="btn-login">→ Log in</button>
+            
+            <button class="btn-login" onclick="window.location.href='../../../Auth/login.html'">→ Log in</button>
           </div>
         </div>
 
         <!-- Cụm nút bên phải -->
         <div class="nav-actions">
           <button class="btn-report">Report Now</button>
-          <button class="btn-login">→ Log in</button>
+          
+          <button class="btn-login" onclick="window.location.href='../../../Auth/login.html'">→ Log in</button>
           <!-- Nút 3 gạch (Mặc định ẩn) -->
           <button class="hamburger" id="hamburger">
             <span></span>
@@ -105,9 +108,7 @@
         <div id="unity-build-title">Wildlife-Guardian</div>
       </div>
     </div>
-<<<<<<< HEAD
     <script src="GameInit.js"></script>
-=======
     <!--///////////////////////////CHATBOTAI////////////////////////////-->
     <div class="chat-bot-AI">
             
@@ -176,9 +177,8 @@
     }
   }
 </script>
-
+    <script src="../checkAuth.js"></script>
     <script type="module" src="../../../ChatBotAI/chatbotai.js"></script>
     <script src = "GameInit.js"> </script>
->>>>>>> 76bb45a58c1f8e6615a7a7b2268a25bd1fa2f944
   </body>
 </html>

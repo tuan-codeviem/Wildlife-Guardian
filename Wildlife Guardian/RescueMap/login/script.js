@@ -59,9 +59,14 @@ async function handleLoginSubmit(event) {
         if (response.ok && data.success) {
             showToast('✅ ' + data.message, 'success');
             
-            // Lưu thông tin đăng nhập vào trình duyệt (nếu cần)
+            // Lưu thông tin đăng nhập theo chuẩn cũ của Rescue Map
             localStorage.setItem('isLoggedIn', 'true');
             localStorage.setItem('username', username);
+
+            // ĐỒNG BỘ: Lưu thêm currentUser để các trang Game, Social nhận diện được
+            if (data.user) {
+                localStorage.setItem("currentUser", JSON.stringify(data.user));
+            }
 
             // Chuyển hướng sau 1.5 giây
             setTimeout(() => {

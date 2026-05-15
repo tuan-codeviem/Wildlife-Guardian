@@ -313,3 +313,77 @@
     <script src="./script1.js"></script>
   </body>
 </html>
+            <div class="chatwindow">
+                <div class="chat-header">
+                    <div class="chat-header-info">
+                        <div class="chat-avatar">
+                            <svg viewBox="0 0 32 32" width="20" height="20">
+                                <rect x="12" y="16" width="8" height="8" fill="#FF6B35" />
+                                <rect x="14" y="12" width="4" height="4" fill="#FF6B35" />
+                                <rect x="18" y="13" width="2" height="2" fill="#FFD93D" />
+                                <rect x="15" y="13" width="2" height="2" fill="#1a1a1a" />
+                                <rect x="8" y="16" width="4" height="6" fill="#FF8C42" />
+                                <rect x="20" y="16" width="4" height="6" fill="#FF8C42" />
+                            </svg>
+                        </div>
+                        <div class="chat-title-group">
+                            <h3>Phoenix AI</h3>
+                            <p>Wildlife Assistant</p>
+                        </div>
+                    </div>
+                    <button class="close">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                    </button>
+                </div>
+
+                <div class="chat">
+                    <div class="model">
+                        <p>Hello! I'm Phoenix, your wildlife guardian assistant!</p>
+                    </div>
+                </div>
+
+                <div class="inputarea">
+                    <input type="text" placeholder="Ask Phoenix anything...">
+                    <button>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="importmap">
+    {
+    "imports": {
+      "@google/genai": "https://esm.run/@google/genai"
+    }
+  }
+</script>
+
+    <script type="module" src="../../ChatBotAI/chatbotai.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="./script1.js"></script>
+  <script>
+      document.addEventListener("DOMContentLoaded", () => {
+          const user = localStorage.getItem("currentUser") || localStorage.getItem("isLoggedIn");
+          const loginBtns = document.querySelectorAll(".btn-login");
+
+          if (user) {
+              loginBtns.forEach((btn) => {
+                  btn.innerHTML = `← Log out`;
+                  btn.onclick = (e) => {
+                      e.preventDefault();
+                      localStorage.removeItem("currentUser");
+                      localStorage.removeItem("isLoggedIn");
+                      localStorage.removeItem("username");
+                      window.location.reload();
+                  };
+              });
+          } else {
+              // Chưa đăng nhập -> Lưu lịch sử để đăng nhập xong quay lại đúng map, rồi đuổi ra Login
+              sessionStorage.setItem("redirectAfterLogin", window.location.href);
+              window.location.href = "../../Auth/login.html";
+          }
+      });
+  </script>
+</body>
+</html>
