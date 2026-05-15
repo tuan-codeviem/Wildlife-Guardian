@@ -1,10 +1,6 @@
-// ==================== WILDLIFE RESCUE MAP - COMPLETE SCRIPT ====================
 
-// Mảng lưu trữ các báo cáo
 let reports = [];
 let nextId = 1;
-
-// Dữ liệu người hỗ trợ (có tọa độ)
 const helpersData = [
   { name: "Danh Thái", role: "Bác sĩ Thú y", verified: true, phone: "0912 345 678", lat: 16.0580, lng: 108.2200, address: "Số 12 Trần Phú, Đà Nẵng", isClinic: false },
   { name: "Thu Trần", role: "Cứu hộ động vật hoang dã", verified: true, phone: "0988 765 432", lat: 16.0620, lng: 108.2150, address: "Số 45 Bạch Đằng, Đà Nẵng", isClinic: false },
@@ -30,14 +26,12 @@ const helpersData = [
   }
 ];
 
-// Biến lưu vùng tròn đang hiển thị
 let activeCircle = null;
 let activeTab = "all";
 let searchKeyword = "";
 let map = null;
 let markersLayer = null;
 
-// Biến camera
 let video = null;
 let canvas = null;
 let stream = null;
@@ -268,7 +262,8 @@ function updateMapMarkers() {
     `<div style="background:#e8f5e9; padding:10px; border-radius:8px;"><div style="font-weight:bold;">🏪 Phòng khám gần nhất:</div><div>🏥 <strong>${escapeHtml(nearestClinic.name)}</strong><br>📍 Cách ${formatDistance(nearestClinic.distance)}<br>📞 ${nearestClinic.phone}<br>🕐 ${nearestClinic.available}</div></div>` : '';
     const popupContent = `<div style="min-width:260px;"><div style="font-weight:bold; font-size:16px;">🐾 ${escapeHtml(report.animal)}</div><div><i class="fas fa-map-marker-alt"></i> ${escapeHtml(report.location)}</div><div><i class="fas fa-calendar-alt"></i> ${report.date}</div>${report.photo ? `<img src="${report.photo}" style="width:100%; border-radius:8px; margin:8px 0; max-height:150px;">` : ''}${report.description ? `<div>${escapeHtml(report.description)}</div>` : ''}<div><span style="background:${markerColor}; color:white; padding:3px 10px; border-radius:20px;">${statusText}</span></div>${helperHtml}${clinicHtml}<hr><div style="font-size:11px; text-align:center;">🔘 Nhấn vào marker để hiện bán kính 500m</div></div>`;
     marker.bindPopup(popupContent);
-    marker.on('click', function() { showRadiusCircle(report.lat, report.lng); });
+    marker.on('click', function() {
+       showRadiusCircle(report.lat, report.lng); });
   });
   if (filteredReports.length === 1) map.setView([filteredReports[0].lat, filteredReports[0].lng], 15);
   else if (filteredReports.length > 1) map.fitBounds(filteredReports.map(r => [r.lat, r.lng]));
@@ -323,7 +318,9 @@ function renderNearestClinic() {
   const distText = formatDistance(nearest.distance);
   clinicDiv.innerHTML = `<div style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9); border-radius:12px; padding:14px; border-left:4px solid #2a9d8f;"><div style="display:flex; gap:12px; align-items:center;"><div style="background:#2a9d8f; width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center;"><i class="fas fa-hospital" style="color:white;"></i></div><div><h4 style="margin:0;">🏥 ${escapeHtml(nearest.name)}</h4><div>📍 Cách ${distText}</div></div></div><div style="margin-top:8px; font-size:12px;">${nearest.address} | 🕐 ${nearest.available} | 📋 ${nearest.specialty}</div><button class="clinic-contact-btn" data-phone="${nearest.phone}" data-name="${escapeHtml(nearest.name)}" style="margin-top:10px; background:#2a9d8f; color:white; border:none; padding:8px; width:100%; border-radius:30px; cursor:pointer;"><i class="fas fa-phone"></i> Gọi ngay</button></div>`;
   const btn = clinicDiv.querySelector('.clinic-contact-btn');
-  if(btn) btn.onclick = () => { if(confirm(`📞 Gọi cho ${btn.dataset.name}?`)) window.location.href = `tel:${btn.dataset.phone}`; };
+  if(btn) btn.onclick = () => {
+     if(confirm(`📞 Gọi cho ${btn.dataset.name}?`)) window.location.href = `tel:${btn.dataset.phone}`;
+     };
 }
 
 function getSampleImage(animalType) {
@@ -331,7 +328,8 @@ function getSampleImage(animalType) {
   canvas.width = 200; canvas.height = 200;
   const ctx = canvas.getContext('2d');
   ctx.fillStyle = '#f0f0f0'; ctx.fillRect(0,0,200,200);
-  ctx.fillStyle = '#ff6b35'; ctx.font = 'bold 60px "Segoe UI Emoji"'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillStyle = '#ff6b35'; ctx.font = 'bold 60px "Segoe UI Emoji"';
+   ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
   let emoji = '🐾';
   if(animalType.includes('Chó')) emoji = '🐕';
   else if(animalType.includes('Mèo')) emoji = '🐈';
@@ -357,21 +355,28 @@ const sampleReports = [
   { animal: "Rùa bị bắt cóc", location: "Gần trường Bách Khoa Hà Nội", status: "emergency", lat: offsetCoordinate(HanoiLat, 0.0013), lng: offsetCoordinate(HanoiLng, -0.0017), description: "Cần hỗ trợ gấp" }
 ];
 sampleReports.forEach(report => { report.photo = getSampleImage(report.animal); report.date = new Date().toLocaleString('vi-VN'); });
-if (reports.length === 0) { sampleReports.forEach(report => { reports.push({ id: nextId++, ...report }); }); }
+if (reports.length === 0) {
+   sampleReports.forEach(report => { reports.push({ id: nextId++, ...report }); }); }
 
 async function initCamera() {
   video = document.getElementById('video');
   if (!video) return false;
   if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { showToast('❌ Trình duyệt không hỗ trợ camera', 'error'); return false; }
   try {
-    const constraints = { video: { facingMode: { exact: "environment" }, width: { ideal: 1280 }, height: { ideal: 720 } } };
-    try { stream = await navigator.mediaDevices.getUserMedia(constraints); } catch (err) { stream = await navigator.mediaDevices.getUserMedia({ video: true }); }
+    const constraints = {
+       video: { facingMode: { 
+        exact: "environment" }, width: { ideal: 1280 }, height: { ideal: 720 } } };
+    try { stream = await navigator.mediaDevices.getUserMedia(constraints);
+
+     } catch (err) { 
+      stream = await navigator.mediaDevices.getUserMedia({ video: true }); }
     video.srcObject = stream; video.setAttribute('playsinline', true); await video.play(); return true;
   } catch (err) { showToast(`❌ Không thể truy cập camera: ${err.message}`, 'error'); return false; }
 }
 function stopCamera() { if (stream) { stream.getTracks().forEach(track => track.stop()); stream = null; } if (video) video.srcObject = null; }
 function capturePhoto() {
-  if (!video || !video.videoWidth) { showToast('Camera chưa sẵn sàng!', 'error'); return; }
+  if (!video || !video.videoWidth) { showToast('Camera chưa sẵn sàng!', 'error'); 
+    return; }
   canvas = document.createElement('canvas'); canvas.width = video.videoWidth; canvas.height = video.videoHeight;
   canvas.getContext('2d').drawImage(video, 0, 0);
   capturedPhoto = canvas.toDataURL('image/jpeg', 0.8);
@@ -379,55 +384,123 @@ function capturePhoto() {
   document.getElementById('captureBtn').style.display = 'none'; document.getElementById('retakeBtn').style.display = 'flex';
   stopCamera(); video.style.display = 'none';
 }
-function retakePhoto() { capturedPhoto = null; document.getElementById('previewSection').style.display = 'none'; document.getElementById('captureBtn').style.display = 'flex'; document.getElementById('retakeBtn').style.display = 'none'; video.style.display = 'block'; initCamera(); }
-async function getCurrentLocation() { return new Promise((resolve, reject) => { if (!navigator.geolocation) reject("GPS không hỗ trợ"); else navigator.geolocation.getCurrentPosition(resolve, reject, { enableHighAccuracy: true, timeout: 15000 }); }); }
+function retakePhoto() { 
+  capturedPhoto = null; 
+  document.getElementById('previewSection').style.display = 'none';
+   document.getElementById('captureBtn').style.display = 'flex'; document.getElementById('retakeBtn').style.display = 'none';
+    video.style.display = 'block';
+    
+    initCamera(); }
+async function getCurrentLocation() {
+   return new Promise((resolve, reject) => { if (!navigator.geolocation) reject("GPS không hỗ trợ");
+     else navigator.geolocation.getCurrentPosition(resolve, reject, { enableHighAccuracy: true, timeout: 15000 });
+     }); }
 async function getAddressFromCoords(lat, lng) {
-  try { const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18`); const data = await res.json(); if (data.display_name) return data.display_name.split(',')[0]+','+data.display_name.split(',')[1]+','+data.display_name.split(',')[2]; return `${lat.toFixed(4)}, ${lng.toFixed(4)}`; } catch(e) { return `${lat.toFixed(4)}, ${lng.toFixed(4)}`; }
+  try { const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18`);
+   const data = await res.json();
+    if (data.display_name) return data.display_name.split(',')[0]+','+data.display_name.split(',')[1]+','+data.display_name.split(',')[2]; return `${lat.toFixed(4)}, ${lng.toFixed(4)}`; } catch(e) { return `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+   }
 }
 async function fetchLocationAndAddress() {
-  const locationLoading = document.getElementById('locationLoading'); const addressText = document.getElementById('addressText');
+  const locationLoading = document.getElementById('locationLoading');
+   const addressText = document.getElementById('addressText');
   locationLoading.style.display = 'block';
-  try { const pos = await getCurrentLocation(); currentLocation = { lat: pos.coords.latitude, lng: pos.coords.longitude }; currentAddress = await getAddressFromCoords(currentLocation.lat, currentLocation.lng); addressText.innerHTML = `<i class="fas fa-map-marker-alt"></i> ${escapeHtml(currentAddress)}`; locationLoading.style.display = 'none'; return true; }
-  catch(e) { locationLoading.style.display = 'none'; showToast('Không lấy được vị trí, bật GPS', 'error'); return false; }
+  try { const pos = await getCurrentLocation();
+     currentLocation = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+      currentAddress = await getAddressFromCoords(currentLocation.lat, currentLocation.lng);
+       addressText.innerHTML = `<i class="fas fa-map-marker-alt"></i> ${escapeHtml(currentAddress)}`;
+        locationLoading.style.display = 'none'; return true; }
+  catch(e) { locationLoading.style.display = 'none'; 
+    showToast('Không lấy được vị trí, bật GPS', 'error'); return false; }
 }
 async function submitReport() {
-  const animalName = document.getElementById('animalName').value.trim(); const animalStatus = document.getElementById('animalStatus').value; const animalDesc = document.getElementById('animalDesc').value.trim();
+  const animalName = document.getElementById('animalName').value.trim(); 
+  const animalStatus = document.getElementById('animalStatus').value;
+ const animalDesc = document.getElementById('animalDesc').value.trim();
   if (!animalName) { showToast('Nhập tên động vật!', 'error'); return; }
   if (!capturedPhoto) { showToast('Chụp ảnh động vật!', 'error'); return; }
   if (!currentLocation) { showToast('Chờ lấy vị trí GPS...', 'error'); return; }
   const newReport = { id: nextId++, animal: animalName, location: currentAddress, status: animalStatus, lat: currentLocation.lat, lng: currentLocation.lng, date: new Date().toLocaleString('vi-VN'), description: animalDesc, photo: capturedPhoto };
-  reports.push(newReport); closeCameraModal(); renderReportsPanel(); renderNearbyHelpers(); renderNearestClinic();
-  if (map) { updateMapMarkers(); setActiveTab('map'); setTimeout(() => { map.setView([currentLocation.lat, currentLocation.lng], 16); showRadiusCircle(currentLocation.lat, currentLocation.lng); }, 500); }
+  reports.push(newReport); closeCameraModal();
+   renderReportsPanel(); renderNearbyHelpers();
+    renderNearestClinic();
+  if (map) { updateMapMarkers();
+     setActiveTab('map');
+     setTimeout(() => { map.setView([currentLocation.lat, currentLocation.lng], 16);
+       showRadiusCircle(currentLocation.lat, currentLocation.lng); }, 500); }
   showToast('✅ Gửi báo cáo thành công!', 'success');
 }
 async function openCameraModal(e) {
-  if (e) e.preventDefault(); const modal = document.getElementById('cameraModal'); if (!modal) return; modal.style.display = 'block';
-  document.getElementById('animalName').value = ''; document.getElementById('animalDesc').value = ''; document.getElementById('animalStatus').value = 'emergency';
-  document.getElementById('previewSection').style.display = 'none'; document.getElementById('captureBtn').style.display = 'flex'; document.getElementById('retakeBtn').style.display = 'none';
-  capturedPhoto = null; currentLocation = null; video = document.getElementById('video'); video.style.display = 'block'; const captureBtn = document.getElementById('captureBtn');
-  captureBtn.disabled = true; captureBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang khởi tạo...';
-  const ok = await initCamera(); if (ok) { captureBtn.disabled = false; captureBtn.innerHTML = '<i class="fas fa-camera"></i> Chụp ảnh'; await fetchLocationAndAddress(); } else { captureBtn.disabled = false; captureBtn.innerHTML = '<i class="fas fa-camera"></i> Chụp ảnh'; }
+  if (e) e.preventDefault(); const modal = document.getElementById('cameraModal');
+   if (!modal) return;
+    modal.style.display = 'block';
+  document.getElementById('animalName').value = '';
+   document.getElementById('animalDesc').value = '';
+    document.getElementById('animalStatus').value = 'emergency';
+  document.getElementById('previewSection').style.display = 'none';
+   document.getElementById('captureBtn').style.display = 'flex';
+    document.getElementById('retakeBtn').style.display = 'none';
+  capturedPhoto = null;
+  currentLocation = null; 
+  video = document.getElementById('video');
+   video.style.display = 'block';
+    const captureBtn = document.getElementById('captureBtn');
+  captureBtn.disabled = true;
+   captureBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang khởi tạo...';
+  const ok = await initCamera(); 
+  if (ok) { captureBtn.disabled = false;
+     captureBtn.innerHTML = '<i class="fas fa-camera"></i> Chụp ảnh';
+      await fetchLocationAndAddress(); } else { captureBtn.disabled = false;
+         captureBtn.innerHTML = '<i class="fas fa-camera"></i> Chụp ảnh'; }
 }
-function closeCameraModal() { const modal = document.getElementById('cameraModal'); if (modal) modal.style.display = 'none'; stopCamera(); }
+function closeCameraModal() { 
+  const modal = document.getElementById('cameraModal');
+   if (modal) modal.style.display = 'none'; stopCamera(); }
 
 window.setActiveTab = function(tabId) {
   activeTab = tabId;
-  const mapContainer = document.querySelector('.map-container'); const reportsPanel = document.getElementById('reportsPanel');
+  const mapContainer = document.querySelector('.map-container');
+   const reportsPanel = document.getElementById('reportsPanel');
   document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.toggle("active", btn.dataset.tab === tabId));
-  if (tabId === "map") { if(mapContainer) mapContainer.style.display = 'block'; if(reportsPanel) reportsPanel.style.display = 'none'; if (!map) initRealMap(); else { map.invalidateSize(); updateMapMarkers(); } }
-  else { if(mapContainer) mapContainer.style.display = 'none'; if(reportsPanel) reportsPanel.style.display = 'block'; renderReportsPanel(); renderNearbyHelpers(); renderNearestClinic(); if(map) updateMapMarkers(); }
+  if (tabId === "map") {
+     if(mapContainer) mapContainer.style.display = 'block';
+     if(reportsPanel) reportsPanel.style.display = 'none';
+      if (!map) initRealMap(); 
+      else { map.invalidateSize();
+         updateMapMarkers(); 
+        } }
+  else { if(mapContainer) mapContainer.style.display = 'none';
+     if(reportsPanel) reportsPanel.style.display = 'block';
+      renderReportsPanel(); renderNearbyHelpers(); renderNearestClinic();
+       if(map) updateMapMarkers(); }
 };
-function handleSearch() { searchKeyword = document.getElementById("searchInput")?.value || ""; if (activeTab === 'list') { renderReportsPanel(); renderNearbyHelpers(); renderNearestClinic(); } if (map) updateMapMarkers(); }
+function handleSearch() { searchKeyword = document.getElementById("searchInput")?.value || ""; 
+  if (activeTab === 'list') {
+     renderReportsPanel();
+      renderNearbyHelpers();
+       renderNearestClinic();
+
+   } if (map) updateMapMarkers(); }
 
 document.addEventListener("DOMContentLoaded", () => {
-  addToastAnimations(); setTimeout(() => { if (typeof L !== 'undefined') initRealMap(); }, 500);
-  renderReportsPanel(); renderNearbyHelpers(); renderNearestClinic();
+  addToastAnimations();
+   setTimeout(() => { if (typeof L !== 'undefined') initRealMap(); }, 500);
+  renderReportsPanel();
+   renderNearbyHelpers();
+    renderNearestClinic();
   document.querySelectorAll(".tab-btn").forEach(btn => btn.addEventListener("click", () => window.setActiveTab(btn.dataset.tab)));
-  const searchBtn = document.getElementById("searchBtn"); const searchInput = document.getElementById("searchInput");
-  if (searchBtn) searchBtn.addEventListener("click", handleSearch); if (searchInput) searchInput.addEventListener("keyup", (e) => { if (e.key === "Enter") handleSearch(); });
-  const reportBtn = document.getElementById("reportNowBtn"); if (reportBtn) reportBtn.addEventListener("click", openCameraModal);
-  document.getElementById("captureBtn")?.addEventListener("click", capturePhoto); document.getElementById("retakeBtn")?.addEventListener("click", retakePhoto);
-  document.getElementById("submitReportBtn")?.addEventListener("click", submitReport); document.querySelectorAll(".close-modal").forEach(btn => btn.addEventListener("click", closeCameraModal));
-  window.addEventListener("click", (e) => { if (e.target.classList?.contains("modal")) closeCameraModal(); });
+  const searchBtn = document.getElementById("searchBtn");
+   const searchInput = document.getElementById("searchInput");
+  if (searchBtn) searchBtn.addEventListener("click", handleSearch);
+   if (searchInput) searchInput.addEventListener("keyup", (e) => { if (e.key === "Enter") handleSearch(); });
+  const reportBtn = document.getElementById("reportNowBtn");
+   if (reportBtn) reportBtn.addEventListener("click", openCameraModal);
+  document.getElementById("captureBtn")?.addEventListener("click", capturePhoto); 
+  document.getElementById("retakeBtn")?.addEventListener("click", retakePhoto);
+  document.getElementById("submitReportBtn")?.addEventListener("click", submitReport);
+   document.querySelectorAll(".close-modal").forEach(btn => btn.addEventListener("click", closeCameraModal));
+  window.addEventListener("click", (e) => { 
+    if (e.target.classList?.contains("modal")) closeCameraModal();
+   });
   window.setActiveTab("map");
 });
