@@ -25,7 +25,7 @@
             <a href="../Game/Main/Game/GameUnity.html">Game</a>
             <div class="mobile-actions">
                 <button class="btn-report">Report Now</button>
-                <button class="btn-login" style="justify-content: center">
+                <button class="btn-login" style="justify-content: center" onclick="window.location.href='login.html'">
                     Login
                 </button>
             </div>
@@ -55,14 +55,14 @@
                 <!-- Hai nút này sẽ chỉ hiện trong menu 3 gạch khi màn hình cực nhỏ -->
                 <div class="mobile-only-buttons">
                     <button class="btn-report">Report Now</button>
-                    <button class="btn-login">→] Login</button>
+                    <button class="btn-login" onclick="window.location.href='login.html'">→] Login</button>
                 </div>
             </div>
 
             <!-- Cụm nút bên phải -->
             <div class="nav-actions">
                 <button class="btn-report">Report Now</button>
-                <button class="btn-login">→] Login</button>
+                <button class="btn-login" onclick="window.location.href='login.html'">→] Login</button>
                 <!-- Nút 3 gạch (Mặc định ẩn) -->
                 <button class="hamburger" id="hamburger">
                     <span></span>
@@ -210,7 +210,8 @@
                 to joining a
                 community, there are many ways to contribute to wildlife conservation.</span>
             <div class="Block3-content-feature">
-                <div class="Block3-content-feature-content reveal delay-1">
+                <!-- Chuyển thẻ div thành thẻ a, gắn link và bỏ gạch chân -->
+                <a href="../RescueMap/rescuemap/index.html" style="text-decoration: none; color: inherit;" class="Block3-content-feature-content reveal delay-1">
                     <div class="Block3-content-feature-icon Block3-icon1">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -234,8 +235,8 @@
                             <path d="m12 5 7 7-7 7"></path>
                         </svg>
                     </div>
-                </div>
-                <div class="Block3-content-feature-content reveal delay-2">
+                </a>
+                <a href="../Social/frontend/index.html" style="text-decoration: none; color: inherit;" class="Block3-content-feature-content reveal delay-2">
                     <div class="Block3-content-feature-icon Block3-icon2">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -259,8 +260,8 @@
                             <path d="m12 5 7 7-7 7"></path>
                         </svg>
                     </div>
-                </div>
-                <div class="Block3-content-feature-content reveal delay-3">
+                </a>
+                <a href="../Game/Main/SpeciesLibrary/Species.html" style="text-decoration: none; color: inherit;" class="Block3-content-feature-content reveal delay-3">
                     <div class="Block3-content-feature-icon Block3-icon3">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -284,8 +285,8 @@
                             <path d="m12 5 7 7-7 7"></path>
                         </svg>
                     </div>
-                </div>
-                <div class="Block3-content-feature-content reveal delay-4">
+                </a>
+                <a href="#" style="text-decoration: none; color: inherit;" class="Block3-content-feature-content reveal delay-4">
                     <div class="Block3-content-feature-icon Block3-icon4">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -308,7 +309,7 @@
                             <path d="m12 5 7 7-7 7"></path>
                         </svg>
                     </div>
-                </div>
+                </a>
             </div>
         </div>
         <div class="Home-Block4">
@@ -376,7 +377,7 @@
                         <div class="Block4-community-group-one">
                             <div class="Block4-community-group-one-main">
                                 <div class="Block4-community-group-one-image">
-                                    <img src="https://images.unsplash.com/photo-1474511320723-9a56873571b7?w=200&h=200&fit=crop"
+                                    <img src="https://japantourist.vn/Data/Sites/1/media/blog/diadiemyeuthich/trung/gaudo2_11zon.webp"
                                         alt="panda">
                                 </div>
                                 <div class="Block4-community-group-one-text">
@@ -660,43 +661,68 @@
     </main>
     <!-- //////////////////////-->
     <footer>
-        <div class="ChatBotAI">
-            <div class="chat-bot-AI">
-                <div class="AIassit">
-                    <svg class="pixel-phoenix" viewBox="0 0 32 32" width="50" height="50">
-                        <rect x="12" y="16" width="8" height="8" fill="#FF6B35" />
-                        <rect x="14" y="12" width="4" height="4" fill="#FF6B35" />
-                        <rect x="18" y="13" width="2" height="2" fill="#FFD93D" />
-                        <rect x="15" y="13" width="2" height="2" fill="#1a1a1a" />
-                        <rect class="wing" x="8" y="16" width="4" height="6" fill="#FF8C42" />
-                        <rect class="wing" x="20" y="16" width="4" height="6" fill="#FF8C42" />
-                        <rect x="10" y="24" width="2" height="4" fill="#FF6B35" />
-                        <rect x="14" y="24" width="2" height="6" fill="#FFD93D" />
-                        <rect x="18" y="24" width="2" height="4" fill="#FF6B35" />
-                        <rect x="13" y="8" width="2" height="4" fill="#FFD93D" />
-                        <rect x="15" y="6" width="2" height="6" fill="#FF6B35" />
-                        <rect x="17" y="8" width="2" height="4" fill="#FFD93D" />
-                    </svg>
-                    </svg>
+    <div class="ChatBotAI">
+        <div class="chat-bot-AI">
+            
+            <div class="AIassit">
+                <svg class="pixel-phoenix" viewBox="0 0 32 32" width="40" height="40">
+                    <rect x="12" y="16" width="8" height="8" fill="#FF6B35" />
+                    <rect x="14" y="12" width="4" height="4" fill="#FF6B35" />
+                    <rect x="18" y="13" width="2" height="2" fill="#FFD93D" />
+                    <rect x="15" y="13" width="2" height="2" fill="#1a1a1a" />
+                    <rect class="wing" x="8" y="16" width="4" height="6" fill="#FF8C42" />
+                    <rect class="wing" x="20" y="16" width="4" height="6" fill="#FF8C42" />
+                    <rect x="10" y="24" width="2" height="4" fill="#FF6B35" />
+                    <rect x="14" y="24" width="2" height="6" fill="#FFD93D" />
+                    <rect x="18" y="24" width="2" height="4" fill="#FF6B35" />
+                    <rect x="13" y="8" width="2" height="4" fill="#FFD93D" />
+                    <rect x="15" y="6" width="2" height="6" fill="#FF6B35" />
+                    <rect x="17" y="8" width="2" height="4" fill="#FFD93D" />
+                </svg>
+                <div class="sparkle-badge">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+                </div>
+            </div>
+
+            <div class="chatwindow">
+                <div class="chat-header">
+                    <div class="chat-header-info">
+                        <div class="chat-avatar">
+                            <svg viewBox="0 0 32 32" width="20" height="20">
+                                <rect x="12" y="16" width="8" height="8" fill="#FF6B35" />
+                                <rect x="14" y="12" width="4" height="4" fill="#FF6B35" />
+                                <rect x="18" y="13" width="2" height="2" fill="#FFD93D" />
+                                <rect x="15" y="13" width="2" height="2" fill="#1a1a1a" />
+                                <rect x="8" y="16" width="4" height="6" fill="#FF8C42" />
+                                <rect x="20" y="16" width="4" height="6" fill="#FF8C42" />
+                            </svg>
+                        </div>
+                        <div class="chat-title-group">
+                            <h3>Phoenix AI</h3>
+                            <p>Wildlife Assistant</p>
+                        </div>
+                    </div>
+                    <button class="close">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                    </button>
                 </div>
 
-                <div class="chatwindow">
-                    <button class="close">x</button>
-                    <div class="chat">
-                        <div class="model">
-                            <p>Bạn cần hỗ trợ gì?</p>
-                        </div>
-
-
+                <div class="chat">
+                    <div class="model">
+                        <p>Hello! I'm Phoenix, your wildlife guardian assistant!</p>
                     </div>
+                </div>
 
-                    <div class="inputarea">
-                        <input type="text"><button>send</button>
-                    </div>
+                <div class="inputarea">
+                    <input type="text" placeholder="Ask Phoenix anything...">
+                    <button>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"></path></svg>
+                    </button>
                 </div>
             </div>
         </div>
-    </footer>
+    </div>
+</footer>
     <script type="importmap">
   {
     "imports": {
