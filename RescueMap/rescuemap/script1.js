@@ -395,6 +395,7 @@ async function getCurrentLocation() {
    return new Promise((resolve, reject) => { if (!navigator.geolocation) reject("GPS không hỗ trợ");
      else navigator.geolocation.getCurrentPosition(resolve, reject, { enableHighAccuracy: true, timeout: 15000 });
      }); }
+     // API này trả về dữ liệu dưới dạng đường di tên cụ thể 
 async function getAddressFromCoords(lat, lng) {
   try { const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18`);
    const data = await res.json();
