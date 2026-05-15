@@ -58,9 +58,9 @@ const User = mongoose.models.User || mongoose.model("User", userSchema);
 // 4. CẤU HÌNH MULTER (Trợ lý nhận file)
 // ==========================================
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/"); 
-  },
+ destination: (req, file, cb) => {
+    cb(null, "uploads/"); // Chỉ đúng đường dẫn vào thư mục thật
+},
   filename: (req, file, cb) => {
     cb(null, Date.now() + path.extname(file.originalname));
   },
