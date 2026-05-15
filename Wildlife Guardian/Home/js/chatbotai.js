@@ -89,26 +89,33 @@ function thaMouse(e){
     document.removeEventListener("touchend", thaMouse);
 }
 
-AIbtn.addEventListener("click",()=>{
-    if(!dakeoMouse){
+// Khi mở Chat
+AIbtn.addEventListener("click", () => {
+    if (!dakeoMouse) {
         chatWindow.classList.add("active");
-        AIbtn.style.display ="none";
+        // AIbtn.style.display ="none"; // ĐỪNG dùng dòng này
+        AIbtn.style.opacity = "0"; // Làm mờ đi
+        AIbtn.style.pointerEvents = "none"; // Không cho bấm vào khi đang ẩn
         chongketMouse();
     }
-})
+});
 
-closeBtn.addEventListener("click",()=>{
-    if(!dakeoMouse){
+// Khi đóng Chat
+closeBtn.addEventListener("click", () => {
+    if (!dakeoMouse) {
         chatWindow.classList.remove("active");
-        AIbtn.style.display="block";
+        // closeBtn.style.display="block"; // Chỗ này bạn đang dùng nhầm closeBtn, hãy sửa thành AIbtn
+        AIbtn.style.opacity = "1"; // Hiện lại con chim
+        AIbtn.style.pointerEvents = "auto"; // Cho phép bấm lại
+        AIbtn.style.display = "flex"; // Đảm bảo dùng flex để con chim ở giữa
         chongketMouse();
     }
-})
+});
 
 
 import {GoogleGenAI} from "@google/genai"
 
-const API_KEY = "AIzaSyA79DTsFowWFPR4Uj7dO310tkEbylannJo";
+const API_KEY = "AIzaSyBRkY6sJjREIOPMtNxaR8zIggyN8H2UB_0";
 const ai = new GoogleGenAI({apiKey:API_KEY})
 
 document.querySelector(".inputarea button").addEventListener("click",sendMessage);
