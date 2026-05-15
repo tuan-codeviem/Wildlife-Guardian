@@ -290,11 +290,59 @@ body {
 }
 
 /* =======================================================
-                      2. Game Screen
+                      2. GAME SCREEN (UNITY WEBGL)
 ======================================================= */
-.unity-screen{
-  min-height: 135vh;
-  margin-top: 7%;
-  margin-left: 5%;
-  
+/* Căn giữa toàn bộ khu vực chứa game */
+#unity-container {
+  width: 960px;
+  height: 600px;
+  margin: 50px auto; /* Canh giữa, cách navbar 50px */
+  position: relative;
+  background-color: #231F20; /* Màu nền đen đặc trưng của game */
+  border-radius: 16px; /* Bo góc xịn xò */
+  box-shadow: 0 12px 24px rgba(0,0,0,0.15); /* Đổ bóng nổi bật */
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Đảm bảo canvas chiếm trọn khung */
+#unity-canvas {
+  width: 100%;
+  height: 100%;
+  outline: none;
+}
+
+/* Ẩn các râu ria mặc định của Unity (Footer, Fullscreen button xấu xí) */
+#unity-footer {
+  display: none; 
+}
+
+/* --- TRANG TRÍ THANH LOADING BÁO CÁO CỦA UNITY --- */
+#unity-loading-bar {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#unity-progress-bar-empty {
+  width: 200px;
+  height: 10px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  margin-top: 10px;
+  overflow: hidden;
+}
+
+#unity-progress-bar-full {
+  width: 0%;
+  height: 100%;
+  background-color: var(--primary-green); /* Dùng màu xanh đồng bộ Web */
+  border-radius: 10px;
+  transition: width 0.2s ease;
 }

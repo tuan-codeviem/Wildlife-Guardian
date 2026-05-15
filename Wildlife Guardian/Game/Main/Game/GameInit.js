@@ -1,4 +1,4 @@
-      var canvas = document.querySelector("#unity-canvas");
+var canvas = document.querySelector("#unity-canvas");
 
       // Shows a temporary message banner/ribbon for a few seconds, or
       // a permanent error message on top of the canvas if type=='error'.
@@ -26,12 +26,12 @@
       }
 
       var buildUrl = "../../Build";
-      var loaderUrl = buildUrl + "/Game.loader.js";
+      var loaderUrl = buildUrl + "/BackUp_BWD.loader.js";
       var config = {
         arguments: [],
-        dataUrl: buildUrl + "/Game.data",
-        frameworkUrl: buildUrl + "/Game.framework.js",
-        codeUrl: buildUrl + "/Game.wasm",
+        dataUrl: buildUrl + "/BackUp_BWD.data",
+        frameworkUrl: buildUrl + "/BackUp_BWD.framework.js",
+        codeUrl: buildUrl + "/BackUp_BWD.wasm",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "DefaultCompany",
         productName: "EcoGuardian-Unity",
