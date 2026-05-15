@@ -288,6 +288,39 @@ app.post('/api/rescuemap', async (req, res) => {
 });
 
 // ==========================================
+// API ĐĂNG KÝ TÀI KHOẢN (REGISTER)
+// ==========================================
+app.post('/api/auth/register', async (req, res) => {
+    try {
+        // 1. Nhận hồ sơ từ Frontend gửi lên
+        const { fullName, email, password } = req.body;
+
+        // 2. Kiểm tra xem email này có ai dùng chưa
+        const existingUser = await User.findOne({ email: email });
+        if (existingUser) {
+            return res.status(400).json({ message: "Email này đã được sử dụng!" });
+        }
+
+        // 3. Tạo tài khoản mới (Nhét dữ liệu vào khuôn User)
+        const newUser = new User({
+            fullName: fullName,
+            email: email,
+            password: password // (Sau này học thêm mã hóa mật khẩu nha, giờ làm vầy cho chạy web trước)
+        });
+
+        // 4. Lưu xuống kho Database
+        await newUser.save();
+
+        // 5. Báo cáo về cho Frontend: Thành công!
+        res.status(201).json({ message: "Đăng ký thành công!", user: newUser });
+
+    } catch (error) {
+        console.error("Lỗi khi đăng ký:", error);
+        res.status(500).json({ message: "Lỗi máy chủ!" });
+    }
+});
+
+// ==========================================
 // 9. BẬT MÁY CHỦ
 // ==========================================
 app.listen(port, () => {
