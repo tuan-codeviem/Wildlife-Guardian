@@ -130,9 +130,9 @@ async function loadPosts(category = "all posts") {
                     
                     <div class="post-header" style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px;">
                         <div style="display: flex; gap: 12px; align-items: center;">
-    <img src="${post.authorAvatar || "https://i.pravatar.cc/150?img=11"}" alt="Avatar" style="width: 45px; height: 45px; border-radius: 50%; object-fit: cover;">
+    <img class="profile-trigger" data-name="${post.authorName || "Người dùng ẩn danh"}" data-avatar="${post.authorAvatar || "https://i.pravatar.cc/150?img=11"}" src="${post.authorAvatar || "https://i.pravatar.cc/150?img=11"}" alt="Avatar" style="width: 45px; height: 45px; border-radius: 50%; object-fit: cover; cursor: pointer;">
     <div>
-        <h4 style="margin: 0 0 4px 0; font-size: 15px; color: #333; font-weight: bold;">${post.authorName || "Người dùng ẩn danh"}</h4>
+        <h4 class="profile-trigger" data-name="${post.authorName || "Người dùng ẩn danh"}" data-avatar="${post.authorAvatar || "https://i.pravatar.cc/150?img=11"}" style="margin: 0 0 4px 0; font-size: 15px; color: #333; font-weight: bold; cursor: pointer;">${post.authorName || "Người dùng ẩn danh"}</h4>
         <span style="font-size: 12px; color: #888;">${new Date(post.createdAt).toLocaleString("vi-VN")}</span>
     </div>
 </div>
@@ -173,7 +173,7 @@ async function loadPosts(category = "all posts") {
     </svg>
 </button>
                         </div>
-                        <button class="btn-bookmark" data-id="${post._id}" style="background: none; border: none; color: #333; cursor: pointer; padding: 0; display: flex; align-items: center; transition: 0.2s;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="bookmark-icon"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg></button>
+                        
                     </div>
 
                     <div class="post-comments-section" id="comments-${post._id}" style="display: none; border-top: 1px solid #eee; padding-top: 15px; margin-top: 15px;">
@@ -365,19 +365,11 @@ postsFeedContainer.addEventListener("click", async function (e) {
   if (menuBtn) {
     const postId = menuBtn.getAttribute("data-id");
 
-    if (confirm("Dúi có chắc muốn xóa bài viết này không? 🗑️")) {
-      try {
-        const response = await fetch(`${API_URL}/${postId}`, {
-          method: "DELETE",
-        });
-        if (response.ok) {
-          // Xóa bài xong thì tải lại danh sách bài viết cho sạch
-          loadPosts();
-        }
-      } catch (error) {
-        console.error("Lỗi xóa bài:", error);
-      }
-    }
+    // 1. Hiện cái hộp xác nhận xịn xò lên
+    document.getElementById("customDeleteConfirm").style.display = "flex";
+
+    // 2. Lén nhét cái ID của bài viết vào nút Tick (để lát nữa bấm Tick thì biết bài nào mà xóa)
+    document.getElementById("confirmDeleteBtn").setAttribute("data-id", postId);
   }
 
   // 6. XỬ LÝ KHI BẤM NÚT SHARE
@@ -592,4 +584,83 @@ document.addEventListener("DOMContentLoaded", () => {
       myAvatarImg.src = me.avatar || "https://i.pravatar.cc/150?img=11";
     }
   }
+});
+
+// --- LOGIC HIỂN THỊ MINI PROFILE ---
+document.addEventListener("click", function (e) {
+  const popup = document.getElementById("miniProfilePopup");
+
+  // 1. Nếu click vào Avatar hoặc Tên bài viết
+  if (e.target.closest(".profile-trigger")) {
+    const trigger = e.target.closest(".profile-trigger");
+    const name = trigger.getAttribute("data-name");
+    const avatar = trigger.getAttribute("data-avatar");
+
+    // Nạp dữ liệu vào popup
+    document.getElementById("popupName").innerText = name;
+    document.getElementById("popupAvatar").src = avatar;
+
+    // Lấy vị trí chuột để đặt popup hiện lên đúng chỗ đó
+    popup.style.left = e.pageX + "px";
+    popup.style.top = e.pageY + 15 + "px";
+    popup.style.display = "block";
+  }
+
+  // 2. Nếu click vào nút X để đóng
+  if (e.target.id === "closeMiniProfile") {
+    popup.style.display = "none";
+  }
+
+  // 3. Nếu click vào nút "Nhắn tin" trong bảng Mini Profile
+  if (e.target.id === "popupMessageBtn") {
+    // Lấy tên từ bảng popup
+    const name = document.getElementById("popupName").innerText;
+
+    // Tắt bảng popup nhỏ đi
+    popup.style.display = "none";
+
+    // Gọi khung chat xanh lá của Dúi hiện lên
+    const chatBox = document.getElementById("chatBox");
+    if (chatBox) {
+      document.getElementById("chatName").innerText = name; // Cập nhật tên
+      chatBox.style.display = "flex"; // Khung của bạn xài flex nên dùng 'flex' cho mượt
+    }
+  }
+
+  // 4. Nếu click vào dấu X của khung chat xanh lá để tắt
+  if (e.target.id === "closeChat" || e.target.closest("#closeChat")) {
+    document.getElementById("chatBox").style.display = "none";
+  }
+
+  // --- XỬ LÝ HỘP THOẠI XÓA BÀI CUSTOM ---
+
+  // 1. Nếu bấm nút Hủy (✖) màu đỏ
+  document
+    .getElementById("cancelDeleteBtn")
+    .addEventListener("click", function () {
+      document.getElementById("customDeleteConfirm").style.display = "none"; // Giấu hộp đi
+    });
+
+  // 2. Nếu bấm nút Xác nhận (✔) màu xanh
+  document
+    .getElementById("confirmDeleteBtn")
+    .addEventListener("click", async function () {
+      // Lấy lại cái ID bài viết mà mình đã lén nhét vào lúc nãy
+      const postId = this.getAttribute("data-id");
+
+      // Tắt cái hộp đi cho gọn
+      document.getElementById("customDeleteConfirm").style.display = "none";
+
+      // Chạy lệnh gọi Server xóa bài (Y chang code cũ của Dúi)
+      try {
+        const response = await fetch(`${API_URL}/${postId}`, {
+          method: "DELETE",
+        });
+        if (response.ok) {
+          loadPosts(); // Xóa xong thì tải lại danh sách bài viết
+        }
+      } catch (error) {
+        console.error("Lỗi xóa bài:", error);
+      }
+    });
 });
