@@ -115,7 +115,7 @@ closeBtn.addEventListener("click", () => {
 
 import {GoogleGenAI} from "@google/genai"
 
-const API_KEY = "AIzaSyBRkY6sJjREIOPMtNxaR8zIggyN8H2UB_0";
+const API_KEY = "AIzaSyB1NLMyEJPueMbzOBNoUUEe-H0xp7iMYxQ";
 const ai = new GoogleGenAI({apiKey:API_KEY})
 
 document.querySelector(".inputarea button").addEventListener("click",sendMessage);
@@ -150,7 +150,8 @@ async function sendMessage(){
                 1. LUÔN LUÔN trả lời bằng tiếng Việt.
                 2. Bạn chỉ được phép tư vấn, trả lời các câu hỏi liên quan đến bảo vệ động vật hoang dã, thiên nhiên, môi trường và các thông tin về trang web Wildlife Guardian.
                 3. Nếu người dùng hỏi về các chủ đề khác (như toán học, lập trình, giải trí, chính trị...), hãy lịch sự từ chối và lái câu chuyện quay về chủ đề động vật hoang dã.
-                4. Trả lời ngắn gọn, thân thiện và súc tích.`
+                4. Trả lời ngắn gọn, thân thiện và súc tích.
+                5. Bạn có thể trả lời về các vấn đề liên quan tới sơ cứu cơ bản cho động vật bị thương`
             }
     });
     document.getElementById(loading).innerHTML = `<p>${response.text}</p>`;
