@@ -275,5 +275,28 @@
     <script type="module" src="../../ChatBotAI/chatbotai.js"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="./script1.js"></script>
+  <script>
+      document.addEventListener("DOMContentLoaded", () => {
+          const user = localStorage.getItem("currentUser") || localStorage.getItem("isLoggedIn");
+          const loginBtns = document.querySelectorAll(".btn-login");
+
+          if (user) {
+              loginBtns.forEach((btn) => {
+                  btn.innerHTML = `← Log out`;
+                  btn.onclick = (e) => {
+                      e.preventDefault();
+                      localStorage.removeItem("currentUser");
+                      localStorage.removeItem("isLoggedIn");
+                      localStorage.removeItem("username");
+                      window.location.reload();
+                  };
+              });
+          } else {
+              // Chưa đăng nhập -> Lưu lịch sử để đăng nhập xong quay lại đúng map, rồi đuổi ra Login
+              sessionStorage.setItem("redirectAfterLogin", window.location.href);
+              window.location.href = "../../Auth/login.html";
+          }
+      });
+  </script>
 </body>
 </html>

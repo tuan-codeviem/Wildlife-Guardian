@@ -25,7 +25,7 @@
         <a href="GameUnity.html" class="active-mobile">Game</a>
         <div class="mobile-actions">
           <button class="btn-report">Report Now</button>
-          <button class="btn-login" style="justify-content: center">
+          <button class="btn-login" style="justify-content: center" onclick="window.location.href='../../../Auth/login.html'">
             Login
           </button>
         </div>
@@ -56,14 +56,14 @@
           <!-- Hai nút này sẽ chỉ hiện trong menu 3 gạch khi màn hình cực nhỏ -->
           <div class="mobile-only-buttons">
             <button class="btn-report">Report Now</button>
-            <button class="btn-login">→] Login</button>
+            <button class="btn-login" onclick="window.location.href='../../../Auth/login.html'">→] Login</button>
           </div>
         </div>
 
         <!-- Cụm nút bên phải -->
         <div class="nav-actions">
           <button class="btn-report">Report Now</button>
-          <button class="btn-login">→] Login</button>
+          <button class="btn-login" onclick="window.location.href='../../../Auth/login.html'">→] Login</button>
           <!-- Nút 3 gạch (Mặc định ẩn) -->
           <button class="hamburger" id="hamburger">
             <span></span>
@@ -160,7 +160,7 @@
     }
   }
 </script>
-
+    <script src="../checkAuth.js"></script>
     <script type="module" src="../../../ChatBotAI/chatbotai.js"></script>
     <script src = "GameInit.js"> </script>
   </body>

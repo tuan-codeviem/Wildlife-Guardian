@@ -55,16 +55,15 @@ async function handleLoginSubmit(event) {
   event.preventDefault();
 
   if (!validateEmail() || !validatePassword()) {
-    showToast("Please fix the errors before signing in", "error");
+    showToast("Vui lòng kiểm tra lại thông tin", "error");
     return;
   }
 
   const loginBtn = document.getElementById("loginBtn");
   loginBtn.disabled = true;
-  loginBtn.textContent = "Signing in...";
+  loginBtn.textContent = "Đang đăng nhập...";
 
   try {
-    // ĐIỂM MẤU CHỐT: Gọi xuống cổng 3000 của Node.js chứ không phải PHP
     const response = await fetch(`http://localhost:3000/api/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -77,28 +76,24 @@ async function handleLoginSubmit(event) {
     const data = await response.json();
 
     if (data.success) {
-      // Nếu đúng tài khoản
-      showToast(
-        "✅ Login successful! Welcome " + data.user.fullName,
-        "success",
-      );
+      showToast("✅ Chào mừng " + data.user.fullName, "success");
+      
+      // LƯU USER VÀO TRÌNH DUYỆT (Cách làm nhanh nhất)
       localStorage.setItem("currentUser", JSON.stringify(data.user));
 
-      // Lùi ra ngoài 1 thư mục để vào trang Social
+      // Kiểm tra xem trước đó user đang ở trang nào bị đá văng ra
+      const redirectUrl = sessionStorage.getItem("redirectAfterLogin") || "../Home/Home.html";
+      
       setTimeout(() => {
-        window.location.href = "Home.html";
+        sessionStorage.removeItem("redirectAfterLogin"); // Xóa lịch sử tạm
+        window.location.href = redirectUrl; // Trả về đúng trang đó
       }, 1500);
+
     } else {
-      // Nếu sai tài khoản
       showToast("❌ " + data.message, "error");
     }
   } catch (error) {
-    // Đã đổi câu thông báo lỗi cho chuẩn Node.js
-    showToast(
-      "❌ Mất kết nối! Hãy chắc chắn bạn đã bật server Node.js",
-      "error",
-    );
-    console.error("Lỗi đăng nhập:", error);
+    showToast("❌ Lỗi kết nối Server!", "error");
   } finally {
     loginBtn.disabled = false;
     loginBtn.textContent = "Sign In";
