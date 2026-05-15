@@ -31,8 +31,8 @@ mongoose
 // ==========================================
 // 3. KHỞI TẠO CÁC MODEL DATABASE
 // ==========================================
-const Post = require("./models/Post");
-const Rescue = require('./models/Rescue');
+const Post = require("./Wildlife Guardian/Social/models/Post");
+const Rescue = require('./Wildlife Guardian/rescuemap/models/Rescue');
 
 // Model Tin Nhắn (Message)
 const messageSchema = new mongoose.Schema({
