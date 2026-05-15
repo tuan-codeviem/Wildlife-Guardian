@@ -115,7 +115,7 @@ closeBtn.addEventListener("click", () => {
 
 import {GoogleGenAI} from "@google/genai"
 
-const API_KEY = "AIzaSyAODUXPuaAz13Wv3iSnz38EjwHPsiAnFPw";
+const API_KEY = "AIzaSyB3zrH7UpKkeZajeqPpe916ZDs9Ee0Excg";
 const ai = new GoogleGenAI({apiKey:API_KEY})
 
 document.querySelector(".inputarea button").addEventListener("click",sendMessage);
@@ -137,7 +137,7 @@ async function sendMessage(){
     const loading = "loading-"+ Date.now();
     chatBox.insertAdjacentHTML("beforeend",`
             <div class="model" id="${loading}">
-                <p>Đang suy nghĩ</p>
+                <p>⚫⚫⚫</p>
             `);
     
     try{
@@ -147,7 +147,7 @@ async function sendMessage(){
             config:{
                 systemInstruction: `Bạn là trợ lý ảo của dự án web Wildlife Guardian.
                 Luật lệ bắt buộc của bạn:
-                1. LUÔN LUÔN trả lời bằng tiếng Việt.
+                1. Luôn trả lời bằng tiếng anh.
                 2. Bạn chỉ được phép tư vấn, trả lời các câu hỏi liên quan đến bảo vệ động vật hoang dã, thiên nhiên, môi trường và các thông tin về trang web Wildlife Guardian.
                 3. Nếu người dùng hỏi về các chủ đề khác (như toán học, lập trình, giải trí, chính trị...), hãy lịch sự từ chối và lái câu chuyện quay về chủ đề động vật hoang dã.
                 4. Trả lời ngắn gọn, thân thiện và súc tích.
