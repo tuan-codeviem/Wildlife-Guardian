@@ -1,12 +1,12 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en-us">
   <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Wildlife-Guardian</title>
-    <link rel="shortcut icon" href="../TemplateData/favicon.ico">
-    <link rel="stylesheet" href="../TemplateData/style.css">
+    <link rel="shortcut icon" href="../TemplateData/favicon.ico" />
+    <link rel="stylesheet" href="../TemplateData/style.css" />
 
     <link rel="stylesheet" href="style.css" />
     <link
@@ -15,7 +15,7 @@
     />
   </head>
   <body>
-      <!-- 1. THANH NAVBAR -->
+    <!-- 1. THANH NAVBAR -->
     <nav class="navbar">
       <div class="mobile-nav" id="mobileNav">
         <a href="../../../Home/Home.html">Home</a>
@@ -26,7 +26,7 @@
         <div class="mobile-actions">
           <button class="btn-report">Report Now</button>
           <button class="btn-login" style="justify-content: center">
-            Login
+            Log in
           </button>
         </div>
       </div>
@@ -49,21 +49,27 @@
         <!-- Menu Desktop (Sẽ biến mất khi màn hình nhỏ) -->
         <div class="nav-menu" id="navMenu">
           <a href="../../../Home/Home.html" class="nav-item">Home</a>
-          <a href="../../../RescueMap/rescuemap/index.html" class="nav-item">Rescue Map</a>
-          <a href="../../../Social/frontend/index.html" class="nav-item">Social</a>
-          <a href="../SpeciesLibrary/Species.html" class="nav-item">Species Library</a>
+          <a href="../../../RescueMap/rescuemap/index.html" class="nav-item"
+            >Rescue Map</a
+          >
+          <a href="../../../Social/frontend/index.html" class="nav-item"
+            >Social</a
+          >
+          <a href="../SpeciesLibrary/Species.html" class="nav-item"
+            >Species Library</a
+          >
           <a href="GameUnity.html" class="nav-item active">Game</a>
           <!-- Hai nút này sẽ chỉ hiện trong menu 3 gạch khi màn hình cực nhỏ -->
           <div class="mobile-only-buttons">
             <button class="btn-report">Report Now</button>
-            <button class="btn-login">→] Login</button>
+            <button class="btn-login">→ Log in</button>
           </div>
         </div>
 
         <!-- Cụm nút bên phải -->
         <div class="nav-actions">
           <button class="btn-report">Report Now</button>
-          <button class="btn-login">→] Login</button>
+          <button class="btn-login">→ Log in</button>
           <!-- Nút 3 gạch (Mặc định ẩn) -->
           <button class="hamburger" id="hamburger">
             <span></span>
@@ -75,23 +81,27 @@
     </nav>
     <script src="script.js"></script>
 
-
     <!-- Phần Build sẵn html của Unity tạo ra -->
-    <div id="unity-container" class="unity-desktop unity-screen" >
-      <canvas id="unity-canvas" width=1200 height=1200 tabindex="-1"></canvas>
+    <div id="unity-container" class="unity-desktop unity-screen">
+      <canvas
+        id="unity-canvas"
+        width="1200"
+        height="1200"
+        tabindex="-1"
+      ></canvas>
       <div id="unity-loading-bar">
         <div id="unity-logo"></div>
         <div id="unity-progress-bar-empty">
           <div id="unity-progress-bar-full"></div>
         </div>
       </div>
-      <div id="unity-warning"> </div>
+      <div id="unity-warning"></div>
       <div id="unity-footer">
         <div id="unity-logo-title-footer"></div>
         <div id="unity-fullscreen-button"></div>
         <div id="unity-build-title">Wildlife-Guardian</div>
       </div>
     </div>
-    <script src = "GameInit.js"> </script>
+    <script src="GameInit.js"></script>
   </body>
 </html>

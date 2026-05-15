@@ -3,18 +3,24 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Wildlife Guardian </title>
+    <title>Wildlife Guardian</title>
     <link rel="stylesheet" href="Species.css" />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
 
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;600;800&display=swap" rel="stylesheet">
-    <script src="https://kit.fontawesome.com/1ca16433b6.js" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;600;800&display=swap"
+      rel="stylesheet"
+    />
+    <script
+      src="https://kit.fontawesome.com/1ca16433b6.js"
+      crossorigin="anonymous"
+    ></script>
   </head>
-  
+
   <body>
     <!-- 1. THANH NAVBAR -->
     <nav class="navbar">
@@ -27,7 +33,7 @@
         <div class="mobile-actions">
           <button class="btn-report">Report Now</button>
           <button class="btn-login" style="justify-content: center">
-            Login
+            Log in
           </button>
         </div>
       </div>
@@ -49,21 +55,25 @@
         <!-- Menu Desktop (Sẽ biến mất khi màn hình nhỏ) -->
         <div class="nav-menu" id="navMenu">
           <a href="../../../Home/Home.html" class="nav-item">Home</a>
-          <a href="../../../RescueMap/rescuemap/index.html" class="nav-item">Rescue Map</a>
-          <a href="../../../Social/frontend/index.html" class="nav-item">Social</a>
+          <a href="../../../RescueMap/rescuemap/index.html" class="nav-item"
+            >Rescue Map</a
+          >
+          <a href="../../../Social/frontend/index.html" class="nav-item"
+            >Social</a
+          >
           <a href="Species.html" class="nav-item active">Species Library</a>
           <a href="../Game/GameUnity.html" class="nav-item">Game</a>
           <!-- Hai nút này sẽ chỉ hiện trong menu 3 gạch khi màn hình cực nhỏ -->
           <div class="mobile-only-buttons">
             <button class="btn-report">Report Now</button>
-            <button class="btn-login">→] Login</button>
+            <button class="btn-login">→ Log in</button>
           </div>
         </div>
 
         <!-- Cụm nút bên phải -->
         <div class="nav-actions">
           <button class="btn-report">Report Now</button>
-          <button class="btn-login">→] Login</button>
+          <button class="btn-login">→ Log in</button>
           <!-- Nút 3 gạch (Mặc định ẩn) -->
           <button class="hamburger" id="hamburger">
             <span></span>
@@ -75,67 +85,73 @@
     </nav>
 
     <!-- 2.Species Library (Phần phía trên)-->
-    <div class = "Species_Block1">
-        <div class = "Block1_Title">
-            <span class = "Block1_Title_NavName">
-                     Species Library 
-            </span>
-            <span class = "Block1_Title_Description"> 
-                Explore our comprehensive encyclopedia of wildlife species 
-            </span>
-        </div>
+    <div class="Species_Block1">
+      <div class="Block1_Title">
+        <span class="Block1_Title_NavName"> Species Library </span>
+        <span class="Block1_Title_Description">
+          Explore our comprehensive encyclopedia of wildlife species
+        </span>
+      </div>
     </div>
 
-    <div class = "Species_Block2">
-        <div class = "Block2_Top">
-            <div class = "Block2_Top_Search">
-                <span class = "Top_Search_Icon"><i class="fa-solid fa-magnifying-glass" style="color: rgba(0, 0, 0, 0.449);"></i> </span>
-                <input type = "text" placeholder ="Search species by name...">
-            </div>
-            <div class = "Block2_Top_LeftTools">
-                  <button> All </button>
-                  <button> Mammals </button>
-                  <button> Birds </button>
-                  <button> Reptiles </button>
-                  <button> Amphibians</button>
-                  <button> Fish </button>
-                  <button> Insects </button>
-            </div>
+    <div class="Species_Block2">
+      <div class="Block2_Top">
+        <div class="Block2_Top_Search">
+          <span class="Top_Search_Icon"
+            ><i
+              class="fa-solid fa-magnifying-glass"
+              style="color: rgba(0, 0, 0, 0.449)"
+            ></i>
+          </span>
+          <input type="text" placeholder="Search species by name..." />
         </div>
+        <div class="Block2_Top_LeftTools">
+          <button>All</button>
+          <button>Mammals</button>
+          <button>Birds</button>
+          <button>Reptiles</button>
+          <button>Amphibians</button>
+          <button>Fish</button>
+          <button>Insects</button>
+        </div>
+      </div>
     </div>
 
-    <!-- 3.SPECIES LIBRARY (PHẦN GRID)--> 
-     <div class = "Species_Block3">
-        <div class = "Block3_Cards-grid" id = "Cards-grid">
-              <!-- Chờ js đổ dữ liệu vào -->
-        </div>
-     </div>
-     
-     // Xử lý mở card
-     <div id="detail-modal" class="modal">
+    <!-- 3.SPECIES LIBRARY (PHẦN GRID)-->
+    <div class="Species_Block3">
+      <div class="Block3_Cards-grid" id="Cards-grid">
+        <!-- Chờ js đổ dữ liệu vào -->
+      </div>
+    </div>
+
+    // Xử lý mở card
+    <div id="detail-modal" class="modal">
       <div class="modal-content">
-        <span class="close-btn" id="close-modal"><i class="fa-solid fa-xmark"></i></span>
-        
+        <span class="close-btn" id="close-modal"
+          ><i class="fa-solid fa-xmark"></i
+        ></span>
+
         <div class="modal-header-container">
-          <img id="modal-img" src="" alt="Animal Image">
+          <img id="modal-img" src="" alt="Animal Image" />
           <div class="modal-header-overlay">
             <span id="modal-status" class="status-tag">Status</span>
             <h2 id="modal-name">Animal Name</h2>
             <p id="modal-scientific" class="scientific-name">Scientific Name</p>
           </div>
         </div>
-        
+
         <div class="modal-info">
           <div class="info-grid">
-            
             <div class="info-box">
-              <div class="info-icon"><i class="fa-solid fa-location-dot"></i></div>
+              <div class="info-icon">
+                <i class="fa-solid fa-location-dot"></i>
+              </div>
               <div class="info-text">
                 <h4>Habitat</h4>
                 <p id="modal-habitat">Loading...</p>
               </div>
             </div>
-            
+
             <div class="info-box">
               <div class="info-icon"><i class="fa-regular fa-clock"></i></div>
               <div class="info-text">
@@ -143,7 +159,7 @@
                 <p id="modal-behavior">Loading...</p>
               </div>
             </div>
-            
+
             <div class="info-box">
               <div class="info-icon"><i class="fa-solid fa-utensils"></i></div>
               <div class="info-text">
@@ -151,7 +167,7 @@
                 <p id="modal-diet">Loading...</p>
               </div>
             </div>
-            
+
             <div class="info-box">
               <div class="info-icon"><i class="fa-solid fa-leaf"></i></div>
               <div class="info-text">
@@ -159,24 +175,20 @@
                 <p id="modal-foundin">Loading...</p>
               </div>
             </div>
-            
+
             <div class="info-box fun-fact-box">
-              <div class="info-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+              <div class="info-icon">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+              </div>
               <div class="info-text">
                 <h4>Fun Fact</h4>
                 <p id="modal-funfact">Loading...</p>
               </div>
             </div>
-
           </div>
         </div>
       </div>
     </div>
-
-
-
-
-
 
     <script src="Species.js"></script>
   </body>

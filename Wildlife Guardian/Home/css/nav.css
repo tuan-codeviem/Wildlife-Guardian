@@ -6,7 +6,7 @@
   --orange: #f97316;
 }
 
-header {
+body {
   font-family: "Inter", sans-serif;
   margin: 0;
   background: #f8f9fa;
@@ -20,7 +20,6 @@ header {
   align-items: center;
   position: sticky;
   top: 0;
-  opacity: 0.9;
   z-index: 1000;
 }
 
@@ -98,7 +97,7 @@ header {
 
 .btn-report {
   background: #f97316;
-  color: #000000; /* Chữ đen chuẩn */
+  color: #000000;
   border: none;
   padding: 10px 22px;
   border-radius: 12px;
@@ -112,27 +111,9 @@ header {
   transform: scale(0.95);
 }
 
-@keyframes shake {
-  0% {
-    transform: rotate(0deg);
-  }
-  25% {
-    transform: rotate(3deg);
-  }
-  50% {
-    transform: rotate(-3deg);
-  }
-  75% {
-    transform: rotate(3deg);
-  }
-  100% {
-    transform: rotate(0deg);
-  }
-}
-
 .btn-login {
   background: #f8fafc;
-  color: #000000; /* Chữ đen chuẩn */
+  color: #000000;
   border: 1px solid #e2e8f0;
   padding: 10px 22px;
   border-radius: 12px;

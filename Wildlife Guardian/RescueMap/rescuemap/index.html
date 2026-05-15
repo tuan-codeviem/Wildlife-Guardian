@@ -1,209 +1,315 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>Rescue Map - Animal Rescue Map</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style1.css" />
-  <link rel="stylesheet" href="style2.css"/>
-</head>
-<body>
-
-  <!-- NAVBAR -->
-  <nav class="navbar">
-    <div class="mobile-nav" id="mobileNav">
-      <a href="../../Home/Home.html">Home</a>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=yes"
+    />
+    <title>Rescue Map - Animal Rescue Map</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style1.css" />
+    <link rel="stylesheet" href="style2.css" />
+    <style>
+      .nav-container {
+        max-width: 92% !important;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- NAVBAR -->
+    <nav class="navbar">
+      <div class="mobile-nav" id="mobileNav">
+        <a href="../../Home/Home.html">Home</a>
         <a href="index.html" class="active-mobile">Rescue Map</a>
         <a href="../../Social/frontend/index.html">Social</a>
         <a href="../../Game/Main/SpeciesLibrary/Species.html">Species</a>
         <a href="../../Game/Main/Game/GameUnity.html">Game</a>
-      <div class="mobile-actions">
-        <button class="btn-report" onclick="openCameraModal(event)">Report Now</button>
-        <button class="btn-login" style="justify-content: center">Login</button>
-      </div>
-    </div>
-    <div class="nav-container">
-      <!-- Logo -->
-      <div class="logo-area">
-        <div class="logo-icon">
-          <svg viewBox="0 0 24 24" fill="currentColor">
-            <rect x="4" y="8" width="4" height="4"></rect>
-            <rect x="16" y="8" width="4" height="4"></rect>
-            <rect x="8" y="4" width="4" height="4"></rect>
-            <rect x="12" y="4" width="4" height="4"></rect>
-            <rect x="6" y="14" width="12" height="6" rx="2"></rect>
-          </svg>
-        </div>
-        <span class="logo-text">Wildlife Guardian</span>
-      </div>
-
-      <div class="nav-menu" id="navMenu">
-        <a href="../../Home/Home.html" class="nav-item">Home</a>
-        <a href="index.html" class="nav-item active">Rescue Map</a>
-        <a href="../../Social/frontend/index.html" class="nav-item">Social</a>
-        <a href="../../Game/Main/SpeciesLibrary/Species.html" class="nav-item">Species</a>
-        <a href="../../Game/Main/Game/GameUnity.html" class="nav-item">Game</a>
-        <div class="mobile-only-buttons">
-          <button class="btn-report" onclick="openCameraModal(event)">Report Now</button>
-          <button class="btn-login">Login</button>
-        </div>
-      </div>
-
-      <!-- Right-side actions -->
-      <div class="nav-actions">
-        <button class="btn-report" onclick="openCameraModal(event)">Report Now</button>
-        <button class="btn-login">Login</button>
-        <button class="hamburger" id="hamburger">
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
-      </div>
-    </div>
-  </nav>
-
-  <div class="rescue-container">
-    <div class="header">
-      <h1>
-        <i class="fas fa-map-marked-alt"></i>
-        Rescue Map
-      </h1>
-      <p>Track and report injured wildlife in your local area</p>
-      <div class="nav-report-row">
-        <div class="search-bar">
-          <i class="fas fa-search"></i>
-          <input type="text" id="searchInput" placeholder="Search by animal or location..." autocomplete="off">
-          <button id="searchBtn"><i class="fas fa-arrow-right"></i> Search</button>
-        </div>
-        <!-- Map control buttons -->
-        <div class="map-controls">
-          <button id="deleteMarkerBtn" class="control-btn delete-btn" title="Delete selected marker">
-            <i class="fas fa-trash-alt"></i> <span>Delete</span>
+        <div class="mobile-actions">
+          <button class="btn-report" onclick="openCameraModal(event)">
+            Report Now
           </button>
-          <button id="updateDataBtn" class="control-btn update-btn" title="Update current location">
-            <i class="fas fa-sync-alt"></i> <span>Update</span>
-          </button>
-          <button id="locateMeBtn" class="control-btn locate-btn" title="Locate my position">
-            <i class="fas fa-location-dot"></i> <span>Locate</span>
+          <button class="btn-login" style="justify-content: center">
+            Log in
           </button>
         </div>
       </div>
-    </div>
+      <div class="nav-container">
+        <!-- Logo -->
+        <div class="logo-area">
+          <div class="logo-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <rect x="4" y="8" width="4" height="4"></rect>
+              <rect x="16" y="8" width="4" height="4"></rect>
+              <rect x="8" y="4" width="4" height="4"></rect>
+              <rect x="12" y="4" width="4" height="4"></rect>
+              <rect x="6" y="14" width="12" height="6" rx="2"></rect>
+            </svg>
+          </div>
+          <span class="logo-text">Wildlife Guardian</span>
+        </div>
 
-    <div class="tabs">
-      <button class="tab-btn active" data-tab="all">All</button>
-      <button class="tab-btn" data-tab="emergency">Emergency</button>
-      <button class="tab-btn" data-tab="progress">In Progress</button>
-      <button class="tab-btn" data-tab="rescued">Rescued</button>
-      <button class="tab-btn" data-tab="map">Map</button>
-      <button class="tab-btn" data-tab="list">List</button>
-    </div>
-
-    <div class="main-content">
-      <div class="reports-panel" id="reportsPanel"></div>
-      <div class="map-panel" id="mapPanel">
-        <div class="map-legend">
-          <div class="legend-title"><i class="fas fa-map-pin"></i> Map Legend</div>
-          <div class="legend-items">
-            <span><i class="fas fa-user-friends" style="color:#2c7da0;"></i> Volunteers</span>
-            <span><i class="fas fa-hospital-user" style="color:#e76f51;"></i> Vet Clinics</span>
-            <span><i class="fas fa-circle" style="color:#d62828;"></i> Injured</span>
-            <span><i class="fas fa-circle" style="color:#2a9d8f;"></i> Rescued</span>
-            <span><i class="fas fa-circle" style="color:#3b82f6;"></i> In Progress</span>
+        <div class="nav-menu" id="navMenu">
+          <a href="../../Home/Home.html" class="nav-item">Home</a>
+          <a href="index.html" class="nav-item active">Rescue Map</a>
+          <a href="../../Social/frontend/index.html" class="nav-item">Social</a>
+          <a href="../../Game/Main/SpeciesLibrary/Species.html" class="nav-item"
+            >Species Library</a
+          >
+          <a href="../../Game/Main/Game/GameUnity.html" class="nav-item"
+            >Game</a
+          >
+          <div class="mobile-only-buttons">
+            <button class="btn-report" onclick="openCameraModal(event)">
+              Report Now
+            </button>
+            <button class="btn-login">→ Log in</button>
           </div>
         </div>
-        <div class="map-canvas" id="interactiveMap"></div>
-        
-        <!-- NEAREST CLINIC -->
-        <div class="nearest-clinic-section">
-          <div class="clinic-header">
-            <i class="fas fa-hospital"></i> 🏪 Nearest Vet Clinic
+
+        <!-- Right-side actions -->
+        <div class="nav-actions">
+          <button class="btn-report" onclick="openCameraModal(event)">
+            Report Now
+          </button>
+          <button class="btn-login">→ Log in</button>
+          <button class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <div class="rescue-container">
+      <div class="header">
+        <h1>
+          <i class="fas fa-map-marked-alt"></i>
+          Rescue Map
+        </h1>
+        <p>Track and report injured wildlife in your local area</p>
+        <div class="nav-report-row">
+          <div class="search-bar">
+            <i class="fas fa-search"></i>
+            <input
+              type="text"
+              id="searchInput"
+              placeholder="Search by animal or location..."
+              autocomplete="off"
+            />
+            <button id="searchBtn">
+              <i class="fas fa-arrow-right"></i> Search
+            </button>
           </div>
-          <div id="nearestClinic" class="clinic-container">
-            <div style="text-align: center; padding: 20px;">
-              <i class="fas fa-spinner fa-spin"></i> Loading...
+          <!-- Map control buttons -->
+          <div class="map-controls">
+            <button
+              id="deleteMarkerBtn"
+              class="control-btn delete-btn"
+              title="Delete selected marker"
+            >
+              <i class="fas fa-trash-alt"></i> <span>Delete</span>
+            </button>
+            <button
+              id="updateDataBtn"
+              class="control-btn update-btn"
+              title="Update current location"
+            >
+              <i class="fas fa-sync-alt"></i> <span>Update</span>
+            </button>
+            <button
+              id="locateMeBtn"
+              class="control-btn locate-btn"
+              title="Locate my position"
+            >
+              <i class="fas fa-location-dot"></i> <span>Locate</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="all">All</button>
+        <button class="tab-btn" data-tab="emergency">Emergency</button>
+        <button class="tab-btn" data-tab="progress">In Progress</button>
+        <button class="tab-btn" data-tab="rescued">Rescued</button>
+        <button class="tab-btn" data-tab="map">Map</button>
+        <button class="tab-btn" data-tab="list">List</button>
+      </div>
+
+      <div class="main-content">
+        <div class="reports-panel" id="reportsPanel"></div>
+        <div class="map-panel" id="mapPanel">
+          <div class="map-legend">
+            <div class="legend-title">
+              <i class="fas fa-map-pin"></i> Map Legend
+            </div>
+            <div class="legend-items">
+              <span
+                ><i class="fas fa-user-friends" style="color: #2c7da0"></i>
+                Volunteers</span
+              >
+              <span
+                ><i class="fas fa-hospital-user" style="color: #e76f51"></i> Vet
+                Clinics</span
+              >
+              <span
+                ><i class="fas fa-circle" style="color: #d62828"></i>
+                Injured</span
+              >
+              <span
+                ><i class="fas fa-circle" style="color: #2a9d8f"></i>
+                Rescued</span
+              >
+              <span
+                ><i class="fas fa-circle" style="color: #3b82f6"></i> In
+                Progress</span
+              >
+            </div>
+          </div>
+          <div class="map-canvas" id="interactiveMap"></div>
+
+          <!-- NEAREST CLINIC -->
+          <div class="nearest-clinic-section">
+            <div class="clinic-header">
+              <i class="fas fa-hospital"></i> 🏪 Nearest Vet Clinic
+            </div>
+            <div id="nearestClinic" class="clinic-container">
+              <div style="text-align: center; padding: 20px">
+                <i class="fas fa-spinner fa-spin"></i> Loading...
+              </div>
+            </div>
+          </div>
+
+          <div class="nearby-helpers">
+            <div class="helpers-header">
+              <i class="fas fa-hand-holding-heart"></i> Nearby Helpers (Within
+              5km)
+            </div>
+            <div id="helpersList" class="helpers-list"></div>
+          </div>
+          <div class="status-legend-bottom">
+            <div>
+              <span class="status-badge injured"></span> Red: Injured Animal
+            </div>
+            <div>
+              <span class="status-badge rescued"></span> Green: Rescued / Safe
+            </div>
+            <div>
+              <span class="status-badge active"></span> Blue: In Progress
             </div>
           </div>
         </div>
-        
-        <div class="nearby-helpers">
-          <div class="helpers-header">
-            <i class="fas fa-hand-holding-heart"></i> Nearby Helpers (Within 5km)
-          </div>
-          <div id="helpersList" class="helpers-list"></div>
-        </div>
-        <div class="status-legend-bottom">
-          <div><span class="status-badge injured"></span> Red: Injured Animal</div>
-          <div><span class="status-badge rescued"></span> Green: Rescued / Safe</div>
-          <div><span class="status-badge active"></span> Blue: In Progress</div>
-        </div>
       </div>
     </div>
-  </div>
 
-  <!-- Camera Modal -->
-  <div id="cameraModal" class="modal">
-    <div class="modal-content camera-modal">
-      <div class="modal-header">
-        <h3><i class="fas fa-camera"></i> Take a Photo of the Animal</h3>
-        <span class="close-modal" onclick="closeCameraModal()">&times;</span>
-      </div>
-      <div class="modal-body">
-        <div class="camera-container">
-          <video id="video" autoplay playsinline></video>
-          <canvas id="canvas" style="display: none;"></canvas>
-          <div class="camera-controls">
-            <button id="captureBtn" class="capture-btn">
-              <i class="fas fa-camera"></i> Capture
-            </button>
-            <button id="retakeBtn" class="retake-btn" style="display: none;">
-              <i class="fas fa-redo"></i> Retake
-            </button>
-          </div>
-          <div id="previewSection" style="display: none;">
-            <img id="previewImg" class="preview-img">
-            <div class="animal-info-form">
-              <div class="form-group">
-                <label><i class="fas fa-paw"></i> Animal Species / Name *</label>
-                <input type="text" id="animalName" placeholder="e.g., Dog, Cat, Bird, etc.">
-              </div>
-              <div class="form-group">
-                <label><i class="fas fa-thermometer-half"></i> Status *</label>
-                <select id="animalStatus">
-                  <option value="emergency">🚨 Emergency - Needs Immediate Help</option>
-                  <option value="progress">⏳ In Progress - Help is On the Way</option>
-                  <option value="rescued">✅ Rescued - Safe</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label><i class="fas fa-phone-alt"></i> Contact Phone Number *</label>
-                <input type="tel" id="reporterPhone" placeholder="e.g., +1 234 567 890">
-              </div>
-              <div class="form-group">
-                <label><i class="fas fa-info-circle"></i> Additional Details</label>
-                <textarea id="animalDesc" rows="2" placeholder="Describe the animal's condition or specific location..."></textarea>
-              </div>
-              <div class="location-loading" id="locationLoading" style="display: none;">
-                <i class="fas fa-spinner fa-spin"></i> Fetching your location...
-              </div>
-              <div id="locationInfo" class="location-info" style="display: none;">
-                <i class="fas fa-map-marker-alt"></i>
-                <span id="addressText">Retrieving address...</span>
-              </div>
-              <button id="submitReportBtn" class="submit-report-btn">
-                <i class="fas fa-paper-plane"></i> Submit Rescue Report
+    <!-- Camera Modal -->
+    <div id="cameraModal" class="modal">
+      <div class="modal-content camera-modal">
+        <div class="modal-header">
+          <h3><i class="fas fa-camera"></i> Take a Photo of the Animal</h3>
+          <span class="close-modal" onclick="closeCameraModal()">&times;</span>
+        </div>
+        <div class="modal-body">
+          <div class="camera-container">
+            <video id="video" autoplay playsinline></video>
+            <canvas id="canvas" style="display: none"></canvas>
+            <div class="camera-controls">
+              <button id="captureBtn" class="capture-btn">
+                <i class="fas fa-camera"></i> Capture
+              </button>
+              <button id="retakeBtn" class="retake-btn" style="display: none">
+                <i class="fas fa-redo"></i> Retake
               </button>
             </div>
+            <div id="previewSection" style="display: none">
+              <img id="previewImg" class="preview-img" />
+              <div class="animal-info-form">
+                <div class="form-group">
+                  <label
+                    ><i class="fas fa-paw"></i> Animal Species / Name *</label
+                  >
+                  <input
+                    type="text"
+                    id="animalName"
+                    placeholder="e.g., Dog, Cat, Bird, etc."
+                  />
+                </div>
+                <div class="form-group">
+                  <label
+                    ><i class="fas fa-thermometer-half"></i> Status *</label
+                  >
+                  <select id="animalStatus">
+                    <option value="emergency">
+                      🚨 Emergency - Needs Immediate Help
+                    </option>
+                    <option value="progress">
+                      ⏳ In Progress - Help is On the Way
+                    </option>
+                    <option value="rescued">✅ Rescued - Safe</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label
+                    ><i class="fas fa-phone-alt"></i> Contact Phone Number
+                    *</label
+                  >
+                  <input
+                    type="tel"
+                    id="reporterPhone"
+                    placeholder="e.g., +1 234 567 890"
+                  />
+                </div>
+                <div class="form-group">
+                  <label
+                    ><i class="fas fa-info-circle"></i> Additional
+                    Details</label
+                  >
+                  <textarea
+                    id="animalDesc"
+                    rows="2"
+                    placeholder="Describe the animal's condition or specific location..."
+                  ></textarea>
+                </div>
+                <div
+                  class="location-loading"
+                  id="locationLoading"
+                  style="display: none"
+                >
+                  <i class="fas fa-spinner fa-spin"></i> Fetching your
+                  location...
+                </div>
+                <div
+                  id="locationInfo"
+                  class="location-info"
+                  style="display: none"
+                >
+                  <i class="fas fa-map-marker-alt"></i>
+                  <span id="addressText">Retrieving address...</span>
+                </div>
+                <button id="submitReportBtn" class="submit-report-btn">
+                  <i class="fas fa-paper-plane"></i> Submit Rescue Report
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="./script1.js"></script>
-</body>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="./script1.js"></script>
+  </body>
 </html>

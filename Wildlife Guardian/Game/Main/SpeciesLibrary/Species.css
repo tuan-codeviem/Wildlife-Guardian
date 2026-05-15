@@ -5,15 +5,12 @@
 :root {
   --primary-green: #16a34a;
   --orange: #f97316;
-  --background: #f3f8f5;
-  --textcolor: #6b7280;
 }
 
 body {
-  font-family: "Geist", system-ui, -apple-system, sans-serif;
+  font-family: "Inter", sans-serif;
   margin: 0;
   background: #f8f9fa;
-  background-color: var(--background);
 }
 
 .navbar {
@@ -101,7 +98,7 @@ body {
 
 .btn-report {
   background: #f97316;
-  color: #000000; /* Chữ đen chuẩn */
+  color: #000000;
   border: none;
   padding: 10px 22px;
   border-radius: 12px;
@@ -115,27 +112,9 @@ body {
   transform: scale(0.95);
 }
 
-@keyframes shake {
-  0% {
-    transform: rotate(0deg);
-  }
-  25% {
-    transform: rotate(3deg);
-  }
-  50% {
-    transform: rotate(-3deg);
-  }
-  75% {
-    transform: rotate(3deg);
-  }
-  100% {
-    transform: rotate(0deg);
-  }
-}
-
 .btn-login {
   background: #f8fafc;
-  color: #000000; /* Chữ đen chuẩn */
+  color: #000000;
   border: 1px solid #e2e8f0;
   padding: 10px 22px;
   border-radius: 12px;

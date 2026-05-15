@@ -97,7 +97,7 @@ body {
 
 .btn-report {
   background: #f97316;
-  color: #000000; /* Chữ đen chuẩn */
+  color: #000000;
   border: none;
   padding: 10px 22px;
   border-radius: 12px;
@@ -111,27 +111,9 @@ body {
   transform: scale(0.95);
 }
 
-@keyframes shake {
-  0% {
-    transform: rotate(0deg);
-  }
-  25% {
-    transform: rotate(3deg);
-  }
-  50% {
-    transform: rotate(-3deg);
-  }
-  75% {
-    transform: rotate(3deg);
-  }
-  100% {
-    transform: rotate(0deg);
-  }
-}
-
 .btn-login {
   background: #f8fafc;
-  color: #000000; /* Chữ đen chuẩn */
+  color: #000000;
   border: 1px solid #e2e8f0;
   padding: 10px 22px;
   border-radius: 12px;
@@ -298,9 +280,9 @@ body {
   height: 600px;
   margin: 50px auto; /* Canh giữa, cách navbar 50px */
   position: relative;
-  background-color: #231F20; /* Màu nền đen đặc trưng của game */
+  background-color: #231f20; /* Màu nền đen đặc trưng của game */
   border-radius: 16px; /* Bo góc xịn xò */
-  box-shadow: 0 12px 24px rgba(0,0,0,0.15); /* Đổ bóng nổi bật */
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15); /* Đổ bóng nổi bật */
   overflow: hidden;
   display: flex;
   justify-content: center;
@@ -316,7 +298,7 @@ body {
 
 /* Ẩn các râu ria mặc định của Unity (Footer, Fullscreen button xấu xí) */
 #unity-footer {
-  display: none; 
+  display: none;
 }
 
 /* --- TRANG TRÍ THANH LOADING BÁO CÁO CỦA UNITY --- */
