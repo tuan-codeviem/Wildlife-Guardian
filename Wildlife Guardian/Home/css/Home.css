@@ -974,7 +974,7 @@ body {
 .reveal {
     opacity: 0;
     transform: translateY(50px); /* Mặc định: Trượt từ dưới lên */
-    transition: all 1.2s cubic-bezier(0.5, 0, 0, 1); /* Tăng từ 0.8s lên 1.2s để chậm và mượt hơn */
+    transition: all 1s cubic-bezier(0.5, 0, 0, 1); /* Tăng từ 0.8s lên 1.2s để chậm và mượt hơn */
 }
 
 /* Các class thêm vào để đổi hướng */
