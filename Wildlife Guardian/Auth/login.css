@@ -488,3 +488,43 @@ body {
     font-size: 18px;
   }
 }
+.reveal {
+    opacity: 0;
+    transform: translateY(50px); /* Mặc định: Trượt từ dưới lên */
+    transition: all 1s cubic-bezier(0.5, 0, 0, 1); /* Tăng từ 0.8s lên 1.2s để chậm và mượt hơn */
+}
+
+/* Các class thêm vào để đổi hướng */
+.reveal.from-left {
+    transform: translateX(-50px); /* Trượt từ trái sang */
+}
+
+.reveal.from-right {
+    transform: translateX(50px); /* Trượt từ phải sang */
+}
+
+.reveal.from-top {
+    transform: translateY(-50px); /* Trượt từ trên xuống */
+}
+
+/* Hiệu ứng bật ra ngoài (zoom từ nhỏ phóng to lên) */
+.reveal.pop-out {
+    transform: scale(0.5); 
+}
+
+.reveal.pop-out.active {
+    transform: scale(1);
+    transition: all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Hiệu ứng nảy nhẹ (bounce) cực mượt */
+}
+
+/* Khi phần tử xuất hiện trên màn hình, JS sẽ thêm class .active này vào */
+.reveal.active {
+    opacity: 1;
+    transform: translate(0, 0); /* Đưa về đúng vị trí ban đầu của phần tử */
+}
+
+/* Thêm độ trễ (delay) để các khối đứng cạnh nhau hiện lên lần lượt (Stagger effect) */
+.delay-1 { transition-delay: 0.1s; }
+.delay-2 { transition-delay: 0.2s; }
+.delay-3 { transition-delay: 0.3s; }
+.delay-4 { transition-delay: 0.4s; }
