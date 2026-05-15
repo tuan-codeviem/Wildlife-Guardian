@@ -14,7 +14,7 @@ const port = process.env.PORT || 3000;
 app.use(cors()); // Bắt buộc phải có để Frontend và Backend nói chuyện được với nhau
 app.use(express.json()); // Giúp server đọc được dữ liệu dạng chữ
 app.use(express.static('.')); // Để chạy được file HTML/CSS/JS
-app.use("/uploads", express.static(path.join(__dirname, "uploads"))); // Cho phép lấy ảnh từ thư mục uploads
+app.use("/uploads", express.static(path.join(__dirname, "Wildlife Guardian/Social/uploads"))); // Cho phép lấy ảnh từ thư mục uploads
 
 // ==========================================
 // 2. KẾT NỐI MONGODB 
@@ -31,8 +31,8 @@ mongoose
 // ==========================================
 // 3. KHỞI TẠO CÁC MODEL DATABASE
 // ==========================================
-const Post = require("./models/Post");
-const Rescue = require('./models/Rescue');
+const Post = require("./Wildlife Guardian/Social/models/Post");
+const Rescue = require("./Wildlife Guardian/RescueMap/models/Rescue");
 
 // Model Tin Nhắn (Message)
 const messageSchema = new mongoose.Schema({
@@ -58,9 +58,9 @@ const User = mongoose.models.User || mongoose.model("User", userSchema);
 // 4. CẤU HÌNH MULTER (Trợ lý nhận file)
 // ==========================================
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/"); 
-  },
+ destination: (req, file, cb) => {
+    cb(null, "Wildlife Guardian/Social/uploads/"); // Chỉ đúng đường dẫn vào thư mục thật
+},
   filename: (req, file, cb) => {
     cb(null, Date.now() + path.extname(file.originalname));
   },
