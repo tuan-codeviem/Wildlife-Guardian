@@ -115,7 +115,7 @@ closeBtn.addEventListener("click", () => {
 
 import {GoogleGenAI} from "@google/genai"
 
-const API_KEY = "AIzaSyB1NLMyEJPueMbzOBNoUUEe-H0xp7iMYxQ";
+const API_KEY = "AIzaSyAODUXPuaAz13Wv3iSnz38EjwHPsiAnFPw";
 const ai = new GoogleGenAI({apiKey:API_KEY})
 
 document.querySelector(".inputarea button").addEventListener("click",sendMessage);
