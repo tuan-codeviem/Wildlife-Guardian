@@ -273,6 +273,16 @@
                   };
               });
             }
+            
+          // Xử lý sự kiện đóng/mở menu trên Mobile
+          const hamburger = document.getElementById("hamburger");
+          const mobileNav = document.getElementById("mobileNav");
+          if (hamburger && mobileNav) {
+              hamburger.addEventListener("click", () => {
+                  hamburger.classList.toggle("active");
+                  mobileNav.classList.toggle("active");
+              });
+          }
       });
   </script>
 </body>
