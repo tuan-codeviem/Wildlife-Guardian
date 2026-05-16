@@ -272,11 +272,7 @@
                       window.location.reload();
                   };
               });
-          } else {
-              // Chưa đăng nhập -> Lưu lịch sử để đăng nhập xong quay lại đúng map, rồi đuổi ra Login
-              sessionStorage.setItem("redirectAfterLogin", window.location.href);
-              window.location.href = "../../Auth/login.html";
-          }
+            }
       });
   </script>
 </body>
