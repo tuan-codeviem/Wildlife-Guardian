@@ -101,7 +101,8 @@ body {
   border-radius: 12px;
   font-weight: 600;
   cursor: pointer;
-  transition: transform 0.2s ease; /* Đây là lệnh tạo độ mượt khi nhún */
+  transition: transform 0.2s ease;
+  /* Đây là lệnh tạo độ mượt khi nhún */
 }
 
 /* Hiệu ứng nhún xuống khi di chuột vào */
@@ -120,7 +121,8 @@ body {
   display: flex;
   align-items: center;
   gap: 10px;
-  transition: all 0.3s ease; /* Đây là lệnh tạo độ mượt khi đổi màu */
+  transition: all 0.3s ease;
+  /* Đây là lệnh tạo độ mượt khi đổi màu */
 }
 
 /* Hiệu ứng đổi sang màu cam khi di chuột vào */
@@ -164,9 +166,11 @@ body {
   box-shadow: 0 10px 15px rgba(0, 0, 0, 0.05);
   z-index: 999;
 }
+
 .mobile-nav.show {
   display: flex;
 }
+
 .mobile-nav a {
   padding: 15px 24px;
   text-decoration: none;
@@ -174,6 +178,7 @@ body {
   font-weight: 500;
   border-bottom: 1px solid #f8f9fa;
 }
+
 .mobile-nav a:hover {
   background: #f0fdf4;
   color: var(--primary-green);
@@ -185,10 +190,12 @@ body {
   flex-direction: column;
   gap: 10px;
 }
+
 .mobile-actions .btn-report {
   width: 100%;
   margin-bottom: 0;
 }
+
 .mobile-actions .btn-login {
   width: 100%;
   justify-content: center;
@@ -203,6 +210,7 @@ body {
   cursor: pointer;
   padding: 5px;
 }
+
 .hamburger span {
   width: 25px;
   height: 3px;
@@ -210,12 +218,15 @@ body {
   border-radius: 2px;
   transition: 0.3s;
 }
+
 .hamburger.active span:nth-child(1) {
   transform: translateY(8px) rotate(45deg);
 }
+
 .hamburger.active span:nth-child(2) {
   opacity: 0;
 }
+
 .hamburger.active span:nth-child(3) {
   transform: translateY(-8px) rotate(-45deg);
 }
@@ -227,12 +238,15 @@ body {
   .mobile-nav {
     display: none !important;
   }
+
   .hamburger {
     display: none !important;
   }
+
   .nav-menu {
     display: flex !important;
   }
+
   .nav-actions .btn-report,
   .nav-actions .btn-login {
     display: flex !important;
@@ -244,9 +258,11 @@ body {
   .nav-menu {
     display: none;
   }
+
   .hamburger {
     display: flex;
   }
+
   .mobile-actions {
     display: none !important;
   }
@@ -257,13 +273,16 @@ body {
   .nav-menu {
     display: none;
   }
+
   .hamburger {
     display: flex;
   }
+
   .nav-actions .btn-report,
   .nav-actions .btn-login {
     display: none !important;
   }
+
   .mobile-actions {
     display: flex !important;
   }
@@ -734,6 +753,7 @@ body {
     transform: translateY(-50px);
     opacity: 0;
   }
+
   to {
     transform: translateY(0);
     opacity: 1;
@@ -894,44 +914,6 @@ body {
 
   .hamburger {
     display: flex;
-  }
-
-  .mobile-nav {
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    top: 70px;
-    left: 0;
-    right: 0;
-    background: white;
-    padding: 20px;
-    gap: 15px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-    transform: translateX(-100%);
-    transition: 0.3s;
-    z-index: 99;
-  }
-
-  .mobile-nav.active {
-    transform: translateX(0);
-  }
-
-  .mobile-nav a {
-    text-decoration: none;
-    color: #2c3e2f;
-    font-weight: 500;
-    padding: 10px;
-  }
-
-  .mobile-actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 10px;
-  }
-
-  .nav-actions .btn-report,
-  .nav-actions .btn-login {
-    display: none;
   }
 
   .map-controls span {
