@@ -1,150 +1,220 @@
-const chatbot = document.querySelector(".chat-bot-AI");     
-const chatWindow = document.querySelector(".chatwindow");
-const AIbtn = document.querySelector(".AIassit");
-const closeBtn = document.querySelector(".close");
+import { GoogleGenAI } from "@google/genai"
 
-let dakeoMouse = false;
-let startX,startY,offsetX,offsetY;
+const API_KEY = "AIzaSyB3zrH7UpKkeZajeqPpe916ZDs9Ee0Excg";
+const ai = new GoogleGenAI({ apiKey: API_KEY });
 
+/* ════════════════════════════════════════════════════
+   AUTO-DETECT: new UI (wg-chatbot) vs old UI (chat-bot-AI)
+════════════════════════════════════════════════════ */
+const isNewUI = !!document.getElementById("wgChatbot");
 
-// ĐÃ SỬA: Chuyển logic bắt đầu kéo thành một hàm riêng để dùng chung cho cả chuột và cảm ứng
-function batDauKeo(e) {
-    if(e.target.closest(".inputarea input")||e.target.closest(".chat")) return;
-    
-    // ĐÃ SỬA: Xác định lấy toạ độ từ touch (cảm ứng) hay client (chuột máy tính)
+// ── Shared references (resolved from whichever UI is present) ──
+const chatbotContainer = isNewUI
+    ? document.getElementById("wgChatbot")
+    : document.querySelector(".chat-bot-AI");
+
+const chatWindow = isNewUI
+    ? document.getElementById("chatbotWindow")
+    : document.querySelector(".chatwindow");
+
+const openBtn = isNewUI
+    ? document.getElementById("chatbotBtn")
+    : document.querySelector(".AIassit");
+
+const closeBtn = isNewUI
+    ? document.getElementById("cwClose")
+    : document.querySelector(".close");
+
+const chatBox = isNewUI
+    ? document.getElementById("cwMsgs")
+    : document.querySelector(".chatwindow .chat");
+
+const inputEl = isNewUI
+    ? document.getElementById("cwInput")
+    : document.querySelector(".inputarea input");
+
+const sendBtn = isNewUI
+    ? document.getElementById("cwSend")
+    : document.querySelector(".inputarea button");
+
+/* ════════════════════════════════════════════════════
+   DRAGGABLE
+════════════════════════════════════════════════════ */
+let isDragging = false;
+let startX, startY, offsetX, offsetY;
+
+function onDragStart(e) {
+    // Ignore clicks inside text input or message area
+    if (e.target.closest("input") || e.target.closest(isNewUI ? ".cw-msgs" : ".chat")) return;
+
     const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
     const clientY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
 
     startX = clientX;
     startY = clientY;
-    const chatbotAI = chatbot.getBoundingClientRect();
-    offsetX = clientX - chatbotAI.left;
-    offsetY = clientY - chatbotAI.top;
-    dakeoMouse = false;
-    
-    document.body.style.userSelect = "none"; // Ngăn bôi đen chữ khi kéo
-    
-    // ĐÃ SỬA: Thêm các sự kiện touchmove và touchend dành riêng cho thiết bị cảm ứng
+    const rect = chatbotContainer.getBoundingClientRect();
+    offsetX = clientX - rect.left;
+    offsetY = clientY - rect.top;
+    isDragging = false;
+
+    document.body.style.userSelect = "none";
+    if (isNewUI) chatbotContainer.classList.add("is-dragging");
+
     if (e.type.includes('touch')) {
-        document.addEventListener("touchmove", dichuyenMouse, { passive: false });
-        document.addEventListener("touchend", thaMouse);
+        document.addEventListener("touchmove", onDragMove, { passive: false });
+        document.addEventListener("touchend", onDragEnd);
     } else {
-        document.addEventListener("mousemove", dichuyenMouse);
-        document.addEventListener("mouseup", thaMouse);
+        document.addEventListener("mousemove", onDragMove);
+        document.addEventListener("mouseup", onDragEnd);
     }
 }
 
-// ĐÃ SỬA: Gắn sự kiện mousedown cho máy tính và touchstart cho điện thoại
-chatbot.addEventListener("mousedown", batDauKeo);
-chatbot.addEventListener("touchstart", batDauKeo, { passive: false });
-
-function chongketMouse(){
-    const isActive = chatWindow.classList.contains("active") ? chatWindow : AIbtn;
-    let bandauActive = isActive.getBoundingClientRect();
-    let bandau = chatbot.getBoundingClientRect();
-    let bandauX = bandau.left;
-    let bandauY = bandau.top;
-    let dakeo = false;
-
-
-    if(bandauActive.right > window.innerWidth) {bandauX -=(bandauActive.right-window.innerWidth); dakeo=true;}
-    if(bandauActive.bottom>window.innerHeight){bandauY-=(bandauActive.bottom-window.innerHeight);dakeo=true}
-
-    if(bandauActive.left<0){bandauX-=bandauActive.left;dakeo=true};
-    if(bandauActive.top<0){bandauY-=bandauActive.top;dakeo=true};
-
-    if(dakeo||chatbot.style.left!==""){
-        chatbot.style.left = bandauX +"px";
-        chatbot.style.top=bandauY + "px";
-        chatbot.style.bottom="auto";
-        chatbot.style.right = "auto";
-    }
-}
-
-function dichuyenMouse(e){
-    // ĐÃ SỬA: Lấy đúng tọa độ khi di chuyển trên điện thoại hoặc máy tính
+function onDragMove(e) {
     const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
     const clientY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
 
-    if(Math.abs(clientX-startX)>3 || Math.abs(clientY-startY)>3){
-        dakeoMouse=true;
+    if (Math.abs(clientX - startX) > 3 || Math.abs(clientY - startY) > 3) {
+        isDragging = true;
     }
-    if(dakeoMouse){
-        // ĐÃ SỬA: Ngăn màn hình web cuộn lên xuống trong khi người dùng đang giữ kéo chatbot trên điện thoại
-        if(e.type.includes('touch')) e.preventDefault(); 
-        chatbot.style.left= `${clientX-offsetX}px`;
-        chatbot.style.top=`${clientY-offsetY}px`;
-        chatbot.style.bottom="auto";
-        chatbot.style.right="auto";
-        chongketMouse();
+    if (isDragging) {
+        if (e.type.includes('touch')) e.preventDefault();
+        chatbotContainer.style.left = `${clientX - offsetX}px`;
+        chatbotContainer.style.top = `${clientY - offsetY}px`;
+        chatbotContainer.style.bottom = "auto";
+        chatbotContainer.style.right = "auto";
+        clampToViewport();
     }
 }
 
-function thaMouse(e){
-    document.body.style.userSelect = ""; // Khôi phục lại trạng thái bình thường
-    document.removeEventListener("mousemove", dichuyenMouse);
-    document.removeEventListener("mouseup", thaMouse);
-    // ĐÃ SỬA: Gỡ bỏ sự kiện touchmove và touchend để trả lại trạng thái web bình thường sau khi thả tay
-    document.removeEventListener("touchmove", dichuyenMouse);
-    document.removeEventListener("touchend", thaMouse);
+function onDragEnd() {
+    document.body.style.userSelect = "";
+    if (isNewUI) chatbotContainer.classList.remove("is-dragging");
+    document.removeEventListener("mousemove", onDragMove);
+    document.removeEventListener("mouseup", onDragEnd);
+    document.removeEventListener("touchmove", onDragMove);
+    document.removeEventListener("touchend", onDragEnd);
 }
 
-// Khi mở Chat
-AIbtn.addEventListener("click", () => {
-    if (!dakeoMouse) {
-        chatWindow.classList.add("active");
-        // AIbtn.style.display ="none"; // ĐỪNG dùng dòng này
-        AIbtn.style.opacity = "0"; // Làm mờ đi
-        AIbtn.style.pointerEvents = "none"; // Không cho bấm vào khi đang ẩn
-        chongketMouse();
+function clampToViewport() {
+    const activeEl = (chatWindow && (
+        chatWindow.classList.contains("active") || chatWindow.style.display !== "none"
+    )) ? chatWindow : openBtn;
+
+    const rect = chatbotContainer.getBoundingClientRect();
+    const activeRect = activeEl ? activeEl.getBoundingClientRect() : rect;
+    let x = rect.left;
+    let y = rect.top;
+    let moved = false;
+
+    if (activeRect.right > window.innerWidth) { x -= (activeRect.right - window.innerWidth); moved = true; }
+    if (activeRect.bottom > window.innerHeight) { y -= (activeRect.bottom - window.innerHeight); moved = true; }
+    if (activeRect.left < 0) { x -= activeRect.left; moved = true; }
+    if (activeRect.top < 0) { y -= activeRect.top; moved = true; }
+
+    if (moved || chatbotContainer.style.left !== "") {
+        chatbotContainer.style.left = x + "px";
+        chatbotContainer.style.top = y + "px";
+        chatbotContainer.style.bottom = "auto";
+        chatbotContainer.style.right = "auto";
     }
-});
+}
 
-// Khi đóng Chat
-closeBtn.addEventListener("click", () => {
-    if (!dakeoMouse) {
-        chatWindow.classList.remove("active");
-        // closeBtn.style.display="block"; // Chỗ này bạn đang dùng nhầm closeBtn, hãy sửa thành AIbtn
-        AIbtn.style.opacity = "1"; // Hiện lại con chim
-        AIbtn.style.pointerEvents = "auto"; // Cho phép bấm lại
-        AIbtn.style.display = "flex"; // Đảm bảo dùng flex để con chim ở giữa
-        chongketMouse();
+// Attach drag events
+if (chatbotContainer) {
+    chatbotContainer.addEventListener("mousedown", onDragStart);
+    chatbotContainer.addEventListener("touchstart", onDragStart, { passive: false });
+}
+
+/* ════════════════════════════════════════════════════
+   OPEN / CLOSE
+════════════════════════════════════════════════════ */
+if (openBtn && chatWindow) {
+    openBtn.addEventListener("click", () => {
+        if (!isDragging) {
+            chatWindow.classList.add("active");
+            if (isNewUI) {
+                openBtn.style.opacity = "0";
+                openBtn.style.pointerEvents = "none";
+            } else {
+                openBtn.style.opacity = "0";
+                openBtn.style.pointerEvents = "none";
+            }
+            clampToViewport();
+            if (chatBox) chatBox.scrollTop = chatBox.scrollHeight;
+        }
+    });
+}
+
+if (closeBtn && chatWindow) {
+    closeBtn.addEventListener("click", () => {
+        if (!isDragging) {
+            chatWindow.classList.remove("active");
+            if (openBtn) {
+                openBtn.style.opacity = "1";
+                openBtn.style.pointerEvents = "auto";
+                openBtn.style.display = "flex";
+            }
+            clampToViewport();
+        }
+    });
+}
+
+/* ════════════════════════════════════════════════════
+   SEND MESSAGE
+════════════════════════════════════════════════════ */
+function appendMessage(role, html) {
+    if (!chatBox) return;
+    if (isNewUI) {
+        // New UI: .msg.user / .msg.bot structure
+        const wrap = document.createElement("div");
+        wrap.className = role === "user" ? "msg user" : "msg bot";
+        if (role === "bot") {
+            wrap.innerHTML = `
+                <div class="msg-av">
+                    <svg viewBox="0 0 32 32" width="15" height="15">
+                        <rect x="12" y="16" width="8" height="8" fill="#FF6B35"/>
+                        <rect x="14" y="12" width="4" height="4" fill="#FF6B35"/>
+                        <rect x="8" y="16" width="4" height="6" fill="#FF8C42"/>
+                        <rect x="20" y="16" width="4" height="6" fill="#FF8C42"/>
+                    </svg>
+                </div>
+                <div class="msg-bubble">${html}</div>`;
+        } else {
+            wrap.innerHTML = `<div class="msg-bubble">${html}</div>`;
+        }
+        chatBox.appendChild(wrap);
+        chatBox.scrollTop = chatBox.scrollHeight;
+        return wrap;
+    } else {
+        // Old UI: .user / .model with <p> inside
+        const wrap = document.createElement("div");
+        wrap.className = role === "user" ? "user" : "model";
+        wrap.innerHTML = `<p>${html}</p>`;
+        chatBox.appendChild(wrap);
+        chatBox.scrollTop = chatBox.scrollHeight;
+        return wrap;
     }
-});
+}
 
+async function sendMessage() {
+    if (!inputEl || !chatBox) return;
+    const userMessage = inputEl.value.trim();
+    if (!userMessage) return;
+    inputEl.value = "";
 
-import {GoogleGenAI} from "@google/genai"
+    // Show user message
+    appendMessage("user", userMessage);
 
-const API_KEY = "AIzaSyB3zrH7UpKkeZajeqPpe916ZDs9Ee0Excg";
-const ai = new GoogleGenAI({apiKey:API_KEY})
+    // Show loading dots
+    const loadEl = appendMessage("bot", isNewUI
+        ? '<span class="typing"><span></span><span></span><span></span></span>'
+        : "⚫⚫⚫");
 
-document.querySelector(".inputarea button").addEventListener("click",sendMessage);
-
-async function sendMessage(){
-    const userMessage = document.querySelector(".inputarea input").value;
-    if(!userMessage.trim()) return;
-
-    // Làm trống ô nhập liệu sau khi người dùng bấm gửi
-    document.querySelector(".inputarea input").value = "";
-
-    const chatBox = document.querySelector(".chatwindow .chat");
-
-    chatBox.insertAdjacentHTML("beforeend",`
-            <div class="user">
-                <p>${userMessage}</p>
-            `);
-    
-    const loading = "loading-"+ Date.now();
-    chatBox.insertAdjacentHTML("beforeend",`
-            <div class="model" id="${loading}">
-                <p>⚫⚫⚫</p>
-            `);
-    
-    try{
+    try {
         const response = await ai.models.generateContent({
             model: 'gemini-2.5-flash',
             contents: userMessage,
-            config:{
+            config: {
                 systemInstruction: `Bạn là trợ lý ảo của dự án web Wildlife Guardian.
                 Luật lệ bắt buộc của bạn:
                 1. Luôn trả lời bằng tiếng anh.
@@ -153,9 +223,41 @@ async function sendMessage(){
                 4. Trả lời ngắn gọn, thân thiện và súc tích.
                 5. Bạn có thể trả lời về các vấn đề liên quan tới sơ cứu cơ bản cho động vật bị thương`
             }
-    });
-    document.getElementById(loading).innerHTML = `<p>${response.text}</p>`;
-    }catch(error){
-        document.getElementById(loading).innerHTML=`<p style="color:red">${error.message}</p>`;
+        });
+
+        // Replace loading with actual response
+        if (isNewUI) {
+            const bubble = loadEl.querySelector(".msg-bubble");
+            if (bubble) bubble.textContent = response.text;
+        } else {
+            const p = loadEl.querySelector("p");
+            if (p) p.textContent = response.text;
+        }
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+    } catch (error) {
+        if (isNewUI) {
+            const bubble = loadEl.querySelector(".msg-bubble");
+            if (bubble) {
+                bubble.style.color = "#ef4444";
+                bubble.style.wordBreak = "break-word";
+                bubble.style.overflowWrap = "anywhere";
+                bubble.textContent = error.message;
+            }
+        } else {
+            const p = loadEl.querySelector("p");
+            if (p) {
+                p.style.color = "red";
+                p.style.wordBreak = "break-word";
+                p.textContent = error.message;
+            }
+        }
+        chatBox.scrollTop = chatBox.scrollHeight;
     }
 }
+
+// Attach send events
+if (sendBtn) sendBtn.addEventListener("click", sendMessage);
+if (inputEl) inputEl.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") sendMessage();
+});

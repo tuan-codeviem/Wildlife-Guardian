@@ -1,6 +1,19 @@
-/* ═══════════════════════════════════════════════════════
-   WILDLIFE GUARDIAN – nav.css  (Ultra Transparent)
-═══════════════════════════════════════════════════════ */
+/* ── SCROLL PROGRESS (From Home.css) ── */
+.wg-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 100%;
+  transform: scaleX(0);
+  transform-origin: left;
+  background: linear-gradient(90deg, #22c55e, #4ade80, #f97316);
+  z-index: 9999;
+  pointer-events: none;
+  will-change: transform;
+}
+
+/* ── NAVBAR (From nav.css) ── */
 body {
   font-family: "Outfit", "Inter", system-ui, sans-serif;
   margin: 0
