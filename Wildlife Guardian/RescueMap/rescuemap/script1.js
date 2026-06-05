@@ -336,7 +336,7 @@ function initRealMap() {
   viewer.scene.camera.frustum.far = 100000000;
 
   viewer.camera.flyTo({ 
-    destination: Cesium.Cartesian3.fromDegrees(108.2171, 16.0545, 10000), 
+    destination: Cesium.Cartesian3.fromDegrees(108.2171, 16.0545, 25000000), 
     duration: 2 
   });
 
@@ -725,6 +725,21 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("submitReportBtn")?.addEventListener("click", submitReport);
   
   window.addEventListener("click", (e) => { if (e.target.classList?.contains("modal")) closeCameraModal(); });
+  
+  // Sự kiện khi click vào nút View Home
+  const viewHomeBtn = document.getElementById("viewHomeBtn");
+  if (viewHomeBtn) {
+    viewHomeBtn.addEventListener("click", () => {
+      if (viewer) {
+        viewer.camera.flyTo({
+          destination: Cesium.Cartesian3.fromDegrees(108.2171, 16.0545, 25000000),
+          duration: 2
+        });
+        if (popupDiv) popupDiv.style.display = 'none';
+        activeEntity = null;
+      }
+    });
+  }
   
   window.setActiveTab("all"); 
 });
