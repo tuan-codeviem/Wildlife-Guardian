@@ -302,7 +302,7 @@ body {
 
 /* ========== MAIN CONTAINER ========== */
 .rescue-container {
-  max-width: 1400px;
+  max-width: 96%; /* Mở rộng toàn bộ khung trang web ra sát 2 bên mép màn hình */
   margin: 0 auto;
   padding: 20px;
 }
@@ -441,7 +441,7 @@ body {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 0px;
   background: white;
   padding: 12px 20px;
   border-radius: 60px;
@@ -469,203 +469,153 @@ body {
   display: flex;
   gap: 20px;
   flex-wrap: wrap;
+  align-items: stretch;
+}
+
+.left-sidebar {
+  flex: 1.5; /* Tăng tỷ lệ chia không gian cho cột trái */
+  min-width: 440px; /* Kéo to chiều rộng tối thiểu của danh sách báo cáo */
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-height: 86vh; /* Kéo dài chiều cao để hiển thị thêm nhiều thông tin */
+  overflow-y: auto;
+  padding-right: 5px;
+}
+
+.left-sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+.left-sidebar::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
 }
 
 .reports-panel {
-  flex: 1.2;
-  min-width: 320px;
   background: white;
-  border-radius: 24px;
-  padding: 20px;
-  max-height: 70vh;
-  overflow-y: auto;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-radius: 20px;
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .map-panel {
-  flex: 2.5;
+  flex: 2.5; /* Điều chỉnh lại tỷ lệ của bản đồ cho cân đối */
   min-width: 480px;
-  background: white;
+  background: #e9ecef;
   border-radius: 24px;
-  padding: 15px;
+  padding: 0;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  position: relative;
+  overflow: hidden;
+  min-height: 86vh; /* Kéo dài chiều cao của bản đồ bằng với cột trái */
 }
 
 .map-canvas {
-  height: 380px;
-  border-radius: 20px;
-  overflow: hidden;
-  margin: 15px 0;
-  background: #e9ecef;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
 }
 
-/* ========== PHÒNG KHÁM GẦN NHẤT ========== */
-.nearest-clinic-section {
-  margin-top: 15px;
-  background: #f8f9fa;
-  border-radius: 20px;
-  padding: 12px;
+/* ========== ẨN LOGO & TEXT CESIUM ========== */
+.cesium-widget-credits {
+  display: none !important;
 }
 
-.clinic-header {
-  font-weight: bold;
-  margin-bottom: 10px;
-  color: #1e5a4a;
-  font-size: 14px;
-}
-
-.clinic-container {
-  margin-bottom: 10px;
-}
-
-.clinic-card {
-  background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
-  border-radius: 12px;
-  padding: 14px;
-  margin-bottom: 10px;
-  border-left: 4px solid #2a9d8f;
-}
-
-.clinic-contact-btn {
-  background: #2a9d8f;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 25px;
-  cursor: pointer;
-  font-size: 13px;
-  transition: 0.2s;
-}
-
-.clinic-contact-btn:hover {
-  background: #1e5a4a;
-}
-
-/* ========== NGƯỜI HỖ TRỢ ========== */
-.nearby-helpers {
-  margin-top: 15px;
-  background: #f8f9fa;
-  border-radius: 20px;
-  padding: 12px;
-}
-
-.helpers-header {
-  font-weight: bold;
-  margin-bottom: 10px;
-  color: #1e5a4a;
-}
-
-.helpers-list {
-  max-height: 180px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.helper-card {
+/* ========== REPORT CARD (GIAO DIỆN MỚI) ========== */
+.report-card {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: white;
-  padding: 10px 12px;
-  border-radius: 16px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-}
-
-.helper-info h4 {
-  font-size: 14px;
-  margin-bottom: 4px;
-}
-
-.helper-info p {
-  font-size: 12px;
-  color: #666;
-}
-
-.contact-btn {
-  background: #1e5a4a;
-  color: white;
-  border: none;
-  padding: 6px 14px;
-  border-radius: 30px;
-  cursor: pointer;
-  font-size: 12px;
-}
-
-/* ========== REPORT CARD ========== */
-.report-card {
   background-color: #ffffff;
   border-radius: 20px;
-  padding: 14px;
+  padding: 12px;
   margin-bottom: 12px;
   border-left: 5px solid #ccc;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: box-shadow 0.2s;
+}
+
+.report-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .report-card.emergency {
   border-left-color: #d62828;
 }
-
 .report-card.progress {
   border-left-color: #3b82f6;
 }
-
 .report-card.rescued {
   border-left-color: #2a9d8f;
 }
 
-.card-header {
+.report-card-main {
   display: flex;
-  justify-content: space-between;
-  margin-bottom: 8px;
+  align-items: center;
+  gap: 14px;
+  min-width: 0; /* Cho phép phần này co lại và text hiển thị dấu ... */
 }
 
-.animal-name {
-  font-weight: bold;
-  font-size: 16px;
+.report-card-thumb {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  object-fit: cover;
+  flex-shrink: 0; /* Ngăn ảnh bị co lại */
+  background-color: #f0f0f0; /* Màu nền chờ */
+}
+
+.report-card-info {
+  min-width: 0; /* Để text ellipsis hoạt động */
+}
+
+.report-card-info h4 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.report-card-info .location {
+  font-size: 12px;
+  color: #555;
+  margin: 2px 0 5px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .status-tag {
-  font-size: 12px;
-  padding: 2px 10px;
-  border-radius: 20px;
-  background: #f0f0f0;
-}
-
-.location {
-  font-size: 13px;
-  color: #555;
-  margin-bottom: 5px;
-}
-
-.date {
   font-size: 11px;
-  color: #999;
-  margin-bottom: 8px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-weight: 600;
 }
 
-.report-photo {
-  width: 100%;
-  border-radius: 12px;
-  margin: 8px 0;
-  max-height: 150px;
-  object-fit: cover;
+.report-card.emergency .status-tag {
+  background-color: #fee2e2;
+  color: #b91c1c;
+}
+.report-card.progress .status-tag {
+  background-color: #dbeafe;
+  color: #1d4ed8;
+}
+.report-card.rescued .status-tag {
+  background-color: #d1fae5;
+  color: #065f46;
 }
 
-.description {
-  font-size: 12px;
-  color: #666;
-  margin-bottom: 10px;
-  padding: 8px;
-  background: #f5f5f5;
-  border-radius: 12px;
-}
-
-.action-buttons {
+.report-card-actions {
   display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-end;
+  flex-shrink: 0; /* Ngăn các nút bị co lại */
 }
 
 .small-btn {
@@ -675,23 +625,37 @@ body {
   border-radius: 30px;
   font-size: 12px;
   cursor: pointer;
-  transition: 0.1s;
+  transition: 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  justify-content: center;
+  width: 90px; /* Cho các nút có chiều rộng cố định */
 }
 
 .small-btn:hover {
-  background: #dee4f5;
+  transform: scale(0.97);
 }
 
-/* ========== MAP LEGEND ========== */
-.map-legend,
-.status-legend-bottom {
+.small-btn.locate-btn {
+  background-color: #e0f2f1;
+  color: #00796b;
+}
+
+.small-btn.delete-btn {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+/* ========== CÁC MỤC Ở CỘT TRÁI ========== */
+.map-legend {
   display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
+  justify-content: center;
   font-size: 12px;
-  padding: 8px 12px;
-  background: #f8f9fa;
-  border-radius: 40px;
+  padding: 12px;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .legend-items {
@@ -718,6 +682,49 @@ body {
 
 .status-badge.active {
   background: #3b82f6;
+}
+
+.nearby-helpers,
+.nearest-clinic-section {
+  background: white;
+  border-radius: 20px;
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  margin-bottom: 5px;
+}
+
+.helpers-header {
+  font-weight: bold;
+  margin-bottom: 12px;
+  color: #1e5a4a;
+  font-size: 15px;
+}
+
+.helpers-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.helper-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f8f9fa;
+  padding: 12px;
+  border-radius: 14px;
+  border-left: 3px solid #f4a261;
+}
+
+.contact-btn {
+  background: #f4a261;
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 30px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
 }
 
 /* ========== MODAL CAMERA ========== */
@@ -903,8 +910,8 @@ body {
     flex-direction: column;
   }
 
-  .map-panel,
-  .reports-panel {
+  .left-sidebar,
+  .map-panel {
     min-width: auto;
   }
 
@@ -942,4 +949,138 @@ body {
   .legend-items {
     gap: 10px;
   }
+}
+
+/* ========== CESIUM MAP POPUP (DARK THEME) ========== */
+.rescue-popup {
+  background: #1e1e1e;
+  width: 320px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  color: #fff;
+  font-family: "Inter", sans-serif;
+  position: relative;
+  border: 1px solid #333;
+}
+
+.rescue-popup .close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.5);
+  border: none;
+  color: white;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: 0.2s;
+}
+
+.rescue-popup .close-btn:hover {
+  background: rgba(255, 0, 0, 0.8);
+}
+
+.rescue-header {
+  height: 120px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 12px;
+}
+
+.rescue-header::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(30, 30, 30, 1), rgba(30, 30, 30, 0));
+  z-index: 1;
+}
+
+.rescue-badge {
+  position: relative;
+  z-index: 2;
+  align-self: flex-start;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: bold;
+  border-radius: 20px;
+  border: 1px solid;
+  backdrop-filter: blur(4px);
+}
+
+.rescue-title-container {
+  position: relative;
+  z-index: 2;
+}
+
+.rescue-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+}
+
+.rescue-details {
+  padding: 15px;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.rescue-details::-webkit-scrollbar {
+  width: 4px;
+}
+.rescue-details::-webkit-scrollbar-thumb {
+  background: #555;
+  border-radius: 4px;
+}
+
+.detail-section {
+  margin-bottom: 12px;
+}
+
+.detail-title {
+  font-size: 11px;
+  color: #aaa;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.detail-box {
+  background: #2a2a2a;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+  font-size: 12px;
+}
+
+.detail-item:last-child {
+  margin-bottom: 0;
+}
+
+.detail-item-title {
+  color: #888;
+}
+
+.detail-item-value {
+  color: #fff;
+  font-weight: 500;
+  text-align: right;
+  max-width: 60%;
 }

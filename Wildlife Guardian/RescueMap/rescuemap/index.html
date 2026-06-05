@@ -5,17 +5,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <title>Rescue Map - Bản đồ Cứu hộ Động vật</title>
+  
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style2.css" />
+  
+  <script src="https://cesium.com/downloads/cesiumjs/releases/1.116/Build/Cesium/Cesium.js"></script>
+  <link href="https://cesium.com/downloads/cesiumjs/releases/1.116/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style2.css">
   <link rel="stylesheet" href="style1.css">
   <link rel="stylesheet" href="../../ChatBotAI/chatbot.css">
 </head>
 
 <body>
 
-  <!-- THANH NAVBAR -->
   <nav class="navbar">
     <div class="mobile-nav" id="mobileNav">
       <a href="../../Home/Home.html">Home</a>
@@ -24,16 +26,11 @@
       <a href="../../Game/Main/SpeciesLibrary/Species.html">Species</a>
       <a href="../../Game/Main/Game/GameUnity.html">Game</a>
       <div class="mobile-actions">
-        <button class="btn-report" onclick="openCameraModal(event)">
-          Report Now
-        </button>
-        <button class="btn-login" style="justify-content: center">
-          Log in
-        </button>
+        <button class="btn-report" onclick="openCameraModal(event)">Report Now</button>
+        <button class="btn-login" style="justify-content: center">Log in</button>
       </div>
     </div>
     <div class="nav-container">
-      <!-- Logo -->
       <div class="logo-area">
         <div class="logo-icon">
           <svg viewBox="0 0 24 24" fill="currentColor">
@@ -47,7 +44,6 @@
         <span class="logo-text">Wildlife Guardian</span>
       </div>
 
-      <!-- Menu Desktop -->
       <div class="nav-menu" id="navMenu">
         <a href="../../Home/Home.html" class="nav-item">Home</a>
         <a href="index.html" class="nav-item active">Rescue Map</a>
@@ -60,14 +56,11 @@
         </div>
       </div>
 
-      <!-- Cụm nút bên phải -->
       <div class="nav-actions">
         <button class="btn-report" onclick="openCameraModal(event)">Report Now</button>
         <button class="btn-login">Login</button>
         <button class="hamburger" id="hamburger">
-          <span></span>
-          <span></span>
-          <span></span>
+          <span></span><span></span><span></span>
         </button>
       </div>
     </div>
@@ -75,10 +68,7 @@
 
   <div class="rescue-container">
     <div class="header">
-      <h1>
-        <i class="fas fa-map-marked-alt"></i>
-        Rescue Map
-      </h1>
+      <h1><i class="fas fa-map-marked-alt"></i> Rescue Map</h1>
       <p>Theo dõi và báo cáo động vật bị thương trong khu vực của bạn</p>
       <div class="nav-report-row">
         <div class="search-bar">
@@ -86,49 +76,50 @@
           <input type="text" id="searchInput" placeholder="Tìm kiếm theo động vật hoặc địa điểm..." autocomplete="off">
           <button id="searchBtn"><i class="fas fa-arrow-right"></i> Tìm</button>
         </div>
-        <!-- Nút Report Now duy nhất ở đây - đã xóa nút thừa bên dưới -->
       </div>
     </div>
 
-    <div class="tabs">
-      <button class="tab-btn active" data-tab="all">Tất cả</button>
-      <button class="tab-btn" data-tab="emergency">Khẩn cấp</button>
-      <button class="tab-btn" data-tab="progress">Đang xử lý</button>
-      <button class="tab-btn" data-tab="rescued">Đã cứu</button>
-      <button class="tab-btn" data-tab="map">Bản đồ</button>
-      <button class="tab-btn" data-tab="list">Danh sách</button>
-    </div>
-
     <div class="main-content">
-      <div class="reports-panel" id="reportsPanel"></div>
-      <div class="map-panel" id="mapPanel">
+      <!-- Khung bên trái chứa toàn bộ tính năng và danh sách -->
+      <div class="left-sidebar">
+        <div class="tabs">
+          <button class="tab-btn active" data-tab="all">Tất cả</button>
+          <button class="tab-btn" data-tab="emergency">Khẩn cấp</button>
+          <button class="tab-btn" data-tab="progress">Đang xử lý</button>
+          <button class="tab-btn" data-tab="rescued">Đã cứu</button>
+          <button class="tab-btn" data-tab="map">Bản đồ</button>
+          <button class="tab-btn" data-tab="list">Danh sách</button>
+        </div>
+
+        <!-- Chú thích bản đồ chuyển qua cột trái -->
         <div class="map-legend">
-          <div class="legend-title"><i class="fas fa-map-pin"></i> Chú thích bản đồ</div>
-          <div class="legend-items">
-            <span><i class="fas fa-user-friends" style="color:#2c7da0;"></i> Tình nguyện viên</span>
-            <span><i class="fas fa-hospital-user" style="color:#e76f51;"></i> Phòng khám</span>
-            <span><i class="fas fa-circle" style="color:#d62828;"></i> Bị thương</span>
-            <span><i class="fas fa-circle" style="color:#2a9d8f;"></i> Đã cứu</span>
-            <span><i class="fas fa-circle" style="color:#3b82f6;"></i> Đang xử lý</span>
+          <div class="legend-items" style="justify-content: center; width: 100%;">
+            <span><span class="status-badge injured"></span> Khẩn cấp</span>
+            <span><span class="status-badge active"></span> Đang xử lý</span>
+            <span><span class="status-badge rescued"></span> Đã cứu</span>
           </div>
         </div>
-        <div class="map-canvas" id="interactiveMap"></div>
+
+        <div class="reports-panel" id="reportsPanel"></div>
+        
+        <!-- Danh sách Tình nguyện viên & Phòng khám -->
         <div class="nearby-helpers">
           <div class="helpers-header">
-            <i class="fas fa-hand-holding-heart"></i> Người hỗ trợ gần đây (10km)
+            <i class="fas fa-hand-holding-heart"></i> Người hỗ trợ gần đây
           </div>
           <div id="helpersList" class="helpers-list"></div>
         </div>
-        <div class="status-legend-bottom">
-          <div><span class="status-badge injured"></span> Đỏ: Động vật bị thương</div>
-          <div><span class="status-badge rescued"></span> Xanh lá: Đã được cứu</div>
-          <div><span class="status-badge active"></span> Xanh dương: Đang xử lý</div>
-        </div>
+        
+        <div id="nearestClinic" class="nearest-clinic-section"></div>
+      </div>
+
+      <!-- Khung bên phải chỉ chứa duy nhất bản đồ 3D -->
+      <div class="map-panel" id="mapPanel">
+        <div class="map-canvas" id="interactiveMap"></div>
       </div>
     </div>
   </div>
 
-  <!-- Modal Camera -->
   <div id="cameraModal" class="modal">
     <div class="modal-content camera-modal">
       <div class="modal-header">
@@ -186,9 +177,8 @@
       </div>
     </div>
   </div>
-  <!--/////////////////////////////////CHATBOTAI//////////////////////////////////-->
-  <div class="chat-bot-AI">
 
+  <div class="chat-bot-AI">
     <div class="AIassit">
       <svg class="pixel-phoenix" viewBox="0 0 32 32" width="40" height="40">
         <rect x="12" y="16" width="8" height="8" fill="#FF6B35" />
@@ -207,8 +197,7 @@
       <div class="sparkle-badge">
         <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none"
           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path
-            d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" />
+          <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" />
         </svg>
       </div>
     </div>
@@ -251,26 +240,25 @@
         <button>
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path
-              d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719">
-            </path>
+            <path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"></path>
           </svg>
         </button>
       </div>
     </div>
   </div>
-  </div>
+
   <script type="importmap">
     {
-    "imports": {
-      "@google/genai": "https://esm.run/@google/genai"
+      "imports": {
+        "@google/genai": "https://esm.run/@google/genai"
+      }
     }
-  }
-</script>
+  </script>
 
   <script type="module" src="../../ChatBotAI/chatbotai.js"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="./script1.js"></script>
+
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const user = localStorage.getItem("currentUser") || localStorage.getItem("isLoggedIn");
@@ -291,5 +279,4 @@
     });
   </script>
 </body>
-
 </html>
