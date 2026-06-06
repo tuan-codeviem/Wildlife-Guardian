@@ -1,72 +1,81 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const path = require('path');
+const cors = require('cors');
 require('dotenv').config();
 
 const app = express();
-app.use(express.json()); // THIẾU CÁI NÀY LÀ KHÔNG LƯU ĐƯỢC DATA
-app.use(express.static('.')); // Để chạy được file HTML/CSS/JS
+
+app.use(cors()); // Sử dụng thư viện chuẩn của Express
+
+// ĐÃ SỬA LỖI: Chỉ dùng 1 lần express.json với giới hạn 50mb để chứa được ảnh chụp
+app.use(express.json({ limit: '50mb' })); 
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
+app.use(express.static(__dirname)); // Phục vụ file tĩnh
 
 const port = process.env.PORT || 3000;
 
+// Kết nối MongoDB
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('🔥 Kết nối MongoDB thành công!'))
-  .catch(err => console.error('❌ Lỗi:', err.message));
+  .catch(err => console.error('❌ Lỗi kết nối Database:', err.message));
 
-const Rescue = require('./models/Rescue');
+// Import Models
+const Rescue = require('./RescueMap/models/Rescue');
+const User = require('./RescueMap/models/User');
 
-// API lấy dữ liệu (Dùng cho hàm loadReportsFromDB ở trên)
+// ==========================================
+// API CỨU HỘ
+// ==========================================
 app.get('/api/rescuemap', async (req, res) => {
-    const rescues = await Rescue.find();
-    res.json(rescues);
+    try {
+        const rescues = await Rescue.find();
+        res.json(rescues);
+    } catch (error) {
+        res.status(500).json({ error: "Lỗi tải dữ liệu" });
+    }
 });
 
-// API lưu dữ liệu (Dùng cho sự kiện click map)
 app.post('/api/rescuemap', async (req, res) => {
     try {
         const newRescue = new Rescue(req.body);
         await newRescue.save();
-        res.status(201).send({ message: "Đã gửi báo cáo cứu hộ thành công!" });
+        res.status(201).json({ message: "Đã gửi báo cáo cứu hộ thành công!" });
     } catch (error) {
-        res.status(400).send({ error: "Không thể lưu báo cáo" });
+        console.error("❌ Lỗi khi lưu vào DB:", error);
+        res.status(400).json({ error: "Không thể lưu báo cáo" });
     }
 });
 
-app.listen(port, () => console.log(`🚀 Chạy tại http://localhost:${port}`));
-const User = require('./models/User');
-
-// API Đăng ký (Dùng để tạo tài khoản mới vào CSDL)
 app.post('/api/register', async (req, res) => {
     try {
         const newUser = new User(req.body);
         await newUser.save();
-        res.status(201).send({ message: "Tạo tài khoản thành công!" });
+        res.status(201).json({ message: "Tạo tài khoản thành công!" });
     } catch (error) {
-        res.status(400).send({ error: "Tên đăng nhập đã tồn tại!" });
+        res.status(400).json({ error: "Tên đăng nhập đã tồn tại!" });
     }
 });
 
 app.post('/api/login', async (req, res) => {
-    const { username, password } = req.body;
-    console.log("Đang đăng nhập với:", username, password); // Log này sẽ hiện ở terminal Node.js
-
-    const user = await User.findOne({ username, password });
-    console.log("Kết quả tìm kiếm user:", user); 
-
-    if (user) {
-        res.json({ success: true, message: "Đăng nhập thành công!" });
-    } else {
-        res.status(401).json({ success: false, message: "Sai tài khoản hoặc mật khẩu!" });
+    try {
+        const { username, password } = req.body;
+        const user = await User.findOne({ username, password });
+        if (user) {
+            res.json({ success: true, message: "Đăng nhập thành công!" });
+        } else {
+            res.status(401).json({ success: false, message: "Sai tài khoản hoặc mật khẩu!" });
+        }
+    } catch (error) {
+        res.status(500).json({ success: false, message: "Lỗi Server!" });
     }
 });
-// Thêm vào file server.js hiện tại của bạn
+
 app.post('/api/forgotpassword', async (req, res) => {
     const { email } = req.body;
     try {
-        // Tìm trong database, trường 'username' lưu email như ảnh bạn chụp
         const user = await User.findOne({ username: email });
-
         if (user) {
-            // Giả lập gửi mail thành công
             res.json({ success: true, message: "Link khôi phục đã gửi đến " + email });
         } else {
             res.status(404).json({ success: false, message: "Không tìm thấy tài khoản này!" });
@@ -75,3 +84,6 @@ app.post('/api/forgotpassword', async (req, res) => {
         res.status(500).json({ success: false, message: "Lỗi Server!" });
     }
 });
+
+// Khởi động server
+app.listen(port, '0.0.0.0', () => console.log(`🚀 Chạy tại http://127.0.0.1:${port} (Sẵn sàng kết nối)`));
