@@ -22,6 +22,10 @@ mongoose.connect(process.env.MONGO_URI)
 const Rescue   = require('./Wildlife Guardian/RescueMap/models/Rescue');
 const User     = require('./Wildlife Guardian/RescueMap/models/User');
 
+// Nhúng Route Upload xử lý tải ảnh lên Cloudinary
+const uploadRoute = require('./upload.route');
+app.use('/api/upload', uploadRoute);
+
 // Lấy dữ liệu
 app.get('/api/rescuemap', async (req, res) => {
     try {

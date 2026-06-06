@@ -40,6 +40,20 @@ let currentLocation = null;
 let currentAddress = "";
 let toastContainer = null;
 
+// ═══════════════════════════════════════════════════════════════
+// HÀM HỖ TRỢ: CHUYỂN ĐỔI BASE64 SANG BLOB ĐỂ UPLOAD CLOUDINARY
+// ═══════════════════════════════════════════════════════════════
+function dataURItoBlob(dataURI) {
+    const byteString = atob(dataURI.split(',')[1]);
+    const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+    }
+    return new Blob([ab], {type: mimeString});
+}
+
 function createToastContainer() {
     if (document.getElementById("customToastContainer")) return;
     const container = document.createElement("div");
@@ -216,7 +230,6 @@ function getApiUrl(path) {
 
 // ═══════════════════════════════════════════════════════════════
 // REVERSE GEOCODE – Lấy địa chỉ thực từ tọa độ lat/lng
-// Dùng Nominatim (OpenStreetMap) – miễn phí, không cần API key
 // ═══════════════════════════════════════════════════════════════
 async function reverseGeocode(lat, lng) {
     try {
@@ -226,7 +239,6 @@ async function reverseGeocode(lat, lng) {
         });
         const data = await res.json();
         if (data && data.address) {
-            // Ưu tiên: số nhà + đường + quận + tỉnh
             const a = data.address;
             const parts = [
                 a.house_number,
@@ -244,33 +256,26 @@ async function reverseGeocode(lat, lng) {
     }
 }
 
-// Cập nhật địa chỉ cho 1 card đang hiển thị trên DOM
 function updateCardAddress(reportId, newAddress) {
     const locEls = document.querySelectorAll(`[data-report-id="${reportId}"]`);
     locEls.forEach(el => {
-        // Fade out nhẹ
         el.style.transition = 'opacity 0.3s ease';
         el.style.opacity = '0';
-
         setTimeout(() => {
-            // Cập nhật nội dung
             el.innerHTML = escapeHtml(newAddress);
-            el.removeAttribute('style');         // bỏ tất cả inline style cũ
-            // Style mới: địa chỉ thực hiện ra rõ ràng + highlight xanh ngắn
+            el.removeAttribute('style');         
             el.style.cssText = `
                 line-height: 1.35;
                 color: #86efac;
                 font-style: normal;
                 transition: color 1.5s ease;
             `;
-            // Fade in + fade màu về bình thường
             el.style.opacity = '1';
             setTimeout(() => {
                 el.style.color = '#94a3b8';
             }, 2000);
         }, 300);
     });
-    // Cập nhật trong mảng reports để lần render sau dùng địa chỉ đã giải
     const r = reports.find(x => x.id === reportId);
     if (r) {
         r.location   = newAddress;
@@ -278,27 +283,20 @@ function updateCardAddress(reportId, newAddress) {
     }
 }
 
-
-// Batch resolve addresses sau khi render – không block UI
 async function resolveAddressesInBackground(reportsList) {
-    // Chỉ xử lý những báo cáo chưa có địa chỉ thực
     const needResolve = reportsList.filter(r =>
         r._needGeocode === true && !isNaN(r.lat) && !isNaN(r.lng)
     );
     if (needResolve.length === 0) return;
-
     console.log(`📍 Đang reverse geocode ${needResolve.length} vị trí...`);
-
-    // Xử lý tuần tự với delay nhỏ để tránh rate limit Nominatim (1 req/s)
     for (const report of needResolve) {
-        await new Promise(r => setTimeout(r, 1100)); // 1.1s delay giữa các request
+        await new Promise(r => setTimeout(r, 1100));
         const addr = await reverseGeocode(report.lat, report.lng);
         updateCardAddress(report.id, addr);
         console.log(`✅ [${report.animal}] Vị trí: ${addr}`);
     }
 }
 
-// [Yêu cầu 1] Viết hàm Fetch Data cực kỳ chặt chẽ
 async function fetchRescueReports() {
     try {
         console.log("Đang gọi API lấy dữ liệu từ MongoDB...");
@@ -312,11 +310,6 @@ async function fetchRescueReports() {
                 const latVal = item.location && item.location.lat !== undefined ? parseFloat(item.location.lat) : NaN;
                 const lngVal = item.location && item.location.lng !== undefined ? parseFloat(item.location.lng) : NaN;
 
-                // ── CHIẾN LƯỢC XỬ LÝ ĐỊA CHỈ (3 tầng) ─────────────────────
-                // Tầng 1: Dùng địa chỉ đã lưu trong DB nếu có và hợp lệ
-                // Tầng 2: Nếu thiếu → hiển thị toạ độ ngay lập tức (không block)
-                // Tầng 3: Background geocode → cập nhật DOM khi có kết quả
-                // ─────────────────────────────────────────────────────────────
                 const rawAddr = (item.address || '').trim();
                 const BAD = ['', 'chưa rõ địa chỉ', 'chưa rõ', 'undefined', 'null', 'không rõ'];
                 const hasAddr = rawAddr && !BAD.includes(rawAddr.toLowerCase());
@@ -325,13 +318,10 @@ async function fetchRescueReports() {
                 let needGeocode = false;
 
                 if (hasAddr) {
-                    // Có địa chỉ thật → dùng luôn
                     displayAddr = rawAddr;
                 } else if (!isNaN(latVal) && !isNaN(lngVal)) {
-                    // Chưa có địa chỉ nhưng có tọa độ
-                    // → Hiển thị toạ độ ngắn gọn tạm thời
                     displayAddr = `${latVal.toFixed(4)}°N, ${lngVal.toFixed(4)}°E`;
-                    needGeocode = true;  // Đánh dấu cần geocode sau
+                    needGeocode = true;  
                 } else {
                     displayAddr = 'Đang xác định vị trí...';
                 }
@@ -346,7 +336,7 @@ async function fetchRescueReports() {
                     date: item.createdAt || item.date || new Date().toLocaleString("vi-VN"),
                     description: item.description || item.note || "",
                     photo: item.photo || getSampleImage(item.animalName || item.animal || "Động vật"),
-                    _needGeocode: needGeocode  // flag nội bộ
+                    _needGeocode: needGeocode 
                 };
             }).filter(report => !isNaN(report.lat) && !isNaN(report.lng));
         } else {
@@ -357,7 +347,6 @@ async function fetchRescueReports() {
         renderNearbyHelpers();
         renderNearestClinic();
 
-        // Race condition guard
         function tryAddMarkers(attempts) {
             if (viewer) {
                 renderMarkersToMap(filterReports());
@@ -367,7 +356,6 @@ async function fetchRescueReports() {
         }
         tryAddMarkers(5);
 
-        // ── TẦNG 3: Sau 1.5s mới bắt đầu geocode (ưu tiên render UI trước) ──
         setTimeout(() => resolveAddressesInBackground([...reports]), 1500);
 
     } catch (error) {
@@ -377,28 +365,27 @@ async function fetchRescueReports() {
 
 
 function createReportCardHTML(report) {
-    /* ── Status mapping ── */
     const STATUS = {
         emergency: {
-            label:   'Kh\u1ea9n c\u1ea5p',
+            label:   'Khẩn cấp',
             icon:    'fas fa-circle-exclamation',
-            color:   '#f87171',          /* red-400 – d\u1ec5 \u0111\u1ecdc tr\u00ean n\u1ec1n t\u1ed1i */
+            color:   '#f87171',
             bg:      'rgba(239,68,68,0.15)',
             border:  'rgba(239,68,68,0.35)',
             cls:     'emergency'
         },
         progress: {
-            label:   '\u0110ang c\u1ee9u h\u1ed9',
+            label:   'Đang cứu hộ',
             icon:    'fas fa-spinner',
-            color:   '#60a5fa',          /* blue-400 */
+            color:   '#60a5fa',
             bg:      'rgba(59,130,246,0.15)',
             border:  'rgba(59,130,246,0.35)',
             cls:     'progress'
         },
         rescued: {
-            label:   'An to\u00e0n',
+            label:   'An toàn',
             icon:    'fas fa-circle-check',
-            color:   '#4ade80',          /* green-400 */
+            color:   '#4ade80',
             bg:      'rgba(34,197,94,0.15)',
             border:  'rgba(34,197,94,0.35)',
             cls:     'rescued'
@@ -406,32 +393,22 @@ function createReportCardHTML(report) {
     };
     const st = STATUS[report.status] || STATUS.rescued;
 
-    /* ── Xử lý hiển thị địa chỉ ─────────────────────────────────────────
-       report.location đã được xử lý 3 tầng từ fetchRescueReports:
-       • Nếu có địa chỉ thực → hiển thị bình thường
-       • Nếu chưa có (đang geocode) → hiển thị toạ độ tạm, sau đó sẽ auto-update
-       • Thêm data-report-id để updateCardAddress() tìm được đúng element
-       ─────────────────────────────────────────────────────────────────── */
     const isCoords = /^-?\d+\.\d+°[NS]/.test(report.location || '');
     const addressHTML = isCoords
-        // Hiển thị toạ độ tạm với icon loading – sẽ bị thay khi geocode xong
         ? `<span data-report-id="${report.id}"
                style="color:#64748b; font-style:italic;
                       display:inline-flex; align-items:center; gap:5px;">
              <i class="fas fa-circle-notch fa-spin" style="font-size:10px;"></i>
              ${escapeHtml(report.location)}
            </span>`
-        // Địa chỉ thực – hiển bình thường
         : `<span data-report-id="${report.id}" style="line-height:1.35;">
              ${escapeHtml(report.location || 'Đang xác định...')}
            </span>`;
 
-    /* ── Photo ── */
     const photoSrc = report.photo
         ? report.photo
         : `https://ui-avatars.com/api/?name=${encodeURIComponent(report.animal)}&background=0a1c12&color=4ade80&size=128&bold=true`;
 
-    /* ── Description block ── */
     const descBlock = report.description
         ? `<div style="
               font-size:12.5px; color:#94a3b8;
@@ -447,29 +424,19 @@ function createReportCardHTML(report) {
 
     return `
 <div class="report-card ${st.cls}">
-
-  <!-- \u2460 Header: \u1ea3nh + th\u00f4ng tin ch\u00ednh -->
   <div style="display:flex; gap:12px; margin-bottom:10px; align-items:flex-start;">
-
-    <!-- Thumbnail -->
     <img src="${photoSrc}"
          alt="${escapeHtml(report.animal)}"
          style="width:72px; height:72px; object-fit:cover; border-radius:10px;
                 border:1px solid rgba(255,255,255,0.1); flex-shrink:0;
                 box-shadow:0 4px 12px rgba(0,0,0,0.4);">
-
-    <!-- Text info -->
     <div style="flex:1; min-width:0; display:flex; flex-direction:column; gap:5px;">
-
-      <!-- T\u00ean \u0111\u1ed9ng v\u1eadt -->
       <h4 style="
             margin:0; font-size:15px; font-weight:700;
             color:#f8fafc; white-space:nowrap;
             overflow:hidden; text-overflow:ellipsis;
             line-height:1.2;
          ">${escapeHtml(report.animal)}</h4>
-
-      <!-- Status badge \u2013 pill, dark bg -->
       <span style="
               display:inline-flex; align-items:center; gap:5px;
               width:max-content; padding:4px 12px;
@@ -481,8 +448,6 @@ function createReportCardHTML(report) {
         <i class="${st.icon}" style="font-size:10px;"></i>
         ${st.label}
       </span>
-
-      <!-- \u0110\u1ecba ch\u1ec9 \u2013 c\u00f3 x\u1eed l\u00fd fallback -->
       <p style="
            margin:0; font-size:12px; color:#94a3b8;
            display:flex; align-items:flex-start; gap:6px;
@@ -491,22 +456,14 @@ function createReportCardHTML(report) {
            style="color:var(--green-main); margin-top:2px; flex-shrink:0; font-size:11px;"></i>
         ${addressHTML}
       </p>
-
-      <!-- Th\u1eddi gian -->
       <p style="margin:0; font-size:11.5px; color:#64748b; display:flex; align-items:center; gap:5px;">
         <i class="fas fa-clock" style="font-size:10px;"></i>
         ${escapeHtml(report.date || '')}
       </p>
     </div>
   </div>
-
-  <!-- \u2461 M\u00f4 t\u1ea3 (n\u1ebfu c\u00f3) -->
   ${descBlock}
-
-  <!-- \u2462 Action buttons -->
   <div style="display:flex; gap:8px; border-top:1px dashed rgba(255,255,255,0.07); padding-top:11px;">
-
-    <!-- V\u1ecb tr\u00ed 3D \u2013 pill, xanh l\u00e1 -->
     <button class="report-action-btn locate-btn"
             data-lat="${report.lat}" data-lng="${report.lng}"
             style="
@@ -519,10 +476,8 @@ function createReportCardHTML(report) {
             "
             onmouseover="this.style.background='rgba(34,197,94,0.2)';this.style.transform='translateY(-1px)'"
             onmouseout="this.style.background='rgba(34,197,94,0.1)';this.style.transform='none'">
-      <i class="fas fa-crosshairs"></i> V\u1ecb tr\u00ed 3D
+      <i class="fas fa-crosshairs"></i> Vị trí 3D
     </button>
-
-    <!-- X\u00f3a \u2013 pill, \u0111\u1ecf -->
     <button class="report-action-btn delete-btn"
             data-id="${report.id}"
             style="
@@ -612,7 +567,6 @@ function initRealMap() {
         const style = document.createElement("style");
         style.id = "cesiumFixStyles";
         style.textContent = `
-            /* Full-screen fix: interactiveMap must be absolute inside fixed map-wrapper */
             #interactiveMap {
                 position: absolute !important;
                 top: 0 !important; left: 0 !important;
@@ -629,7 +583,6 @@ function initRealMap() {
                 position: absolute !important;
                 top: 0 !important; left: 0 !important;
             }
-            /* Hide Cesium default toolbar that creates white bg */
             .cesium-viewer-toolbar { display: none !important; }
             .cesium-widget-credits { display: none !important; }
         `;
@@ -674,19 +627,14 @@ function setupCustomPopup() {
     if (popupDiv) popupDiv.remove();
 
     popupDiv = document.createElement('div');
-    popupDiv.id = 'cesiumPopupDiv';           /* ID cho CSS targeting */
-    popupDiv.className = 'cesium-popup-overlay'; /* Class: style1.css sets z-index:1050 */
+    popupDiv.id = 'cesiumPopupDiv';          
+    popupDiv.className = 'cesium-popup-overlay'; 
     popupDiv.style.position = 'absolute';
-    popupDiv.style.top = '80px';    /* Dưới navbar (68px) thêm margin */
+    popupDiv.style.top = '80px';    
     popupDiv.style.right = '20px';
     popupDiv.style.backgroundColor = 'transparent';
     popupDiv.style.padding = '0px';
     popupDiv.style.display = 'none';
-    /* ── Z-INDEX FIX ──────────────────────────────────────────────────────
-       Navbar z-index: 1000  →  popupDiv phải > 1000 để không bị navbar che
-       .floating-panel z-index: 100  →  popup cũng trên panel
-       Modal overlay z-index: 9000  →  popup dưới modal (đúng thứ tự)
-       -------------------------------------------------------------------- */
     popupDiv.style.zIndex = '1050';
     popupDiv.style.pointerEvents = 'auto';
     container.appendChild(popupDiv);
@@ -708,17 +656,14 @@ function setupCustomPopup() {
     }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
 }
 
-// [Yêu cầu 2] Hàm Vẽ Dấu chấm lên 3D Globe (Render Markers)
 function renderMarkersToMap(reportsData) {
     if (!viewer) return;
     
-    // Cesium API: Xóa toàn bộ marker cũ trên bản đồ để chuẩn bị vẽ cái mới
     viewer.entities.removeAll(); 
     if (popupDiv) popupDiv.style.display = 'none';
     
     if (reportsData.length === 0) return;
     
-    // Lặp qua mảng data vừa lấy từ MongoDB
     reportsData.forEach(report => {
         let markerColor = Cesium.Color.fromCssColorString('#ef4444'); 
         let statusText = '🆘 KHẨN CẤP'; let statusColor = '#dc2626'; let badgeBg = '#fef2f2';
@@ -821,10 +766,9 @@ function renderMarkersToMap(reportsData) {
             </div>
         `;
         
-        // Dùng API Cesium.Viewer.entities.add để vẽ marker lên quả địa cầu
         viewer.entities.add({
             id: `report_${report.id}`,
-            position: Cesium.Cartesian3.fromDegrees(report.lng, report.lat), // Nhận tọa độ Float
+            position: Cesium.Cartesian3.fromDegrees(report.lng, report.lat),
             point: { pixelSize: 18, color: markerColor, outlineColor: Cesium.Color.WHITE, outlineWidth: 3, disableDepthTestDistance: Number.POSITIVE_INFINITY },
             properties: { customHTML: popupContent }
         });
@@ -900,118 +844,98 @@ async function fetchLocationAndAddress() {
     }
 }
 
+// ═══════════════════════════════════════════════════════════════
+// HÀM SUBMIT REPORT ĐÃ ĐƯỢC TÍCH HỢP UPLOAD CLOUDINARY
+// ═══════════════════════════════════════════════════════════════
 async function submitReport() {
-    // ══════════════════════════════════════════════════
-    // BƯỚC 1: Thu thập dữ liệu từ Form và log ra Console
-    // Mở F12 → Tab "Console" để xem thông tin này
-    // ══════════════════════════════════════════════════
     const animalName   = document.getElementById("animalName")?.value.trim() || "";
     const animalStatus = document.getElementById("animalStatus")?.value || "emergency";
     const animalDesc   = document.getElementById("animalDesc")?.value.trim() || "";
 
-    console.group("🔍 [submitReport] DEBUG FORM DATA");
-    console.log("📋 Tên động vật:", animalName  || "(TRỐNG – sẽ bị chặn)");
-    console.log("🚦 Tình trạng  :", animalStatus);
-    console.log("📝 Mô tả       :", animalDesc   || "(không có)");
-    console.log("📸 capturedPhoto:", capturedPhoto ? `✅ Có ảnh (${Math.round(capturedPhoto.length / 1024)} KB base64)` : "❌ KHÔNG CÓ ẢNH");
-    console.log("📍 currentLocation:", currentLocation ?? "❌ KHÔNG CÓ GPS");
-    console.log("🗺️  currentAddress:", currentAddress || "(chưa lấy được địa chỉ)");
-    console.groupEnd();
-
-    // ══════════════════════════════════════════════════
-    // BƯỚC 2: Validate – chặn sớm nếu thiếu dữ liệu
-    // ══════════════════════════════════════════════════
     if (!animalName) {
-        console.warn("⛔ Chặn: thiếu tên động vật");
         return showToast("Vui lòng nhập tên động vật!", "error");
     }
     if (!currentLocation) {
-        console.warn("⛔ Chặn: chưa có GPS. currentLocation =", currentLocation);
         return showToast("Chưa lấy được vị trí GPS. Hãy thử lại!", "error");
     }
-    // Ảnh: nếu không chụp được thì vẫn cho gửi nhưng cảnh báo rõ
-    if (!capturedPhoto) {
-        console.warn("⚠️ capturedPhoto = null → Sẽ gửi không có ảnh");
-    }
 
-    // ══════════════════════════════════════════════════
-    // BƯỚC 3: Đóng gói payload chuẩn để gửi lên MongoDB
-    // ══════════════════════════════════════════════════
-    const payload = {
-        animalName  : animalName,
-        status      : animalStatus,
-        description : animalDesc,
-        location    : {
-            lat: currentLocation.lat,
-            lng: currentLocation.lng
-        },
-        address     : currentAddress || `${currentLocation.lat.toFixed(5)}, ${currentLocation.lng.toFixed(5)}`,
-        date        : new Date().toLocaleString("vi-VN"),
-        // ── PHẦN ẢNH ──────────────────────────────────
-        // capturedPhoto là chuỗi base64 JPEG từ camera.
-        photo       : capturedPhoto || null
-    };
-
-    console.log("📦 [submitReport] Payload sẽ gửi lên /api/rescuemap:", {
-        ...payload,
-        photo: payload.photo ? `[base64 image ~${Math.round((payload.photo.length)/1024)}KB]` : null
-    });
-    console.log("🌐 URL endpoint:", getApiUrl('/api/rescuemap'));
-
-    // ══════════════════════════════════════════════════
-    // BƯỚC 4: Hiện Loading Spinner trên nút Submit
-    // ══════════════════════════════════════════════════
     const submitBtn = document.getElementById('submitReportBtn');
     const originalBtnHTML = submitBtn ? submitBtn.innerHTML : '';
     if (submitBtn) {
         submitBtn.disabled = true;
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>Đang gửi...</span>';
     }
 
-    // ══════════════════════════════════════════════════
-    // BƯỚC 5: Gọi API POST – xử lý lỗi cực kỳ chặt chẽ
-    // ══════════════════════════════════════════════════
+    let finalPhotoUrl = null;
+
+    // --- BƯỚC MỚI THÊM VÀO: UPLOAD ẢNH LÊN CLOUDINARY ---
+    if (capturedPhoto) {
+        try {
+            if (submitBtn) submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>Đang tải ảnh lên...</span>';
+            
+            const formData = new FormData();
+            formData.append('image', dataURItoBlob(capturedPhoto), 'capture.jpg'); // Gọi API Backend của bạn
+            
+            console.log("Đang tải ảnh lên Cloudinary qua API backend...");
+            const uploadRes = await fetch(getApiUrl('/api/upload'), {
+                method: 'POST',
+                body: formData
+            });
+            
+            const uploadData = await uploadRes.json();
+            if (uploadRes.ok) {
+                finalPhotoUrl = uploadData.url; // Lấy link ảnh Cloudinary trả về
+                console.log("✅ Tải ảnh thành công:", finalPhotoUrl);
+            } else {
+                throw new Error(uploadData.error || uploadData.message || "Lỗi upload ảnh");
+            }
+        } catch (error) {
+            console.error("❌ Lỗi khi tải ảnh lên:", error);
+            showToast("Không thể tải ảnh lên, nhưng báo cáo vẫn sẽ được gửi.", "error");
+        }
+    }
+
+    // --- BƯỚC LƯU DATABASE: Gửi link URL thay vì chuỗi Base64 ---
+    if (submitBtn) submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>Đang gửi báo cáo...</span>';
+
+    const payload = {
+        animalName  : animalName,
+        status      : animalStatus,
+        description : animalDesc,
+        location    : { lat: currentLocation.lat, lng: currentLocation.lng },
+        address     : currentAddress || `${currentLocation.lat.toFixed(5)}, ${currentLocation.lng.toFixed(5)}`,
+        date        : new Date().toLocaleString("vi-VN"),
+        photo       : finalPhotoUrl // Dùng link Cloudinary nếu có ảnh
+    };
+
     try {
-        console.log("🚀 Đang gọi fetch POST...");
         const response = await fetch(getApiUrl('/api/rescuemap'), {
             method : 'POST',
             headers: { 'Content-Type': 'application/json' },
             body   : JSON.stringify(payload)
         });
 
-        console.log("📨 Server response status:", response.status, response.statusText);
-
-        // Đọc body dù thành công hay thất bại
         const contentType = response.headers.get("content-type") || "";
         let result;
         if (contentType.includes("application/json")) {
             result = await response.json();
         } else {
             const rawText = await response.text();
-            console.error("❌ Server trả về HTML / text thay vì JSON:", rawText.substring(0, 300));
             if (submitBtn) { submitBtn.disabled = false; submitBtn.innerHTML = originalBtnHTML; }
-            return showToast(`❌ Lỗi Server ngầm (${response.status}). Mở F12 → Console để xem chi tiết!`, "error");
+            return showToast(`❌ Lỗi Server. Mở F12 để xem chi tiết!`, "error");
         }
 
-        console.log("📩 Server result JSON:", result);
-
-        // ── Xử lý thành công (201 Created) ────────────
-        if (response.ok) { // 2xx bao gồm 201
-            console.log("✅ Lưu thành công! Bắt đầu reload data...");
+        if (response.ok) { 
             showToast("✅ Báo cáo đã được lưu lên bản đồ!", "success");
             closeCameraModal();
 
-            // Tự động gọi lại API để lấy data mới → render sidebar + markers
             await fetchRescueReports();
 
-            // Bay camera Cesium tới vị trí báo cáo mới
             if (viewer && currentLocation) {
                 window.setActiveTab("map");
                 viewer.camera.flyTo({
                     destination: Cesium.Cartesian3.fromDegrees(currentLocation.lng, currentLocation.lat, 1500),
                     duration: 2,
                     complete: function () {
-                        // Tìm entity vừa thêm và show popup
                         if (reports.length > 0) {
                             const newReport = reports[reports.length - 1];
                             const entity = viewer.entities.getById(`report_${newReport.id}`);
@@ -1029,20 +953,14 @@ async function submitReport() {
                     }
                 });
             }
-
-        // ── Xử lý lỗi từ server (400, 500, ...) ──────
         } else {
             const errMsg = result?.error || result?.message || `HTTP ${response.status}`;
-            console.error(`❌ Server từ chối (${response.status}):`, errMsg, "\nFull result:", result);
             if (submitBtn) { submitBtn.disabled = false; submitBtn.innerHTML = originalBtnHTML; }
             showToast(`❌ Server lỗi: ${errMsg}`, "error");
         }
-
-    // ── Lỗi mạng (network down, CORS, sai URL, ...) ──
     } catch (networkError) {
-        console.error("🔥 Lỗi mạng / CORS khi gọi POST:", networkError);
         if (submitBtn) { submitBtn.disabled = false; submitBtn.innerHTML = originalBtnHTML; }
-        showToast(`❌ Lỗi kết nối: ${networkError.message} – Kiểm tra server có đang chạy không?`, "error");
+        showToast(`❌ Lỗi kết nối. Kiểm tra server có đang chạy không?`, "error");
     }
 }
 
@@ -1050,7 +968,6 @@ window.openCameraModal = async function(e) {
     if (e) e.preventDefault();
     const modal = document.getElementById("cameraModal");
     if (!modal) return;
-    // Use .open class instead of inline display style
     modal.classList.add("open");
     document.body.style.overflow = 'hidden';
     
@@ -1061,7 +978,6 @@ window.openCameraModal = async function(e) {
     document.getElementById("retakeBtn").style.display = "none";
     document.getElementById("locationInfo").style.display = "none";
     
-    // Show/hide preview image vs video
     const previewImg = document.getElementById("previewImg");
     if (previewImg) previewImg.style.display = "none";
 
@@ -1131,6 +1047,62 @@ document.addEventListener("DOMContentLoaded", () => {
     /* Support Force button */
     document.getElementById("supportForceBtn")?.addEventListener("click", () => {
         showToast("📞 Đang kết nối lực lượng hỗ trợ...", "success");
+        let directoryModal = document.getElementById("supportDirectoryModal");
+        if (!directoryModal) {
+            directoryModal = document.createElement("div");
+            directoryModal.id = "supportDirectoryModal";
+            directoryModal.className = "rm-modal-overlay open";
+            
+            const volunteerHtml = helpersData.filter(h => !h.isClinic).map(h => `
+                <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 12px; border-radius: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <h4 style="margin: 0; color: #0f172a; font-size: 15px;"><i class="fas fa-user-shield" style="color: #10b981;"></i> ${escapeHtml(h.name)} ${h.verified ? '<i class="fas fa-check-circle" style="color: #3b82f6; font-size: 12px;" title="Đã xác thực"></i>' : ''}</h4>
+                        <p style="margin: 4px 0 0 0; color: #64748b; font-size: 13px;">${escapeHtml(h.role)}</p>
+                        <p style="margin: 2px 0 0 0; color: #94a3b8; font-size: 12px;"><i class="fas fa-map-marker-alt"></i> ${escapeHtml(h.address)}</p>
+                    </div>
+                    <button onclick="window.location.href='tel:${h.phone}'" style="background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.2); padding: 8px 16px; border-radius: 20px; font-weight: 600; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#10b981'; this.style.color='white'" onmouseout="this.style.background='rgba(16, 185, 129, 0.1)'; this.style.color='#10b981'"><i class="fas fa-phone"></i> Gọi</button>
+                </div>
+            `).join('');
+
+            const clinicHtml = helpersData.filter(h => h.isClinic).map(h => `
+                <div style="background: #f0fdf4; border: 1px solid #bbf7d0; padding: 12px; border-radius: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <h4 style="margin: 0; color: #065f46; font-size: 15px;"><i class="fas fa-clinic-medical" style="color: #059669;"></i> ${escapeHtml(h.name)}</h4>
+                        <p style="margin: 4px 0 0 0; color: #047857; font-size: 13px;">${escapeHtml(h.specialty)} | 🕐 ${h.available}</p>
+                        <p style="margin: 2px 0 0 0; color: #059669; font-size: 12px; opacity: 0.8;"><i class="fas fa-map-marker-alt"></i> ${escapeHtml(h.address)}</p>
+                    </div>
+                    <button onclick="window.location.href='tel:${h.phone}'" style="background: #059669; color: white; border: none; padding: 8px 16px; border-radius: 20px; font-weight: 600; cursor: pointer; transition: 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='none'"><i class="fas fa-phone"></i> Gọi</button>
+                </div>
+            `).join('');
+
+            directoryModal.innerHTML = `
+                <div class="rm-modal" style="max-width: 600px;">
+                    <div class="rm-modal-header" style="background: linear-gradient(135deg, #10b981, #059669);">
+                        <div class="rm-modal-title" style="color: white;">
+                            <i class="fas fa-address-book"></i>
+                            <span>Danh bạ Lực lượng Hỗ trợ</span>
+                        </div>
+                        <button class="rm-modal-close" style="color: white; opacity: 0.8;" onclick="this.closest('.rm-modal-overlay').classList.remove('open')">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="rm-form-section" style="max-height: 70vh; overflow-y: auto; padding: 20px;">
+                        <h3 style="margin-top: 0; font-size: 16px; color: #0f172a; margin-bottom: 12px;"><i class="fas fa-user-friends" style="color: #3b82f6;"></i> Tình nguyện viên & Chuyên gia</h3>
+                        ${volunteerHtml}
+                        
+                        <h3 style="margin-top: 24px; font-size: 16px; color: #0f172a; margin-bottom: 12px;"><i class="fas fa-hospital" style="color: #ef4444;"></i> Trạm Y tế & Phòng khám Thú y</h3>
+                        ${clinicHtml}
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(directoryModal);
+            
+            directoryModal.addEventListener('click', (e) => {
+                if(e.target === directoryModal) directoryModal.classList.remove('open');
+            });
+        } else {
+            directoryModal.classList.add("open");
+        }
     });
     
     window.setActiveTab("all"); 
