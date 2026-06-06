@@ -78,10 +78,6 @@
       </div>
     </div>
   </nav>
-
-  <!-- ==========================================
-       MAIN WRAPPER – Full Screen Map
-  ========================================== -->
   <div class="map-wrapper" id="mapWrapper">
 
     <!-- Full-screen 3D Cesium Map (Background) -->
@@ -92,9 +88,6 @@
       <i class="fas fa-globe-asia"></i> View Globe
     </button>
 
-    <!-- ==========================================
-         FLOATING LEFT PANEL (Glassmorphism)
-    ========================================== -->
     <div class="floating-panel" id="floatingPanel">
 
       <!-- Panel Header -->
@@ -147,11 +140,105 @@
 
         <!-- Nearest Clinic -->
         <div id="nearestClinic" class="clinic-section"></div>
+
+        <!-- ───────── ACTION BUTTONS ───────── -->
+        <div class="panel-action-row">
+          <button class="panel-support-btn" id="supportForceBtn">
+            <i class="fas fa-shield-halved"></i>
+            Lực lượng hỗ trợ
+          </button>
+          <button class="panel-feedback-btn" id="feedbackBtn" onclick="openFeedbackModal()">
+            <i class="fas fa-comment-dots"></i>
+            Phản hồi
+          </button>
+        </div>
+
       </div>
 
     </div><!-- /floating-panel -->
 
   </div><!-- /map-wrapper -->
+
+  <!-- ==========================================
+       FEEDBACK MODAL
+  ========================================== -->
+  <div id="feedbackModal" class="rm-modal-overlay">
+    <div class="rm-modal feedback-modal-box">
+      <div class="rm-modal-header">
+        <div class="rm-modal-title">
+          <i class="fas fa-comment-dots" style="color:#f97316"></i>
+          <span>Gửi phản hồi</span>
+        </div>
+        <button class="rm-modal-close" onclick="closeFeedbackModal()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <!-- Star Rating -->
+      <div class="fb-rating-wrap">
+        <p class="fb-rating-label">Đánh giá trải nghiệm của bạn</p>
+        <div class="fb-stars" id="fbStars">
+          <i class="fas fa-star fb-star" data-val="1"></i>
+          <i class="fas fa-star fb-star" data-val="2"></i>
+          <i class="fas fa-star fb-star" data-val="3"></i>
+          <i class="fas fa-star fb-star" data-val="4"></i>
+          <i class="fas fa-star fb-star" data-val="5"></i>
+        </div>
+        <input type="hidden" id="fbRating" value="0">
+      </div>
+
+      <form id="feedbackForm" class="fb-form" onsubmit="submitFeedback(event)">
+        <div class="rm-form-section" style="padding-top:0">
+
+          <div class="rm-field">
+            <div class="rm-input-wrap">
+              <i class="fas fa-user rm-field-icon"></i>
+              <input type="text" id="fbName" class="rm-input" placeholder=" " required autocomplete="name">
+              <label class="rm-label" for="fbName">Họ và tên *</label>
+            </div>
+          </div>
+
+          <div class="rm-field">
+            <div class="rm-input-wrap">
+              <i class="fas fa-envelope rm-field-icon"></i>
+              <input type="email" id="fbEmail" class="rm-input" placeholder=" " autocomplete="email">
+              <label class="rm-label" for="fbEmail">Email (tuỳ chọn)</label>
+            </div>
+          </div>
+
+          <div class="rm-field">
+            <div class="rm-input-wrap rm-select-wrap">
+              <i class="fas fa-tag rm-field-icon"></i>
+              <select id="fbType" class="rm-input rm-select">
+                <option value="suggestion">💡 Góp ý cải thiện</option>
+                <option value="error">🐛 Báo cáo lỗi</option>
+                <option value="compliment">⭐ Khen ngợi</option>
+                <option value="other">📝 Khác</option>
+              </select>
+              <label class="rm-label rm-label-active" for="fbType">Loại phản hồi</label>
+            </div>
+          </div>
+
+          <div class="rm-field">
+            <div class="rm-input-wrap">
+              <i class="fas fa-comment rm-field-icon" style="top:18px"></i>
+              <textarea id="fbContent" class="rm-input rm-textarea" rows="4" placeholder=" " required></textarea>
+              <label class="rm-label" for="fbContent">Nội dung phản hồi *</label>
+            </div>
+          </div>
+
+          <div class="fb-actions">
+            <button type="button" class="fb-btn-cancel" onclick="closeFeedbackModal()">
+              <i class="fas fa-times"></i> Hủy
+            </button>
+            <button type="submit" class="fb-btn-submit" id="fbSubmitBtn">
+              <i class="fas fa-paper-plane"></i> Gửi phản hồi
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <!-- ==========================================
        CAMERA / REPORT MODAL (Premium Redesign)
@@ -337,6 +424,7 @@
   <script type="module" src="/Wildlife%20Guardian/ChatBotAI/chatbotai.js"></script>
   <script src="/Wildlife%20Guardian/Home/js/nav.js"></script>
   <script src="./script1.js"></script>
+  <script src="./feedback.js"></script>
 
   <script>
     // Declare variables first
