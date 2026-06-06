@@ -7,7 +7,7 @@ require('dotenv').config();
 const app = express();
 
 app.use(cors());
-app.use(express.json({ limit: '50mb' })); 
+app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use(express.static(__dirname));
 
@@ -15,8 +15,8 @@ const port = process.env.PORT || 3000;
 
 // Kết nối MongoDB
 mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('🔥 Kết nối MongoDB thành công!'))
-  .catch(err => console.error('❌ Lỗi kết nối Database:', err.message));
+    .then(() => console.log('🔥 Kết nối MongoDB thành công!'))
+    .catch(err => console.error('❌ Lỗi kết nối Database:', err.message));
 
 // Import Models
 const Rescue = require('./RescueMap/models/Rescue');
@@ -65,6 +65,7 @@ app.post('/api/login', async (req, res) => {
             res.status(401).json({ success: false, message: "Sai tài khoản hoặc mật khẩu!" });
         }
     } catch (error) {
+
         res.status(500).json({ success: false, message: "Lỗi Server!" });
     }
 });

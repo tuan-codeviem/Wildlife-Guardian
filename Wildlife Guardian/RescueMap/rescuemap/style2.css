@@ -1,28 +1,119 @@
-/* ========== NAVBAR ========== */
+/* ═══════════════════════════════════════════════════════
+   style2.css – Popup Card Styles (Bao branch)
+   ⚠️  MERGE FIX: All layout/navbar/body overrides from
+   Bao's branch are NEUTRALIZED below so they don't break
+   Tuan's full-screen 3D map layout from style1.css.
+   Only the popup card styles (.rescue-popup.light-theme
+   and its children) from this file are kept intact.
+═══════════════════════════════════════════════════════ */
+
+/* ── LAYER Z-INDEX SYSTEM ────────────────────────────
+   Layer 0 (Base)   : #interactiveMap      → z-index: 0
+   Layer 1 (Float)  : .floating-panel      → z-index: 100
+   Layer 2 (Nav)    : .navbar              → z-index: 1000
+   Layer 3 (Modal)  : .rm-modal-overlay    → z-index: 9000
+   Layer 4 (Chatbot): #chatbot-container   → z-index: 9500
+   Layer 5 (Toast)  : #customToastContainer→ z-index: 10000
+──────────────────────────────────────────────────── */
+
+/* NEUTRALIZE: Bao's :root variables (keep only what we need for popups) */
 :root {
-  --primary-green: #10b981;
-  --dark-green: #047857;
-  --forest-green: #064e3b;
-  --light-green: #ecfdf5;
-  --orange: #f59e0b;
+  --bao-primary-green: #10b981;
+  --bao-dark-green:    #047857;
+  --bao-forest-green:  #064e3b;
+  --bao-orange:        #f59e0b;
 }
 
+/* NEUTRALIZE: Bao's body override – must NOT change background or font */
 body {
-  font-family: "Inter", sans-serif;
-  margin: 0;
-  background: #f8f9fa;
+  background: transparent !important; /* style1.css controls the background */
+  font-family: "Outfit", "Segoe UI", system-ui, sans-serif !important;
+  overflow: hidden !important; /* Tuan: full-screen map, no page scroll */
 }
 
+/* NEUTRALIZE: Bao's navbar – must stay fixed (not sticky) to sit above map */
 .navbar {
-  background: white;
-  border-bottom: 1px solid #eeeeee;
-  height: 72px;
-  display: flex;
-  align-items: center;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
+  position: fixed !important;
+  top: 0 !important;
+  background: transparent !important;    /* style1.css / nav.css handles this */
+  border-bottom: none !important;
+  height: 68px !important;
+  z-index: 1000 !important;
 }
+
+/* NEUTRALIZE: Bao's .rescue-container, .header, .main-content, .left-sidebar,
+   .map-panel – these containers DON'T EXIST in Tuan's HTML. Setting them to
+   display:none avoids them accidentally creating layout space if injected. */
+.rescue-container,
+.header,
+.main-content,
+.left-sidebar,
+.map-panel {
+  display: none !important;
+}
+
+/* NEUTRALIZE: Bao's .tabs – Tuan uses .panel-tabs instead */
+.tabs {
+  display: none !important;
+}
+
+/* NEUTRALIZE: Bao's .map-legend – Tuan uses .panel-legend */
+.map-legend {
+  display: none !important;
+}
+
+/* NEUTRALIZE: Bao's .reports-panel – Tuan uses .reports-list inside panel-scroll */
+.reports-panel {
+  display: block !important; /* revert – this ID is used by script1.js */
+  background: transparent !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* NEUTRALIZE: Bao's .nearby-helpers / .nearest-clinic-section */
+.nearby-helpers,
+.nearest-clinic-section {
+  display: none !important; /* Tuan uses .helpers-section / .clinic-section */
+}
+
+/* NEUTRALIZE: Bao's .view-home-btn positioning (style1.css owns this) */
+.view-home-btn {
+  /* Let style1.css control the position – do not override */
+}
+
+/* CHATBOT CONTAINER – always on top of everything */
+#chatbot-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9500;    /* Above modal (9000), below toast (10000) */
+  pointer-events: auto;
+}
+
+/* Ensure existing .wg-chatbot also gets correct z-index */
+.wg-chatbot,
+.chat-bot-AI {
+  position: fixed !important;
+  bottom: 24px !important;
+  right: 24px !important;
+  z-index: 9500 !important;
+  pointer-events: auto !important;
+}
+
+/* Chatbot window should never be blocked by Cesium canvas */
+.chatbot-window,
+.cw-msgs,
+.chatwindow {
+  z-index: 9501 !important;
+  pointer-events: auto !important;
+}
+
+/* ── NEUTRALIZE Bao's old tab-btn (Tuan already styles this in style1.css) ── */
+/* Leave .tab-btn rules below to be handled by style1.css only */
+
+
 
 .nav-container {
   max-width: 1350px;
@@ -298,12 +389,21 @@ body {
   box-sizing: border-box;
 }
 
+
+/* ═══════════════════════════════════════════════════════
+   ⚠️  MERGE FIX – BLOCK 2: Bao's old body + container styles
+   These MUST be neutralized. Tuan's style1.css controls
+   the full-screen layout. The body below would paint a
+   green-white gradient OVER the 3D map.
+═══════════════════════════════════════════════════════ */
 body {
-  background: linear-gradient(135deg, #f0fdf4 0%, #d1fae5 100%);
-  font-family: "Inter", "Segoe UI", Roboto, system-ui, sans-serif;
+  /* Neutralized: original was background: linear-gradient(135deg, #f0fdf4, #d1fae5)
+     which paints a white/light-green background over the 3D globe */
+  background: #020c05 !important;
+  overflow: hidden !important;
 }
 
-/* ========== MAIN CONTAINER ========== */
+
 .rescue-container {
   max-width: 96%; /* Mở rộng toàn bộ khung trang web ra sát 2 bên mép màn hình */
   margin: 0 auto;

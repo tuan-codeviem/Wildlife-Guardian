@@ -4,30 +4,50 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>Rescue Map - Bản đồ Cứu hộ Động vật</title>
-  
+  <title>Rescue Map – Bản đồ Cứu hộ Động vật | Wildlife Guardian</title>
+
+  <!-- FontAwesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+
+  <!-- Cesium 3D Globe -->
   <script src="https://cesium.com/downloads/cesiumjs/releases/1.116/Build/Cesium/Cesium.js"></script>
   <link href="https://cesium.com/downloads/cesiumjs/releases/1.116/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
-  
-  <link rel="stylesheet" href="style2.css">
+
+  <!-- Styles -->
   <link rel="stylesheet" href="style1.css">
-  <link rel="stylesheet" href="../../ChatBotAI/chatbot.css">
+  <link rel="stylesheet" href="style2.css">
+  <link rel="stylesheet" href="/Wildlife%20Guardian/ChatBotAI/chatbot.css">
+
+  <!-- Navbar CSS (shared from Home) -->
+  <link rel="stylesheet" href="/Wildlife%20Guardian/Home/css/nav.css">
 </head>
 
 <body>
+  <!-- ==========================================
+       SCROLL PROGRESS BAR
+  ========================================== -->
+  <div class="wg-progress" id="wgProgress"></div>
 
-  <nav class="navbar">
+  <!-- ==========================================
+       NAVBAR – Copied from Home
+  ========================================== -->
+  <nav class="navbar" id="navbar">
     <div class="mobile-nav" id="mobileNav">
       <a href="../../Home/Home.html">Home</a>
       <a href="index.html" class="active-mobile">Rescue Map</a>
       <a href="../../Social/frontend/index.html">Social</a>
-      <a href="../../Game/Main/SpeciesLibrary/Species.html">Species</a>
+      <a href="../../SpeciesLibarary/SpeciesLibarary.html">Species</a>
       <a href="../../Game/Main/Game/GameUnity.html">Game</a>
+      <a href="../../Contact/Contact.html">Contact Us</a>
       <div class="mobile-actions">
-        <button class="btn-report" onclick="openCameraModal(event)">Report Now</button>
-        <button class="btn-login" style="justify-content: center">Log in</button>
+        <button class="btn-report" onclick="openCameraModal(event)">🚨 Report Now</button>
+        <button class="btn-login">→ Log in</button>
       </div>
     </div>
     <div class="nav-container">
@@ -43,151 +63,221 @@
         </div>
         <span class="logo-text">Wildlife Guardian</span>
       </div>
-
       <div class="nav-menu" id="navMenu">
         <a href="../../Home/Home.html" class="nav-item">Home</a>
         <a href="index.html" class="nav-item active">Rescue Map</a>
         <a href="../../Social/frontend/index.html" class="nav-item">Social</a>
-        <a href="../../Game/Main/SpeciesLibrary/Species.html" class="nav-item">Species</a>
+        <a href="../../SpeciesLibarary/SpeciesLibarary.html" class="nav-item">Species</a>
         <a href="../../Game/Main/Game/GameUnity.html" class="nav-item">Game</a>
-        <div class="mobile-only-buttons">
-          <button class="btn-report" onclick="openCameraModal(event)">Report Now</button>
-          <button class="btn-login">Login</button>
-        </div>
+        <a href="../../Contact/Contact.html" class="nav-item">Contact Us</a>
       </div>
-
       <div class="nav-actions">
-        <button class="btn-report" onclick="openCameraModal(event)">Report Now</button>
-        <button class="btn-login">Login</button>
-        <button class="hamburger" id="hamburger">
-          <span></span><span></span><span></span>
-        </button>
+        <button class="btn-report" onclick="openCameraModal(event)">🚨 Report Now</button>
+        <button class="btn-login">→ Log in</button>
+        <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
       </div>
     </div>
   </nav>
 
-  <div class="rescue-container">
-    <div class="header">
-      <h1><i class="fas fa-map-marked-alt"></i> Rescue Map</h1>
-      <p>Theo dõi và báo cáo động vật bị thương trong khu vực của bạn</p>
-      <div class="nav-report-row">
-        <div class="search-bar">
-          <i class="fas fa-search"></i>
-          <input type="text" id="searchInput" placeholder="Tìm kiếm theo động vật hoặc địa điểm..." autocomplete="off">
-          <button id="searchBtn"><i class="fas fa-arrow-right"></i> Tìm</button>
-        </div>
-      </div>
-    </div>
+  <!-- ==========================================
+       MAIN WRAPPER – Full Screen Map
+  ========================================== -->
+  <div class="map-wrapper" id="mapWrapper">
 
-    <div class="main-content">
-      <!-- Khung bên trái chứa toàn bộ tính năng và danh sách -->
-      <div class="left-sidebar">
-        <div class="tabs">
-          <button class="tab-btn active" data-tab="all">Tất cả</button>
-          <button class="tab-btn" data-tab="emergency">Khẩn cấp</button>
-          <button class="tab-btn" data-tab="progress">Đang xử lý</button>
-          <button class="tab-btn" data-tab="rescued">Đã cứu</button>
-          <button class="tab-btn" data-tab="map">Bản đồ</button>
-          <button class="tab-btn" data-tab="list">Danh sách</button>
-        </div>
+    <!-- Full-screen 3D Cesium Map (Background) -->
+    <div id="interactiveMap"></div>
 
-        <!-- Chú thích bản đồ chuyển qua cột trái -->
-        <div class="map-legend">
-          <div class="legend-items" style="justify-content: center; width: 100%;">
-            <span><span class="status-badge injured"></span> Khẩn cấp</span>
-            <span><span class="status-badge active"></span> Đang xử lý</span>
-            <span><span class="status-badge rescued"></span> Đã cứu</span>
+    <!-- Floating "View Home" button on map -->
+    <button id="viewHomeBtn" class="view-home-btn" title="Quay lại toàn cảnh quả địa cầu">
+      <i class="fas fa-globe-asia"></i> View Globe
+    </button>
+
+    <!-- ==========================================
+         FLOATING LEFT PANEL (Glassmorphism)
+    ========================================== -->
+    <div class="floating-panel" id="floatingPanel">
+
+      <!-- Panel Header -->
+      <div class="panel-header">
+        <div class="panel-title">
+          <div class="panel-title-icon"><i class="fas fa-map-marked-alt"></i></div>
+          <div>
+            <h2>Rescue Map</h2>
+            <p>Theo dõi và báo cáo cứu hộ</p>
           </div>
         </div>
+      </div>
 
-        <div class="reports-panel" id="reportsPanel"></div>
-        
-        <!-- Danh sách Tình nguyện viên & Phòng khám -->
-        <div class="nearby-helpers">
-          <div class="helpers-header">
-            <i class="fas fa-hand-holding-heart"></i> Người hỗ trợ gần đây
+      <!-- Search Bar -->
+      <div class="panel-search">
+        <div class="search-glass">
+          <i class="fas fa-search"></i>
+          <input type="text" id="searchInput" placeholder="Tìm động vật, địa điểm..." autocomplete="off">
+          <button id="searchBtn" title="Tìm kiếm"><i class="fas fa-arrow-right"></i></button>
+        </div>
+      </div>
+
+      <!-- Filter Tabs -->
+      <div class="panel-tabs">
+        <button class="tab-btn active" data-tab="all">Tất cả</button>
+        <button class="tab-btn emergency-tab" data-tab="emergency">Khẩn cấp</button>
+        <button class="tab-btn progress-tab" data-tab="progress">Đang xử lý</button>
+        <button class="tab-btn rescued-tab" data-tab="rescued">Đã cứu</button>
+      </div>
+
+      <!-- Map Legend -->
+      <div class="panel-legend">
+        <span><span class="legend-dot emergency-dot"></span> Khẩn cấp</span>
+        <span><span class="legend-dot progress-dot"></span> Đang xử lý</span>
+        <span><span class="legend-dot rescued-dot"></span> Đã cứu</span>
+      </div>
+
+      <!-- Reports List -->
+      <div class="panel-scroll">
+        <div id="reportsPanel" class="reports-list"></div>
+
+        <!-- Nearby Helpers -->
+        <div class="helpers-section">
+          <div class="section-header">
+            <i class="fas fa-hand-holding-heart"></i>
+            <span>Người hỗ trợ gần đây</span>
           </div>
           <div id="helpersList" class="helpers-list"></div>
         </div>
-        
-        <div id="nearestClinic" class="nearest-clinic-section"></div>
+
+        <!-- Nearest Clinic -->
+        <div id="nearestClinic" class="clinic-section"></div>
       </div>
 
-      <!-- Khung bên phải chỉ chứa duy nhất bản đồ 3D -->
-      <div class="map-panel" id="mapPanel">
-        <button id="viewHomeBtn" class="view-home-btn" title="Quay lại toàn cảnh quả địa cầu"><i class="fas fa-globe-asia"></i> View Home</button>
-        <div class="map-canvas" id="interactiveMap"></div>
-      </div>
-    </div>
-  </div>
+    </div><!-- /floating-panel -->
 
-  <div id="cameraModal" class="modal">
-    <div class="modal-content camera-modal">
-      <div class="modal-header">
-        <h3><i class="fas fa-camera"></i> Chụp ảnh động vật cần cứu hộ</h3>
-        <span class="close-modal" onclick="closeCameraModal()">&times;</span>
+  </div><!-- /map-wrapper -->
+
+  <!-- ==========================================
+       CAMERA / REPORT MODAL (Premium Redesign)
+  ========================================== -->
+  <div id="cameraModal" class="rm-modal-overlay">
+    <div class="rm-modal">
+      <!-- Modal Header -->
+      <div class="rm-modal-header">
+        <div class="rm-modal-title">
+          <i class="fas fa-camera"></i>
+          <span>Báo cáo Động vật Cần Cứu hộ</span>
+        </div>
+        <button class="rm-modal-close" onclick="closeCameraModal()">
+          <i class="fas fa-times"></i>
+        </button>
       </div>
-      <div class="modal-body">
-        <div class="camera-container">
-          <video id="video" autoplay playsinline></video>
-          <canvas id="canvas" style="display: none;"></canvas>
-          <div class="camera-controls">
-            <button id="captureBtn" class="capture-btn">
-              <i class="fas fa-camera"></i> Chụp ảnh
-            </button>
-            <button id="retakeBtn" class="retake-btn" style="display: none;">
-              <i class="fas fa-redo"></i> Chụp lại
-            </button>
+
+      <!-- Camera Viewfinder -->
+      <div class="rm-camera-wrap" id="cameraViewfinder">
+        <video id="video" autoplay playsinline></video>
+        <canvas id="canvas" style="display:none;"></canvas>
+
+        <!-- Scanning animation overlay (shown when camera is active) -->
+        <div class="scan-overlay" id="scanOverlay">
+          <div class="scan-corners">
+            <span class="corner tl"></span>
+            <span class="corner tr"></span>
+            <span class="corner bl"></span>
+            <span class="corner br"></span>
           </div>
-          <div id="previewSection" style="display: none;">
-            <img id="previewImg" class="preview-img">
-            <div class="animal-info-form">
-              <div class="form-group">
-                <label><i class="fas fa-paw"></i> Tên/loài động vật *</label>
-                <input type="text" id="animalName" placeholder="VD: Chó, Mèo, Chim, ...">
-              </div>
-              <div class="form-group">
-                <label><i class="fas fa-thermometer-half"></i> Tình trạng *</label>
-                <select id="animalStatus">
-                  <option value="emergency">🚨 Khẩn cấp - Cần hỗ trợ ngay</option>
-                  <option value="progress">⏳ Đang xử lý - Đã có người giúp</option>
-                  <option value="rescued">✅ Đã cứu - An toàn</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label><i class="fas fa-phone-alt"></i> SĐT Liên hệ *</label>
-                <input type="tel" id="reporterPhone" placeholder="VD: 0912 345 678">
-              </div>
-              <div class="form-group">
-                <label><i class="fas fa-info-circle"></i> Mô tả thêm</label>
-                <textarea id="animalDesc" rows="2" placeholder="Mô tả chi tiết tình trạng..."></textarea>
-              </div>
-              <div class="location-loading" id="locationLoading" style="display: none;">
-                <i class="fas fa-spinner fa-spin"></i> Đang lấy vị trí của bạn...
-              </div>
-              <div id="locationInfo" class="location-info" style="display: none;">
-                <i class="fas fa-map-marker-alt"></i>
-                <span id="addressText">Đang lấy địa chỉ...</span>
-              </div>
-              <button id="submitReportBtn" class="submit-report-btn">
-                <i class="fas fa-paper-plane"></i> Gửi báo cáo cứu hộ
-              </button>
-            </div>
+          <div class="scan-line"></div>
+          <div class="scan-label"><i class="fas fa-camera"></i> Hướng camera vào động vật</div>
+        </div>
+
+        <!-- Captured photo preview -->
+        <img id="previewImg" class="rm-preview-img" style="display:none;" alt="Ảnh chụp">
+      </div>
+
+      <!-- Camera action buttons -->
+      <div class="rm-camera-actions">
+        <button id="captureBtn" class="rm-btn-capture">
+          <i class="fas fa-camera"></i> Chụp ảnh
+        </button>
+        <button id="retakeBtn" class="rm-btn-retake" style="display:none;">
+          <i class="fas fa-redo"></i> Chụp lại
+        </button>
+      </div>
+
+      <!-- Animal Info Form (shown after photo taken) -->
+      <div id="previewSection" class="rm-form-section" style="display:none;">
+
+        <!-- Field: Animal Name -->
+        <div class="rm-field">
+          <div class="rm-input-wrap">
+            <i class="fas fa-paw rm-field-icon"></i>
+            <input type="text" id="animalName" class="rm-input" placeholder=" " autocomplete="off">
+            <label class="rm-label" for="animalName">Tên / Loài động vật *</label>
           </div>
         </div>
+
+        <!-- Field: Status -->
+        <div class="rm-field">
+          <div class="rm-input-wrap rm-select-wrap">
+            <i class="fas fa-thermometer-half rm-field-icon"></i>
+            <select id="animalStatus" class="rm-input rm-select">
+              <option value="emergency">🚨 Khẩn cấp – Cần hỗ trợ ngay</option>
+              <option value="progress">⏳ Đang xử lý – Đã có người giúp</option>
+              <option value="rescued">✅ Đã cứu – An toàn</option>
+            </select>
+            <label class="rm-label rm-label-active" for="animalStatus">Tình trạng *</label>
+          </div>
+        </div>
+
+        <!-- Field: Phone -->
+        <div class="rm-field">
+          <div class="rm-input-wrap">
+            <i class="fas fa-phone-alt rm-field-icon"></i>
+            <input type="tel" id="reporterPhone" class="rm-input" placeholder=" " autocomplete="tel">
+            <label class="rm-label" for="reporterPhone">SĐT Liên hệ *</label>
+          </div>
+        </div>
+
+        <!-- Field: Description -->
+        <div class="rm-field">
+          <div class="rm-input-wrap">
+            <i class="fas fa-info-circle rm-field-icon"></i>
+            <textarea id="animalDesc" class="rm-input rm-textarea" rows="3" placeholder=" "></textarea>
+            <label class="rm-label" for="animalDesc">Mô tả thêm (tuỳ chọn)</label>
+          </div>
+        </div>
+
+        <!-- Location Info -->
+        <div id="locationLoading" class="rm-location-loading" style="display:none;">
+          <i class="fas fa-spinner fa-spin"></i>
+          <span>Đang xác định vị trí GPS...</span>
+        </div>
+        <div id="locationInfo" class="rm-location-info" style="display:none;">
+          <i class="fas fa-map-marker-alt"></i>
+          <span id="addressText">Đang lấy địa chỉ...</span>
+        </div>
+
+        <!-- Submit Button -->
+        <button id="submitReportBtn" class="rm-btn-submit">
+          <i class="fas fa-paper-plane"></i>
+          <span>Gửi báo cáo cứu hộ</span>
+        </button>
       </div>
     </div>
   </div>
 
+  <!-- ==========================================
+       CHATBOT AI – must use .chat-bot-AI, .AIassit, .chatwindow, .close
+       These are the exact class names chatbotai.js binds to.
+       chatbot.css (../../ChatBotAI/chatbot.css) provides all styling.
+       z-index: 9999 is set in chatbot.css automatically.
+  ========================================== -->
   <div class="chat-bot-AI">
-    <div class="AIassit">
+    <!-- Trigger button (Phoenix mascot) -->
+    <div class="AIassit" title="Chat with Phoenix AI">
       <svg class="pixel-phoenix" viewBox="0 0 32 32" width="40" height="40">
         <rect x="12" y="16" width="8" height="8" fill="#FF6B35" />
         <rect x="14" y="12" width="4" height="4" fill="#FF6B35" />
         <rect x="18" y="13" width="2" height="2" fill="#FFD93D" />
         <rect x="15" y="13" width="2" height="2" fill="#1a1a1a" />
-        <rect class="wing" x="8" y="16" width="4" height="6" fill="#FF8C42" />
-        <rect class="wing" x="20" y="16" width="4" height="6" fill="#FF8C42" />
+        <rect x="8" y="16" width="4" height="6" fill="#FF8C42" />
+        <rect x="20" y="16" width="4" height="6" fill="#FF8C42" />
         <rect x="10" y="24" width="2" height="4" fill="#FF6B35" />
         <rect x="14" y="24" width="2" height="6" fill="#FFD93D" />
         <rect x="18" y="24" width="2" height="4" fill="#FF6B35" />
@@ -195,14 +285,10 @@
         <rect x="15" y="6" width="2" height="6" fill="#FF6B35" />
         <rect x="17" y="8" width="2" height="4" fill="#FFD93D" />
       </svg>
-      <div class="sparkle-badge">
-        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none"
-          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" />
-        </svg>
-      </div>
+      <div class="sparkle-badge">✦</div>
     </div>
 
+    <!-- Chat Window (hidden by default; JS adds .active class on click) -->
     <div class="chatwindow">
       <div class="chat-header">
         <div class="chat-header-info">
@@ -210,74 +296,88 @@
             <svg viewBox="0 0 32 32" width="20" height="20">
               <rect x="12" y="16" width="8" height="8" fill="#FF6B35" />
               <rect x="14" y="12" width="4" height="4" fill="#FF6B35" />
-              <rect x="18" y="13" width="2" height="2" fill="#FFD93D" />
-              <rect x="15" y="13" width="2" height="2" fill="#1a1a1a" />
               <rect x="8" y="16" width="4" height="6" fill="#FF8C42" />
               <rect x="20" y="16" width="4" height="6" fill="#FF8C42" />
             </svg>
           </div>
           <div class="chat-title-group">
             <h3>Phoenix AI</h3>
-            <p>Wildlife Assistant</p>
+            <p>Wildlife Assistant · Online</p>
           </div>
         </div>
-        <button class="close">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M18 6 6 18" />
-            <path d="m6 6 12 12" />
+        <!-- MUST use class="close" – chatbotai.js listens on this -->
+        <button class="close" title="Đóng chat">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M18 6 6 18M6 6l12 12" />
           </svg>
         </button>
       </div>
 
       <div class="chat">
         <div class="model">
-          <p>Hello! I'm Phoenix, your wildlife guardian assistant!</p>
+          <p>Hello! I'm Phoenix 🦅 Your wildlife guardian assistant! How can I help you today?</p>
         </div>
       </div>
 
       <div class="inputarea">
-        <input type="text" placeholder="Ask Phoenix anything...">
-        <button>
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"></path>
+        <input type="text" placeholder="Ask Phoenix anything…" />
+        <button title="Send">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" />
           </svg>
         </button>
       </div>
     </div>
   </div>
 
-  <script type="importmap">
-    {
-      "imports": {
-        "@google/genai": "https://esm.run/@google/genai"
-      }
-    }
-  </script>
-
-  <script type="module" src="../../ChatBotAI/chatbotai.js"></script>
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <!-- ==========================================
+       SCRIPTS
+  ========================================== -->
+  <script type="importmap">{"imports":{"@google/genai":"https://esm.run/@google/genai"}}</script>
+  <script type="module" src="/Wildlife%20Guardian/ChatBotAI/chatbotai.js"></script>
+  <script src="/Wildlife%20Guardian/Home/js/nav.js"></script>
   <script src="./script1.js"></script>
 
   <script>
+    // Declare variables first
+    const progressBar = document.getElementById('wgProgress');
+    const navbar = document.getElementById('navbar');
+
+    // Navbar: trigger scrolled class on load (body overflow:hidden, map is fixed)
+    // so window.scroll won't fire. We use the floating panel's scroll instead.
+    if (navbar) navbar.classList.add('scrolled'); // Always show navbar bg on map page
+
+    // Optionally: listen to floating-panel scroll for progress bar
+    const panelScroll = document.querySelector('.panel-scroll');
+    if (panelScroll) {
+      panelScroll.addEventListener('scroll', () => {
+        if (progressBar) {
+          const total = panelScroll.scrollHeight - panelScroll.clientHeight;
+          progressBar.style.transform = `scaleX(${total > 0 ? panelScroll.scrollTop / total : 0})`;
+        }
+      }, { passive: true });
+    }
+
+
+    // Login/logout button logic
     document.addEventListener("DOMContentLoaded", () => {
       const user = localStorage.getItem("currentUser") || localStorage.getItem("isLoggedIn");
-      const loginBtns = document.querySelectorAll(".btn-login");
-
-      if (user) {
-        loginBtns.forEach((btn) => {
-          btn.innerHTML = `← Log out`;
-          btn.onclick = (e) => {
-            e.preventDefault();
+      document.querySelectorAll(".btn-login").forEach(b => {
+        if (user) {
+          b.textContent = "← Log out";
+          b.onclick = () => {
             localStorage.removeItem("currentUser");
             localStorage.removeItem("isLoggedIn");
             localStorage.removeItem("username");
             window.location.reload();
           };
-        });
-      }
+        } else {
+          b.textContent = "→ Log in";
+          b.onclick = () => { window.location.href = "../../Auth/login.html"; };
+        }
+      });
     });
   </script>
 </body>
+
 </html>
