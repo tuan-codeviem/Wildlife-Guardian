@@ -1,7 +1,6 @@
 // Cấu hình Token Cesium
 Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2ZmM2MjY2ZS03ZDI3LTQ3YzgtYTMxMi0wNDg3ZDc5YzRlNTYiLCJpZCI6NDM4ODM2LCJpc3MiOiJodHRwczovL2FwaS5jZXNpdW0uY29tIiwiYXVkIjoidW5kZWZpbmVkX2RlZmF1bHQiLCJpYXQiOjE3ODAyOTY2OTl9.tDMoMdaTI7NA8otfGmZ1bwnMZFub0aSsaJLdYu54j6M';
 
-// Navbar Mobile Toggle
 const hamburger = document.getElementById("hamburger");
 const mobileNav = document.getElementById("mobileNav");
 if (hamburger && mobileNav) {
@@ -19,8 +18,7 @@ navItems.forEach((item) => {
     });
 });
 
-// Variables
-let reports = []; // Mảng này giờ sẽ được tải trực tiếp từ MongoDB
+let reports = [];
 const helpersData = [
     { name: "Danh Thái", role: "Bác sĩ Thú y", verified: true, phone: "0912 345 678", lat: 16.058, lng: 108.22, address: "Số 12 Trần Phú, Đà Nẵng", isClinic: false },
     { name: "Thu Trần", role: "Cứu hộ động vật hoang dã", verified: true, phone: "0988 765 432", lat: 16.062, lng: 108.215, address: "Số 45 Bạch Đằng, Đà Nẵng", isClinic: false },
@@ -41,8 +39,6 @@ let capturedPhoto = null;
 let currentLocation = null;
 let currentAddress = "";
 let toastContainer = null;
-
-// ================= CÁC HÀM TIỆN ÍCH =================
 
 function createToastContainer() {
     if (document.getElementById("customToastContainer")) return;
@@ -149,8 +145,6 @@ function getSampleImage(animalType) {
     return canvas.toDataURL("image/jpeg", 0.8);
 }
 
-// ================= RENDER COMPONENTS TÌNH NGUYỆN VIÊN & PHÒNG KHÁM =================
-
 function renderNearbyHelpers() {
     const helpersDiv = document.getElementById("helpersList");
     if (!helpersDiv) return;
@@ -211,40 +205,32 @@ function renderNearestClinic() {
     if (btn) btn.onclick = () => { if (confirm(`📞 Gọi cho ${btn.dataset.name}?`)) window.location.href = `tel:${btn.dataset.phone}`; };
 }
 
-// ================= QUẢN LÝ BÁO CÁO (PANEL TRÁI & MONGODB) =================
-
-// Tự động nhận diện đường dẫn API để tránh lỗi khi test qua Live Server
 function getApiUrl(path) {
-    // ĐÃ SỬA: Nếu web không chạy trực tiếp trên cổng 3000, bắt buộc trỏ mọi API về cổng 3000
     if (window.location.port !== '3000') {
         let host = window.location.hostname || '127.0.0.1';
-        
-        // Thay vì dùng chữ 'localhost', ta đổi hẳn sang IP '127.0.0.1' để tránh lỗi Network ERR_FAILED
         if (host === 'localhost') host = '127.0.0.1';
-        
         return `http://${host}:3000${path}`;
     }
     return path;
 }
 
-// Hàm tải dữ liệu từ MongoDB
 async function loadReportsFromDB() {
     try {
-        const response = await fetch(getApiUrl('/api/rescuemap'));
+        const response = await fetch(getApiUrl(`/api/rescuemap?t=${new Date().getTime()}`), { cache: 'no-store' });
         const dbData = await response.json();
         
         if (dbData && dbData.length > 0) {
             reports = dbData.map(item => ({
-                id: item._id, // Map _id của Mongo vào thuộc tính id
+                id: item._id ? item._id.toString() : "", 
                 animal: item.animal || "Chưa rõ tên",
                 location: item.location || "Chưa rõ địa chỉ",
                 status: item.status || "emergency",
-                lat: item.latitude,
-                lng: item.longitude,
+                lat: parseFloat(item.lat !== undefined ? item.lat : item.latitude), 
+                lng: parseFloat(item.lng !== undefined ? item.lng : item.longitude),
                 date: item.date || new Date().toLocaleString("vi-VN"),
                 description: item.description || item.note || "",
                 photo: item.photo || getSampleImage(item.animal || "Động vật")
-            }));
+            })).filter(report => !isNaN(report.lat) && !isNaN(report.lng));
         } else {
             reports = [];
         }
@@ -264,39 +250,39 @@ function createReportCardHTML(report) {
     let statusColor = "", statusBg = "";
     
     if (report.status === "emergency") { 
-        statusDisplay = "Khẩn cấp"; statusIcon = "🚨"; statusClass = "emergency"; 
-        statusColor = "#d62828"; statusBg = "#fbeae9";
+        statusDisplay = "Khẩn cấp"; statusIcon = "🆘"; statusClass = "emergency"; 
+        statusColor = "#dc2626"; statusBg = "#fef2f2";
     } else if (report.status === "progress") { 
-        statusDisplay = "Đang xử lý"; statusIcon = "⏳"; statusClass = "progress"; 
-        statusColor = "#e67e22"; statusBg = "#fdf3e8";
+        statusDisplay = "Đang cứu hộ"; statusIcon = "🏃"; statusClass = "progress"; 
+        statusColor = "#0284c7"; statusBg = "#f0f9ff";
     } else { 
-        statusDisplay = "Đã cứu"; statusIcon = "✅"; statusClass = "rescued"; 
-        statusColor = "#2a9d8f"; statusBg = "#e9f5f4";
+        statusDisplay = "An toàn"; statusIcon = "🌿"; statusClass = "rescued"; 
+        statusColor = "#16a34a"; statusBg = "#dcfce7";
     }
     
     const photoSrc = report.photo ? report.photo : `https://ui-avatars.com/api/?name=${encodeURIComponent(report.animal)}&background=random&size=128`;
 
-    return `<div class="report-card ${statusClass}" style="margin-bottom: 16px; padding: 16px; border-radius: 12px; background: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.06); border: 1px solid #eaeaea; transition: transform 0.2s;">
+    return `<div class="report-card ${statusClass}" style="margin-bottom: 16px; padding: 16px; border-radius: 16px; background: #fff; box-shadow: 0 10px 25px rgba(0,0,0,0.05); border: 1px solid #f1f5f9; transition: all 0.3s ease;">
       <div style="display: flex; gap: 16px; margin-bottom: 12px;">
-          <img src="${photoSrc}" style="width: 85px; height: 85px; object-fit: cover; border-radius: 10px; border: 1px solid #f0f0f0;">
+          <img src="${photoSrc}" style="width: 90px; height: 90px; object-fit: cover; border-radius: 12px; border: 2px solid #e2e8f0; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
           <div style="flex: 1; display: flex; flex-direction: column; justify-content: center;">
               <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;">
-                <h4 style="margin: 0; font-size: 16px; color: #222;">${escapeHtml(report.animal)}</h4>
+                <h4 style="margin: 0; font-size: 17px; color: #1e293b; font-weight: 700;">${escapeHtml(report.animal)}</h4>
               </div>
-              <span style="display: inline-block; width: max-content; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; color: ${statusColor}; background: ${statusBg}; margin-bottom: 8px;">${statusIcon} ${statusDisplay}</span>
-              <p style="margin: 0 0 4px 0; font-size: 13px; color: #555; display: flex; align-items: flex-start; gap: 6px;"><i class="fas fa-map-marker-alt" style="color: #e63946; margin-top: 3px;"></i> <span style="line-height: 1.3;">${escapeHtml(report.location)}</span></p>
-              <p style="margin: 0; font-size: 12px; color: #888;"><i class="fas fa-clock"></i> ${report.date}</p>
+              <span style="display: inline-block; width: max-content; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; color: ${statusColor}; background: ${statusBg}; margin-bottom: 8px;">${statusIcon} ${statusDisplay}</span>
+              <p style="margin: 0 0 4px 0; font-size: 13px; color: #475569; display: flex; align-items: flex-start; gap: 6px;"><i class="fas fa-map-marker-alt" style="color: #10b981; margin-top: 3px;"></i> <span style="line-height: 1.3;">${escapeHtml(report.location)}</span></p>
+              <p style="margin: 0; font-size: 12px; color: #94a3b8;"><i class="fas fa-clock"></i> ${report.date}</p>
           </div>
       </div>
       
       ${report.description ? `
-        <div style="font-size: 13px; color: #444; background: #f8f9fa; padding: 10px 12px; border-radius: 8px; margin-bottom: 12px; font-style: italic; border-left: 3px solid #ccc; line-height: 1.5;">
+        <div style="font-size: 13.5px; color: #334155; background: #f8fafc; padding: 12px 14px; border-radius: 10px; margin-bottom: 12px; font-style: italic; border-left: 4px solid #10b981; line-height: 1.5;">
           "${escapeHtml(report.description)}"
         </div>` : ""}
         
-      <div style="display: flex; gap: 10px; border-top: 1px solid #f0f0f0; padding-top: 12px;">
-        <button class="report-action-btn locate-btn" data-lat="${report.lat}" data-lng="${report.lng}" style="flex: 1; padding: 10px; background: #e0f2fe; color: #0284c7; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 6px;"><i class="fas fa-location-dot"></i> Định vị</button>
-        <button class="report-action-btn delete-btn" data-id="${report.id}" style="padding: 10px 16px; background: #fee2e2; color: #ef4444; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center;"><i class="fas fa-trash"></i></button>
+      <div style="display: flex; gap: 10px; border-top: 1px dashed #e2e8f0; padding-top: 14px;">
+        <button class="report-action-btn locate-btn" data-lat="${report.lat}" data-lng="${report.lng}" style="flex: 1; padding: 10px; background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 6px;"><i class="fas fa-crosshairs"></i> Vị trí 3D</button>
+        <button class="report-action-btn delete-btn" data-id="${report.id}" style="padding: 10px 16px; background: #fef2f2; color: #ef4444; border: 1px solid #fecaca; border-radius: 10px; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center;"><i class="fas fa-trash-alt"></i></button>
       </div>
     </div>`;
 }
@@ -327,7 +313,7 @@ function renderReportsPanel() {
     document.querySelectorAll(".delete-btn").forEach((btn) => {
         btn.onclick = (e) => {
             e.stopPropagation();
-            const id = btn.dataset.id; // Lấy ID dạng string của MongoDB
+            const id = btn.dataset.id;
             if(confirm("Bạn có chắc muốn ẩn báo cáo này khỏi bản đồ? (Cần có API backend để xóa vĩnh viễn)")) {
                 reports = reports.filter((r) => r.id !== id);
                 renderReportsPanel(); renderNearbyHelpers(); renderNearestClinic();
@@ -337,8 +323,6 @@ function renderReportsPanel() {
         };
     });
 }
-
-// ================= CESIUM MAP CẬP NHẬT LỖI HIỂN THỊ =================
 
 function initRealMap() {
     const mapContainer = document.getElementById("interactiveMap");
@@ -430,15 +414,15 @@ function updateMapMarkers() {
     if (filteredReports.length === 0) return;
     
     filteredReports.forEach(report => {
-        let markerColor = Cesium.Color.fromCssColorString('#d62828'); 
-        let statusText = '🚨 KHẨN CẤP'; let statusColor = '#ff4d4d'; let badgeBg = 'rgba(214, 40, 40, 0.2)';
+        let markerColor = Cesium.Color.fromCssColorString('#ef4444'); 
+        let statusText = '🆘 KHẨN CẤP'; let statusColor = '#dc2626'; let badgeBg = '#fef2f2';
 
         if (report.status === 'rescued') {
-            markerColor = Cesium.Color.fromCssColorString('#2a9d8f');
-            statusText = '✅ ĐÃ CỨU'; statusColor = '#2a9d8f'; badgeBg = 'rgba(42, 157, 143, 0.2)';
+            markerColor = Cesium.Color.fromCssColorString('#22c55e');
+            statusText = '🌿 AN TOÀN'; statusColor = '#16a34a'; badgeBg = '#dcfce7';
         } else if (report.status === 'progress') {
             markerColor = Cesium.Color.fromCssColorString('#3b82f6');
-            statusText = '⏳ ĐANG XỬ LÝ'; statusColor = '#66a3ff'; badgeBg = 'rgba(59, 130, 246, 0.2)';
+            statusText = '🏃 ĐANG CỨU HỘ'; statusColor = '#0284c7'; badgeBg = '#f0f9ff';
         }
         
         const bgImage = report.photo ? report.photo : 'https://via.placeholder.com/400x200?text=No+Image';
@@ -448,12 +432,12 @@ function updateMapMarkers() {
         let helpersHtml = '';
         if (helpersWithDist.length > 0) {
             helpersHtml = helpersWithDist.map(h => `
-                <div class="detail-item" style="flex-direction: column; align-items: flex-start; margin-bottom: 8px;">
+                <div class="detail-item" style="flex-direction: column; align-items: flex-start; margin-bottom: 10px; background: #f8fafc; padding: 8px; border-radius: 8px; border: 1px solid #e2e8f0;">
                     <div style="display:flex; justify-content:space-between; width:100%;">
-                        <span style="color: #4ade80; font-weight: bold;"><i class="fas fa-user-md"></i> ${escapeHtml(h.name)}</span>
-                        <span style="color: #aaa; font-size: 11px;">Cách ${formatDistance(h.distance)}</span>
+                        <span style="color: #16a34a; font-weight: 700;"><i class="fas fa-user-shield"></i> ${escapeHtml(h.name)}</span>
+                        <span style="color: #64748b; font-size: 11px; background: #e2e8f0; padding: 2px 6px; border-radius: 10px;">${formatDistance(h.distance)}</span>
                     </div>
-                    <div style="color: #ddd; font-size: 11px; margin-top: 2px;">${escapeHtml(h.role)} - 📞 ${h.phone}</div>
+                    <div style="color: #475569; font-size: 12px; margin-top: 4px;">${escapeHtml(h.role)} - 📞 ${h.phone}</div>
                 </div>
             `).join('');
         } else {
@@ -467,12 +451,12 @@ function updateMapMarkers() {
         if (clinicsWithDist.length > 0) {
             const c = clinicsWithDist[0];
             clinicHtml = `
-                <div class="detail-item" style="flex-direction: column; align-items: flex-start;">
+                <div class="detail-item" style="flex-direction: column; align-items: flex-start; background: #f0fdf4; padding: 8px; border-radius: 8px; border: 1px solid #bbf7d0;">
                     <div style="display:flex; justify-content:space-between; width:100%;">
-                        <span style="color: #60a5fa; font-weight: bold;"><i class="fas fa-clinic-medical"></i> ${escapeHtml(c.name)}</span>
-                        <span style="color: #aaa; font-size: 11px;">Cách ${formatDistance(c.distance)}</span>
+                        <span style="color: #059669; font-weight: 700;"><i class="fas fa-clinic-medical"></i> ${escapeHtml(c.name)}</span>
+                        <span style="color: #64748b; font-size: 11px; background: #e2e8f0; padding: 2px 6px; border-radius: 10px;">${formatDistance(c.distance)}</span>
                     </div>
-                    <div style="color: #ddd; font-size: 11px; margin-top: 2px;">📞 ${c.phone} | ${c.available}</div>
+                    <div style="color: #475569; font-size: 12px; margin-top: 4px;">📞 ${c.phone} | ${c.available}</div>
                 </div>
             `;
         } else {
@@ -480,10 +464,10 @@ function updateMapMarkers() {
         }
 
         const popupContent = `
-            <div class="rescue-popup">
+            <div class="rescue-popup light-theme">
                 <button class="close-btn"><i class="fas fa-times"></i></button>
                 <div class="rescue-header" style="background-image: url('${bgImage}')">
-                    <span class="rescue-badge" style="color: ${statusColor}; border-color: ${statusColor}; background-color: ${badgeBg};">${statusText}</span>
+                    <span class="rescue-badge" style="color: ${statusColor}; border: none; background-color: ${badgeBg}; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">${statusText}</span>
                     <div class="rescue-title-container">
                         <h2 class="rescue-title"><i class="fas fa-paw"></i> ${escapeHtml(report.animal)}</h2>
                     </div>
@@ -491,40 +475,40 @@ function updateMapMarkers() {
 
                 <div class="rescue-details">
                     <div class="detail-section">
-                        <div class="detail-title"><i class="fas fa-map-marker-alt"></i> THÔNG TIN ĐỊA ĐIỂM</div>
+                        <div class="detail-title" style="color:#10b981;"><i class="fas fa-map-marker-alt"></i> ĐỊA ĐIỂM CỨU HỘ</div>
                         <div class="detail-box">
                             <div class="detail-item">
-                                <div class="detail-item-title">Vị trí</div>
+                                <div class="detail-item-title"><i class="fas fa-location-arrow"></i> Vị trí</div>
                                 <div class="detail-item-value">${escapeHtml(report.location)}</div>
                             </div>
                             <div class="detail-item">
-                                <div class="detail-item-title">Thời gian</div>
+                                <div class="detail-item-title"><i class="far fa-clock"></i> Thời gian</div>
                                 <div class="detail-item-value">${report.date}</div>
                             </div>
                         </div>
                     </div>
 
                     <div class="detail-section">
-                        <div class="detail-title"><i class="fas fa-info-circle"></i> MÔ TẢ TÌNH TRẠNG</div>
-                        <div class="detail-box" style="font-style: italic; font-size: 13px; color: #ddd;">
+                        <div class="detail-title" style="color:#f59e0b;"><i class="fas fa-info-circle"></i> MÔ TẢ TÌNH TRẠNG</div>
+                        <div class="detail-box" style="font-style: italic; font-size: 13px; color: #475569; background: #fffbeb; border-left: 3px solid #fcd34d;">
                             ${escapeHtml(report.description || "Chưa có mô tả chi tiết.")}
                         </div>
                     </div>
                     
                     <div class="detail-section">
-                        <div class="detail-title"><i class="fas fa-hospital"></i> PHÒNG KHÁM GẦN NHẤT</div>
+                        <div class="detail-title" style="color:#059669;"><i class="fas fa-hospital"></i> PHÒNG KHÁM GẦN NHẤT</div>
                         <div class="detail-box">${clinicHtml}</div>
                     </div>
 
                     <div class="detail-section">
-                        <div class="detail-title"><i class="fas fa-hands-helping"></i> NGƯỜI HỖ TRỢ GẦN ĐÂY</div>
+                        <div class="detail-title" style="color:#3b82f6;"><i class="fas fa-hands-helping"></i> LỰC LƯỢNG HỖ TRỢ</div>
                         <div class="detail-box">${helpersHtml}</div>
                     </div>
                     
-                    <hr style="border: 0; border-top: 1px solid #333; margin: 12px 0;">
+                    <hr style="border: 0; border-top: 1px dashed #cbd5e1; margin: 12px 0;">
                     <div style="display: flex; gap: 8px; justify-content: space-between;">
-                        <button onclick="alert('Đang gọi liên hệ hỗ trợ...')" style="flex: 1; background: #256f5b; color: white; border: none; padding: 8px 12px; border-radius: 20px; cursor: pointer; font-size: 13px; font-weight: bold;">
-                            <i class="fas fa-phone"></i> Liên hệ
+                        <button onclick="alert('Đang gọi liên hệ hỗ trợ...')" style="flex: 1; background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; padding: 10px 12px; border-radius: 20px; cursor: pointer; font-size: 14px; font-weight: bold; box-shadow: 0 4px 6px rgba(16, 185, 129, 0.2); transition: transform 0.2s;">
+                            <i class="fas fa-phone-volume"></i> Gọi liên hệ khẩn cấp
                         </button>
                     </div>
                 </div>
@@ -539,8 +523,6 @@ function updateMapMarkers() {
         });
     });
 }
-
-// ================= MÁY ẢNH & ĐỊA ĐIỂM =================
 
 async function initCamera() {
     video = document.getElementById("video");
@@ -612,34 +594,33 @@ async function submitReport() {
     if (!capturedPhoto) return showToast("Chụp ảnh động vật!", "error");
     if (!currentLocation) return showToast("Đang chờ vị trí GPS...", "error");
     
-    // Tạo object dữ liệu chuẩn bị gửi lên Database
     const newReportData = {
         animal: animalName,
         status: animalStatus,
         description: animalDesc,
         latitude: currentLocation.lat,
         longitude: currentLocation.lng,
+        lat: currentLocation.lat, 
+        lng: currentLocation.lng, 
         location: currentAddress,
         date: new Date().toLocaleString("vi-VN"),
         photo: capturedPhoto
     };
 
     try {
-        // Gọi API POST để lưu dữ liệu cố định vào MongoDB
         const response = await fetch(getApiUrl('/api/rescuemap'), {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(newReportData)
         });
 
-        // KIỂM TRA XEM SERVER TRẢ VỀ CÓ ĐÚNG LÀ CHUỖI JSON KHÔNG TRƯỚC KHI ĐỌC
         const contentType = response.headers.get("content-type");
         let result;
         if (contentType && contentType.includes("application/json")) {
             result = await response.json();
         } else {
             const errText = await response.text();
-            console.error("❌ Lỗi từ Server (Dữ liệu trả về không phải JSON):", errText);
+            console.error("❌ Lỗi từ Server:", errText);
             return showToast("Máy chủ đang bị lỗi ngầm. Bấm F12 mở Console để xem!", "error");
         }
 
@@ -647,18 +628,34 @@ async function submitReport() {
             showToast("✅ Đã lưu báo cáo cố định lên bản đồ!", "success");
             closeCameraModal();
             
-            // Tải lại danh sách từ Database để cập nhật giao diện
             await loadReportsFromDB();
             
             if (viewer) {
                 window.setActiveTab("map");
-                viewer.camera.flyTo({ destination: Cesium.Cartesian3.fromDegrees(currentLocation.lng, currentLocation.lat, 1500), duration: 2 });
+                viewer.camera.flyTo({ 
+                    destination: Cesium.Cartesian3.fromDegrees(currentLocation.lng, currentLocation.lat, 1500), 
+                    duration: 2,
+                    complete: function() {
+                        if (reports.length > 0) {
+                            const newReport = reports[reports.length - 1]; 
+                            const entityId = `report_${newReport.id}`;
+                            const entity = viewer.entities.getById(entityId);
+                            if (entity && popupDiv) {
+                                activeEntity = entity;
+                                const htmlContent = typeof entity.properties.customHTML.getValue === 'function' ? entity.properties.customHTML.getValue() : entity.properties.customHTML;
+                                popupDiv.innerHTML = htmlContent;
+                                popupDiv.style.display = 'block';
+                                const closeBtn = popupDiv.querySelector('.close-btn');
+                                if(closeBtn) closeBtn.onclick = () => { popupDiv.style.display = 'none'; activeEntity = null; };
+                            }
+                        }
+                    }
+                });
             }
         } else {
             showToast("❌ Lỗi: " + result.error, "error");
         }
     } catch (error) {
-        console.error("Lỗi fetch (Không thể kết nối API):", error);
         showToast("❌ Lỗi mạng: " + error.message, "error");
     }
 }
@@ -704,7 +701,6 @@ document.addEventListener("DOMContentLoaded", () => {
     addPanelStyles(); 
     setTimeout(() => { if (typeof Cesium !== "undefined") initRealMap(); }, 500);
     
-    // TẢI DỮ LIỆU CỐ ĐỊNH TỪ MONGODB NGAY KHI MỞ TRANG
     loadReportsFromDB();
     
     document.querySelectorAll(".tab-btn").forEach((btn) => btn.addEventListener("click", () => window.setActiveTab(btn.dataset.tab)));

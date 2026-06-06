@@ -6,12 +6,10 @@ require('dotenv').config();
 
 const app = express();
 
-app.use(cors()); // Sử dụng thư viện chuẩn của Express
-
-// ĐÃ SỬA LỖI: Chỉ dùng 1 lần express.json với giới hạn 50mb để chứa được ảnh chụp
+app.use(cors());
 app.use(express.json({ limit: '50mb' })); 
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
-app.use(express.static(__dirname)); // Phục vụ file tĩnh
+app.use(express.static(__dirname));
 
 const port = process.env.PORT || 3000;
 
@@ -24,9 +22,7 @@ mongoose.connect(process.env.MONGO_URI)
 const Rescue = require('./RescueMap/models/Rescue');
 const User = require('./RescueMap/models/User');
 
-// ==========================================
-// API CỨU HỘ
-// ==========================================
+// Lấy dữ liệu
 app.get('/api/rescuemap', async (req, res) => {
     try {
         const rescues = await Rescue.find();
@@ -36,6 +32,7 @@ app.get('/api/rescuemap', async (req, res) => {
     }
 });
 
+// Cất dữ liệu
 app.post('/api/rescuemap', async (req, res) => {
     try {
         const newRescue = new Rescue(req.body);
@@ -47,6 +44,7 @@ app.post('/api/rescuemap', async (req, res) => {
     }
 });
 
+// Auth Routes
 app.post('/api/register', async (req, res) => {
     try {
         const newUser = new User(req.body);
