@@ -1081,19 +1081,6 @@ window.closeCameraModal = function() {
     stopCamera();
 };
 
-/* ── FEEDBACK MODAL ────────────────────────────────── */
-window.openFeedbackModal = function() {
-    const modal = document.getElementById("feedbackModal");
-    if (modal) modal.classList.add("open");
-    document.body.style.overflow = 'hidden';
-};
-
-window.closeFeedbackModal = function() {
-    const modal = document.getElementById("feedbackModal");
-    if (modal) modal.classList.remove("open");
-    document.body.style.overflow = '';
-};
-
 window.setActiveTab = function (tabId) {
     activeTab = tabId;
     document.querySelectorAll(".tab-btn").forEach((btn) => btn.classList.toggle("active", btn.dataset.tab === tabId));
@@ -1126,10 +1113,9 @@ document.addEventListener("DOMContentLoaded", () => {
     
     window.addEventListener("click", (e) => {
         if (e.target.id === "cameraModal")  window.closeCameraModal();
-        if (e.target.id === "feedbackModal") window.closeFeedbackModal();
     });
     document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") { window.closeCameraModal(); window.closeFeedbackModal(); }
+        if (e.key === "Escape") { window.closeCameraModal(); }
     });
     
     const viewHomeBtn = document.getElementById("viewHomeBtn");

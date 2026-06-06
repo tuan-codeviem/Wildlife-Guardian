@@ -21,7 +21,6 @@ mongoose.connect(process.env.MONGO_URI)
 // Import Models
 const Rescue   = require('./Wildlife Guardian/RescueMap/models/Rescue');
 const User     = require('./Wildlife Guardian/RescueMap/models/User');
-const Feedback = require('./Wildlife Guardian/RescueMap/models/Feedback');
 
 // Lấy dữ liệu
 app.get('/api/rescuemap', async (req, res) => {
@@ -42,40 +41,6 @@ app.post('/api/rescuemap', async (req, res) => {
     } catch (error) {
         console.error("❌ Lỗi khi lưu vào DB:", error);
         res.status(400).json({ error: "Không thể lưu báo cáo" });
-    }
-});
-
-// ════════════════════════════════════════════════
-// FEEDBACK ROUTES
-// ════════════════════════════════════════════════
-
-// Gửi phản hồi mới
-app.post('/api/feedback', async (req, res) => {
-    try {
-        const { name, email, location, type, content, rating } = req.body;
-        if (!name || !content) {
-            return res.status(400).json({ error: 'Tên và nội dung là bắt buộc!' });
-        }
-        if (content.length < 10) {
-            return res.status(400).json({ error: 'Nội dung quá ngắn (tối thiểu 10 ký tự)!' });
-        }
-        const newFeedback = new Feedback({ name, email, location, type, content, rating: rating || 0 });
-        await newFeedback.save();
-        console.log(`💬 Phản hồi mới từ "${name}": ${type} | ⭐ ${rating || 0}/5`);
-        res.status(201).json({ success: true, message: 'Phản hồi đã được ghi nhận thành công!' });
-    } catch (error) {
-        console.error('❌ Lỗi khi lưu phản hồi:', error);
-        res.status(500).json({ error: 'Không thể lưu phản hồi. Vui lòng thử lại!' });
-    }
-});
-
-// Lấy danh sách phản hồi (dùng cho admin)
-app.get('/api/feedback', async (req, res) => {
-    try {
-        const feedbacks = await Feedback.find().sort({ createdAt: -1 }).limit(100);
-        res.json(feedbacks);
-    } catch (error) {
-        res.status(500).json({ error: 'Lỗi tải danh sách phản hồi' });
     }
 });
 
