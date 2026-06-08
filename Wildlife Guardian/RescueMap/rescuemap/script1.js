@@ -432,7 +432,7 @@ function createReportCardHTML(report) {
               font-size:12.5px; color:#94a3b8;
               background:rgba(255,255,255,0.04);
               padding:10px 12px; border-radius:8px;
-              margin-bottom:12px; font-style:italic;
+              margin-top:12px; font-style:italic;
               border-left:3px solid ${st.color};
               line-height:1.55;
            ">
@@ -441,8 +441,10 @@ function createReportCardHTML(report) {
         : '';
 
     return `
-<div class="report-card ${st.cls}">
-  <div style="display:flex; gap:12px; margin-bottom:10px; align-items:flex-start;">
+<div class="report-card ${st.cls}" style="align-items: stretch;">
+  <!-- Khối bên trái: Ảnh, Thông tin và Mô tả (Tự động co giãn) -->
+  <div style="flex:1; min-width:0; display:flex; flex-direction:column; justify-content:center;">
+    <div style="display:flex; gap:12px; align-items:flex-start;">
     <img src="${photoSrc}"
          alt="${escapeHtml(report.animal)}"
          style="width:72px; height:72px; object-fit:cover; border-radius:10px;
@@ -482,11 +484,13 @@ function createReportCardHTML(report) {
     </div>
   </div>
   ${descBlock}
-  <div style="display:flex; gap:8px; border-top:1px dashed rgba(255,255,255,0.07); padding-top:11px;">
+  </div>
+  <!-- Khối bên phải: Cụm nút bấm (Cố định chiều rộng không bị ép) -->
+  <div style="display:flex; flex-direction:column; align-items:flex-end; justify-content:center; gap:8px; border-left:1px dashed rgba(150,150,150,0.25); padding-left:14px; margin-left:8px; flex-shrink:0;">
     <button class="report-action-btn locate-btn"
             data-lat="${report.lat}" data-lng="${report.lng}"
             style="
-              flex:1; padding:9px 10px;
+              width:110px; padding:8px 10px;
               background:rgba(34,197,94,0.1); color:#4ade80;
               border:1px solid rgba(34,197,94,0.25); border-radius:var(--radius-pill);
               font-family:var(--font); font-weight:600; cursor:pointer;
@@ -500,16 +504,16 @@ function createReportCardHTML(report) {
     <button class="report-action-btn delete-btn"
             data-id="${report.id}"
             style="
-              padding:9px 14px;
+              width:110px; padding:8px 10px;
               background:rgba(239,68,68,0.1); color:#f87171;
               border:1px solid rgba(239,68,68,0.25); border-radius:var(--radius-pill);
-              cursor:pointer; font-size:13px;
-              display:flex; align-items:center; justify-content:center;
+              font-family:var(--font); font-weight:600; cursor:pointer;
+              font-size:12.5px; display:flex; align-items:center; justify-content:center; gap:6px;
               transition:all 0.2s;
             "
             onmouseover="this.style.background='rgba(239,68,68,0.2)';this.style.transform='translateY(-1px)'"
             onmouseout="this.style.background='rgba(239,68,68,0.1)';this.style.transform='none'">
-      <i class="fas fa-trash-alt"></i>
+      <i class="fas fa-trash-alt"></i> Xóa
     </button>
   </div>
 </div>`;
