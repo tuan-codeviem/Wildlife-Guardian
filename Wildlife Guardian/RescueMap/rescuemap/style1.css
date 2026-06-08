@@ -688,22 +688,8 @@ html, body {
 @media (max-width: 768px) {
   :root { --panel-width: 100vw; }
 
-  .floating-panel {
-    top: auto;
-    bottom: 0; left: 0;
-    width: 100%;
-    height: 55vh;
-    border-right: none;
-    border-top: 1px solid var(--glass-border);
-    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-    padding-top: 0;
-  }
-
-  #interactiveMap { height: 100%; }
-
+  /* Cosmetic only – layout rules are in the media query after the CRITICAL block below */
   .view-home-btn {
-    bottom: calc(55vh + 12px);
-    right: 16px;
     padding: 10px 14px;
     font-size: 12px;
   }
@@ -745,12 +731,79 @@ html, body {
   border-bottom: 1px solid rgba(255,255,255,0.08) !important;
 }
 
-/* (3) CRITICAL: Map wrapper must be truly full-screen */
+/* (3) CRITICAL: Map wrapper must be truly full-screen on desktop */
 .map-wrapper {
   position: fixed !important;
   top: 0 !important; left: 0 !important;
   width: 100vw !important; height: 100vh !important;
   z-index: 0 !important;
+}
+
+/* (3b) MOBILE OVERRIDE: On small screens, make .map-wrapper a flex column
+   so globe and panel share the viewport without overlapping.
+   This media query comes AFTER the CRITICAL block above in the cascade,
+   so !important rules here override the general ones above. */
+@media (max-width: 768px) {
+  /* Wrapper chứa cả globe + panel, chia theo chiều dọc */
+  .map-wrapper {
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+  }
+
+  /* Bỏ overflow:hidden khỏi body trên mobile để phần panel có thể scroll */
+  html, body {
+    overflow: hidden !important; /* giữ hidden để không có thanh scroll ngang */
+  }
+
+  /* Globe: cố định 55vh, Cesium canvas sẽ fill vào đây */
+  #interactiveMap {
+    position: relative !important;
+    flex: 0 0 55vh !important;
+    height: 55vh !important;
+    width: 100% !important;
+    top: auto !important;
+    left: auto !important;
+    overflow: hidden !important;
+  }
+
+  /* Cesium canvas bên trong phải fill 100% của #interactiveMap */
+  #interactiveMap .cesium-viewer,
+  #interactiveMap .cesium-viewer-cesiumWidgetContainer,
+  #interactiveMap .cesium-widget,
+  #interactiveMap canvas {
+    width: 100% !important;
+    height: 100% !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+  }
+
+  /* Panel: chiếm 45vh dưới, scroll được bên trong */
+  .floating-panel {
+    position: relative !important;
+    flex: 0 0 45vh !important;
+    height: 45vh !important;
+    max-height: 45vh !important;
+    width: 100% !important;
+    top: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    border-right: none !important;
+    border-top: 1px solid var(--glass-border) !important;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0 !important;
+    padding-top: 12px !important;
+    overflow-y: auto !important;
+    z-index: 100 !important;
+  }
+
+  /* Nút View Globe: fixed, nằm ngay trên viền panel */
+  .view-home-btn {
+    position: fixed !important;
+    bottom: calc(45vh + 10px) !important;
+    right: 16px !important;
+    top: auto !important;
+  }
 }
 
 /* (4) CRITICAL: Cesium canvas must NOT have pointer-events blocked */

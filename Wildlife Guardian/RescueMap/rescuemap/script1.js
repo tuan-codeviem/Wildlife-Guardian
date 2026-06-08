@@ -226,10 +226,9 @@ function getApiUrl(path) {
 // ═══════════════════════════════════════════════════════════════
 async function reverseGeocode(lat, lng) {
     try {
-        const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=16&accept-language=vi`;
-        const res = await fetch(url, {
-            headers: { 'Accept-Language': 'vi' }
-        });
+        // Gọi qua backend proxy để tránh CORS (trước đây gọi trực tiếp Nominatim)
+        const url = getApiUrl(`/api/geocode?lat=${lat}&lng=${lng}&zoom=16`);
+        const res = await fetch(url);
         const data = await res.json();
         if (data && data.address) {
             const a = data.address;
@@ -283,10 +282,22 @@ async function resolveAddressesInBackground(reportsList) {
     if (needResolve.length === 0) return;
     console.log(`📍 Đang reverse geocode ${needResolve.length} vị trí...`);
     for (const report of needResolve) {
-        await new Promise(r => setTimeout(r, 1100));
+        // Tăng delay lên 1.5s để tôn trọng rate limit 1 req/s của Nominatim
+        await new Promise(r => setTimeout(r, 1500));
         const addr = await reverseGeocode(report.lat, report.lng);
         updateCardAddress(report.id, addr);
         console.log(`✅ [${report.animal}] Vị trí: ${addr}`);
+
+        // Lưu kết quả vào DB để lần sau không phải geocode lại
+        if (report.id) {
+            try {
+                await fetch(getApiUrl(`/api/rescuemap/${report.id}/address`), {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ address: addr })
+                });
+            } catch (e) { console.warn("Lỗi lưu address vào DB:", e); }
+        }
     }
 }
 
@@ -297,6 +308,12 @@ async function fetchRescueReports() {
         const dbData = await response.json();
         
         console.log("Dữ liệu từ API (MongoDB):", dbData);
+        // Log riêng photo của từng item để dễ debug
+        if (dbData && dbData.length > 0) {
+            dbData.forEach((item, i) => {
+                console.log(`📷 [${i}] ${item.animalName || item.animal} → photo: ${item.photo ? item.photo.substring(0, 60) + '...' : 'NULL'}`);
+            });
+        }
         
         if (dbData && dbData.length > 0) {
             reports = dbData.map(item => {
@@ -319,6 +336,13 @@ async function fetchRescueReports() {
                     displayAddr = 'Đang xác định vị trí...';
                 }
 
+                // Lỗi 1 & 5 FIX (dứt điểm): Lấy ảnh trực tiếp từ DB.
+                // item.photo có thể là: URL Cloudinary (http...), chuỗi Base64 (data:image/...), hoặc null.
+                // Chỉ dùng getSampleImage (trả null) khi item.photo thực sự rỗng.
+                const rawPhoto = item.photo && typeof item.photo === 'string' && item.photo.trim() !== '' 
+                    ? item.photo.trim() 
+                    : null;
+
                 return {
                     id: item._id ? item._id.toString() : "",
                     animal: item.animalName || item.animal || "Chưa rõ tên",
@@ -328,7 +352,7 @@ async function fetchRescueReports() {
                     lng: lngVal,
                     date: item.createdAt || item.date || new Date().toLocaleString("vi-VN"),
                     description: item.description || item.note || "",
-                    photo: item.photo || getSampleImage(item.animalName || item.animal || "Động vật"),
+                    photo: rawPhoto,  // null nếu không có ảnh; có thể là URL hoặc base64
                     _needGeocode: needGeocode 
                 };
             }).filter(report => !isNaN(report.lat) && !isNaN(report.lng));
@@ -423,7 +447,8 @@ function createReportCardHTML(report) {
          alt="${escapeHtml(report.animal)}"
          style="width:72px; height:72px; object-fit:cover; border-radius:10px;
                 border:1px solid rgba(255,255,255,0.1); flex-shrink:0;
-                box-shadow:0 4px 12px rgba(0,0,0,0.4);">
+                box-shadow:0 4px 12px rgba(0,0,0,0.4);"
+         onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(report.animal)}&background=0a1c12&color=4ade80&size=128&bold=true'">
     <div style="flex:1; min-width:0; display:flex; flex-direction:column; gap:5px;">
       <h4 style="
             margin:0; font-size:15px; font-weight:700;
@@ -561,13 +586,28 @@ function initRealMap() {
         const style = document.createElement("style");
         style.id = "cesiumFixStyles";
         style.textContent = `
-            #interactiveMap {
-                position: absolute !important;
-                top: 0 !important; left: 0 !important;
-                width: 100% !important; height: 100% !important;
-                display: block !important;
-                overflow: hidden !important;
+            /* Desktop: #interactiveMap absolute fills the full fixed wrapper */
+            @media (min-width: 769px) {
+                #interactiveMap {
+                    position: absolute !important;
+                    top: 0 !important; left: 0 !important;
+                    width: 100% !important; height: 100% !important;
+                    display: block !important;
+                    overflow: hidden !important;
+                }
             }
+            /* Mobile: #interactiveMap is a flex-child, position:relative + fixed height */
+            @media (max-width: 768px) {
+                #interactiveMap {
+                    position: relative !important;
+                    width: 100% !important;
+                    height: 55vh !important;
+                    display: block !important;
+                    overflow: hidden !important;
+                    flex: 0 0 55vh !important;
+                }
+            }
+            /* Cesium internal elements always fill their container */
             #interactiveMap .cesium-viewer,
             #interactiveMap .cesium-viewer-cesiumWidgetContainer,
             #interactiveMap .cesium-widget,
@@ -867,7 +907,8 @@ async function fetchLocationAndAddress() {
         
         // Tách phần lấy địa chỉ ra một try-catch riêng. Nếu API lỗi, vẫn giữ lại được tọa độ GPS.
         try {
-            const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${currentLocation.lat}&lon=${currentLocation.lng}&zoom=18&accept-language=vi`);
+            // Gọi qua backend proxy để tránh CORS
+            const res = await fetch(getApiUrl(`/api/geocode?lat=${currentLocation.lat}&lng=${currentLocation.lng}&zoom=18`));
             const data = await res.json();
             currentAddress = data.display_name ? data.display_name : `${currentLocation.lat.toFixed(5)}, ${currentLocation.lng.toFixed(5)}`;
         } catch (apiError) {
@@ -891,6 +932,9 @@ async function fetchLocationAndAddress() {
 // ═══════════════════════════════════════════════════════════════
 // HÀM SUBMIT REPORT ĐÃ ĐƯỢC TÍCH HỢP UPLOAD CLOUDINARY
 // ═══════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
+// HÀM SUBMIT REPORT ĐÃ FIX LỖI ẢNH (HỖ TRỢ FALLBACK BASE64)
+// ═══════════════════════════════════════════════════════════════
 async function submitReport() {
     const animalName   = document.getElementById("animalName")?.value.trim() || "";
     const animalStatus = document.getElementById("animalStatus")?.value || "emergency";
@@ -909,7 +953,9 @@ async function submitReport() {
         submitBtn.disabled = true;
     }
 
-    let finalPhotoUrl = null;
+    // FIX: Mặc định gán luôn ảnh vừa chụp (Base64) làm ảnh sẽ lưu. 
+    // Nếu upload Cloudinary thành công thì ghi đè lại bằng Link sau.
+    let finalPhotoUrl = capturedPhoto; 
 
     // --- BƯỚC MỚI THÊM VÀO: UPLOAD ẢNH LÊN CLOUDINARY ---
     if (capturedPhoto) {
@@ -917,7 +963,7 @@ async function submitReport() {
             if (submitBtn) submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>Đang tải ảnh lên...</span>';
             
             const formData = new FormData();
-            formData.append('image', dataURItoBlob(capturedPhoto), 'capture.jpg'); // Gọi API Backend của bạn
+            formData.append('image', dataURItoBlob(capturedPhoto), 'capture.jpg'); 
             
             console.log("Đang tải ảnh lên Cloudinary qua API backend...");
             const uploadRes = await fetch(getApiUrl('/api/upload'), {
@@ -927,20 +973,19 @@ async function submitReport() {
             
             const uploadData = await uploadRes.json();
             if (uploadRes.ok) {
-                finalPhotoUrl = uploadData.url; // Lấy link ảnh Cloudinary trả về
+                // FIX: Quét rộng các key API Cloudinary thường trả về
+                finalPhotoUrl = uploadData.secure_url || uploadData.url || uploadData.imageUrl || capturedPhoto; 
                 console.log("✅ Tải ảnh thành công:", finalPhotoUrl);
             } else {
-                throw new Error(uploadData.error || uploadData.message || "Lỗi upload ảnh");
+                console.warn("⚠️ API upload lỗi, tự động chuyển sang lưu ảnh dạng Base64 gốc.");
             }
         } catch (error) {
-            console.error("❌ Lỗi khi tải ảnh lên:", error);
-            if (submitBtn) { submitBtn.disabled = false; submitBtn.innerHTML = originalBtnHTML; }
-            showToast("❌ Không thể đẩy ảnh lên Cloudinary! Vui lòng kiểm tra lại file .env", "error");
-            return; // Chặn không cho gửi báo cáo nếu ảnh chưa lên được mây
+            console.warn("❌ Lỗi mạng khi gọi API tải ảnh. Tự động chuyển sang lưu Base64.", error);
+            // FIX: Bỏ lệnh `return;` ở đây để hệ thống không bị kẹt, vẫn tiếp tục gửi được báo cáo!
         }
     }
 
-    // --- BƯỚC LƯU DATABASE: Gửi link URL thay vì chuỗi Base64 ---
+    // --- BƯỚC LƯU DATABASE: Gửi thông tin cứu hộ ---
     if (submitBtn) submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>Đang gửi báo cáo...</span>';
 
     const payload = {
@@ -950,7 +995,7 @@ async function submitReport() {
         location    : { lat: currentLocation.lat, lng: currentLocation.lng },
         address     : currentAddress || `${currentLocation.lat.toFixed(5)}, ${currentLocation.lng.toFixed(5)}`,
         date        : new Date().toLocaleString("vi-VN"),
-        photo       : finalPhotoUrl // Dùng link Cloudinary nếu có ảnh
+        photo       : finalPhotoUrl // Lúc này photo chắc chắn có data (Link Cloudinary hoặc chuỗi Base64)
     };
 
     try {
@@ -972,10 +1017,69 @@ async function submitReport() {
 
         if (response.ok) { 
             showToast("✅ Báo cáo đã được lưu lên bản đồ!", "success");
-            closeCameraModal();
 
+            // Lấy ID và ảnh từ kết quả POST
+            const savedId = result && result.id ? result.id : null;
+            const savedPhotoUrl = finalPhotoUrl;
+            console.log("📸 finalPhotoUrl:", savedPhotoUrl ? savedPhotoUrl.substring(0, 80) + '...' : 'NULL');
+            console.log("🆔 savedId:", savedId);
+
+            // Đóng modal TRUỚC khi await để tránh race condition với fetchRescueReports
+            await closeCameraModal();
+
+            // Fetch lại danh sách từ DB
             await fetchRescueReports();
 
+            // ============================================================
+            // Đảm bảo ảnh được lưu vào MongoDB (trường hợp DB chưa có ảnh)
+            // ============================================================
+            if (savedPhotoUrl && savedId) {
+                const newReport = reports.find(r => r.id === savedId);
+
+                if (newReport && !newReport.photo) {
+                    console.log("🔧 DB chưa có ảnh, đang PATCH vào MongoDB...");
+                    try {
+                        const patchRes = await fetch(getApiUrl(`/api/rescuemap/${savedId}/photo`), {
+                            method: 'PATCH',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ photo: savedPhotoUrl })
+                        });
+                        if (patchRes.ok) {
+                            console.log("✅ PATCH thành công! Ảnh đã vào MongoDB.");
+                            newReport.photo = savedPhotoUrl;
+                        } else {
+                            console.warn("⚠️ PATCH thất bại:", await patchRes.text());
+                        }
+                    } catch (e) {
+                        console.warn("❌ Lỗi mạng khi PATCH:", e);
+                    }
+                } else if (newReport && newReport.photo) {
+                    console.log("✅ DB đã có ảnh:", newReport.photo.substring(0, 70) + '...');
+                } else if (!newReport) {
+                    console.warn("⚠️ Không tìm thấy report với id:", savedId, "- thử fallback...");
+                    // Fallback: patch report cuối cùng
+                    if (reports.length > 0) {
+                        const last = reports[reports.length - 1];
+                        if (!last.photo && last.id) {
+                            try {
+                                await fetch(getApiUrl(`/api/rescuemap/${last.id}/photo`), {
+                                    method: 'PATCH',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ photo: savedPhotoUrl })
+                                });
+                                last.photo = savedPhotoUrl;
+                                console.log("✅ Fallback PATCH thành công.");
+                            } catch (e) { console.warn("❌ Fallback PATCH lỗi:", e); }
+                        }
+                    }
+                }
+
+                // Re-render UI với ảnh đúng (luôn chạy dù DB đã có hay vừa patch)
+                renderReportsPanel();
+                if (viewer) renderMarkersToMap(filterReports());
+            }
+
+            // FlyTo tới điểm vừa báo cáo trên Cesium
             if (viewer && currentLocation) {
                 window.setActiveTab("map");
                 viewer.camera.flyTo({
