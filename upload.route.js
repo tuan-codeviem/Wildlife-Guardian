@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const cloudinary = require('../config/cloudinary'); 
-const upload = require('../middlewares/upload');    
+const cloudinary = require('./cloudinary'); 
+const upload = require('./upload');    
 
 // Bắt POST request tại endpoint /api/upload
 router.post('/', upload.single('image'), async (req, res) => {
@@ -15,7 +15,7 @@ router.post('/', upload.single('image'), async (req, res) => {
 
     // Upload lên Cloudinary
     const result = await cloudinary.uploader.upload(fileBase64, {
-      folder: 'wildlife_guardian_uploads', // Tự động tạo thư mục này trên Cloudinary của bạn
+      folder: 'wildlife_guardian_uploads',
     });
 
     res.status(200).json({

@@ -1234,3 +1234,52 @@ body {
   text-align: right;
   max-width: 60%;
 }
+
+/* ========================================================
+   BẢN VÁ LỖI GIAO DIỆN (UI/UX FIXES)
+   ======================================================== */
+
+/* Lỗi 2: Sửa màu chữ Dropdown (Trạng thái) để không bị chìm vào nền trắng */
+#animalStatus option {
+  color: #0f172a !important;
+  background-color: #ffffff !important;
+  font-weight: 500;
+}
+
+/* Lỗi 4: Sửa layout Mobile bị panel che khuất bản đồ 3D */
+@media screen and (max-width: 768px) {
+  /* Cho wrapper hiển thị dạng flex column để chia đôi không bị đè lên nhau */
+  .map-wrapper {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  /* Quả cầu chiếm 55vh phía trên */
+  #interactiveMap {
+    position: relative !important;
+    height: 55vh !important;
+    flex: 0 0 55vh !important;
+  }
+
+  .floating-panel {
+    top: auto !important;         /* bỏ top: 50vh cũ */
+    bottom: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 45vh !important;       /* panel chiếm 45vh phía dưới */
+    max-height: 45vh !important;
+    padding-top: 12px !important;  /* thay padding-top navbar */
+    border-radius: 20px 20px 0 0 !important;
+    border-top: 1px solid rgba(255,255,255,0.12) !important;
+    border-right: none !important;
+    overflow-y: auto !important;
+    background: var(--bg-surface) !important; /* Đảm bảo panel đè map có nền solid */
+  }
+
+  /* Đẩy nút View Globe lên trên panel */
+  .view-home-btn {
+    bottom: calc(45vh + 12px) !important;
+    right: 16px !important;
+    top: auto !important;
+  }
+}

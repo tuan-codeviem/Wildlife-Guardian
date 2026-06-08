@@ -9,6 +9,8 @@ const rescueSchema = new mongoose.Schema({
     },
     description: String,    // Mô tả chi tiết
     reporter: String,       // Người báo cáo
+    photo: String,          // Sửa Lỗi 1 & 5: Lưu URL ảnh thực tế tải lên từ Cloudinary
+    address: String,        // Lưu thêm text địa chỉ (nếu có)
     createdAt: { type: Date, default: Date.now }
 });
 

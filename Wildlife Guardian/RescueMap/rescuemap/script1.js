@@ -146,17 +146,10 @@ function filterReports() {
 }
 
 function getSampleImage(animalType) {
-    const canvas = document.createElement("canvas"); canvas.width = 200; canvas.height = 200;
-    const ctx = canvas.getContext("2d");
-    ctx.fillStyle = "#f0f0f0"; ctx.fillRect(0, 0, 200, 200);
-    ctx.fillStyle = "#ff6b35"; ctx.font = 'bold 60px "Segoe UI Emoji"'; ctx.textAlign = "center"; ctx.textBaseline = "middle";
-    let emoji = "🐾";
-    if (animalType.includes("Chó")) emoji = "🐕"; 
-    else if (animalType.includes("Mèo")) emoji = "🐈";
-    else if (animalType.includes("Chim")) emoji = "🐦";
-    else if (animalType.includes("Khỉ")) emoji = "🐒";
-    ctx.fillText(emoji, 100, 80); ctx.font = 'bold 14px "Segoe UI"'; ctx.fillStyle = "#333"; ctx.fillText(animalType, 100, 150);
-    return canvas.toDataURL("image/jpeg", 0.8);
+    // Trả về null để các fallback URL ở createReportCardHTML & renderMarkersToMap hoạt động đúng.
+    // (Trước đây hàm này tạo canvas base64 với emoji, khiến logic `report.photo ? ... : fallback`
+    //  không bao giờ dùng được ảnh placeholder đẹp từ ui-avatars.com)
+    return null;
 }
 
 function renderNearbyHelpers() {
@@ -405,7 +398,8 @@ function createReportCardHTML(report) {
              ${escapeHtml(report.location || 'Đang xác định...')}
            </span>`;
 
-    const photoSrc = report.photo
+    // Lỗi 1 & 5 FIX: chỉ dùng những URL thực sự hợp lệ (chấp nhận http hoặc data:image/ cho ảnh vừa chụp)
+    const photoSrc = (report.photo && (report.photo.startsWith('http') || report.photo.startsWith('data:image/')))
         ? report.photo
         : `https://ui-avatars.com/api/?name=${encodeURIComponent(report.animal)}&background=0a1c12&color=4ade80&size=128&bold=true`;
 
@@ -664,6 +658,8 @@ function renderMarkersToMap(reportsData) {
     
     if (reportsData.length === 0) return;
     
+    const locationCount = {}; // Lưu số lượng marker tại mỗi tọa độ để tạo độ lệch
+
     reportsData.forEach(report => {
         let markerColor = Cesium.Color.fromCssColorString('#ef4444'); 
         let statusText = '🆘 KHẨN CẤP'; let statusColor = '#dc2626'; let badgeBg = '#fef2f2';
@@ -676,7 +672,11 @@ function renderMarkersToMap(reportsData) {
             statusText = '🏃 ĐANG CỨU HỘ'; statusColor = '#0284c7'; badgeBg = '#f0f9ff';
         }
         
-        const bgImage = report.photo ? report.photo : 'https://via.placeholder.com/400x200?text=No+Image';
+        // Lỗi 5 FIX: chỉ dùng những URL thực sự hợp lệ (phải bắt đầu bằng http hoặc data:image/ cho ảnh vừa chụp)
+        const hasRealPhoto = report.photo && (report.photo.startsWith('http') || report.photo.startsWith('data:image/'));
+        const bgImage = hasRealPhoto
+            ? report.photo
+            : null;
         const onlyHelpers = helpersData.filter(h => !h.isClinic);
         const helpersWithDist = onlyHelpers.map(h => ({ ...h, distance: calculateDistance(h.lat, h.lng, report.lat, report.lng) })).filter(h => h.distance <= 5).sort((a, b) => a.distance - b.distance).slice(0, 2);
         
@@ -717,7 +717,13 @@ function renderMarkersToMap(reportsData) {
         const popupContent = `
             <div class="rescue-popup light-theme">
                 <button class="close-btn"><i class="fas fa-times"></i></button>
-                <div class="rescue-header" style="background-image: url('${bgImage}')">
+                <div class="rescue-header" style="background-color: #e8f5e9; ${bgImage ? `background-image: url('${bgImage}');` : ''}">
+                    ${!bgImage ? `
+                    <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; pointer-events:none;">
+                        <div style="text-align:center; opacity:0.5;">
+                            <i class="fas fa-paw" style="font-size:32px; color:#10b981;"></i>
+                        </div>
+                    </div>` : ''}
                     <span class="rescue-badge" style="color: ${statusColor}; border: none; background-color: ${badgeBg}; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">${statusText}</span>
                     <div class="rescue-title-container">
                         <h2 class="rescue-title"><i class="fas fa-paw"></i> ${escapeHtml(report.animal)}</h2>
@@ -766,9 +772,24 @@ function renderMarkersToMap(reportsData) {
             </div>
         `;
         
+        // Sửa lỗi 3: Logic tạo độ lệch (offset) hình tròn cho các marker trùng tọa độ
+        const locKey = `${report.lat.toFixed(5)}_${report.lng.toFixed(5)}`;
+        if (!locationCount[locKey]) locationCount[locKey] = 0;
+        
+        const count = locationCount[locKey];
+        let renderLat = report.lat;
+        let renderLng = report.lng;
+        if (count > 0) {
+            const offsetRadius = 0.0002; // Khoảng 20m độ lệch để tránh đè chập nhau
+            const angle = count * (Math.PI / 3); // Phân bổ góc 60 độ xung quanh
+            renderLat += offsetRadius * Math.cos(angle);
+            renderLng += offsetRadius * Math.sin(angle);
+        }
+        locationCount[locKey]++;
+
         viewer.entities.add({
             id: `report_${report.id}`,
-            position: Cesium.Cartesian3.fromDegrees(report.lng, report.lat),
+            position: Cesium.Cartesian3.fromDegrees(renderLng, renderLat),
             point: { pixelSize: 18, color: markerColor, outlineColor: Cesium.Color.WHITE, outlineWidth: 3, disableDepthTestDistance: Number.POSITIVE_INFINITY },
             properties: { customHTML: popupContent }
         });
@@ -826,21 +847,44 @@ async function fetchLocationAndAddress() {
     const locationLoading = document.getElementById("locationLoading");
     const locationInfo = document.getElementById("locationInfo");
     const addressText = document.getElementById("addressText");
-    locationLoading.style.display = "block"; locationInfo.style.display = "none";
+    
+    if (locationLoading) locationLoading.style.display = "block";
+    if (locationInfo) locationInfo.style.display = "none";
     
     try {
+        if (!navigator.geolocation) {
+            throw new Error("Trình duyệt không hỗ trợ GPS");
+        }
+
         const pos = await new Promise((resolve, reject) => {
-            navigator.geolocation.getCurrentPosition(resolve, reject, { enableHighAccuracy: true, timeout: 15000 });
+            navigator.geolocation.getCurrentPosition(resolve, reject, { 
+                enableHighAccuracy: true, 
+                timeout: 10000,
+                maximumAge: 0 
+            });
         });
         currentLocation = { lat: pos.coords.latitude, lng: pos.coords.longitude };
-        const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${currentLocation.lat}&lon=${currentLocation.lng}&zoom=18`);
-        const data = await res.json();
-        currentAddress = data.display_name ? data.display_name : `${currentLocation.lat.toFixed(4)}, ${currentLocation.lng.toFixed(4)}`;
         
-        addressText.innerHTML = escapeHtml(currentAddress);
-        locationLoading.style.display = "none"; locationInfo.style.display = "flex";
+        // Tách phần lấy địa chỉ ra một try-catch riêng. Nếu API lỗi, vẫn giữ lại được tọa độ GPS.
+        try {
+            const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${currentLocation.lat}&lon=${currentLocation.lng}&zoom=18&accept-language=vi`);
+            const data = await res.json();
+            currentAddress = data.display_name ? data.display_name : `${currentLocation.lat.toFixed(5)}, ${currentLocation.lng.toFixed(5)}`;
+        } catch (apiError) {
+            currentAddress = `${currentLocation.lat.toFixed(5)}, ${currentLocation.lng.toFixed(5)}`;
+        }
+        
+        if (addressText) addressText.innerHTML = escapeHtml(currentAddress);
+        if (locationLoading) locationLoading.style.display = "none";
+        if (locationInfo) locationInfo.style.display = "flex";
     } catch (e) {
-        locationLoading.style.display = "none"; showToast("Không lấy được vị trí GPS", "error");
+        if (locationLoading) locationLoading.style.display = "none";
+        let errorMsg = "Không lấy được vị trí GPS. Hãy bật Vị trí và dùng link có HTTPS/localhost.";
+        if (e.code === 1) errorMsg = "Bạn đã từ chối quyền truy cập vị trí. Hãy bật lại!";
+        else if (e.code === 2) errorMsg = "Không tìm thấy tín hiệu GPS hiện tại.";
+        else if (e.code === 3) errorMsg = "Hết thời gian chờ lấy vị trí GPS.";
+        
+        showToast(errorMsg, "error");
     }
 }
 
@@ -890,7 +934,9 @@ async function submitReport() {
             }
         } catch (error) {
             console.error("❌ Lỗi khi tải ảnh lên:", error);
-            showToast("Không thể tải ảnh lên, nhưng báo cáo vẫn sẽ được gửi.", "error");
+            if (submitBtn) { submitBtn.disabled = false; submitBtn.innerHTML = originalBtnHTML; }
+            showToast("❌ Không thể đẩy ảnh lên Cloudinary! Vui lòng kiểm tra lại file .env", "error");
+            return; // Chặn không cho gửi báo cáo nếu ảnh chưa lên được mây
         }
     }
 
