@@ -20,6 +20,7 @@
   "homepage": "https://github.com/tuan-codeviem/Wildlife-Guardian#readme",
   "dependencies": {
     "cloudinary": "^1.41.3",
+    "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "mongoose": "^9.6.1",
