@@ -148,9 +148,6 @@ function filterReports() {
 }
 
 function getSampleImage(animalType) {
-    // Trả về null để các fallback URL ở createReportCardHTML & renderMarkersToMap hoạt động đúng.
-    // (Trước đây hàm này tạo canvas base64 với emoji, khiến logic `report.photo ? ... : fallback`
-    //  không bao giờ dùng được ảnh placeholder đẹp từ ui-avatars.com)
     return null;
 }
 
@@ -215,20 +212,15 @@ function renderNearestClinic() {
 }
 
 function getApiUrl(path) {
-    if (window.location.port !== '3000') {
-        let host = window.location.hostname || '127.0.0.1';
-        if (host === 'localhost') host = '127.0.0.1';
-        return `http://${host}:3000${path}`;
-    }
-    return path;
+    let host = window.location.hostname || 'localhost';
+    return `http://${host}:3000${path}`;
 }
 
 // ═══════════════════════════════════════════════════════════════
-// REVERSE GEOCODE – Lấy địa chỉ thực từ tọa độ lat/lng
+// REVERSE GEOCODE
 // ═══════════════════════════════════════════════════════════════
 async function reverseGeocode(lat, lng) {
     try {
-        // Gọi qua backend proxy để tránh CORS (trước đây gọi trực tiếp Nominatim)
         const url = getApiUrl(`/api/geocode?lat=${lat}&lng=${lng}&zoom=16`);
         const res = await fetch(url);
         const data = await res.json();
@@ -282,15 +274,11 @@ async function resolveAddressesInBackground(reportsList) {
         r._needGeocode === true && !isNaN(r.lat) && !isNaN(r.lng)
     );
     if (needResolve.length === 0) return;
-    console.log(`📍 Đang reverse geocode ${needResolve.length} vị trí...`);
     for (const report of needResolve) {
-        // Tăng delay lên 1.5s để tôn trọng rate limit 1 req/s của Nominatim
         await new Promise(r => setTimeout(r, 1500));
         const addr = await reverseGeocode(report.lat, report.lng);
         updateCardAddress(report.id, addr);
-        console.log(`✅ [${report.animal}] Vị trí: ${addr}`);
 
-        // Lưu kết quả vào DB để lần sau không phải geocode lại
         if (report.id) {
             try {
                 await fetch(getApiUrl(`/api/rescuemap/${report.id}/address`), {
@@ -305,17 +293,8 @@ async function resolveAddressesInBackground(reportsList) {
 
 async function fetchRescueReports() {
     try {
-        console.log("Đang gọi API lấy dữ liệu từ MongoDB...");
         const response = await fetch(getApiUrl(`/api/rescuemap?t=${new Date().getTime()}`), { cache: 'no-store' });
         const dbData = await response.json();
-        
-        console.log("Dữ liệu từ API (MongoDB):", dbData);
-        // Log riêng photo của từng item để dễ debug
-        if (dbData && dbData.length > 0) {
-            dbData.forEach((item, i) => {
-                console.log(`📷 [${i}] ${item.animalName || item.animal} → photo: ${item.photo ? item.photo.substring(0, 60) + '...' : 'NULL'}`);
-            });
-        }
         
         if (dbData && dbData.length > 0) {
             reports = dbData.map(item => {
@@ -337,10 +316,6 @@ async function fetchRescueReports() {
                 } else {
                     displayAddr = 'Đang xác định vị trí...';
                 }
-
-                // Lỗi 1 & 5 FIX (dứt điểm): Lấy ảnh trực tiếp từ DB.
-                // item.photo có thể là: URL Cloudinary (http...), chuỗi Base64 (data:image/...), hoặc null.
-                // Chỉ dùng getSampleImage (trả null) khi item.photo thực sự rỗng.
                 const rawPhoto = item.photo && typeof item.photo === 'string' && item.photo.trim() !== '' 
                     ? item.photo.trim() 
                     : null;
@@ -354,10 +329,11 @@ async function fetchRescueReports() {
                     lng: lngVal,
                     date: item.createdAt || item.date || new Date().toLocaleString("vi-VN"),
                     description: item.description || item.note || "",
-                    photo: rawPhoto,  // null nếu không có ảnh; có thể là URL hoặc base64
+                    photo: rawPhoto, 
                     _needGeocode: needGeocode,
                     reporterName: item.reportedBy?.fullName || item.reporter || "Khách",
-                    reporterAvatar: item.reportedBy?.avatar || ""
+                    reporterAvatar: item.reportedBy?.avatar || "",
+                    reporterUserId: item.reportedBy?.userId || null
                 };
             }).filter(report => !isNaN(report.lat) && !isNaN(report.lng));
         } else {
@@ -386,7 +362,6 @@ async function fetchRescueReports() {
 
 
 function createReportCardHTML(report) {
-    // 1. Định nghĩa trạng thái
     const STATUS = {
         emergency: { label: 'Khẩn cấp', class: 'report-emergency' },
         progress:  { label: 'Đang cứu hộ', class: 'report-progress' },
@@ -394,20 +369,17 @@ function createReportCardHTML(report) {
     };
     const st = STATUS[report.status] || STATUS.emergency;
 
-    // 2. Xử lý ảnh (ưu tiên ảnh thật, nếu không có dùng fallback avatar)
     const fallbackSrc = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(report.animal) + '&background=0a1c12&color=4ade80&size=128&bold=true';
     const photoSrc = (report.photo && (report.photo.startsWith('http') || report.photo.startsWith('data:image/')))
         ? report.photo
         : fallbackSrc;
 
-    // 3. Xử lý địa chỉ (hiển thị icon loading nếu đang là tọa độ thô)
     const isCoords = /^-?\d+\.\d+°[NS]/.test(report.location || '');
     const addrText = escapeHtml(report.location || 'Đang xác định...');
     const addressHTML = isCoords
         ? `<i class="fas fa-circle-notch fa-spin" style="font-size:9px;opacity:0.5;"></i> <span data-report-id="${report.id}" style="font-style:italic;color:#94a3b8;">${addrText}</span>`
         : `<span data-report-id="${report.id}">${addrText}</span>`;
 
-    // 4. Các thông tin phụ trợ (Ngày, Mô tả, SĐT, Người đăng)
     const dateStr = typeof report.date === 'string' ? report.date : new Date(report.date).toLocaleString('vi-VN');
     
     const descBlock = report.description
@@ -425,7 +397,21 @@ function createReportCardHTML(report) {
         ? `<img src="${rAvatar}" alt="" style="width:18px;height:18px;border-radius:50%;object-fit:cover;" onerror="this.outerHTML='${rInitial}'">`
         : `<div style="width:18px;height:18px;border-radius:50%;background:linear-gradient(135deg,#16a34a,#15803d);color:#fff;font-size:9px;font-weight:800;display:flex;align-items:center;justify-content:center;">${rInitial}</div>`;
 
-    // 5. Trả về cấu trúc HTML sạch, không lỗi đóng thẻ
+    let currentUserId = null;
+    try {
+        const userStr = localStorage.getItem('currentUser');
+        if (userStr) {
+            const userObj = JSON.parse(userStr);
+            // Ép về String để tránh lỗi so sánh ObjectId vs String
+            currentUserId = (userObj.userId || userObj._id || '').toString().trim();
+        }
+    } catch(e) {}
+
+    // Ép cả reporterUserId về String trước khi so sánh
+    const reportOwnerIdStr = report.reporterUserId ? report.reporterUserId.toString().trim() : null;
+    const isOwner = !!(currentUserId && reportOwnerIdStr && currentUserId === reportOwnerIdStr);
+    const deleteBtnHtml = isOwner ? `<button class="small-btn delete-btn rcard-delete" data-id="${report.id}"><i class="fas fa-trash-alt"></i> Xóa</button>` : '';
+
     return `
     <div class="report-card ${st.class}" style="background: rgba(6,21,8,0.85); border: 1px solid rgba(255,255,255,0.09);">
         <div class="report-card-main" style="flex: 1; min-width: 0;">
@@ -447,9 +433,7 @@ function createReportCardHTML(report) {
             <button class="small-btn locate-btn rcard-locate" data-id="${report.id}" data-lat="${report.lat}" data-lng="${report.lng}">
                 <i class="fas fa-crosshairs"></i> Vị trí 3D
             </button>
-            <button class="small-btn delete-btn rcard-delete" data-id="${report.id}">
-                <i class="fas fa-trash-alt"></i> Xóa
-            </button>
+            ${deleteBtnHtml}
         </div>
     </div>`;
 }
@@ -460,17 +444,19 @@ function renderReportsPanel() {
     container.innerHTML = '';
     const filtered = filterReports();
     if (filtered.length === 0) {
-        container.innerHTML = '<div style="text-align:center;padding:36px 16px;color:#94a3b8;"><i class="fas fa-binoculars" style="font-size:40px;color:rgba(34,197,94,0.28);margin-bottom:12px;display:block;"></i><h3 style="color:#f8fafc;font-size:15px;margin-bottom:6px;">Địáo cáo nào</h3><p style="font-size:12.5px;line-height:1.6;">Nhấn <strong style="color:#f97316;">&#128680; Report Now</strong><br>trên thanh menu để báo cáo!</p></div>';
+        container.innerHTML = '<div style="text-align:center;padding:36px 16px;color:#94a3b8;"><i class="fas fa-binoculars" style="font-size:40px;color:rgba(34,197,94,0.28);margin-bottom:12px;display:block;"></i><h3 style="color:#f8fafc;font-size:15px;margin-bottom:6px;">Chưa có báo cáo nào</h3><p style="font-size:12.5px;line-height:1.6;">Nhấn <strong style="color:#f97316;">&#128680; Report Now</strong><br>trên thanh menu để báo cáo!</p></div>';
         return;
     }
     const heading = document.createElement('div');
     heading.style.cssText = 'font-size:12.5px;font-weight:700;color:#4ade80;border-bottom:1px solid rgba(255,255,255,0.08);padding-bottom:10px;margin-bottom:12px;display:flex;align-items:center;gap:7px;letter-spacing:0.3px;';
     heading.innerHTML = '<i class="fas fa-list-ul" style="opacity:0.7;"></i> Danh sách báo cáo <span style="background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.3);color:#4ade80;border-radius:99px;padding:2px 9px;font-size:10.5px;margin-left:auto;">' + filtered.length + '</span>';
     container.appendChild(heading);
+    
     filtered.forEach(function(report) {
         container.insertAdjacentHTML('beforeend', createReportCardHTML(report));
         var card = container.lastElementChild;
         if (!card) return;
+        
         var locBtn = card.querySelector('.rcard-locate');
         if (locBtn) {
             locBtn.addEventListener('click', function(e) {
@@ -518,19 +504,86 @@ function renderReportsPanel() {
                 tryOpen(10);
             });
         }
+        
+        // --- ĐOẠN ĐÃ ĐƯỢC FIX LỖI BẤM XÓA ---
         var delBtn = card.querySelector('.rcard-delete');
         if (delBtn) {
-            delBtn.addEventListener('click', function(e) {
+            delBtn.addEventListener('click', async function(e) {
                 e.stopPropagation();
                 var id = delBtn.dataset.id;
-                if (confirm('Ẩn báo cáo này khỏi danh sách?')) {
-                    reports = reports.filter(function(r){ return r.id !== id; });
-                    renderReportsPanel(); renderNearbyHelpers(); renderNearestClinic();
-                    if (viewer) renderMarkersToMap(filterReports());
-                    showToast('✅ Đã ẩn báo cáo!', 'success');
+
+                // Chặn đứng ngay lập tức nếu bài viết bị lỗi rỗng ID (Nguyên nhân gây ra URL lỗi 404 HTML)
+                if (!id || id === 'undefined' || id.trim() === '') {
+                    showToast('❌ Báo cáo này bị lỗi dữ liệu (Không có ID gốc) nên không thể xóa!', 'error');
+                    return;
+                }
+
+                if (confirm('Bạn có chắc chắn muốn xóa báo cáo này khỏi hệ thống?')) {
+                    
+                    let myUserId = "";
+                    try {
+                        const me = JSON.parse(localStorage.getItem('currentUser'));
+                        // Ép về String để đảm bảo khớp với ownerId lưu trong MongoDB (String)
+                        if (me) myUserId = (me.userId || me._id || '').toString().trim();
+                    } catch(err) {}
+
+                    console.log('🗑️ [DELETE] Gửi xóa báo cáo ID:', id, '| Với userId:', myUserId);
+
+                    // Validation: Chặn khi không có thông tin user
+                    if (!myUserId) {
+                        showToast('❌ Bạn chưa đăng nhập hoặc không lấy được thông tin phiên đăng nhập!', 'error');
+                        return;
+                    }
+
+                    delBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                    delBtn.disabled = true;
+
+                    try {
+                        // Mã hóa URL để không bị lỗi Fetch Error do khoảng trắng
+                        // Fix thêm lỗi "undefined" nếu lỡ bài viết đó chưa có ID
+                        const safeId = encodeURIComponent((id || '').toString().trim());
+                        const safeUserId = encodeURIComponent((myUserId || '').toString().trim());
+                        const url = getApiUrl(`/api/rescuemap/${safeId}?userId=${safeUserId}`);
+
+                        const response = await fetch(url, {
+                            method: 'DELETE',
+                            headers: { 'Accept': 'application/json' }
+                        });
+                        
+                        // Chống lỗi "Parse JSON" (Tách bạch xem server trả JSON hay HTML Error)
+                        const contentType = response.headers.get("content-type");
+                        let result;
+                        if (contentType && contentType.includes("application/json")) {
+                            result = await response.json();
+                        } else {
+                            const textError = await response.text();
+                            console.error("❌ Lỗi Server trả về (Không phải JSON):", textError);
+                            throw new Error(`Server trả về HTML lỗi (Status ${response.status}). F12 xem chi tiết.`);
+                        }
+
+                        if (response.ok && result.success) {
+                            reports = reports.filter(function(r){ return r.id !== id; });
+                            renderReportsPanel(); 
+                            renderNearbyHelpers(); 
+                            renderNearestClinic();
+                            if (viewer) renderMarkersToMap(filterReports());
+                            showToast('✅ ' + result.message, 'success');
+                        } else {
+                            showToast('❌ ' + (result.message || 'Không thể xóa báo cáo!'), 'error');
+                            delBtn.innerHTML = '<i class="fas fa-trash-alt"></i> Xóa';
+                            delBtn.disabled = false;
+                        }
+                    } catch (error) {
+                        console.error('🚨 Lỗi hệ thống khi gọi DELETE:', error);
+                        // ĐÃ SỬA: In thẳng tên lỗi lên màn hình để dễ dàng biết bệnh
+                        showToast(`❌ Lỗi: ${error.message || 'Mất kết nối tới Server'}`, 'error');
+                        delBtn.innerHTML = '<i class="fas fa-trash-alt"></i> Xóa';
+                        delBtn.disabled = false;
+                    }
                 }
             });
         }
+        // -------------------------------------
     });
 }
 
@@ -543,7 +596,6 @@ function initRealMap() {
         const style = document.createElement("style");
         style.id = "cesiumFixStyles";
         style.textContent = `
-            /* Desktop: #interactiveMap absolute fills the full fixed wrapper */
             @media (min-width: 769px) {
                 #interactiveMap {
                     position: absolute !important;
@@ -553,7 +605,6 @@ function initRealMap() {
                     overflow: hidden !important;
                 }
             }
-            /* Mobile: #interactiveMap is a flex-child, position:relative + fixed height */
             @media (max-width: 768px) {
                 #interactiveMap {
                     position: relative !important;
@@ -564,7 +615,6 @@ function initRealMap() {
                     flex: 0 0 55vh !important;
                 }
             }
-            /* Cesium internal elements always fill their container */
             #interactiveMap .cesium-viewer,
             #interactiveMap .cesium-viewer-cesiumWidgetContainer,
             #interactiveMap .cesium-widget,
@@ -655,7 +705,7 @@ function renderMarkersToMap(reportsData) {
     
     if (reportsData.length === 0) return;
     
-    const locationCount = {}; // Lưu số lượng marker tại mỗi tọa độ để tạo độ lệch
+    const locationCount = {}; 
 
     reportsData.forEach(report => {
         let markerColor = Cesium.Color.fromCssColorString('#ef4444'); 
@@ -669,7 +719,6 @@ function renderMarkersToMap(reportsData) {
             statusText = '🏃 ĐANG CỨU HỘ'; statusColor = '#0284c7'; badgeBg = '#f0f9ff';
         }
         
-        // Lỗi 5 FIX: chỉ dùng những URL thực sự hợp lệ (phải bắt đầu bằng http hoặc data:image/ cho ảnh vừa chụp)
         const hasRealPhoto = report.photo && (report.photo.startsWith('http') || report.photo.startsWith('data:image/'));
         const bgImage = hasRealPhoto
             ? report.photo
@@ -769,7 +818,6 @@ function renderMarkersToMap(reportsData) {
             </div>
         `;
         
-        // Sửa lỗi 3: Logic tạo độ lệch (offset) hình tròn cho các marker trùng tọa độ
         const locKey = `${report.lat.toFixed(5)}_${report.lng.toFixed(5)}`;
         if (!locationCount[locKey]) locationCount[locKey] = 0;
         
@@ -777,8 +825,8 @@ function renderMarkersToMap(reportsData) {
         let renderLat = report.lat;
         let renderLng = report.lng;
         if (count > 0) {
-            const offsetRadius = 0.0002; // Khoảng 20m độ lệch để tránh đè chập nhau
-            const angle = count * (Math.PI / 3); // Phân bổ góc 60 độ xung quanh
+            const offsetRadius = 0.0002; 
+            const angle = count * (Math.PI / 3); 
             renderLat += offsetRadius * Math.cos(angle);
             renderLng += offsetRadius * Math.sin(angle);
         }
@@ -862,9 +910,7 @@ async function fetchLocationAndAddress() {
         });
         currentLocation = { lat: pos.coords.latitude, lng: pos.coords.longitude };
         
-        // Tách phần lấy địa chỉ ra một try-catch riêng. Nếu API lỗi, vẫn giữ lại được tọa độ GPS.
         try {
-            // Gọi qua backend proxy để tránh CORS
             const res = await fetch(getApiUrl(`/api/geocode?lat=${currentLocation.lat}&lng=${currentLocation.lng}&zoom=18`));
             const data = await res.json();
             currentAddress = data.display_name ? data.display_name : `${currentLocation.lat.toFixed(5)}, ${currentLocation.lng.toFixed(5)}`;
@@ -886,14 +932,7 @@ async function fetchLocationAndAddress() {
     }
 }
 
-// ═══════════════════════════════════════════════════════════════
-// HÀM SUBMIT REPORT ĐÃ ĐƯỢC TÍCH HỢP UPLOAD CLOUDINARY
-// ═══════════════════════════════════════════════════════════════
-// ═══════════════════════════════════════════════════════════════
-// HÀM SUBMIT REPORT ĐÃ FIX LỖI ẢNH (HỖ TRỢ FALLBACK BASE64)
-// ═══════════════════════════════════════════════════════════════
 async function submitReport() {
-    // yêu cầu đăng nhập mới cho gửi báo cáo 
     let currentUser = null;
     try {
         const rawUser = localStorage.getItem('currentUser');
@@ -921,11 +960,8 @@ async function submitReport() {
         submitBtn.disabled = true;
     }
 
-    // FIX: Mặc định gán luôn ảnh vừa chụp (Base64) làm ảnh sẽ lưu. 
-    // Nếu upload Cloudinary thành công thì ghi đè lại bằng Link sau.
     let finalPhotoUrl = capturedPhoto; 
 
-    // --- BƯỚC MỚI THÊM VÀO: UPLOAD ẢNH LÊN CLOUDINARY ---
     if (capturedPhoto) {
         try {
             if (submitBtn) submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>Đang tải ảnh lên...</span>';
@@ -941,7 +977,6 @@ async function submitReport() {
             
             const uploadData = await uploadRes.json();
             if (uploadRes.ok) {
-                // FIX: Quét rộng các key API Cloudinary thường trả về
                 finalPhotoUrl = uploadData.secure_url || uploadData.url || uploadData.imageUrl || capturedPhoto; 
                 console.log("✅ Tải ảnh thành công:", finalPhotoUrl);
             } else {
@@ -949,11 +984,9 @@ async function submitReport() {
             }
         } catch (error) {
             console.warn("❌ Lỗi mạng khi gọi API tải ảnh. Tự động chuyển sang lưu Base64.", error);
-            // FIX: Bỏ lệnh `return;` ở đây để hệ thống không bị kẹt, vẫn tiếp tục gửi được báo cáo!
         }
     }
 
-    // --- BƯỚC LƯU DATABASE: Gửi thông tin cứu hộ ---
     if (submitBtn) submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>Đang gửi báo cáo...</span>';
 
     const payload = {
@@ -963,13 +996,14 @@ async function submitReport() {
         location    : { lat: currentLocation.lat, lng: currentLocation.lng },
         address     : currentAddress || `${currentLocation.lat.toFixed(5)}, ${currentLocation.lng.toFixed(5)}`,
         date        : new Date().toLocaleString("vi-VN"),
-        photo       : finalPhotoUrl, // Lúc này photo chắc chắn có data (Link Cloudinary hoặc chuỗi Base64)
+        photo       : finalPhotoUrl,
         reporter    : currentUser ? currentUser.fullName : "Khách",
         reportedBy  : currentUser ? {
-            userId: currentUser.userId || currentUser._id,
-            fullName: currentUser.fullName,
-            email: currentUser.email,
-            avatar: currentUser.avatar
+            // Ép về String để đảm bảo nhất quán với schema { type: String }
+            userId  : (currentUser.userId || currentUser._id || '').toString().trim(),
+            fullName: currentUser.fullName || 'Khách',
+            email   : currentUser.email    || '',
+            avatar  : currentUser.avatar   || ''
         } : undefined
     };
 
@@ -993,26 +1027,16 @@ async function submitReport() {
         if (response.ok) { 
             showToast("✅ Báo cáo đã được lưu lên bản đồ!", "success");
 
-            // Lấy ID và ảnh từ kết quả POST
             const savedId = result && result.id ? result.id : null;
             const savedPhotoUrl = finalPhotoUrl;
-            console.log("📸 finalPhotoUrl:", savedPhotoUrl ? savedPhotoUrl.substring(0, 80) + '...' : 'NULL');
-            console.log("🆔 savedId:", savedId);
 
-            // Đóng modal TRUỚC khi await để tránh race condition với fetchRescueReports
             await closeCameraModal();
-
-            // Fetch lại danh sách từ DB
             await fetchRescueReports();
 
-            // ============================================================
-            // Đảm bảo ảnh được lưu vào MongoDB (trường hợp DB chưa có ảnh)
-            // ============================================================
             if (savedPhotoUrl && savedId) {
                 const newReport = reports.find(r => r.id === savedId);
 
                 if (newReport && !newReport.photo) {
-                    console.log("🔧 DB chưa có ảnh, đang PATCH vào MongoDB...");
                     try {
                         const patchRes = await fetch(getApiUrl(`/api/rescuemap/${savedId}/photo`), {
                             method: 'PATCH',
@@ -1020,19 +1044,10 @@ async function submitReport() {
                             body: JSON.stringify({ photo: savedPhotoUrl })
                         });
                         if (patchRes.ok) {
-                            console.log("✅ PATCH thành công! Ảnh đã vào MongoDB.");
                             newReport.photo = savedPhotoUrl;
-                        } else {
-                            console.warn("⚠️ PATCH thất bại:", await patchRes.text());
                         }
-                    } catch (e) {
-                        console.warn("❌ Lỗi mạng khi PATCH:", e);
-                    }
-                } else if (newReport && newReport.photo) {
-                    console.log("✅ DB đã có ảnh:", newReport.photo.substring(0, 70) + '...');
+                    } catch (e) {}
                 } else if (!newReport) {
-                    console.warn("⚠️ Không tìm thấy report với id:", savedId, "- thử fallback...");
-                    // Fallback: patch report cuối cùng
                     if (reports.length > 0) {
                         const last = reports[reports.length - 1];
                         if (!last.photo && last.id) {
@@ -1043,18 +1058,15 @@ async function submitReport() {
                                     body: JSON.stringify({ photo: savedPhotoUrl })
                                 });
                                 last.photo = savedPhotoUrl;
-                                console.log("✅ Fallback PATCH thành công.");
-                            } catch (e) { console.warn("❌ Fallback PATCH lỗi:", e); }
+                            } catch (e) {}
                         }
                     }
                 }
 
-                // Re-render UI với ảnh đúng (luôn chạy dù DB đã có hay vừa patch)
                 renderReportsPanel();
                 if (viewer) renderMarkersToMap(filterReports());
             }
 
-            // FlyTo tới điểm vừa báo cáo trên Cesium
             if (viewer && currentLocation) {
                 window.setActiveTab("map");
                 viewer.camera.flyTo({
@@ -1113,7 +1125,7 @@ window.openCameraModal = async function(e) {
     document.getElementById("captureBtn").innerHTML = '<i class="fas fa-camera"></i> Chụp ảnh';
     
     await initCamera(); await fetchLocationAndAddress();
-    updateReporterInfo(); // Cập nhật thông tin người đăng
+    updateReporterInfo();
 }
 
 window.closeCameraModal = function() {
@@ -1134,7 +1146,7 @@ function updateReporterInfo() {
     const avatarUrlEl= document.getElementById('reporterAvatarUrl');
 
     if (!wrapper || !avatarEl || !nameEl) return;
-    wrapper.style.display = 'flex'; // Đảm bảo hiển thị
+    wrapper.style.display = 'flex';
 
     let user = null;
     try {
@@ -1143,7 +1155,6 @@ function updateReporterInfo() {
     } catch(e) {}
 
     if (user && (user.fullName || user.userId)) {
-        // ── Đã đăng nhập ──
         const name    = user.fullName || 'Người dùng';
         const avatarUrl = user.avatar || '';
         const initial = name.trim().charAt(0).toUpperCase();
@@ -1151,7 +1162,6 @@ function updateReporterInfo() {
         nameEl.textContent = name;
         if (badgeEl) badgeEl.textContent = user.email || 'Đã đăng nhập';
 
-        // Nếu avatarEl là <div> thì hiển thị như avatar chữ cái hoặc ảnh
         if (avatarEl.tagName === 'DIV' || avatarEl.tagName === 'SPAN') {
             if (avatarUrl) {
                 avatarEl.innerHTML = `<img src="${avatarUrl}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" onerror="this.outerHTML='${initial}'">`;
@@ -1159,7 +1169,6 @@ function updateReporterInfo() {
                 avatarEl.textContent = initial;
             }
         } else {
-            // là <img>
             avatarEl.src = avatarUrl || 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
         }
 
@@ -1169,7 +1178,6 @@ function updateReporterInfo() {
         if (avatarUrlEl) avatarUrlEl.value = avatarUrl;
 
     } else {
-        // ── Khách ──
         nameEl.textContent = 'Khách (Guest)';
         if (badgeEl) badgeEl.textContent = 'Không đăng nhập';
         if (avatarEl.tagName === 'DIV' || avatarEl.tagName === 'SPAN') {
@@ -1226,7 +1234,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    /* Support Force button */
     document.getElementById("supportForceBtn")?.addEventListener("click", () => {
         showToast("📞 Đang kết nối lực lượng hỗ trợ...", "success");
         let directoryModal = document.getElementById("supportDirectoryModal");
