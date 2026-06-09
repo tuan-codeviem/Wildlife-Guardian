@@ -891,6 +891,10 @@ async function fetchLocationAndAddress() {
 // HÀM SUBMIT REPORT ĐÃ FIX LỖI ẢNH (HỖ TRỢ FALLBACK BASE64)
 // ═══════════════════════════════════════════════════════════════
 async function submitReport() {
+    if (localStorage.getItem('isLoggedIn') !== 'true' && !localStorage.getItem('currentUser')) {
+        return showToast("Vui lòng đăng nhập tài khoản trước khi gửi báo cáo!", "error");
+    }
+
     const animalName   = document.getElementById("animalName")?.value.trim() || "";
     const animalStatus = document.getElementById("animalStatus")?.value || "emergency";
     const animalDesc   = document.getElementById("animalDesc")?.value.trim() || "";
