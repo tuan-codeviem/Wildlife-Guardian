@@ -1,6 +1,12 @@
 /* ═══════════════════════════════════════════════════════
    WILDLIFE GUARDIAN – nav.css  (Ultra Transparent)
 ═══════════════════════════════════════════════════════ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 body {
   font-family: "Outfit", "Inter", system-ui, sans-serif;
   margin: 0
@@ -340,12 +346,36 @@ body {
   z-index: 10002;
   transition: all 0.3s;
 }
+
+.user-dropdown-popup::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 0 8px 8px 8px;
+  border-style: solid;
+  border-color: transparent transparent rgba(34, 197, 94, 0.3) transparent;
+}
+
+.user-dropdown-popup::after {
+  content: "";
+  position: absolute;
+  top: -7px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 0 7px 7px 7px;
+  border-style: solid;
+  border-color: transparent transparent rgba(4, 14, 8, 0.98) transparent;
+}
+
 .dropdown-avatar-img {
   width: 70px;
   height: 70px;
   border-radius: 50%;
   object-fit: cover;
-  margin-bottom: 12px;
+  margin: 0 auto 12px;
+  display: block;
   border: 3px solid #22c55e;
   padding: 3px;
 }

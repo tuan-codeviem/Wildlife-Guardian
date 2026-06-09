@@ -11,11 +11,14 @@ if (userString) {
 
   loginBtns.forEach((btn) => {
     // 1. Đổi nút "Log in" thành Avatar
+    btn.className = "avatar-btn"; // Xoá class btn-login để mất cái viền hộp đen của nút
     btn.innerHTML = `<img src="${userAvatar}" style="width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid #16a34a; background: white;">`;
     btn.style.padding = "0";
     btn.style.background = "transparent";
     btn.style.border = "none";
     btn.style.minWidth = "auto";
+    btn.style.outline = "none";
+    btn.style.cursor = "pointer";
 
     // 2. Cài đặt hành động: Bấm vào thì mở bảng Mini Profile Tài Khoản
     btn.onclick = (e) => {
@@ -29,18 +32,25 @@ if (userString) {
 
         if (popup.style.display === "block") {
           popup.style.display = "none";
+          popup.style.opacity = "0";
+          popup.style.transform = "translateY(10px) translateX(-50%)";
         } else {
-          popup.style.display = "block";
           const rect = btn.getBoundingClientRect();
-          popup.style.top = rect.bottom + 10 + "px";
-          // Căn giữa cho điện thoại, neo phải cho máy tính
+          popup.style.top = (rect.bottom + 10) + "px";
           if (window.innerWidth < 768) {
             popup.style.left = "50%";
-            popup.style.transform = "translateX(-50%)";
           } else {
-            popup.style.left = rect.right - 200 + "px";
-            popup.style.transform = "none";
+            popup.style.left = (rect.left + rect.width / 2) + "px";
           }
+          popup.style.right = "auto";
+          popup.style.transform = "translateY(10px) translateX(-50%)";
+          popup.style.display = "block";
+          
+          // Anim
+          setTimeout(() => {
+            popup.style.opacity = "1";
+            popup.style.transform = "translateY(0) translateX(-50%)";
+          }, 10);
         }
       }
     };

@@ -859,6 +859,7 @@
 
       loginBtns.forEach((btn) => {
         // 1. Đổi nút "Log in" thành Avatar
+        btn.className = 'avatar-btn';
         btn.innerHTML = `<img src="${userAvatar}" style="width: 38px; height: 38px; border-radius: 50%; object-fit: cover; background: white;">`;
         btn.style.padding = "0";
         btn.style.background = "transparent";
@@ -882,18 +883,24 @@
             if (popup.style.display === "block") {
               popup.style.display = "none";
               popup.style.opacity = "0";
-              popup.style.transform = "translateY(10px)";
+              popup.style.transform = "translateY(10px) translateX(-50%)";
             } else {
               // Định vị popup nằm ngay dưới nút Avatar
               const rect = btn.getBoundingClientRect();
               popup.style.top = (rect.bottom + 10) + "px";
-              popup.style.right = (window.innerWidth - rect.right) + "px";
+              if (window.innerWidth < 768) {
+                popup.style.left = "50%";
+              } else {
+                popup.style.left = (rect.left + rect.width / 2) + "px";
+              }
+              popup.style.right = "auto";
+              popup.style.transform = "translateY(10px) translateX(-50%)";
               popup.style.display = "block";
 
               // Anim
               setTimeout(() => {
                 popup.style.opacity = "1";
-                popup.style.transform = "none";
+                popup.style.transform = "translateY(0) translateX(-50%)";
               }, 10);
             }
           }
