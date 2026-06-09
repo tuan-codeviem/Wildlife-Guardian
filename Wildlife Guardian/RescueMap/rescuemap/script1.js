@@ -355,7 +355,9 @@ async function fetchRescueReports() {
                     date: item.createdAt || item.date || new Date().toLocaleString("vi-VN"),
                     description: item.description || item.note || "",
                     photo: rawPhoto,  // null nếu không có ảnh; có thể là URL hoặc base64
-                    _needGeocode: needGeocode 
+                    _needGeocode: needGeocode,
+                    reporterName: item.reportedBy?.fullName || item.reporter || "Khách",
+                    reporterAvatar: item.reportedBy?.avatar || ""
                 };
             }).filter(report => !isNaN(report.lat) && !isNaN(report.lng));
         } else {
@@ -891,7 +893,14 @@ async function fetchLocationAndAddress() {
 // HÀM SUBMIT REPORT ĐÃ FIX LỖI ẢNH (HỖ TRỢ FALLBACK BASE64)
 // ═══════════════════════════════════════════════════════════════
 async function submitReport() {
-    if (localStorage.getItem('isLoggedIn') !== 'true' && !localStorage.getItem('currentUser')) {
+    // yêu cầu đăng nhập mới cho gửi báo cáo 
+    let currentUser = null;
+    try {
+        const rawUser = localStorage.getItem('currentUser');
+        if (rawUser) currentUser = JSON.parse(rawUser);
+    } catch(e) {}
+
+    if (localStorage.getItem('isLoggedIn') !== 'true' && !currentUser) {
         return showToast("Vui lòng đăng nhập tài khoản trước khi gửi báo cáo!", "error");
     }
 
@@ -954,7 +963,14 @@ async function submitReport() {
         location    : { lat: currentLocation.lat, lng: currentLocation.lng },
         address     : currentAddress || `${currentLocation.lat.toFixed(5)}, ${currentLocation.lng.toFixed(5)}`,
         date        : new Date().toLocaleString("vi-VN"),
-        photo       : finalPhotoUrl // Lúc này photo chắc chắn có data (Link Cloudinary hoặc chuỗi Base64)
+        photo       : finalPhotoUrl, // Lúc này photo chắc chắn có data (Link Cloudinary hoặc chuỗi Base64)
+        reporter    : currentUser ? currentUser.fullName : "Khách",
+        reportedBy  : currentUser ? {
+            userId: currentUser.userId || currentUser._id,
+            fullName: currentUser.fullName,
+            email: currentUser.email,
+            avatar: currentUser.avatar
+        } : undefined
     };
 
     try {
