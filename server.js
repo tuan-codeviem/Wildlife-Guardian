@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const multer = require("multer");
 const path = require("path");
-const https = require("https"); 
+const https = require("https");
 require("dotenv").config();
 
 const uploadRoute = require("./upload.route");
@@ -27,9 +27,9 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(cors({
-  origin: '*',
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 // ==========================================
@@ -42,7 +42,7 @@ app.use((req, res, next) => {
 
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
-app.use(express.static(".")); 
+app.use(express.static("."));
 app.use(
     "/uploads",
     express.static(path.join(__dirname, "Wildlife Guardian/Social/uploads")),
@@ -268,7 +268,7 @@ app.post("/api/posts/:id/comment", uploadFile, async (req, res) => {
 app.delete("/api/posts/:postId/comment/:commentId", async (req, res) => {
     try {
         const { postId, commentId } = req.params;
-        const { userId } = req.query; 
+        const { userId } = req.query;
 
         if (!userId) {
             return res.status(401).json({ message: "Thiếu thông tin người dùng!" });
@@ -335,7 +335,21 @@ app.put("/api/posts/:id", uploadFile, async (req, res) => {
 
 app.delete("/api/posts/:id", async (req, res) => {
     try {
-        await Post.findByIdAndDelete(req.params.id);
+        // Thay đổi: Nhận thêm userId từ query để bảo mật
+        const userId = req.query.userId;
+        if (!userId) {
+            return res.status(401).json({ message: "Vui lòng đăng nhập để xóa bài!" });
+        }
+
+        const post = await Post.findById(req.params.id);
+        if (!post) return res.status(404).json({ message: "Không tìm thấy bài viết!" });
+
+        // Kiểm tra xem người yêu cầu xóa có phải là chủ bài viết không
+        if (post.authorId && post.authorId.toString() !== userId.toString()) {
+            return res.status(403).json({ message: "Bạn không có quyền xóa bài viết này!" });
+        }
+
+        await Post.deleteOne({ _id: post._id });
         res.json({ message: "Đã xóa bài viết thành công!" });
     } catch (error) {
         res.status(500).json({ message: "Lỗi khi xóa bài!" });
@@ -353,7 +367,7 @@ app.get("/api/messages/:user1/:user2", async (req, res) => {
                 { sender: user1, receiver: user2 },
                 { sender: user2, receiver: user1 },
             ],
-        }).sort({ timestamp: 1, createdAt: 1 }); 
+        }).sort({ timestamp: 1, createdAt: 1 });
         res.json({ success: true, messages });
     } catch (error) {
         res.status(500).json({ success: false, message: "Lỗi tải tin nhắn!" });
@@ -377,7 +391,7 @@ app.post("/api/messages", async (req, res) => {
 app.post("/api/register", async (req, res) => {
     try {
         const { email, password, fullName, username } = req.body;
-        
+
         const searchConditions = [];
         if (email) searchConditions.push({ email: email });
         if (username) searchConditions.push({ username: username });
@@ -436,7 +450,7 @@ app.get("/api/users/friends/:myId", async (req, res) => {
         const searchQuery = req.query.search || "";
 
         const me = await User.findById(myId);
-        if (!me) return res.json({ success: true, users: [] }); 
+        if (!me) return res.json({ success: true, users: [] });
 
         const myFriends = me.friends || [];
         const friendsList = await User.find({
@@ -512,8 +526,8 @@ app.get("/api/users/search-new/:myId", async (req, res) => {
 
         const users = await User.find({
             fullName: { $regex: search, $options: "i" },
-            _id: { $ne: myId }, 
-        }).limit(10); 
+            _id: { $ne: myId },
+        }).limit(10);
 
         const results = users.map((u) => {
             let status = "none";
@@ -522,8 +536,8 @@ app.get("/api/users/search-new/:myId", async (req, res) => {
             const targetRequests = u.friendRequests || [];
 
             if (myFriends.includes(u._id.toString())) status = "friend";
-            else if (targetRequests.includes(myId)) status = "sent"; 
-            else if (myRequests.includes(u._id.toString())) status = "received"; 
+            else if (targetRequests.includes(myId)) status = "sent";
+            else if (myRequests.includes(u._id.toString())) status = "received";
 
             return { _id: u._id, fullName: u.fullName, avatar: u.avatar, status };
         });
@@ -568,7 +582,7 @@ app.post("/api/friends/respond", async (req, res) => {
         if (!me.friends) me.friends = [];
         if (!requester.friends) requester.friends = [];
 
-        me.friendRequests = me.friendRequests.filter((id) => id !== requesterId); 
+        me.friendRequests = me.friendRequests.filter((id) => id !== requesterId);
         if (action === "accept") {
             if (!me.friends.includes(requesterId)) me.friends.push(requesterId);
             if (!requester.friends.includes(myId)) requester.friends.push(myId);
@@ -720,7 +734,7 @@ app.delete("/api/rescuemap/:id", async (req, res) => {
         }
 
         let rescue = null;
-        
+
         if (mongoose.Types.ObjectId.isValid(reportId)) {
             rescue = await Rescue.findById(reportId);
         } else {
@@ -750,7 +764,7 @@ app.delete("/api/rescuemap/:id", async (req, res) => {
         // Sử dụng deleteOne để bắt chính xác kết quả phản hồi từ Database
         const deleteResult = await Rescue.deleteOne({ _id: rescue._id });
         console.log(`✅ [DELETE] Thực thi xóa MongoDB:`, deleteResult);
-        
+
         if (deleteResult.deletedCount === 0) {
             console.log("⚠️ Cảnh báo: Lệnh chạy thành công nhưng không có bản ghi nào bị xóa (Có thể do lỗi _id).");
             return res.status(500).json({ success: false, message: "Lỗi DB: Không thể xóa bản ghi!" });
@@ -768,7 +782,7 @@ app.get("/api/geocode", async (req, res) => {
     try {
         const { lat, lng, zoom } = req.query;
         const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=${zoom || 18}&addressdetails=1`;
-        
+
         https.get(url, { headers: { "User-Agent": "WildlifeGuardian/1.0" } }, (response) => {
             let data = "";
             response.on("data", chunk => data += chunk);

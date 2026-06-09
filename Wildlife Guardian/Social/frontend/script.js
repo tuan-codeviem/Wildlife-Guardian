@@ -415,9 +415,8 @@ window.renderCommentsHTML = function (
     const replyHtml = isReply
       ? ""
       : `
-      ${
-        replies.length > 0
-          ? `
+      ${replies.length > 0
+        ? `
           <div style="margin-top: 8px;">
               <button class="toggle-replies-btn" data-target="replies-${c._id}" style="background: none; border: none; color: #737373; cursor: pointer; font-weight: 600; font-size: 12px; padding: 0; display: flex; align-items: center; gap: 8px; transition: 0.2s;">
                   <div style="width: 24px; height: 1px; background: #dbdbdb;"></div>
@@ -428,7 +427,7 @@ window.renderCommentsHTML = function (
               </div>
           </div>
       `
-          : ""
+        : ""
       }
     `;
 
@@ -527,7 +526,7 @@ async function loadPosts(category = "all posts") {
       // Kiểm tra xem bài này có phải của tài khoản hiện tại không (So sánh bằng ID)
       const isMyPost = me
         ? (post.authorId && post.authorId === myId) ||
-          (!post.authorId && post.authorName === me.fullName)
+        (!post.authorId && post.authorName === me.fullName)
         : false;
       const postOptionsHTML = isMyPost
         ? `
@@ -1195,7 +1194,7 @@ postsFeedContainer.addEventListener("click", async function (e) {
           countSpan.innerText =
             data.likesCount > 0
               ? `${data.likesCount} ` +
-                (currentLang === "EN" && data.likesCount > 1 ? t.likes : t.like)
+              (currentLang === "EN" && data.likesCount > 1 ? t.likes : t.like)
               : t.like;
         }
 
@@ -1431,7 +1430,7 @@ async function loadFriendRequests() {
       requestBadge.style.display = "none";
       pendingRequestsContainer.innerHTML = `<p style="font-size: 13px; color: #888; text-align: center;">${window.translations[currentLang].no_friend_requests}</p>`;
     }
-  } catch (err) {}
+  } catch (err) { }
 }
 
 // 4. Bấm Xác nhận hoặc Xóa
@@ -1953,9 +1952,17 @@ document.addEventListener("click", async function (e) {
     // Tắt cái hộp đi cho gọn
     document.getElementById("customDeleteConfirm").style.display = "none";
 
+    // Lấy ID người dùng hiện tại để gửi lên Server xác thực
+    const meString = localStorage.getItem("currentUser");
+    let myUserId = "ẩn_danh";
+    if (meString) {
+      const me = JSON.parse(meString);
+      myUserId = me._id || me.userId || "user_macdinh";
+    }
+
     // Chạy lệnh gọi Server xóa bài
     try {
-      const response = await fetch(`${API_URL}/${postId}`, {
+      const response = await fetch(`${API_URL}/${postId}?userId=${myUserId}`, {
         method: "DELETE",
       });
       if (response.ok) {
