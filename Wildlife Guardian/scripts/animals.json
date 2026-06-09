@@ -34,7 +34,7 @@
       "en": "They can communicate using seismic vibrations.",
       "vi": "Chúng có thể giao tiếp bằng các rung động địa chấn truyền qua đất."
     },
-    "thumbnailUrl": "https://example.com/asian_elephant.jpg",
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1780994801/wildlife-guardian/images/asian-elephant.jpg",
     "model3dUrl": "https://example.com/placeholder.glb"
   },
   {
@@ -72,8 +72,8 @@
       "en": "They use their bushy tails as wraparound blankets in the cold.",
       "vi": "Chúng dùng chiếc đuôi xù xì như một chiếc chăn quấn quanh người khi trời lạnh."
     },
-    "thumbnailUrl": "https://example.com/red_panda.jpg",
-    "model3dUrl": "https://example.com/placeholder.glb"
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1780994811/wildlife-guardian/images/red-panda.avif",
+    "model3dUrl": "https://res.cloudinary.com/dotlymsmk/raw/upload/v1780991945/wildlife-guardian/models/red-panda.glb"
   },
   {
     "speciesId": "indochinese-tiger",
@@ -110,7 +110,7 @@
       "en": "A tiger's roar can be heard as far as 3 kilometers away.",
       "vi": "Tiếng gầm của hổ có thể vang xa tới 3 km."
     },
-    "thumbnailUrl": "https://example.com/indochinese_tiger.jpg",
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1780990885/wildlife-guardian/images/indochinese-tiger.jpg",
     "model3dUrl": "https://example.com/placeholder.glb"
   },
   {
@@ -148,7 +148,7 @@
       "en": "They are named after the green color of their fat, not their shell.",
       "vi": "Chúng được đặt tên theo màu mỡ của chúng chứ không phải màu mai."
     },
-    "thumbnailUrl": "https://example.com/green_turtle.jpg",
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1780994805/wildlife-guardian/images/green-sea-turtle.jpg",
     "model3dUrl": "https://example.com/placeholder.glb"
   },
   {
@@ -186,7 +186,7 @@
       "en": "It is a symbol of luck and longevity in East Asian culture.",
       "vi": "Nó là biểu tượng của sự may mắn và trường thọ trong văn hóa Á Đông."
     },
-    "thumbnailUrl": "https://example.com/red_crowned_crane.jpg",
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1780994810/wildlife-guardian/images/red-crowned-crane.jpg",
     "model3dUrl": "https://example.com/placeholder.glb"
   },
   {
@@ -224,7 +224,7 @@
       "en": "They can detect a single drop of blood in 100 liters of water.",
       "vi": "Chúng có thể phát hiện một giọt máu trong 100 lít nước."
     },
-    "thumbnailUrl": "https://example.com/great_white_shark.jpg",
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1780995821/wildlife-guardian/images/great-white-shark.jpg",
     "model3dUrl": "https://example.com/placeholder.glb"
   },
   {
@@ -262,7 +262,7 @@
       "en": "Their scales are made of keratin, the same material as human fingernails.",
       "vi": "Vảy của chúng làm từ keratin, cùng chất liệu với móng tay người."
     },
-    "thumbnailUrl": "https://example.com/sunda_pangolin.jpg",
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1780994812/wildlife-guardian/images/sunda-pangolin.jpg",
     "model3dUrl": "https://example.com/placeholder.glb"
   },
   {
@@ -300,7 +300,7 @@
       "en": "Females can reproduce without mating (parthenogenesis).",
       "vi": "Con cái có thể sinh sản mà không cần giao phối (trinh sản)."
     },
-    "thumbnailUrl": "https://example.com/komodo_dragon.jpg",
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1780994808/wildlife-guardian/images/komodo-dragon.jpg",
     "model3dUrl": "https://example.com/placeholder.glb"
   },
   {
@@ -338,7 +338,7 @@
       "en": "They get their toxicity from the bugs they eat.",
       "vi": "Chúng có được độc tính từ những loài bọ mà chúng ăn."
     },
-    "thumbnailUrl": "https://example.com/poison_dart_frog.jpg",
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1780994809/wildlife-guardian/images/poison-dart-frog.avif",
     "model3dUrl": "https://example.com/placeholder.glb"
   },
   {
@@ -376,7 +376,121 @@
       "en": "Their talons are larger than the claws of a grizzly bear.",
       "vi": "Móng vuốt của chúng còn lớn hơn móng vuốt của một con gấu xám."
     },
-    "thumbnailUrl": "https://example.com/harpy_eagle.jpg",
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1780994806/wildlife-guardian/images/harpy-eagle.jpg",
     "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "red-fox",
+    "animalName": {
+      "en": "Red Fox",
+      "vi": "Cáo Lửa"
+    },
+    "scientificName": "Vulpes vulpes",
+    "status": {
+      "en": "Least Concern",
+      "vi": "Ít lo ngại"
+    },
+    "category": {
+      "en": "Mammal",
+      "vi": "Động vật có vú"
+    },
+    "distribution": {
+      "en": "Northern Hemisphere",
+      "vi": "Bắc Bán Cầu"
+    },
+    "habitat": {
+      "en": "Forests, grasslands, and deserts",
+      "vi": "Rừng, đồng cỏ và sa mạc"
+    },
+    "diet": {
+      "en": "Omnivore",
+      "vi": "Động vật ăn tạp"
+    },
+    "behavior": {
+      "en": "Solitary hunters, highly adaptable",
+      "vi": "Săn mồi đơn độc, khả năng thích nghi cực cao"
+    },
+    "funFact": {
+      "en": "They can use the Earth's magnetic field to calculate the distance and direction of their prey.",
+      "vi": "Chúng có thể cảm nhận từ trường Trái đất để tính toán khoảng cách và hướng đi của con mồi."
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1780997679/wildlife-guardian/images/red-fox.jpg",
+    "model3dUrl": "https://res.cloudinary.com/dotlymsmk/raw/upload/v1780996780/wildlife-guardian/models/red-fox.glb"
+  },
+  {
+    "speciesId": "ferret",
+    "animalName": {
+      "en": "Black-footed Ferret",
+      "vi": "Chồn Sương Chân Đen"
+    },
+    "scientificName": "Mustela nigripes",
+    "status": {
+      "en": "Endangered",
+      "vi": "Nguy cấp"
+    },
+    "category": {
+      "en": "Mammal",
+      "vi": "Động vật có vú"
+    },
+    "distribution": {
+      "en": "North America",
+      "vi": "Bắc Mỹ"
+    },
+    "habitat": {
+      "en": "Shortgrass prairies",
+      "vi": "Đồng cỏ ngắn"
+    },
+    "diet": {
+      "en": "Carnivore (primarily prairie dogs)",
+      "vi": "Động vật ăn thịt (chủ yếu ăn cầy thảo nguyên)"
+    },
+    "behavior": {
+      "en": "Nocturnal and spends most of its time underground in burrows.",
+      "vi": "Hoạt động về đêm và dành phần lớn thời gian dưới các hang ngầm."
+    },
+    "funFact": {
+      "en": "They were once thought to be extinct until a small population was discovered in 1981.",
+      "vi": "Người ta từng cho rằng chúng đã tuyệt chủng cho đến khi phát hiện ra một quần thể nhỏ vào năm 1981."
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1780997903/wildlife-guardian/images/ferret.jpg",
+    "model3dUrl": "https://res.cloudinary.com/dotlymsmk/raw/upload/v1780997914/wildlife-guardian/models/ferret.glb"
+  },
+  {
+    "speciesId": "armadillo",
+    "animalName": {
+      "en": "Nine-banded Armadillo",
+      "vi": "Tatu Chín Dải"
+    },
+    "scientificName": "Dasypus novemcinctus",
+    "status": {
+      "en": "Least Concern",
+      "vi": "Ít lo ngại"
+    },
+    "category": {
+      "en": "Mammal",
+      "vi": "Động vật có vú"
+    },
+    "distribution": {
+      "en": "North, Central, and South America",
+      "vi": "Bắc, Trung và Nam Mỹ"
+    },
+    "habitat": {
+      "en": "Forests, scrublands, and grasslands",
+      "vi": "Rừng, vùng cây bụi và đồng cỏ"
+    },
+    "diet": {
+      "en": "Insectivore",
+      "vi": "Động vật ăn côn trùng"
+    },
+    "behavior": {
+      "en": "Excellent diggers, known to jump straight up in the air when startled.",
+      "vi": "Đào bới xuất sắc, thường bật nhảy thẳng lên không trung khi bị giật mình."
+    },
+    "funFact": {
+      "en": "Its shell is made of real bone covered by a layer of tough horn.",
+      "vi": "Lớp vỏ của nó được làm từ xương thật và được bao phủ bởi một lớp sừng cứng cáp."
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1780997901/wildlife-guardian/images/armadillo.jpg",
+    "model3dUrl": "https://res.cloudinary.com/dotlymsmk/raw/upload/v1780997995/wildlife-guardian/models/armadillo.glb"
   }
 ]

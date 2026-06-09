@@ -75,28 +75,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* ──────────────────────────────────────────────
      4.  LOGIN / LOGOUT TOGGLE  (mirrors Home)
+         --> REPLACED BY AVATAR SCRIPT IN HTML <--
   ─────────────────────────────────────────────── */
-  function setupLoginBtn(btn) {
-    if (!btn) return;
-    const user = localStorage.getItem('currentUser') || localStorage.getItem('isLoggedIn');
-    if (user) {
-      btn.textContent = '← Log out';
-      btn.onclick = () => {
-        localStorage.removeItem('currentUser');
-        localStorage.removeItem('isLoggedIn');
-        localStorage.removeItem('username');
-        window.location.reload();
-      };
-    } else {
-      btn.textContent = '→ Log in';
-      btn.onclick = () => { window.location.href = '../Auth/login.html'; };
-    }
-  }
-
-  setupLoginBtn(document.getElementById('desktopLoginBtn'));
-  setupLoginBtn(document.getElementById('mobileLoginBtn'));
-
-
   /* ──────────────────────────────────────────────
      5.  PARTICLE CANVAS  (hero background)
          Same algorithm as Home's hero canvas

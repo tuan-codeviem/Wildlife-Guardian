@@ -1334,3 +1334,152 @@ a.ci-value:hover { color: var(--clr-green-600); }
 
   .ct-social-row { flex-direction: column; }
 }
+
+/* ═══════════════════════════════════════════════
+   FOOTER (Copied from Home.css)
+═══════════════════════════════════════════════ */
+.site-footer {
+  background: #020c05;
+  border-top: 1px solid rgba(255, 255, 255, .06);
+  padding: 60px 0 0
+}
+
+.footer-top {
+  display: flex;
+  gap: 60px;
+  padding-bottom: 48px
+}
+
+.ft-brand {
+  flex: 0 0 260px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px
+}
+
+.ft-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #fff
+}
+
+.ft-logo .logo-icon {
+  background: linear-gradient(135deg, #16a34a, #14532d);
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff
+}
+
+.ft-logo .logo-icon svg {
+  width: 17px;
+  height: 17px
+}
+
+.ft-logo span {
+  font-size: 17px;
+  font-weight: 800
+}
+
+.ft-brand p {
+  font-size: 14px;
+  color: rgba(255, 255, 255, .38);
+  line-height: 1.6
+}
+
+.ft-nav {
+  flex: 1;
+  display: flex;
+  justify-content: space-evenly;
+  gap: 40px
+}
+
+.ft-col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px
+}
+
+.ft-col h4 {
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, .65);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 4px
+}
+
+.ft-col a {
+  font-size: 14px;
+  color: rgba(255, 255, 255, .32);
+  text-decoration: none;
+  transition: color .2s
+}
+
+.ft-col a:hover {
+  color: #4ade80
+}
+
+.footer-bottom {
+  border-top: 1px solid rgba(255, 255, 255, .06);
+  padding: 20px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between
+}
+
+.footer-bottom span {
+  font-size: 13px;
+  color: rgba(255, 255, 255, .2)
+}
+
+.ft-social {
+  display: flex;
+  gap: 10px
+}
+
+.ft-social a {
+  width: 32px;
+  height: 32px;
+  border: 1px solid rgba(255, 255, 255, .1);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, .32);
+  text-decoration: none;
+  transition: all .2s
+}
+
+.ft-social a:hover {
+  background: #16a34a;
+  border-color: #16a34a;
+  color: #fff
+}
+
+@media(max-width:820px) {
+  .footer-top {
+    flex-direction: column
+  }
+  .ft-brand {
+    flex: none
+  }
+}
+
+@media(max-width:640px) {
+  .ft-nav {
+    flex-direction: column;
+    gap: 20px
+  }
+  .footer-bottom {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center
+  }
+}

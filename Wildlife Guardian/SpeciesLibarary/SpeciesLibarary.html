@@ -137,8 +137,10 @@
       <div class="container">
         <div class="sl-header-content wg-reveal">
           <div class="sec-chip" data-i18n="lib_chip">📚 Holographic Database</div>
-          <h1 class="sl-title"><span data-i18n="lib_title_1">Species</span> <span class="text-green" data-i18n="lib_title_2">Library</span></h1>
-          <p class="sl-desc" data-i18n="lib_desc">Discover our world's magnificent creatures. Play the rescue game to unlock exclusive 3D
+          <h1 class="sl-title"><span data-i18n="lib_title_1">Species</span> <span class="text-green"
+              data-i18n="lib_title_2">Library</span></h1>
+          <p class="sl-desc" data-i18n="lib_desc">Discover our world's magnificent creatures. Play the rescue game to
+            unlock exclusive 3D
             holographic views and comprehensive data!</p>
         </div>
       </div>
@@ -151,7 +153,8 @@
           <!-- Search -->
           <div class="sl-search">
             <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" id="searchInput" data-i18n="lib_search_placeholder" placeholder="Search species by name..." autocomplete="off" />
+            <input type="text" id="searchInput" data-i18n="lib_search_placeholder"
+              placeholder="Search species by name..." autocomplete="off" />
           </div>
 
           <!-- Filters -->
@@ -197,25 +200,25 @@
               </svg></div>
             <span>Wildlife Guardian</span>
           </div>
-          <p>Protecting wildlife together, one rescue at a time.</p>
+          <p data-i18n="ft_desc">Protecting wildlife together, one rescue at a time.</p>
         </div>
         <div class="ft-nav">
           <div class="ft-col">
-            <h4>Platform</h4><a href="../RescueMap/rescuemap/index.html">Rescue Map</a><a
-              href="../Social/frontend/index.html">Community</a><a href="SpeciesLibarary.html">Species Library</a><a
-              href="../Game/Main/Game/GameUnity.html">Game</a>
+            <h4 data-i18n="ft_platform">Platform</h4><a href="../RescueMap/rescuemap/index.html" data-i18n="nav_rescue">Rescue Map</a><a
+              href="../Social/frontend/index.html" data-i18n="nav_social">Community</a><a href="SpeciesLibarary.html" data-i18n="nav_species">Species Library</a><a
+              href="../Game/Main/Game/GameUnity.html" data-i18n="nav_game">Game</a>
           </div>
           <div class="ft-col">
-            <h4>Support</h4><a href="../Contact/Contact.html">Contact Us</a><a href="#">FAQ</a><a href="#">Report a
+            <h4 data-i18n="ft_support">Support</h4><a href="../Contact/Contact.html" data-i18n="nav_contact">Contact Us</a><a href="#">FAQ</a><a href="#">Report a
               Bug</a>
           </div>
           <div class="ft-col">
-            <h4>Legal</h4><a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="#">Cookie Policy</a>
+            <h4 data-i18n="ft_legal">Legal</h4><a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="#">Cookie Policy</a>
           </div>
         </div>
       </div>
       <div class="footer-bottom">
-        <span>© 2026 Wildlife Guardian. All rights reserved.</span>
+        <span data-i18n="ft_rights">© 2026 Wildlife Guardian. All rights reserved.</span>
         <div class="ft-social"><a href="#">𝕏</a><a href="#">IG</a><a href="#">FB</a></div>
       </div>
     </div>
@@ -246,31 +249,31 @@
           <!-- Info Boxes -->
           <div class="bento-box">
             <div class="bento-icon"><i class="fa-solid fa-location-dot"></i></div>
-            <h4>Habitat</h4>
+            <h4 data-i18n="sp_habitat">Habitat</h4>
             <p id="bmHabitat">Loading...</p>
           </div>
 
           <div class="bento-box">
             <div class="bento-icon"><i class="fa-solid fa-earth-americas"></i></div>
-            <h4>Found In</h4>
+            <h4 data-i18n="sp_foundin">Found In</h4>
             <p id="bmFoundIn">Loading...</p>
           </div>
 
           <div class="bento-box">
             <div class="bento-icon"><i class="fa-solid fa-utensils"></i></div>
-            <h4>Diet</h4>
+            <h4 data-i18n="sp_diet">Diet</h4>
             <p id="bmDiet">Loading...</p>
           </div>
 
           <div class="bento-box">
             <div class="bento-icon"><i class="fa-regular fa-clock"></i></div>
-            <h4>Behavior</h4>
+            <h4 data-i18n="sp_behavior">Behavior</h4>
             <p id="bmBehavior">Loading...</p>
           </div>
 
           <div class="bento-box bento-wide">
             <div class="bento-icon text-orange"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
-            <h4>Fun Fact</h4>
+            <h4 data-i18n="sp_funfact">Fun Fact</h4>
             <p id="bmFunFact">Loading...</p>
           </div>
         </div>
@@ -366,11 +369,14 @@
 
       loginBtns.forEach((btn) => {
         // 1. Đổi nút "Log in" thành Avatar
-        btn.innerHTML = `<img src="${userAvatar}" style="width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid #16a34a; background: white;">`;
+        btn.className = "avatar-btn"; // Xoá class btn-login để mất cái viền hộp đen của nút
+        btn.innerHTML = `<img src="${userAvatar}" style="width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid #16a34a; background: white; display: block;">`;
         btn.style.padding = "0";
         btn.style.background = "transparent";
         btn.style.border = "none";
         btn.style.minWidth = "auto";
+        btn.style.outline = "none";
+        btn.style.cursor = "pointer";
 
         // 2. Cài đặt hành động: Bấm vào thì mở bảng Mini Profile Tài Khoản
         btn.onclick = (e) => {
@@ -402,9 +408,14 @@
       });
     } else {
       // TRƯỜNG HỢP 2: CHƯA ĐĂNG NHẬP
-      // Đá văng ra trang Login chung của hệ thống
-      sessionStorage.setItem("redirectAfterLogin", window.location.href);
-      window.location.href = "../../Auth/login.html";
+      // Gắn sự kiện chuyển hướng sang trang Login khi bấm nút "Log in"
+      loginBtns.forEach((btn) => {
+        btn.onclick = (e) => {
+          e.preventDefault();
+          sessionStorage.setItem("redirectAfterLogin", window.location.href);
+          window.location.href = "../Auth/login.html";
+        };
+      });
     }
 
     // Cài đặt sự kiện cho bảng Dropdown Tài khoản
