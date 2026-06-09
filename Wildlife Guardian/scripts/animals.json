@@ -1,0 +1,382 @@
+[
+  {
+    "speciesId": "asian-elephant",
+    "animalName": {
+      "en": "Asian Elephant",
+      "vi": "Voi Châu Á"
+    },
+    "scientificName": "Elephas maximus",
+    "status": {
+      "en": "Endangered",
+      "vi": "Nguy cấp"
+    },
+    "category": {
+      "en": "Mammal",
+      "vi": "Động vật có vú"
+    },
+    "distribution": {
+      "en": "South and Southeast Asia",
+      "vi": "Nam và Đông Nam Á"
+    },
+    "habitat": {
+      "en": "Tropical forests and grasslands",
+      "vi": "Rừng nhiệt đới và đồng cỏ"
+    },
+    "diet": {
+      "en": "Herbivore",
+      "vi": "Động vật ăn cỏ"
+    },
+    "behavior": {
+      "en": "Highly social, lives in matriarchal herds",
+      "vi": "Có tính xã hội cao, sống theo bầy đàn mẫu hệ"
+    },
+    "funFact": {
+      "en": "They can communicate using seismic vibrations.",
+      "vi": "Chúng có thể giao tiếp bằng các rung động địa chấn truyền qua đất."
+    },
+    "thumbnailUrl": "https://example.com/asian_elephant.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "red-panda",
+    "animalName": {
+      "en": "Red Panda",
+      "vi": "Gấu Trúc Đỏ"
+    },
+    "scientificName": "Ailurus fulgens",
+    "status": {
+      "en": "Endangered",
+      "vi": "Nguy cấp"
+    },
+    "category": {
+      "en": "Mammal",
+      "vi": "Động vật có vú"
+    },
+    "distribution": {
+      "en": "Himalayas, Southwestern China",
+      "vi": "Dãy Himalaya, Tây Nam Trung Quốc"
+    },
+    "habitat": {
+      "en": "Temperate forests with bamboo understories",
+      "vi": "Rừng ôn đới có nhiều tre trúc"
+    },
+    "diet": {
+      "en": "Omnivore (mainly bamboo)",
+      "vi": "Động vật ăn tạp (chủ yếu là tre)"
+    },
+    "behavior": {
+      "en": "Solitary and nocturnal",
+      "vi": "Sống đơn độc và hoạt động về đêm"
+    },
+    "funFact": {
+      "en": "They use their bushy tails as wraparound blankets in the cold.",
+      "vi": "Chúng dùng chiếc đuôi xù xì như một chiếc chăn quấn quanh người khi trời lạnh."
+    },
+    "thumbnailUrl": "https://example.com/red_panda.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "indochinese-tiger",
+    "animalName": {
+      "en": "Indochinese Tiger",
+      "vi": "Hổ Đông Dương"
+    },
+    "scientificName": "Panthera tigris corbetti",
+    "status": {
+      "en": "Critically Endangered",
+      "vi": "Cực kỳ nguy cấp"
+    },
+    "category": {
+      "en": "Mammal",
+      "vi": "Động vật có vú"
+    },
+    "distribution": {
+      "en": "Southeast Asia",
+      "vi": "Đông Nam Á"
+    },
+    "habitat": {
+      "en": "Tropical and subtropical broadleaf forests",
+      "vi": "Rừng rụng lá nhiệt đới và cận nhiệt đới"
+    },
+    "diet": {
+      "en": "Carnivore",
+      "vi": "Động vật ăn thịt"
+    },
+    "behavior": {
+      "en": "Highly territorial ambush predators",
+      "vi": "Động vật săn mồi phục kích có tính lãnh thổ cao"
+    },
+    "funFact": {
+      "en": "A tiger's roar can be heard as far as 3 kilometers away.",
+      "vi": "Tiếng gầm của hổ có thể vang xa tới 3 km."
+    },
+    "thumbnailUrl": "https://example.com/indochinese_tiger.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "green-sea-turtle",
+    "animalName": {
+      "en": "Green Sea Turtle",
+      "vi": "Rùa Xanh"
+    },
+    "scientificName": "Chelonia mydas",
+    "status": {
+      "en": "Vulnerable",
+      "vi": "Sắp nguy cấp"
+    },
+    "category": {
+      "en": "Reptile",
+      "vi": "Bò sát"
+    },
+    "distribution": {
+      "en": "Tropical and subtropical oceans",
+      "vi": "Các vùng biển nhiệt đới và cận nhiệt đới"
+    },
+    "habitat": {
+      "en": "Coral reefs and seagrass beds",
+      "vi": "Rạn san hô và thảm cỏ biển"
+    },
+    "diet": {
+      "en": "Herbivore (adults)",
+      "vi": "Động vật ăn cỏ (khi trưởng thành)"
+    },
+    "behavior": {
+      "en": "Migrates long distances to breeding grounds",
+      "vi": "Di cư khoảng cách xa đến bãi đẻ trứng"
+    },
+    "funFact": {
+      "en": "They are named after the green color of their fat, not their shell.",
+      "vi": "Chúng được đặt tên theo màu mỡ của chúng chứ không phải màu mai."
+    },
+    "thumbnailUrl": "https://example.com/green_turtle.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "red-crowned-crane",
+    "animalName": {
+      "en": "Red-crowned Crane",
+      "vi": "Sếu Đỉnh Đầu Đỏ"
+    },
+    "scientificName": "Grus japonensis",
+    "status": {
+      "en": "Critically Endangered",
+      "vi": "Cực kỳ nguy cấp"
+    },
+    "category": {
+      "en": "Bird",
+      "vi": "Chim"
+    },
+    "distribution": {
+      "en": "East Asia",
+      "vi": "Đông Á"
+    },
+    "habitat": {
+      "en": "Wetlands and marshes",
+      "vi": "Đầm lầy và vùng ngập nước"
+    },
+    "diet": {
+      "en": "Omnivore",
+      "vi": "Động vật ăn tạp"
+    },
+    "behavior": {
+      "en": "Performs elaborate mating dances",
+      "vi": "Thực hiện những vũ điệu tán tỉnh phức tạp"
+    },
+    "funFact": {
+      "en": "It is a symbol of luck and longevity in East Asian culture.",
+      "vi": "Nó là biểu tượng của sự may mắn và trường thọ trong văn hóa Á Đông."
+    },
+    "thumbnailUrl": "https://example.com/red_crowned_crane.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "great-white-shark",
+    "animalName": {
+      "en": "Great White Shark",
+      "vi": "Cá Mập Trắng"
+    },
+    "scientificName": "Carcharodon carcharias",
+    "status": {
+      "en": "Vulnerable",
+      "vi": "Sắp nguy cấp"
+    },
+    "category": {
+      "en": "Fish",
+      "vi": "Cá"
+    },
+    "distribution": {
+      "en": "Coastal surface waters of all major oceans",
+      "vi": "Vùng nước mặt ven biển của tất cả các đại dương"
+    },
+    "habitat": {
+      "en": "Oceanic and coastal waters",
+      "vi": "Vùng nước biển khơi và ven bờ"
+    },
+    "diet": {
+      "en": "Carnivore",
+      "vi": "Động vật ăn thịt"
+    },
+    "behavior": {
+      "en": "Apex predator, hunts by ambush",
+      "vi": "Kẻ săn mồi đỉnh cao, săn bằng cách phục kích"
+    },
+    "funFact": {
+      "en": "They can detect a single drop of blood in 100 liters of water.",
+      "vi": "Chúng có thể phát hiện một giọt máu trong 100 lít nước."
+    },
+    "thumbnailUrl": "https://example.com/great_white_shark.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "sunda-pangolin",
+    "animalName": {
+      "en": "Sunda Pangolin",
+      "vi": "Tê Tê Java"
+    },
+    "scientificName": "Manis javanica",
+    "status": {
+      "en": "Critically Endangered",
+      "vi": "Cực kỳ nguy cấp"
+    },
+    "category": {
+      "en": "Mammal",
+      "vi": "Động vật có vú"
+    },
+    "distribution": {
+      "en": "Southeast Asia",
+      "vi": "Đông Nam Á"
+    },
+    "habitat": {
+      "en": "Primary and secondary forests",
+      "vi": "Rừng nguyên sinh và thứ sinh"
+    },
+    "diet": {
+      "en": "Insectivore (ants and termites)",
+      "vi": "Động vật ăn côn trùng (kiến và mối)"
+    },
+    "behavior": {
+      "en": "Rolls into a ball when threatened",
+      "vi": "Cuộn tròn thành quả bóng khi bị đe dọa"
+    },
+    "funFact": {
+      "en": "Their scales are made of keratin, the same material as human fingernails.",
+      "vi": "Vảy của chúng làm từ keratin, cùng chất liệu với móng tay người."
+    },
+    "thumbnailUrl": "https://example.com/sunda_pangolin.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "komodo-dragon",
+    "animalName": {
+      "en": "Komodo Dragon",
+      "vi": "Rồng Komodo"
+    },
+    "scientificName": "Varanus komodoensis",
+    "status": {
+      "en": "Endangered",
+      "vi": "Nguy cấp"
+    },
+    "category": {
+      "en": "Reptile",
+      "vi": "Bò sát"
+    },
+    "distribution": {
+      "en": "Indonesian islands",
+      "vi": "Các đảo của Indonesia"
+    },
+    "habitat": {
+      "en": "Tropical savanna forests",
+      "vi": "Rừng xavan nhiệt đới"
+    },
+    "diet": {
+      "en": "Carnivore",
+      "vi": "Động vật ăn thịt"
+    },
+    "behavior": {
+      "en": "Dominant predators, use venom to kill prey",
+      "vi": "Kẻ săn mồi thống trị, dùng nọc độc để kết liễu con mồi"
+    },
+    "funFact": {
+      "en": "Females can reproduce without mating (parthenogenesis).",
+      "vi": "Con cái có thể sinh sản mà không cần giao phối (trinh sản)."
+    },
+    "thumbnailUrl": "https://example.com/komodo_dragon.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "poison-dart-frog",
+    "animalName": {
+      "en": "Poison Dart Frog",
+      "vi": "Ếch Phi Tiêu Độc"
+    },
+    "scientificName": "Dendrobatidae",
+    "status": {
+      "en": "Least Concern",
+      "vi": "Ít lo ngại"
+    },
+    "category": {
+      "en": "Amphibian",
+      "vi": "Lưỡng cư"
+    },
+    "distribution": {
+      "en": "Central and South America",
+      "vi": "Trung và Nam Mỹ"
+    },
+    "habitat": {
+      "en": "Humid rainforests",
+      "vi": "Rừng mưa ẩm ướt"
+    },
+    "diet": {
+      "en": "Insectivore",
+      "vi": "Động vật ăn côn trùng"
+    },
+    "behavior": {
+      "en": "Diurnal, highly toxic",
+      "vi": "Hoạt động ban ngày, cực kỳ độc"
+    },
+    "funFact": {
+      "en": "They get their toxicity from the bugs they eat.",
+      "vi": "Chúng có được độc tính từ những loài bọ mà chúng ăn."
+    },
+    "thumbnailUrl": "https://example.com/poison_dart_frog.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "harpy-eagle",
+    "animalName": {
+      "en": "Harpy Eagle",
+      "vi": "Đại Bàng Harpy"
+    },
+    "scientificName": "Harpia harpyja",
+    "status": {
+      "en": "Near Threatened",
+      "vi": "Sắp bị đe dọa"
+    },
+    "category": {
+      "en": "Bird",
+      "vi": "Chim"
+    },
+    "distribution": {
+      "en": "Central and South America",
+      "vi": "Trung và Nam Mỹ"
+    },
+    "habitat": {
+      "en": "Tropical rainforest canopy",
+      "vi": "Tầng tán rừng mưa nhiệt đới"
+    },
+    "diet": {
+      "en": "Carnivore (sloths, monkeys)",
+      "vi": "Động vật ăn thịt (lười, khỉ)"
+    },
+    "behavior": {
+      "en": "Silent hunters with incredible agility",
+      "vi": "Kẻ đi săn thầm lặng với sự nhanh nhẹn đáng kinh ngạc"
+    },
+    "funFact": {
+      "en": "Their talons are larger than the claws of a grizzly bear.",
+      "vi": "Móng vuốt của chúng còn lớn hơn móng vuốt của một con gấu xám."
+    },
+    "thumbnailUrl": "https://example.com/harpy_eagle.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  }
+]

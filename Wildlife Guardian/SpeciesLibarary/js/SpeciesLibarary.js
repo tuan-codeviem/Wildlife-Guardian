@@ -16,83 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // ==========================================
   // 1. MOCK DATA
   // ==========================================
-  const speciesData = [
-    {
-      name: "Asian Elephant",
-      scientificName: "Elephas Maximus",
-      status: "Endangered",
-      statusClass: "en",
-      category: "Mammals",
-      isUnlocked: true,
-      image: "https://i.natgeofe.com/k/63b1a8a7-0081-493e-8b53-81d01261ab5d/red-panda-full-body_square.jpg",
-      modelUrl: "model-viewer/ngon-redpanda.glb",
-      habitat: "Tropical forests, grasslands, and scrublands across South and Southeast Asia",
-      behavior: "Highly social animals living in family groups led by a matriarch. Known for their intelligence and memory.",
-      foundIn: "Vietnam, Thailand, India, Sri Lanka",
-      diet: "Herbivore – grasses, leaves, bark, roots, and fruits. Can consume up to 150 kg of vegetation daily.",
-      funFact: "Elephants can communicate using seismic vibrations through the ground!"
-    },
-    {
-      name: "Indochinese Tiger",
-      scientificName: "Panthera tigris corbetti",
-      status: "Critically Endangered",
-      statusClass: "ce",
-      category: "Mammals",
-      isUnlocked: false,
-      image: "https://images.squarespace-cdn.com/content/v1/657b302ad0d11e71b22b40c3/80395f24-f05d-49c6-98e8-9ff4a4e7d623/photo_954.jpg",
-      modelUrl: "",
-      habitat: "Tropical and subtropical moist broadleaf forests of Southeast Asia",
-      behavior: "Solitary and territorial. Primarily nocturnal hunters that stalk prey silently.",
-      diet: "Carnivore – deer, wild pigs, and occasionally larger prey like buffalo.",
-      foundIn: "Vietnam, Cambodia, Laos, Thailand",
-      funFact: "No two tigers have the same stripe pattern – they're like fingerprints!"
-    },
-    {
-      name: "Green Sea Turtle",
-      scientificName: "Chelonia mydas",
-      status: "Vulnerable",
-      statusClass: "vu",
-      category: "Reptiles",
-      isUnlocked: true,
-      image: "https://static.vecteezy.com/system/resources/thumbnails/071/755/687/small_2x/close-up-of-green-sea-turtle-swimming-in-aquarium-at-daytime-free-video.jpg",
-      modelUrl: "https://modelviewer.dev/shared-assets/models/glTF-Sample-Models/2.0/Duck/glTF-Binary/Duck.glb",
-      habitat: "Tropical and subtropical ocean waters, coral reefs, and seagrass beds",
-      diet: "Herbivore – primarily seagrass and algae as adults.",
-      behavior: "Migratory, traveling long distances between feeding and nesting grounds.",
-      foundIn: "Pacific Ocean, Indian Ocean, Atlantic Ocean",
-      funFact: "They can hold their breath for up to 5 hours while sleeping underwater!"
-    },
-    {
-      name: "Red-crowned Crane",
-      scientificName: "Grus Japonensis",
-      status: "Critically Endangered",
-      statusClass: "ce",
-      category: "Birds",
-      isUnlocked: false,
-      image: "https://s3.animalia.bio/animals/photos/full/original/shutterstock-1043519431jpg.webp",
-      modelUrl: "",
-      habitat: "Wetlands, marshes, and riverbanks in East Asia",
-      diet: "Omnivore – fish, amphibians, insects, plants, and grains.",
-      behavior: "Known for elaborate courtship dances. Mate for life and both parents care for young.",
-      foundIn: "Japan, China, Korea, Russia",
-      funFact: "In Japanese culture, they symbolize luck, longevity, and fidelity!"
-    },
-    {
-      name: "Great White Shark",
-      scientificName: "Carcharodon carcharias",
-      status: "Vulnerable",
-      statusClass: "vu",
-      category: "Fish",
-      isUnlocked: false,
-      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRX0fspKR6qR0hzEA4OGG5VmwEd9Nscsn-zAY2IA_ibK8Fgr69UXxtgxy02A77uTJG5cMl7Dk0zYGChz8vH_U4ecNtDnRIyPcRo0rZ1k74&s=10",
-      modelUrl: "",
-      habitat: "Coastal and offshore waters with temperatures between 12 and 24 °C.",
-      behavior: "Highly migratory and curious predators. Often investigate objects by biting them.",
-      diet: "Carnivore – marine mammals, fish, and seabirds.",
-      foundIn: "Global coastal waters",
-      funFact: "They can detect a single drop of blood in 100 liters of water!"
-    }
-  ];
+  let speciesData = [];
 
   // ==========================================
   // 2. RENDER GALLERY
@@ -109,22 +33,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
     sorted.forEach((animal, idx) => {
       const card = document.createElement("div");
+      
+      const lang = (localStorage.getItem("appLang") || "EN").toLowerCase();
+      const name = animal.animalName[lang];
+      const category = animal.category[lang];
+      
+      let statusText = category;
+      let statusClass = "en";
+      if (animal.status) {
+        statusText = animal.status[lang];
+        const enStatus = animal.status.en.toLowerCase();
+        if (enStatus.includes("critically")) statusClass = "ce";
+        else if (enStatus.includes("endangered")) statusClass = "en";
+        else if (enStatus.includes("vulnerable")) statusClass = "vu";
+        else if (enStatus.includes("near") || enStatus.includes("threatened")) statusClass = "nt";
+        else statusClass = "lc";
+      }
 
       if (animal.isUnlocked) {
         /* ── PREMIUM CARD ── */
-        // HTML NOTE: class="sl-card premium-card wg-reveal"
         card.className = "sl-card premium-card wg-reveal";
         card.dataset.index = idx;
         card.innerHTML = `
           <div class="card-inner">
             <div class="card-img-wrap">
-              <span class="status-tag ${animal.statusClass}">${animal.status}</span>
+              <span class="status-tag ${statusClass}">${statusText}</span>
               <div class="premium-badge">🌟 3D Unlocked</div>
-              <img src="${animal.image}" alt="${animal.name}" loading="lazy" />
+              <img src="${animal.thumbnailUrl}" alt="${name}" loading="lazy" />
             </div>
             <div class="card-body">
-              <span class="card-cat">${animal.category}</span>
-              <h3 class="card-title">${animal.name}</h3>
+              <span class="card-cat">${category}</span>
+              <h3 class="card-title">${name}</h3>
               <p class="card-sci">${animal.scientificName}</p>
             </div>
           </div>
@@ -134,17 +73,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
       } else {
         /* ── LOCKED CARD ── */
-        // HTML NOTE: class="sl-card standard-card wg-reveal"
         card.className = "sl-card standard-card wg-reveal";
         card.innerHTML = `
           <div class="card-img-wrap">
-            <span class="status-tag ${animal.statusClass}">${animal.status}</span>
+            <span class="status-tag ${statusClass}">${statusText}</span>
             <div class="locked-overlay"><i class="fa-solid fa-lock"></i></div>
-            <img src="${animal.image}" alt="${animal.name}" loading="lazy" />
+            <img src="${animal.thumbnailUrl}" alt="${name}" loading="lazy" />
           </div>
           <div class="card-body">
-            <span class="card-cat">${animal.category}</span>
-            <h3 class="card-title">${animal.name}</h3>
+            <span class="card-cat">${category}</span>
+            <h3 class="card-title">${name}</h3>
             <p class="card-sci">${animal.scientificName}</p>
             <div class="locked-text">
               🎮 Play game to unlock 3D Hologram
@@ -160,41 +98,46 @@ document.addEventListener('DOMContentLoaded', () => {
     initScrollReveal();
   }
 
-  // ==========================================
-  // FETCH UNLOCKED SPECIES DYNAMICALLY
-  // ==========================================
-  const currentUserStr = localStorage.getItem("currentUser");
-  if (currentUserStr) {
+  async function initLibrary() {
     try {
-      const currentUser = JSON.parse(currentUserStr);
-      const userId = currentUser._id || currentUser.userId || currentUser.id;
-      
-      fetch(`http://${window.location.hostname}:3000/api/users/${userId}/unlocked`)
-        .then(res => res.json())
-        .then(data => {
-          if (data.success && data.unlockedSpecies) {
-            speciesData.forEach(animal => {
-               animal.isUnlocked = data.unlockedSpecies.includes(animal.name);
-            });
-          } else {
-            speciesData.forEach(animal => animal.isUnlocked = false);
-          }
-          renderCards(speciesData);
-        })
-        .catch(err => {
-          console.error("Lỗi fetch unlocked species:", err);
+      // 1. Lấy toàn bộ động vật
+      const res = await fetch(`http://${window.location.hostname}:3000/api/species`);
+      const data = await res.json();
+      if (data.success) {
+        speciesData = data.species;
+      }
+
+      // 2. Lấy trạng thái mở khóa của User (nếu có đăng nhập)
+      const currentUserStr = localStorage.getItem("currentUser");
+      if (currentUserStr) {
+        const currentUser = JSON.parse(currentUserStr);
+        const userId = currentUser._id || currentUser.userId || currentUser.id;
+
+        const unlockRes = await fetch(`http://${window.location.hostname}:3000/api/users/${userId}/unlocked`);
+        const unlockData = await unlockRes.json();
+        
+        if (unlockData.success && unlockData.unlockedSpecies) {
+          speciesData.forEach(animal => {
+            animal.isUnlocked = unlockData.unlockedSpecies.includes(animal.speciesId);
+          });
+        } else {
           speciesData.forEach(animal => animal.isUnlocked = false);
-          renderCards(speciesData);
-        });
-    } catch(e) {
-      speciesData.forEach(animal => animal.isUnlocked = false);
+        }
+      } else {
+        // Chưa đăng nhập thì khóa hết
+        speciesData.forEach(animal => animal.isUnlocked = false);
+      }
+
+      // 3. Render
+      renderCards(speciesData);
+    } catch (e) {
+      console.error("Lỗi khởi tạo thư viện:", e);
       renderCards(speciesData);
     }
-  } else {
-    // Chưa đăng nhập thì khóa hết
-    speciesData.forEach(animal => animal.isUnlocked = false);
-    renderCards(speciesData);
   }
+
+  // Chạy hàm khởi tạo
+  initLibrary();
 
 
   // ==========================================
@@ -249,10 +192,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const searchInput = document.getElementById("searchInput");
 
   function applyFilters() {
+    const lang = (localStorage.getItem("appLang") || "EN").toLowerCase();
     const filtered = speciesData.filter(a => {
-      const matchCat    = currentCategory === "All" || a.category === currentCategory;
-      const matchSearch = a.name.toLowerCase().includes(currentSearch);
-      return matchCat && matchSearch;
+      // Check if Category string includes the keyword (e.g. "Mammals" vs "Mammal")
+      const catMatches = currentCategory === "All" || a.category.en.toLowerCase().includes(currentCategory.toLowerCase().replace('s',''));
+      const nameMatches = a.animalName[lang].toLowerCase().includes(currentSearch);
+      return catMatches && nameMatches;
     });
     renderCards(filtered);
   }
@@ -273,6 +218,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Lắng nghe sự kiện đổi ngôn ngữ để render lại toàn bộ thẻ
+  const langBtns = document.querySelectorAll(".lang-toggle-btn");
+  langBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      // Đợi localStorage cập nhật xong từ script language_EN_VI
+      setTimeout(() => {
+        applyFilters();
+      }, 50);
+    });
+  });
 
   // ==========================================
   // 5. HOLOGRAPHIC MODAL – OPEN / CLOSE
@@ -292,17 +247,33 @@ document.addEventListener('DOMContentLoaded', () => {
   const bmFunFact   = document.getElementById("bmFunFact");
 
   function openBentoModal(animal) {
+    const lang = (localStorage.getItem("appLang") || "EN").toLowerCase();
+    
+    let statusText = animal.category[lang];
+    let statusClass = "en";
+    if (animal.status) {
+        statusText = animal.status[lang];
+        const enStatus = animal.status.en.toLowerCase();
+        if (enStatus.includes("critically")) statusClass = "ce";
+        else if (enStatus.includes("endangered")) statusClass = "en";
+        else if (enStatus.includes("vulnerable")) statusClass = "vu";
+        else if (enStatus.includes("near") || enStatus.includes("threatened")) statusClass = "nt";
+        else statusClass = "lc";
+    }
+
     // ── Populate text ──
-    bmStatus.textContent = animal.status;
-    bmStatus.className   = `status-badge ${animal.statusClass}`;
-    bmStatus.style.background = getStatusColor(animal.statusClass);
-    bmName.textContent      = animal.name;
+    bmStatus.textContent = statusText;
+    bmStatus.className   = `status-badge ${statusClass}`;
+    if (typeof getStatusColor === "function") {
+        bmStatus.style.background = getStatusColor(statusClass);
+    }
+    bmName.textContent      = animal.animalName[lang];
     bmScientific.textContent= animal.scientificName;
-    bmHabitat.textContent   = animal.habitat;
-    bmFoundIn.textContent   = animal.foundIn;
-    bmDiet.textContent      = animal.diet;
-    bmBehavior.textContent  = animal.behavior;
-    bmFunFact.textContent   = animal.funFact;
+    bmHabitat.textContent   = animal.habitat[lang];
+    bmFoundIn.textContent   = animal.distribution[lang];
+    bmDiet.textContent      = animal.diet[lang];
+    bmBehavior.textContent  = animal.behavior[lang];
+    bmFunFact.textContent   = animal.funFact[lang];
 
     // ── Hero injection ──
     modalHero.innerHTML = "";
@@ -311,8 +282,8 @@ document.addEventListener('DOMContentLoaded', () => {
       // 3D model-viewer – MUST fill container via CSS
       modalHero.innerHTML = `
         <model-viewer
-          src="${animal.modelUrl}"
-          alt="${animal.name} 3D Model"
+          src="${animal.model3dUrl}"
+          alt="${animal.animalName[lang]} 3D Model"
           auto-rotate
           camera-controls
           rotation-per-second="20deg"
@@ -323,7 +294,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       // Locked 2D view
       modalHero.innerHTML = `
-        <img src="${animal.image}" alt="${animal.name}" class="locked-hero-img" />
+        <img src="${animal.thumbnailUrl}" alt="${animal.animalName[lang]}" class="locked-hero-img" />
         <div class="locked-cta-wrap">
           <span class="locked-cta-label">🔒 3D View Locked</span>
           <button class="locked-cta-btn"
@@ -454,6 +425,7 @@ document.addEventListener('DOMContentLoaded', () => {
       en:  "#f97316",
       vu:  "#eab308",
       lc:  "#3b82f6",
+      nt:  "#0d9488",
     };
     return map[statusClass] || "#64748b";
   }

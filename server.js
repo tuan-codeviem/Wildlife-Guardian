@@ -48,31 +48,11 @@ mongoose
 // ==========================================
 // 3. KHỞI TẠO CÁC MODEL DATABASE
 // ==========================================
-const Post = require("./Wildlife Guardian/Social/models/Post");
-const Rescue = require("./Wildlife Guardian/rescuemap/models/Rescue");
-
-// Model Tin Nhắn (Message)
-const messageSchema = new mongoose.Schema({
-    sender: String,
-    receiver: String,
-    text: String,
-    timestamp: { type: Date, default: Date.now },
-});
-const Message = mongoose.model("Message", messageSchema);
-
-// Model Người Dùng (User)
-const userSchema = new mongoose.Schema({
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-    fullName: String,
-    avatar: String,
-    username: String, // Thêm để tương thích với code của nhánh Bảo
-    friends: { type: [String], default: [] }, // Danh sách ID bạn bè
-    friendRequests: { type: [String], default: [] }, // Danh sách ID người gửi lời mời
-    unlockedSpecies: { type: [String], default: [] }, // Danh sách tên con vật đã mở khóa
-});
-// Dùng dòng này để tránh lỗi đè model nếu file ./models/User.js cũng đang tồn tại
-const User = mongoose.models.User || mongoose.model("User", userSchema);
+const Post = require("./Wildlife Guardian/models/Post");
+const Rescue = require("./Wildlife Guardian/models/Rescue");
+const Message = require("./Wildlife Guardian/models/Message");
+const User = require("./Wildlife Guardian/models/User");
+const Species = require("./Wildlife Guardian/models/Species");
 
 // ==========================================
 // 4. CẤU HÌNH MULTER (Trợ lý nhận file) - CLOUDINARY
@@ -103,6 +83,50 @@ const uploadFile = (req, res, next) => {
         next();
     });
 };
+
+// ==========================================
+// 4.5 API THƯ VIỆN ĐỘNG VẬT (SPECIES)
+// ==========================================
+
+// Lấy toàn bộ danh sách động vật
+app.get("/api/species", async (req, res) => {
+    try {
+        const speciesList = await Species.find();
+        res.json({ success: true, species: speciesList });
+    } catch (error) {
+        res.status(500).json({ success: false, message: "Lỗi tải danh sách động vật!" });
+    }
+});
+
+// Lấy danh sách ID động vật đã mở khóa của 1 User
+app.get("/api/users/:id/unlocked", async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id);
+        if (!user) return res.status(404).json({ success: false, message: "Không tìm thấy người dùng" });
+        res.json({ success: true, unlockedSpecies: user.unlockedSpecies });
+    } catch (error) {
+        res.status(500).json({ success: false, message: "Lỗi server" });
+    }
+});
+
+// Mở khóa một động vật mới cho User
+app.post("/api/users/:id/unlock", async (req, res) => {
+    try {
+        const { speciesId } = req.body;
+        if (!speciesId) return res.status(400).json({ success: false, message: "Thiếu speciesId" });
+
+        const user = await User.findById(req.params.id);
+        if (!user) return res.status(404).json({ success: false, message: "Không tìm thấy người dùng" });
+
+        if (!user.unlockedSpecies.includes(speciesId)) {
+            user.unlockedSpecies.push(speciesId);
+            await user.save();
+        }
+        res.json({ success: true, message: "Đã mở khóa thành công!", unlockedSpecies: user.unlockedSpecies });
+    } catch (error) {
+        res.status(500).json({ success: false, message: "Lỗi server" });
+    }
+});
 
 // ==========================================
 // 5. CÁC API BÀI VIẾT (POSTS)

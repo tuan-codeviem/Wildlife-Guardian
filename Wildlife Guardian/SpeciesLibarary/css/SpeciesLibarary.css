@@ -447,6 +447,7 @@ a      { text-decoration: none; }
 .status-tag.vu { background: #eab308; }
 .status-tag.en { background: var(--clr-orange); }
 .status-tag.ce { background: #dc2626; }
+.status-tag.nt { background: #0d9488; }
 
 .card-body { padding: 22px 24px 24px; }
 
