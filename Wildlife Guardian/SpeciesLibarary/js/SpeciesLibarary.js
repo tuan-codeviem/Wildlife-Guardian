@@ -160,7 +160,41 @@ document.addEventListener('DOMContentLoaded', () => {
     initScrollReveal();
   }
 
-  renderCards(speciesData);
+  // ==========================================
+  // FETCH UNLOCKED SPECIES DYNAMICALLY
+  // ==========================================
+  const currentUserStr = localStorage.getItem("currentUser");
+  if (currentUserStr) {
+    try {
+      const currentUser = JSON.parse(currentUserStr);
+      const userId = currentUser._id || currentUser.userId || currentUser.id;
+      
+      fetch(`http://${window.location.hostname}:3000/api/users/${userId}/unlocked`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.success && data.unlockedSpecies) {
+            speciesData.forEach(animal => {
+               animal.isUnlocked = data.unlockedSpecies.includes(animal.name);
+            });
+          } else {
+            speciesData.forEach(animal => animal.isUnlocked = false);
+          }
+          renderCards(speciesData);
+        })
+        .catch(err => {
+          console.error("Lỗi fetch unlocked species:", err);
+          speciesData.forEach(animal => animal.isUnlocked = false);
+          renderCards(speciesData);
+        });
+    } catch(e) {
+      speciesData.forEach(animal => animal.isUnlocked = false);
+      renderCards(speciesData);
+    }
+  } else {
+    // Chưa đăng nhập thì khóa hết
+    speciesData.forEach(animal => animal.isUnlocked = false);
+    renderCards(speciesData);
+  }
 
 
   // ==========================================

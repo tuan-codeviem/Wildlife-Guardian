@@ -28,42 +28,83 @@
   <!-- NAVBAR (Copied from Home) -->
   <nav class="navbar" id="navbar">
     <div class="mobile-nav" id="mobileNav">
-      <a href="../Home/Home.html" class="active-mobile">Home</a>
-      <a href="../RescueMap/rescuemap/index.html">Rescue Map</a>
-      <a href="../Social/frontend/index.html">Social</a>
-      <a href="SpeciesLibarary.html">Species</a>
-      <a href="../Game/Main/Game/GameUnity.html">Game</a>
-      <a href="../Contact/Contact.html">Contact Us</a>
+      <a href="../Home/Home.html" data-i18n="nav_home">Home</a>
+      <a href="../RescueMap/rescuemap/index.html" data-i18n="nav_rescue">Rescue Map</a>
+      <a href="../Social/frontend/index.html" data-i18n="nav_social">Social</a>
+      <a href="SpeciesLibarary.html" class="active-mobile" data-i18n="nav_species">Species</a>
+      <a href="../Game/Main/Game/GameUnity.html" data-i18n="nav_game">Game</a>
+      <a href="../Contact/Contact.html" data-i18n="nav_contact">Contact Us</a>
       <div class="mobile-actions">
-        <button class="btn-report">🚨 Report Now</button>
-        <button class="btn-login">→ Log in</button>
+        <div class="lang-switcher" style="display: flex; align-items: center; justify-content: center; gap: 6px; color: white; font-weight: 600; margin-bottom: 10px;">
+          <span class="lang-text">EN</span>
+          <button class="lang-toggle-btn" style="background: none; border: none; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 4px; transition: transform 0.3s;" title="Switch language">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+            </svg>
+          </button>
+        </div>
+        <button class="btn-report" data-i18n="btn_report">🚨 Report Now</button>
+        <button class="btn-login" style="justify-content: center" data-i18n="btn_login">
+          → Log in
+        </button>
       </div>
     </div>
     <div class="nav-container">
+      <!-- Logo -->
       <div class="logo-area">
         <div class="logo-icon">
           <svg viewBox="0 0 24 24" fill="currentColor">
-            <rect x="4" y="8" width="4" height="4" />
-            <rect x="16" y="8" width="4" height="4" />
-            <rect x="8" y="4" width="4" height="4" />
-            <rect x="12" y="4" width="4" height="4" />
-            <rect x="6" y="14" width="12" height="6" rx="2" />
+            <rect x="4" y="8" width="4" height="4"></rect>
+            <rect x="16" y="8" width="4" height="4"></rect>
+            <rect x="8" y="4" width="4" height="4"></rect>
+            <rect x="12" y="4" width="4" height="4"></rect>
+            <rect x="6" y="14" width="12" height="6" rx="2"></rect>
           </svg>
         </div>
         <span class="logo-text">Wildlife Guardian</span>
       </div>
-      <div class="nav-menu">
-        <a href="../Home/Home.html" class="nav-item">Home</a>
-        <a href="../RescueMap/rescuemap/index.html" class="nav-item">Rescue Map</a>
-        <a href="../Social/frontend/index.html" class="nav-item">Social</a>
-        <a href="SpeciesLibarary.html" class="nav-item active">Species Library</a>
-        <a href="../Game/Main/Game/GameUnity.html" class="nav-item">Game</a>
-        <a href="../Contact/Contact.html" class="nav-item">Contact Us</a>
+
+      <!-- Menu Desktop -->
+      <div class="nav-menu" id="navMenu">
+        <a href="../Home/Home.html" class="nav-item" data-i18n="nav_home">Home</a>
+        <a href="../RescueMap/rescuemap/index.html" class="nav-item" data-i18n="nav_rescue">Rescue Map</a>
+        <a href="../Social/frontend/index.html" class="nav-item" data-i18n="nav_social">Social</a>
+        <a href="SpeciesLibarary.html" class="nav-item active" data-i18n="nav_species">Species Library</a>
+        <a href="../Game/Main/Game/GameUnity.html" class="nav-item" data-i18n="nav_game">Game</a>
+        <a href="../Contact/Contact.html" class="nav-item" data-i18n="nav_contact">Contact Us</a>
+        
+        <div class="mobile-only-buttons">
+          <div class="lang-switcher" style="display: flex; align-items: center; justify-content: center; gap: 6px; color: white; font-weight: 600; margin-bottom: 10px;">
+            <span class="lang-text">EN</span>
+            <button class="lang-toggle-btn" style="background: none; border: none; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 4px; transition: transform 0.3s;" title="Switch language">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+              </svg>
+            </button>
+          </div>
+          <button class="btn-report" data-i18n="btn_report">🚨 Report Now</button>
+          <button class="btn-login" data-i18n="btn_login">→ Log in</button>
+        </div>
       </div>
+
+      <!-- Cụm nút bên phải -->
       <div class="nav-actions">
-        <button class="btn-report">🚨 Report Now</button>
-        <button class="btn-login">→ Log in</button>
-        <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+        <div class="lang-switcher" style="display: flex; align-items: center; gap: 6px; color: white; font-weight: 600; margin-right: 10px;">
+          <span class="lang-text">EN</span>
+          <button class="lang-toggle-btn" style="background: none; border: none; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 4px; transition: transform 0.3s;" title="Switch language">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+            </svg>
+          </button>
+        </div>
+        <button class="btn-report" data-i18n="btn_report">🚨 Report Now</button>
+        <button class="btn-login" data-i18n="btn_login">→ Log in</button>
+        <!-- Nút 3 gạch -->
+        <button class="hamburger" id="hamburger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
       </div>
     </div>
   </nav>
@@ -216,7 +257,45 @@
     </div>
   </div>
 
+  <!-- BẢNG DROPDOWN TÀI KHOẢN (AVATAR GÓC TRÊN PHẢI) -->
+  <div id="userDropdownPopup" class="user-dropdown-popup" style="display: none;">
+    <img id="dropdownAvatar" src="" alt="Avatar" class="dropdown-avatar-img" />
+    <h4 id="dropdownName" class="dropdown-name-text">User Name</h4>
+    <div class="dropdown-actions">
+      <button id="dropdownSettingsBtn" data-i18n="btn_settings" class="dropdown-btn dropdown-btn-settings">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+        Settings
+      </button>
+      <button id="dropdownLogoutBtn" data-i18n="btn_logout" class="dropdown-btn dropdown-btn-logout">
+        Log out
+      </button>
+    </div>
+  </div>
+
+  <!-- HỘP THOẠI CẬP NHẬT HỒ SƠ LẦN ĐẦU ĐĂNG NHẬP -->
+  <div id="profileSetupModal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.6); z-index: 10001; justify-content: center; align-items: center; backdrop-filter: blur(5px);">
+    <div style="background: white; padding: 30px; border-radius: 20px; width: 320px; text-align: center; box-shadow: 0 15px 30px rgba(0,0,0,0.2); position: relative;">
+      <button id="closeProfileModal" style="display: none; position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 20px; cursor: pointer; color: #888; transition: 0.2s;">✖</button>
+      <h3 id="profileModalTitle" style="margin: 0 0 10px 0; color: #333; font-size: 20px;" data-i18n="update_profile_title">Update profile</h3>
+      <p id="profileModalDesc" style="font-size: 14px; color: #666; margin-bottom: 20px;" data-i18n="update_profile_desc">Choose an avatar and display name to get started!</p>
+
+      <label style="display: inline-block; position: relative; cursor: pointer; margin-bottom: 20px;" title="Bấm để chọn ảnh">
+        <img id="setupAvatarPreview" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" style="width: 110px; height: 110px; border-radius: 50%; object-fit: cover; border: 3px solid #16a34a; padding: 3px;">
+        <div style="position: absolute; bottom: 5px; right: 5px; background: #16a34a; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid white; font-size: 16px;">
+          📷
+        </div>
+        <input type="file" id="setupAvatarInput" accept="image/*" hidden>
+      </label>
+
+      <input type="text" id="setupNameInput" data-i18n="name_placeholder" placeholder="Your display name..." style="width: 100%; padding: 12px 15px; border-radius: 12px; border: 1px solid #ddd; outline: none; margin-bottom: 20px; box-sizing: border-box; text-align: center; font-weight: 600; font-size: 15px;">
+
+      <button id="saveProfileBtn" data-i18n="btn_save_profile" style="width: 100%; background: #16a34a; color: white; border: none; padding: 12px; border-radius: 12px; font-weight: bold; cursor: pointer; margin-bottom: 12px; transition: 0.2s; font-size: 15px;">Save Profile</button>
+      <button id="skipProfileBtn" data-i18n="btn_skip" style="width: 100%; background: #f1f5f9; color: #666; border: none; padding: 12px; border-radius: 12px; font-weight: bold; cursor: pointer; transition: 0.2s; font-size: 15px;">Skip (Anonymous)</button>
+    </div>
+  </div>
+
   <!-- JS -->
+  <script src="../Home/js/language_EN_VI.js"></script>
   <script src="../Home/js/nav.js"></script>
   <script src="js/SpeciesLibarary.js"></script>
   <script>
@@ -233,14 +312,196 @@
       if (navbar) navbar.classList.toggle('scrolled', window.scrollY > 60);
     }, { passive: true });
 
-    // Mirror login button logic
-    document.addEventListener("DOMContentLoaded", () => {
-      const user = localStorage.getItem("currentUser") || localStorage.getItem("isLoggedIn");
-      document.querySelectorAll(".btn-login").forEach(b => {
-        if (user) { b.textContent = "← Log out"; b.onclick = () => { localStorage.removeItem("currentUser"); localStorage.removeItem("isLoggedIn"); localStorage.removeItem("username"); window.location.reload() }; }
-        else { b.textContent = "→ Log in"; b.onclick = () => { window.location.href = "../Auth/login.html" }; }
-      });
+    // ==========================================
+// 0. QUẢN LÝ TRẠNG THÁI LOGIN / LOGOUT THÔNG MINH
+// ==========================================
+const userString = localStorage.getItem("currentUser");
+const loginBtns = document.querySelectorAll(".btn-login");
+
+if (userString) {
+  // TRƯỜNG HỢP 1: ĐÃ ĐĂNG NHẬP
+  const currentUser = JSON.parse(userString);
+  const userAvatar = currentUser.avatar || "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+
+  loginBtns.forEach((btn) => {
+    // 1. Đổi nút "Log in" thành Avatar
+    btn.innerHTML = `<img src="${userAvatar}" style="width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid #16a34a; background: white;">`;
+    btn.style.padding = "0";
+    btn.style.background = "transparent";
+    btn.style.border = "none";
+    btn.style.minWidth = "auto";
+
+    // 2. Cài đặt hành động: Bấm vào thì mở bảng Mini Profile Tài Khoản
+    btn.onclick = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const popup = document.getElementById("userDropdownPopup");
+      if (popup) {
+        document.getElementById("dropdownAvatar").src = userAvatar;
+        document.getElementById("dropdownName").innerText =
+          currentUser.fullName || "User";
+
+        if (popup.style.display === "block") {
+          popup.style.display = "none";
+        } else {
+          popup.style.display = "block";
+          const rect = btn.getBoundingClientRect();
+          popup.style.top = rect.bottom + 10 + "px";
+          // Căn giữa cho điện thoại, neo phải cho máy tính
+          if (window.innerWidth < 768) {
+            popup.style.left = "50%";
+            popup.style.transform = "translateX(-50%)";
+          } else {
+            popup.style.left = rect.right - 200 + "px";
+            popup.style.transform = "none";
+          }
+        }
+      }
+    };
+  });
+} else {
+  // TRƯỜNG HỢP 2: CHƯA ĐĂNG NHẬP
+  // Đá văng ra trang Login chung của hệ thống
+  sessionStorage.setItem("redirectAfterLogin", window.location.href);
+  window.location.href = "../../Auth/login.html";
+}
+
+// Cài đặt sự kiện cho bảng Dropdown Tài khoản
+const dropdownSettingsBtn = document.getElementById("dropdownSettingsBtn");
+const dropdownLogoutBtn = document.getElementById("dropdownLogoutBtn");
+
+if (dropdownSettingsBtn) {
+  dropdownSettingsBtn.addEventListener("click", () => {
+    document.getElementById("userDropdownPopup").style.display = "none";
+    openSettingsModal();
+  });
+}
+if (dropdownLogoutBtn) {
+  dropdownLogoutBtn.addEventListener("click", () => {
+    localStorage.removeItem("currentUser");
+    window.location.reload();
+  });
+}
+
+// Hàm mở bảng Cài đặt hồ sơ
+function openSettingsModal() {
+  const meString = localStorage.getItem("currentUser");
+  if (!meString) return;
+  const me = JSON.parse(meString);
+
+  const profileModal = document.getElementById("profileSetupModal");
+  const setupNameInput = document.getElementById("setupNameInput");
+  const setupAvatarPreview = document.getElementById("setupAvatarPreview");
+  const profileModalTitle = document.getElementById("profileModalTitle");
+  const profileModalDesc = document.getElementById("profileModalDesc");
+  const skipProfileBtn = document.getElementById("skipProfileBtn");
+  const closeProfileModal = document.getElementById("closeProfileModal");
+
+  if (profileModal) {
+    const t = window.translations ? window.translations[window.currentLang || "EN"] : {};
+    if (profileModalTitle && t.profile_settings_title)
+      profileModalTitle.innerText = t.profile_settings_title;
+    if (profileModalDesc && t.profile_settings_desc) profileModalDesc.innerText = t.profile_settings_desc;
+    if (setupNameInput) setupNameInput.value = me.fullName || "";
+    if (setupAvatarPreview)
+      setupAvatarPreview.src =
+        me.avatar || "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+
+    if (skipProfileBtn) skipProfileBtn.style.display = "none"; // Ẩn nút bỏ qua
+    if (closeProfileModal) closeProfileModal.style.display = "block"; // Hiện nút X để đóng
+
+    profileModal.style.display = "flex";
+  }
+}
+
+// Lắng nghe sự kiện cho các nút trong Modal Cài Đặt Hồ Sơ
+document.addEventListener("DOMContentLoaded", () => {
+  // 1. Hiển thị ảnh xem trước khi chọn
+  const setupAvatarInput = document.getElementById("setupAvatarInput");
+  const setupAvatarPreview = document.getElementById("setupAvatarPreview");
+  if (setupAvatarInput) {
+    setupAvatarInput.addEventListener("change", function () {
+      const file = this.files[0];
+      if (file) setupAvatarPreview.src = URL.createObjectURL(file);
     });
+  }
+
+  // 2. Bấm nút Lưu Hồ Sơ
+  const saveProfileBtn = document.getElementById("saveProfileBtn");
+  if (saveProfileBtn) {
+    saveProfileBtn.addEventListener("click", async () => {
+      const meString = localStorage.getItem("currentUser");
+      if (!meString) return;
+      const me = JSON.parse(meString);
+      
+      const name = document.getElementById("setupNameInput").value.trim();
+      const file = setupAvatarInput.files[0];
+
+      const t = window.translations ? window.translations[window.currentLang || "EN"] : {
+         please_enter_name: "Please enter a name!", btn_save_profile: "Save Profile", saving: "Saving...", error_try_again: "Error", network_error: "Network error"
+      };
+
+      if (!name) {
+        saveProfileBtn.innerText = t.please_enter_name;
+        setTimeout(() => { saveProfileBtn.innerText = t.btn_save_profile; }, 2000);
+        return;
+      }
+
+      saveProfileBtn.innerText = t.saving;
+      saveProfileBtn.disabled = true;
+
+      const formData = new FormData();
+      formData.append("fullName", name);
+      if (file) formData.append("media", file);
+
+      try {
+        const res = await fetch(`http://${window.location.hostname}:3000/api/users/${me._id || me.userId}`, { method: "PUT", body: formData });
+        const data = await res.json();
+        if (data.success && data.user) {
+          me.fullName = data.user.fullName;
+          me.avatar = data.user.avatar;
+          localStorage.setItem("currentUser", JSON.stringify(me));
+          window.location.reload();
+        } else {
+          saveProfileBtn.innerText = t.error_try_again + " " + (data.message || "");
+          saveProfileBtn.disabled = false;
+        }
+      } catch (e) {
+        console.error("Lỗi cập nhật:", e);
+        saveProfileBtn.innerText = t.network_error;
+        saveProfileBtn.disabled = false;
+      }
+    });
+  }
+
+  // 3. Bấm nút X để đóng Cài đặt
+  const closeProfileModalBtn = document.getElementById("closeProfileModal");
+  if (closeProfileModalBtn) {
+    closeProfileModalBtn.addEventListener("click", () => {
+      document.getElementById("profileSetupModal").style.display = "none";
+    });
+  }
+
+  // 4. Bấm nút Bỏ qua
+  const skipProfileBtn = document.getElementById("skipProfileBtn");
+  if (skipProfileBtn) {
+    skipProfileBtn.addEventListener("click", () => {
+      document.getElementById("profileSetupModal").style.display = "none";
+    });
+  }
+});
+
+
+// Xử lý khi nhấn vào các tab trên máy tính (đổi màu xanh)
+const navItems = document.querySelectorAll(".nav-item");
+navItems.forEach((item) => {
+  item.addEventListener("click", function () {
+    document.querySelector(".nav-item.active").classList.remove("active");
+    this.classList.add("active");
+  });
+});
+
+// ==========================================
   </script>
 </body>
 </html>

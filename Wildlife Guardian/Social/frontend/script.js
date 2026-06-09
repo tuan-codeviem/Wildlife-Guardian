@@ -7,7 +7,7 @@ const loginBtns = document.querySelectorAll(".btn-login");
 if (userString) {
   // TRƯỜNG HỢP 1: ĐÃ ĐĂNG NHẬP
   const currentUser = JSON.parse(userString);
-  const userAvatar = currentUser.avatar || "https://i.pravatar.cc/150?img=11";
+  const userAvatar = currentUser.avatar || "https://cdn-icons-png.flaticon.com/512/149/149071.png";
 
   loginBtns.forEach((btn) => {
     // 1. Đổi nút "Log in" thành Avatar
@@ -73,8 +73,19 @@ if (dropdownLogoutBtn) {
 //              1. THANH NAVBAR
 // ==========================================
 
+const navbar = document.getElementById("navbar");
 const hamburger = document.getElementById("hamburger");
 const mobileNav = document.getElementById("mobileNav");
+
+if (navbar) {
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > 50) {
+      navbar.classList.add("scrolled");
+    } else {
+      navbar.classList.remove("scrolled");
+    }
+  });
+}
 
 // Khi nhấn vào nút 3 gạch
 hamburger.addEventListener("click", () => {
@@ -100,9 +111,10 @@ function openSettingsModal() {
   const closeProfileModal = document.getElementById("closeProfileModal");
 
   if (profileModal) {
-    if (profileModalTitle) profileModalTitle.innerText = "Cài đặt hồ sơ";
-    if (profileModalDesc)
-      profileModalDesc.innerText = "Thay đổi tên và ảnh đại diện của bạn.";
+    const t = window.translations[currentLang];
+    if (profileModalTitle)
+      profileModalTitle.innerText = t.profile_settings_title;
+    if (profileModalDesc) profileModalDesc.innerText = t.profile_settings_desc;
     if (setupNameInput) setupNameInput.value = me.fullName || "";
     if (setupAvatarPreview)
       setupAvatarPreview.src =
@@ -121,6 +133,210 @@ navItems.forEach((item) => {
   item.addEventListener("click", function () {
     document.querySelector(".nav-item.active").classList.remove("active");
     this.classList.add("active");
+  });
+});
+
+// ==========================================
+// QUẢN LÝ NGÔN NGỮ (EN / VI)
+// ==========================================
+const translations = {
+  EN: {
+    nav_home: "Home",
+    nav_rescue: "Rescue Map",
+    nav_social: "Social",
+    nav_species: "Species Library",
+    nav_game: "Game",
+    nav_contact: "Contact Us",
+    btn_report: "🚨 Report Now",
+    btn_login: "→ Log in",
+    post_placeholder: "Share something with the community...",
+    btn_photo: " Photo",
+    cat_story: "Story",
+    cat_adoption: "Adoption",
+    cat_donations: "Donations",
+    cat_orgs: "Organizations",
+    btn_post: "Post",
+    filter_all: "All Posts",
+    filter_adoption: "Adoption",
+    filter_donations: "Donations",
+    filter_orgs: "Organizations",
+    filter_stories: "Stories",
+    title_friends: "Friends",
+    search_friends_placeholder: "Enter a name to find friends...",
+    title_requests: "Requests",
+    no_invitations: "No invitations",
+    title_messages: "Messages",
+    search_messages_placeholder: "Search friends...",
+    btn_message: "Message",
+    btn_add_friend: "Add friend",
+    btn_settings: " Settings",
+    btn_logout: " Log out",
+    del_post_title: "Delete post?",
+    del_post_desc: "Are you sure you want to delete this post?",
+    btn_delete: "Delete",
+    btn_cancel: "Cancel",
+    del_comment_title: "Delete comment?",
+    del_comment_desc: "Are you sure you want to delete this comment?",
+    edit_post_title: "Edit post",
+    btn_change_media: " Change media",
+    btn_save_changes: "Save changes",
+    update_profile_title: "Update profile",
+    update_profile_desc: "Choose an avatar and display name to get started!",
+    name_placeholder: "Your display name...",
+    btn_save_profile: "Save Profile",
+    btn_skip: "Skip (Anonymous)",
+    view_replies: "View replies",
+    hide_replies: "Hide replies",
+    anonymous_user: "Anonymous user",
+    write_comment: "Write a comment...",
+    attach_image: " Attach image",
+    btn_send: "Send",
+    saving: "Saving...",
+    cancel_request: "Cancel request",
+    no_friend_requests: "No friend requests",
+    click_to_message: "Click to message...",
+    please_enter_name: "Please enter a name!",
+    error_try_again: "Error! Please try again",
+    network_error: "Network error! Try again",
+    processing: "Processing...",
+    search_to_start: "Let's search to start a conversation!",
+    like: "Like",
+    likes: "Likes",
+    reply: "Reply",
+    tooltip_edit_post: "Edit post",
+    tooltip_delete_post: "Delete post",
+    tooltip_delete_comment: "Delete comment",
+    profile_settings_title: "Profile settings",
+    profile_settings_desc: "Change your name and avatar.",
+  },
+  VI: {
+    nav_home: "Trang chủ",
+    nav_rescue: "Bản đồ cứu hộ",
+    nav_social: "Cộng đồng",
+    nav_species: "Thư viện loài",
+    nav_game: "Trò chơi",
+    nav_contact: "Liên hệ",
+    btn_report: "🚨 Báo cáo",
+    btn_login: "→ Đăng nhập",
+    post_placeholder: "Chia sẻ điều gì đó với cộng đồng...",
+    btn_photo: " Ảnh",
+    cat_story: "Câu chuyện",
+    cat_adoption: "Nhận nuôi",
+    cat_donations: "Quyên góp",
+    cat_orgs: "Tổ chức",
+    btn_post: "Đăng",
+    filter_all: "Tất cả",
+    filter_adoption: "Nhận nuôi",
+    filter_donations: "Quyên góp",
+    filter_orgs: "Tổ chức",
+    filter_stories: "Câu chuyện",
+    title_friends: "Bạn bè",
+    search_friends_placeholder: "Nhập tên để tìm bạn...",
+    title_requests: "Lời mời",
+    no_invitations: "Không có lời mời",
+    title_messages: "Tin nhắn",
+    search_messages_placeholder: "Tìm kiếm bạn bè...",
+    btn_message: "Nhắn tin",
+    btn_add_friend: "Thêm bạn bè",
+    btn_settings: " Cài đặt",
+    btn_logout: " Đăng xuất",
+    del_post_title: "Xóa bài viết?",
+    del_post_desc: "Bạn có chắc chắn muốn xóa bài viết này không?",
+    btn_delete: "Xóa",
+    btn_cancel: "Hủy",
+    del_comment_title: "Xóa bình luận?",
+    del_comment_desc: "Bạn có chắc chắn muốn xóa bình luận này không?",
+    edit_post_title: "Chỉnh sửa bài viết",
+    btn_change_media: " Đổi ảnh/video",
+    btn_save_changes: "Lưu thay đổi",
+    update_profile_title: "Cập nhật hồ sơ",
+    update_profile_desc:
+      "Hãy chọn ảnh đại diện và tên hiển thị để bắt đầu nhé!",
+    name_placeholder: "Tên hiển thị của bạn...",
+    btn_save_profile: "Lưu hồ sơ",
+    btn_skip: "Để sau (Ẩn danh)",
+    view_replies: "Xem câu trả lời",
+    hide_replies: "Ẩn câu trả lời",
+    anonymous_user: "Người dùng ẩn danh",
+    write_comment: "Viết bình luận...",
+    attach_image: " Đính kèm ảnh",
+    btn_send: "Gửi",
+    saving: "Đang lưu...",
+    cancel_request: "Hủy lời mời",
+    no_friend_requests: "Chưa có lời mời",
+    click_to_message: "Bấm để nhắn tin...",
+    please_enter_name: "Vui lòng nhập tên!",
+    error_try_again: "Lỗi! Vui lòng thử lại",
+    network_error: "Lỗi mạng! Thử lại",
+    processing: "Đang xử lý...",
+    search_to_start: "Hãy tìm kiếm để bắt đầu cuộc trò chuyện!",
+    like: "Thích",
+    likes: "Thích",
+    reply: "Trả lời",
+    tooltip_edit_post: "Sửa bài viết",
+    tooltip_delete_post: "Xóa bài viết",
+    tooltip_delete_comment: "Xóa bình luận",
+    profile_settings_title: "Cài đặt hồ sơ",
+    profile_settings_desc: "Thay đổi tên và ảnh đại diện của bạn.",
+  },
+};
+window.translations = translations;
+
+function applyLanguage() {
+  const t = translations[currentLang];
+  document.querySelectorAll("[data-i18n]").forEach((el) => {
+    const key = el.getAttribute("data-i18n");
+    if (t[key]) {
+      if (el.tagName === "INPUT" || el.tagName === "TEXTAREA") {
+        el.setAttribute("placeholder", t[key]);
+      } else {
+        if (el.children.length === 0) {
+          el.textContent = t[key];
+        } else {
+          for (let node of el.childNodes) {
+            if (node.nodeType === 3 && node.nodeValue.trim().length > 0) {
+              node.nodeValue = t[key];
+              break;
+            }
+          }
+        }
+      }
+    }
+  });
+
+  if (typeof loadPosts === "function") {
+    const activeBtn = document.querySelector(".filter-btn.active");
+    loadPosts(
+      activeBtn ? activeBtn.getAttribute("data-category") : "all posts",
+    );
+  }
+
+  if (typeof loadFriendRequests === "function") loadFriendRequests();
+  if (typeof loadUsersForChat === "function")
+    loadUsersForChat(document.getElementById("searchUser")?.value || "");
+}
+
+const langToggleBtns = document.querySelectorAll(".lang-toggle-btn");
+const langTexts = document.querySelectorAll(".lang-text");
+let currentLang = localStorage.getItem("appLang") || "EN";
+
+// Nạp ngôn ngữ vào lúc mới khởi động trang
+langTexts.forEach((span) => (span.innerText = currentLang));
+applyLanguage();
+
+langToggleBtns.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    currentLang = currentLang === "EN" ? "VI" : "EN";
+    localStorage.setItem("appLang", currentLang); // Lưu vào bộ nhớ máy để dùng cho tính năng đa ngôn ngữ
+    langTexts.forEach((span) => (span.innerText = currentLang));
+    applyLanguage();
+
+    langToggleBtns.forEach((b) => {
+      let currentRotation = parseInt(b.getAttribute("data-rotation") || "0");
+      let newRotation = currentRotation + 180; // Xoay thêm nửa vòng 180 độ
+      b.style.transform = `rotate(${newRotation}deg)`;
+      b.setAttribute("data-rotation", newRotation);
+    });
   });
 });
 
@@ -145,13 +361,8 @@ filterButtons.forEach((button) => {
     filterButtons.forEach((btn) => btn.classList.remove("active"));
     this.classList.add("active");
 
-    // 2. Lấy tên thể loại và ép về chữ thường
-    let selectedCategory = this.innerText.trim().toLowerCase();
-
-    // Xử lý ngoại lệ: Nút ghi "Stories" nhưng Database lưu là "story"
-    if (selectedCategory === "stories") {
-      selectedCategory = "story";
-    }
+    // 2. Lấy tên thể loại bằng data attribute thay vì innerText để không bị lỗi khi đổi ngôn ngữ
+    let selectedCategory = this.getAttribute("data-category");
 
     console.log("🔥 Đang yêu cầu lọc thể loại:", selectedCategory);
 
@@ -199,6 +410,8 @@ window.renderCommentsHTML = function (
 
   const renderComment = (c, isReply = false) => {
     const replies = repliesByParent[c._id] || [];
+    const t = window.translations[currentLang];
+    const dateLocale = currentLang === "EN" ? "en-US" : "vi-VN";
     const replyHtml = isReply
       ? ""
       : `
@@ -208,7 +421,7 @@ window.renderCommentsHTML = function (
           <div style="margin-top: 8px;">
               <button class="toggle-replies-btn" data-target="replies-${c._id}" style="background: none; border: none; color: #737373; cursor: pointer; font-weight: 600; font-size: 12px; padding: 0; display: flex; align-items: center; gap: 8px; transition: 0.2s;">
                   <div style="width: 24px; height: 1px; background: #dbdbdb;"></div>
-                  <span>Xem câu trả lời (${replies.length})</span>
+                  <span>${t.view_replies} (${replies.length})</span>
               </button>
               <div id="replies-${c._id}" style="display: none; margin-top: 8px;">
                   ${replies.map((r) => renderComment(r, true)).join("")}
@@ -222,7 +435,7 @@ window.renderCommentsHTML = function (
     // Cho phép xóa nếu: 1. Mình viết comment, HOẶC 2. Mình là chủ bài viết
     const canDelete = (c.userId && c.userId === myId) || isMyPost;
     const deleteBtn = canDelete
-      ? `<button class="comment-delete-btn" data-post-id="${postId}" data-comment-id="${c._id}" style="background: none; border: none; color: #8e8e8e; cursor: pointer; padding: 0; display: flex; align-items: center; margin-left: auto; transition: color 0.2s;" title="Xóa bình luận" onmouseover="this.style.color='#ed4956'" onmouseout="this.style.color='#8e8e8e'">
+      ? `<button class="comment-delete-btn" data-post-id="${postId}" data-comment-id="${c._id}" style="background: none; border: none; color: #8e8e8e; cursor: pointer; padding: 0; display: flex; align-items: center; margin-left: auto; transition: color 0.2s;" title="${t.tooltip_delete_comment}" onmouseover="this.style.color='#ed4956'" onmouseout="this.style.color='#8e8e8e'">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="12" cy="12" r="1.5"></circle>
                 <circle cx="19" cy="12" r="1.5"></circle>
@@ -231,28 +444,35 @@ window.renderCommentsHTML = function (
         </button>`
       : "";
 
+    let cUser = c.user;
+    if (cUser === "Người dùng ẩn danh" || cUser === "Anonymous user")
+      cUser = t.anonymous_user;
+    let cReplyUser = c.replyToUser;
+    if (cReplyUser === "Người dùng ẩn danh" || cReplyUser === "Anonymous user")
+      cReplyUser = t.anonymous_user;
+
     return `
       <div style="display: flex; gap: 12px; margin-bottom: ${isReply ? "12px" : "16px"}; padding-top: ${isReply ? "0" : "8px"};">
-          <img src="${c.userAvatar || "https://i.pravatar.cc/150?img=11"}" alt="Avatar" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; flex-shrink: 0; border: 1px solid #eee;">
+          <img src="${c.userAvatar || "https://cdn-icons-png.flaticon.com/512/149/149071.png"}" alt="Avatar" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; flex-shrink: 0; border: 1px solid rgba(255, 255, 255, 0.1);">
           <div style="flex: 1; min-width: 0;">
               <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px;">
                   <div style="font-size: 14px; line-height: 1.4; color: #000; margin-bottom: 2px;">
-                      <strong style="font-weight: 600;">${c.user}</strong>
-                      ${c.replyToUser ? `<span style="color: #00376b; font-weight: 400;">@${c.replyToUser}</span> ` : " "}
-                      <span style="font-weight: 400; word-break: break-word;">${c.text}</span>
+                      <strong style="font-weight: 600;">${cUser}</strong>
+                      ${cReplyUser ? `<span style="color: #00376b; font-weight: 400;">@${cReplyUser}</span> ` : " "}
+                      <span style="font-weight: 400; word-break: break-word;">${c.text.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</span>
                   </div>
-                  <button class="comment-like-btn" data-post-id="${postId}" data-comment-id="${c._id}" style="background: none; border: none; color: ${c.likes && myId && c.likes.includes(myId) ? "#e91e63" : "#a8a8a8"}; display: flex; align-items: center; justify-content: center; cursor: pointer; padding: 0; transition: 0.2s; margin-top: 2px;" title="Thích">
+                  <button class="comment-like-btn" data-post-id="${postId}" data-comment-id="${c._id}" style="background: none; border: none; color: ${c.likes && myId && c.likes.includes(myId) ? "#e91e63" : "#a8a8a8"}; display: flex; align-items: center; justify-content: center; cursor: pointer; padding: 0; transition: 0.2s; margin-top: 2px;" title="Like">
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="${c.likes && myId && c.likes.includes(myId) ? "#e91e63" : "none"}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="comment-heart-icon"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
                   </button>
               </div>
-              ${c.media_url ? (c.media_url.includes("/video/") ? `<video src="${c.media_url}" controls style="width: 100%; max-width: 250px; border-radius: 8px; margin-top: 4px; background: #000;"></video>` : `<img src="${c.media_url}" style="width: 100%; max-width: 250px; object-fit: cover; border-radius: 8px; margin-top: 4px; border: 1px solid #eee;">`) : ""}
+              ${c.media_url ? (c.media_url.includes("/video/") ? `<video src="${c.media_url}" controls style="width: 100%; max-width: 250px; border-radius: 8px; margin-top: 4px; background: #000;"></video>` : `<img src="${c.media_url}" style="width: 100%; max-width: 250px; object-fit: cover; border-radius: 8px; margin-top: 4px; border: 1px solid rgba(255, 255, 255, 0.1);">`) : ""}
               
               <div style="display: flex; gap: 16px; margin-top: 6px; font-size: 12px; font-weight: 600; color: #737373; align-items: center;">
-                  <span style="font-weight: 400; color: #8e8e8e;">${new Date(c.createdAt).toLocaleDateString("vi-VN", { day: "numeric", month: "short" })}</span>
+                  <span style="font-weight: 400; color: #8e8e8e;">${new Date(c.createdAt).toLocaleDateString(dateLocale, { day: "numeric", month: "short" })}</span>
                   <button class="comment-like-btn" data-post-id="${postId}" data-comment-id="${c._id}" style="background: none; border: none; color: #737373; font-weight: 600; cursor: pointer; padding: 0;">
-                      <span class="comment-like-count">${c.likes && c.likes.length > 0 ? c.likes.length + " Thích" : "Thích"}</span>
+                      <span class="comment-like-count">${c.likes && c.likes.length > 0 ? c.likes.length + " " + (currentLang === "EN" && c.likes.length > 1 ? t.likes : t.like) : t.like}</span>
                   </button>
-                  <button class="comment-reply-btn" data-post-id="${postId}" data-user="${c.user}" data-comment-id="${isReply ? c.replyTo : c._id}" style="background: none; border: none; color: #737373; font-weight: 600; cursor: pointer; padding: 0;">Trả lời</button>
+                  <button class="comment-reply-btn" data-post-id="${postId}" data-user="${c.user}" data-comment-id="${isReply ? c.replyTo : c._id}" style="background: none; border: none; color: #737373; font-weight: 600; cursor: pointer; padding: 0;">${t.reply}</button>
                   ${deleteBtn}
               </div>
               ${replyHtml}
@@ -266,6 +486,7 @@ window.renderCommentsHTML = function (
 // 2.3. HÀM TẢI & HIỂN THỊ BÀI VIẾT (GIAO DIỆN CHUẨN ẢNH)
 async function loadPosts(category = "all posts") {
   try {
+    const t = window.translations[currentLang];
     // Gửi yêu cầu lọc theo category lên server
     const response = await fetch(`${API_URL}?category=${category}`);
     const posts = await response.json();
@@ -290,6 +511,7 @@ async function loadPosts(category = "all posts") {
       myId = anonId;
     }
 
+    const dateLocale = currentLang === "EN" ? "en-US" : "vi-VN";
     let allPostsHTML = "";
     posts.forEach((post) => {
       // Xử lý hiển thị Ảnh hoặc Video thông minh
@@ -310,28 +532,46 @@ async function loadPosts(category = "all posts") {
       const postOptionsHTML = isMyPost
         ? `
         <div style="display: flex; gap: 12px; align-items: center;">
-            <button class="btn-edit-post" data-id="${post._id}" data-content="${post.content ? post.content.replace(/"/g, "&quot;") : ""}" data-category="${post.category}" data-media="${post.media_url || ""}" style="background: none; border: none; color: #888; cursor: pointer; padding: 0; display: flex; align-items: center; transition: 0.2s;" title="Sửa bài viết" onmouseover="this.style.color='#0084ff'" onmouseout="this.style.color='#888'">
+            <button class="btn-edit-post" data-id="${post._id}" data-content="${post.content ? post.content.replace(/"/g, "&quot;") : ""}" data-category="${post.category}" data-media="${post.media_url || ""}" style="background: none; border: none; color: #888; cursor: pointer; padding: 0; display: flex; align-items: center; transition: 0.2s;" title="${t.tooltip_edit_post}" onmouseover="this.style.color='#0084ff'" onmouseout="this.style.color='#888'">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
             </button>
-            <button class="btn-menu" data-id="${post._id}" style="background: none; border: none; color: #888; cursor: pointer; padding: 0; display: flex; align-items: center; transition: 0.2s;" title="Xóa bài viết" onmouseover="this.style.color='#dc3545'" onmouseout="this.style.color='#888'">
+            <button class="btn-menu" data-id="${post._id}" style="background: none; border: none; color: #888; cursor: pointer; padding: 0; display: flex; align-items: center; transition: 0.2s;" title="${t.tooltip_delete_post}" onmouseover="this.style.color='#dc3545'" onmouseout="this.style.color='#888'">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
             </button>
         </div>`
         : "";
 
+      let displayName = post.authorName || t.anonymous_user;
+      if (
+        displayName === "Người dùng ẩn danh" ||
+        displayName === "Anonymous user"
+      ) {
+        displayName = t.anonymous_user;
+      }
+      const displayCategory =
+        post.category === "story"
+          ? t.cat_story
+          : post.category === "adoption"
+            ? t.cat_adoption
+            : post.category === "donations"
+              ? t.cat_donations
+              : post.category === "organizations"
+                ? t.cat_orgs
+                : post.category;
+
       const postHTML = `
-                <div class="post-card" style="background: white; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border: 1px solid #eee;">
+                <div class="post-card">
                     
                     <div class="post-header" style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px;">
                         <div style="display: flex; gap: 12px; align-items: center;">
-    <img class="profile-trigger" data-id="${post.authorId || ""}" data-name="${post.authorName || "Người dùng ẩn danh"}" data-avatar="${post.authorAvatar || "https://i.pravatar.cc/150?img=11"}" src="${post.authorAvatar || "https://i.pravatar.cc/150?img=11"}" alt="Avatar" style="width: 45px; height: 45px; border-radius: 50%; object-fit: cover; cursor: pointer;">
+    <img class="profile-trigger" data-id="${post.authorId || ""}" data-name="${displayName}" data-avatar="${post.authorAvatar || "https://cdn-icons-png.flaticon.com/512/149/149071.png"}" src="${post.authorAvatar || "https://cdn-icons-png.flaticon.com/512/149/149071.png"}" alt="Avatar" style="width: 45px; height: 45px; border-radius: 50%; object-fit: cover; cursor: pointer;">
     <div>
-        <h4 class="profile-trigger" data-id="${post.authorId || ""}" data-name="${post.authorName || "Người dùng ẩn danh"}" data-avatar="${post.authorAvatar || "https://i.pravatar.cc/150?img=11"}" style="margin: 0 0 4px 0; font-size: 15px; color: #333; font-weight: bold; cursor: pointer;">${post.authorName || "Người dùng ẩn danh"}</h4>
-        <span style="font-size: 12px; color: #888;">${new Date(post.createdAt).toLocaleString("vi-VN")}</span>
+        <h4 class="profile-trigger" data-id="${post.authorId || ""}" data-name="${displayName}" data-avatar="${post.authorAvatar || "https://cdn-icons-png.flaticon.com/512/149/149071.png"}" style="margin: 0 0 4px 0; font-size: 15px; color: #333; font-weight: bold; cursor: pointer;">${displayName}</h4>
+        <span style="font-size: 12px; color: #888;">${new Date(post.createdAt).toLocaleString(dateLocale, { hour: "2-digit", minute: "2-digit", day: "numeric", month: "short", year: "numeric" })}</span>
     </div>
 </div>
                         <div style="display: flex; align-items: center; gap: 15px;">
-                            <span style="background: #e6f4ea; color: #1e8e3e; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; text-transform: lowercase;">${post.category}</span>
+                            <span style="background: #e6f4ea; color: #1e8e3e; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; text-transform: lowercase;">${displayCategory}</span>
                             ${postOptionsHTML}
                         </div>
                     </div>
@@ -371,23 +611,23 @@ async function loadPosts(category = "all posts") {
                         </div>
                         
                         <div style="display: flex; gap: 10px; align-items: flex-end;">
-                            <img id="comment-avatar-${post._id}" src="https://i.pravatar.cc/150?img=11" alt="Avatar" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover;">
+                            <img id="comment-avatar-${post._id}" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Avatar" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover;">
                             <div style="flex: 1;">
                                 <div id="comment-media-preview-${post._id}" style="display: none; position: relative; margin-bottom: 8px;">
-                                    <img id="comment-media-img-${post._id}" style="max-width: 100%; max-height: 200px; border-radius: 8px; object-fit: cover; border: 1px solid #e0e6ed;">
+                                    <img id="comment-media-img-${post._id}" style="max-width: 100%; max-height: 200px; border-radius: 8px; object-fit: cover; border: 1px solid rgba(255, 255, 255, 0.1);">
                                     <button id="remove-comment-media-${post._id}" type="button" style="position: absolute; top: 5px; right: 5px; background: rgba(0,0,0,0.6); color: white; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center;">✕</button>
                                 </div>
                                 <div style="display: flex; gap: 8px;">
-                                    <input type="text" class="comment-input" placeholder="Viết bình luận..." style="flex: 1; padding: 10px 15px; border-radius: 20px; border: 1px solid #ddd; outline: none; font-size: 14px;">
-                                    <label style="cursor: pointer; background: #f0f0f0; border: 1px solid #ddd; border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; transition: 0.2s;" title="Gửi ảnh">
+                                    <input type="text" class="comment-input" placeholder="${t.write_comment}" style="flex: 1; padding: 10px 15px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1); outline: none; font-size: 14px;">
+                                    <label style="cursor: pointer; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; transition: 0.2s;" title="Attach image">
                                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #666;">
                                             <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
                                             <circle cx="8.5" cy="8.5" r="1.5"></circle>
                                             <polyline points="21 15 16 10 5 21"></polyline>
-                                        </svg>
+                                        </svg> 
                                         <input type="file" class="comment-media-input" data-post-id="${post._id}" accept="image/*" hidden>
                                     </label>
-                                    <button class="btn-send-comment" data-id="${post._id}" style="background: #1e8e3e; color: white; border: none; padding: 8px 18px; border-radius: 20px; cursor: pointer; font-weight: bold; font-size: 14px; transition: 0.2s;" title="Gửi bình luận">Gửi</button>
+                                    <button class="btn-send-comment" data-id="${post._id}" style="background: #1e8e3e; color: white; border: none; padding: 8px 18px; border-radius: 20px; cursor: pointer; font-weight: bold; font-size: 14px; transition: 0.2s;" title="Send comment">${t.btn_send}</button>
                                 </div>
                             </div>
                         </div>
@@ -433,7 +673,7 @@ async function loadPosts(category = "all posts") {
 
     // CẬP NHẬT AVATAR COMMENT NẾU NGƯỜI DÙNG ĐÃ ĐĂNG NHẬP
     if (meString) {
-      const userAvatar = me.avatar || "https://i.pravatar.cc/150?img=11";
+      const userAvatar = me.avatar || "https://cdn-icons-png.flaticon.com/512/149/149071.png";
       const allCommentAvatars = document.querySelectorAll(
         "[id^='comment-avatar-']",
       );
@@ -506,7 +746,8 @@ if (saveEditPostBtn) {
       formData.append("media", file);
     }
 
-    saveEditPostBtn.innerText = "Đang lưu...";
+    const t = window.translations[currentLang];
+    saveEditPostBtn.innerText = t.saving;
     saveEditPostBtn.disabled = true;
 
     try {
@@ -525,7 +766,7 @@ if (saveEditPostBtn) {
     } catch (error) {
       console.error("Lỗi sửa bài:", error);
     } finally {
-      saveEditPostBtn.innerText = "Lưu thay đổi";
+      saveEditPostBtn.innerText = t.btn_save_changes;
       saveEditPostBtn.disabled = false;
     }
   });
@@ -555,7 +796,7 @@ postBtn.addEventListener("click", async function () {
     formData.append("authorName", me.fullName);
     formData.append(
       "authorAvatar",
-      me.avatar || "https://i.pravatar.cc/150?img=11",
+      me.avatar || "https://cdn-icons-png.flaticon.com/512/149/149071.png",
     );
     formData.append("authorId", me._id || me.userId);
   }
@@ -744,14 +985,14 @@ postsFeedContainer.addEventListener("click", async function (e) {
     try {
       // Lấy info người dùng từ localStorage
       const meString = localStorage.getItem("currentUser");
-      let userName = "Người dùng ẩn danh";
-      let userAvatar = "https://i.pravatar.cc/150?img=11";
+      let userName = window.translations[currentLang].anonymous_user;
+      let userAvatar = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
       let myUserId = "ẩn_danh";
 
       if (meString) {
         const me = JSON.parse(meString);
         userName = me.fullName || "Người dùng";
-        userAvatar = me.avatar || "https://i.pravatar.cc/150?img=11";
+        userAvatar = me.avatar || "https://cdn-icons-png.flaticon.com/512/149/149071.png";
         myUserId = me._id || me.userId || "user_macdinh";
       }
 
@@ -827,7 +1068,12 @@ postsFeedContainer.addEventListener("click", async function (e) {
           repliesContainer.style.display = "block";
           if (toggleBtn) {
             const span = toggleBtn.querySelector("span");
-            if (span) span.innerText = span.innerText.replace("Xem", "Ẩn");
+            const t = window.translations[currentLang];
+            if (span)
+              span.innerText = span.innerText.replace(
+                t.view_replies.split(" ")[0],
+                t.hide_replies.split(" ")[0],
+              );
           }
         }
       }
@@ -936,6 +1182,7 @@ postsFeedContainer.addEventListener("click", async function (e) {
       );
       const data = await response.json();
 
+      const t = window.translations[currentLang];
       // Đồng bộ cả icon tim ở trên và chữ Thích ở dưới
       const likeBtns = document.querySelectorAll(
         `.comment-like-btn[data-comment-id="${commentId}"]`,
@@ -946,7 +1193,10 @@ postsFeedContainer.addEventListener("click", async function (e) {
 
         if (countSpan) {
           countSpan.innerText =
-            data.likesCount > 0 ? `${data.likesCount} Thích` : "Thích";
+            data.likesCount > 0
+              ? `${data.likesCount} ` +
+                (currentLang === "EN" && data.likesCount > 1 ? t.likes : t.like)
+              : t.like;
         }
 
         if (icon) {
@@ -991,13 +1241,22 @@ postsFeedContainer.addEventListener("click", async function (e) {
     const targetId = toggleRepliesBtn.getAttribute("data-target");
     const repliesContainer = document.getElementById(targetId);
     const span = toggleRepliesBtn.querySelector("span");
+    const t = window.translations[currentLang];
 
     if (repliesContainer.style.display === "none") {
       repliesContainer.style.display = "block";
-      if (span) span.innerText = span.innerText.replace("Xem", "Ẩn");
+      if (span)
+        span.innerText = span.innerText.replace(
+          t.view_replies.split(" ")[0],
+          t.hide_replies.split(" ")[0],
+        );
     } else {
       repliesContainer.style.display = "none";
-      if (span) span.innerText = span.innerText.replace("Ẩn", "Xem");
+      if (span)
+        span.innerText = span.innerText.replace(
+          t.hide_replies.split(" ")[0],
+          t.view_replies.split(" ")[0],
+        );
     }
   }
 
@@ -1060,6 +1319,7 @@ if (searchFriendInput) {
     const myId = JSON.parse(meString)._id || JSON.parse(meString).userId;
 
     try {
+      const t = window.translations[currentLang];
       const response = await fetch(
         `http://${window.location.hostname}:3000/api/users/search-new/${myId}?q=${keyword}`,
       );
@@ -1075,7 +1335,9 @@ if (searchFriendInput) {
         const btnStyle = isSent
           ? "background: #f1f5f9; color: #333;"
           : "background: #eefdf4; color: #16a34a;";
-        const btnText = isSent ? "Hủy" : "Thêm bạn bè";
+        const btnText = isSent
+          ? t.cancel_request.split(" ")[0]
+          : t.btn_add_friend;
 
         friendSearchResults.innerHTML += `
           <div style="display: flex; align-items: center; justify-content: space-between; padding: 8px; border-radius: 8px; border: 1px solid #eee;">
@@ -1102,6 +1364,7 @@ window.toggleFriendRequest = async function (targetId, btnElement) {
   const myId = JSON.parse(meString)._id || JSON.parse(meString).userId;
 
   btnElement.innerText = "...";
+  const t = window.translations[currentLang];
   try {
     const res = await fetch(
       `http://${window.location.hostname}:3000/api/friends/request`,
@@ -1114,11 +1377,11 @@ window.toggleFriendRequest = async function (targetId, btnElement) {
     const data = await res.json();
 
     if (data.action === "sent") {
-      btnElement.innerText = "Hủy";
+      btnElement.innerText = t.cancel_request.split(" ")[0];
       btnElement.style.background = "#f1f5f9";
       btnElement.style.color = "#333";
     } else {
-      btnElement.innerText = "Thêm bạn bè";
+      btnElement.innerText = t.btn_add_friend;
       btnElement.style.background = "#eefdf4";
       btnElement.style.color = "#16a34a";
     }
@@ -1166,7 +1429,7 @@ async function loadFriendRequests() {
       });
     } else {
       requestBadge.style.display = "none";
-      pendingRequestsContainer.innerHTML = `<p style="font-size: 13px; color: #888; text-align: center;">Chưa có lời mời nào</p>`;
+      pendingRequestsContainer.innerHTML = `<p style="font-size: 13px; color: #888; text-align: center;">${window.translations[currentLang].no_friend_requests}</p>`;
     }
   } catch (err) {}
 }
@@ -1324,7 +1587,7 @@ async function loadUsersForChat(searchKeyword = "") {
     userListContainer.innerHTML = "";
 
     if (otherUsers.length === 0) {
-      userListContainer.innerHTML = `<p style="text-align: center; color: #888; font-size: 13px; margin-top: 20px;"> Let's search to start a conversation!</p>`;
+      userListContainer.innerHTML = `<p style="text-align: center; color: #888; font-size: 13px; margin-top: 20px;">${window.translations[currentLang].search_to_start}</p>`;
       return;
     }
 
@@ -1338,12 +1601,12 @@ async function loadUsersForChat(searchKeyword = "") {
       // Thiết kế giao diện từng người
       userDiv.innerHTML = `
                 <div style="position: relative">
-                    <img src="${user.avatar || "https://i.pravatar.cc/150?img=11"}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                    <img src="${user.avatar || "https://cdn-icons-png.flaticon.com/512/149/149071.png"}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
                     <span style="position: absolute; bottom: 2px; right: 0; width: 10px; height: 10px; background: #31a24c; border-radius: 50%; border: 2px solid white;"></span>
                 </div>
                 <div class="chat-info">
                     <h5 style="margin: 0; font-size: 14px; color: #333">${user.fullName}</h5>
-                    <p style="margin: 2px 0 0 0; font-size: 12px; color: #888">Bấm để nhắn tin...</p>
+                    <p style="margin: 2px 0 0 0; font-size: 12px; color: #888">${window.translations[currentLang].click_to_message}</p>
                 </div>
             `;
 
@@ -1356,7 +1619,7 @@ async function loadUsersForChat(searchKeyword = "") {
         document.getElementById("chatName").innerText = user.fullName;
         const chatAvatar = document.getElementById("chatAvatar");
         if (chatAvatar)
-          chatAvatar.src = user.avatar || "https://i.pravatar.cc/150?img=11";
+          chatAvatar.src = user.avatar || "https://cdn-icons-png.flaticon.com/512/149/149071.png";
         lastMessagesString = ""; // Reset để tải tin nhắn người mới mượt hơn
 
         // Gọi hàm tải tin nhắn cũ
@@ -1404,34 +1667,12 @@ document.addEventListener("DOMContentLoaded", () => {
   if (meString) {
     const me = JSON.parse(meString);
 
-    // Nếu avatar đang là ảnh random (pravatar.cc) thì hiện hộp thoại bắt đổi
-    if (me.avatar && me.avatar.includes("pravatar.cc")) {
-      const profileModal = document.getElementById("profileSetupModal");
-      const setupNameInput = document.getElementById("setupNameInput");
-      const profileModalTitle = document.getElementById("profileModalTitle");
-      const profileModalDesc = document.getElementById("profileModalDesc");
-      const skipProfileBtn = document.getElementById("skipProfileBtn");
-      const closeProfileModal = document.getElementById("closeProfileModal");
-
-      if (profileModal) {
-        // Cài đặt lại giao diện mặc định cho lần đầu cập nhật
-        if (profileModalTitle) profileModalTitle.innerText = "Cập nhật hồ sơ";
-        if (profileModalDesc)
-          profileModalDesc.innerText =
-            "Hãy chọn một ảnh đại diện và tên hiển thị để bắt đầu nhé!";
-        if (skipProfileBtn) skipProfileBtn.style.display = "block";
-        if (closeProfileModal) closeProfileModal.style.display = "none";
-
-        profileModal.style.display = "flex";
-        setupNameInput.value = me.fullName || ""; // Điền sẵn tên tài khoản để họ sửa
-      }
-    } else {
-      // Nếu đã có avatar xịn hoặc đã chọn ẩn danh thì nạp bình thường
-      const myAvatarImg = document.getElementById("myAvatar");
-      if (myAvatarImg) {
-        myAvatarImg.src =
-          me.avatar || "https://cdn-icons-png.flaticon.com/512/149/149071.png";
-      }
+    // Luôn sử dụng ảnh avatar và tên đã đăng ký làm mặc định
+    // (Bỏ qua việc ép người dùng chọn lại avatar khi mới đăng nhập)
+    const myAvatarImg = document.getElementById("myAvatar");
+    if (myAvatarImg) {
+      myAvatarImg.src =
+        me.avatar || "https://cdn-icons-png.flaticon.com/512/149/149071.png";
     }
   }
 
@@ -1456,14 +1697,16 @@ document.addEventListener("DOMContentLoaded", () => {
       const file = setupAvatarInput.files[0];
 
       if (!name) {
-        saveProfileBtn.innerText = "Vui lòng nhập tên!";
+        const t = window.translations[currentLang];
+        saveProfileBtn.innerText = t.please_enter_name;
         setTimeout(() => {
-          saveProfileBtn.innerText = "Lưu Hồ Sơ";
+          saveProfileBtn.innerText = t.btn_save_profile;
         }, 2000);
         return;
       }
 
-      saveProfileBtn.innerText = "Đang lưu...";
+      const t = window.translations[currentLang];
+      saveProfileBtn.innerText = t.saving;
       saveProfileBtn.disabled = true;
 
       const formData = new FormData();
@@ -1484,12 +1727,12 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
           // Bật lại nút nếu bị lỗi để người dùng bấm lại
           saveProfileBtn.innerText =
-            "Lỗi! " + (data.message || "Vui lòng thử lại");
+            t.error_try_again + " " + (data.message || "");
           saveProfileBtn.disabled = false;
         }
       } catch (e) {
         console.error("Lỗi cập nhật:", e);
-        saveProfileBtn.innerText = "Lỗi mạng! Thử lại";
+        saveProfileBtn.innerText = t.network_error;
         saveProfileBtn.disabled = false;
       }
     });
@@ -1508,11 +1751,12 @@ document.addEventListener("DOMContentLoaded", () => {
   if (skipProfileBtn) {
     skipProfileBtn.addEventListener("click", async () => {
       const me = JSON.parse(localStorage.getItem("currentUser"));
-      skipProfileBtn.innerText = "Đang xử lý...";
+      const t = window.translations[currentLang];
+      skipProfileBtn.innerText = t.processing;
       skipProfileBtn.disabled = true;
 
       const formData = new FormData();
-      formData.append("fullName", "Người dùng ẩn danh");
+      formData.append("fullName", window.translations["EN"].anonymous_user); // Luôn lưu mặc định
       formData.append(
         "avatar",
         "https://cdn-icons-png.flaticon.com/512/149/149071.png",
@@ -1530,12 +1774,12 @@ document.addEventListener("DOMContentLoaded", () => {
           localStorage.setItem("currentUser", JSON.stringify(me));
           window.location.reload();
         } else {
-          skipProfileBtn.innerText = "Lỗi! Vui lòng thử lại";
+          skipProfileBtn.innerText = t.error_try_again;
           skipProfileBtn.disabled = false;
         }
       } catch (e) {
         console.error("Lỗi bỏ qua:", e);
-        skipProfileBtn.innerText = "Lỗi mạng! Thử lại";
+        skipProfileBtn.innerText = t.network_error;
         skipProfileBtn.disabled = false;
       }
     });
@@ -1579,11 +1823,12 @@ document.addEventListener("click", async function (e) {
     const popupMessageBtn = document.getElementById("popupMessageBtn");
     const popupAddFriendBtn = document.getElementById("popupAddFriendBtn");
 
+    const t = window.translations[currentLang];
     // Đặt lại giao diện mặc định
     if (popupMessageBtn) popupMessageBtn.style.display = "block";
     if (popupAddFriendBtn) {
       popupAddFriendBtn.style.display = "none";
-      popupAddFriendBtn.innerText = "Thêm bạn bè";
+      popupAddFriendBtn.innerText = t.btn_add_friend;
       popupAddFriendBtn.style.background = "#eefdf4";
       popupAddFriendBtn.style.color = "#16a34a";
     }
@@ -1626,11 +1871,11 @@ document.addEventListener("click", async function (e) {
                 } else {
                   popupAddFriendBtn.style.display = "block"; // Hiện nút kết bạn
                   if (user.status === "sent") {
-                    popupAddFriendBtn.innerText = "Hủy lời mời";
+                    popupAddFriendBtn.innerText = t.cancel_request;
                     popupAddFriendBtn.style.background = "#f1f5f9";
                     popupAddFriendBtn.style.color = "#333";
                   } else {
-                    popupAddFriendBtn.innerText = "Thêm bạn bè";
+                    popupAddFriendBtn.innerText = t.btn_add_friend;
                     popupAddFriendBtn.style.background = "#eefdf4";
                     popupAddFriendBtn.style.color = "#16a34a";
                   }

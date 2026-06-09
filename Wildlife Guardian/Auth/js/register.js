@@ -121,7 +121,7 @@ async function handleRegisterSubmit(event) {
 
   try {
     // 1. Đổi đường dẫn thành cổng 3000 của Backend Node.js
-    const response = await fetch("http://localhost:3000/api/auth/register", {
+    const response = await fetch("http://localhost:3000/api/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

@@ -4,7 +4,8 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   fullName: { type: String, required: true },
-  avatar: { type: String, default: "https://i.pravatar.cc/150?img=11" },
+  avatar: { type: String, default: "https://cdn-icons-png.flaticon.com/512/149/149071.png" },
+  unlockedSpecies: { type: [String], default: [] },
   createdAt: { type: Date, default: Date.now },
 });
 

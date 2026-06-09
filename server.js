@@ -69,6 +69,7 @@ const userSchema = new mongoose.Schema({
     username: String, // Thêm để tương thích với code của nhánh Bảo
     friends: { type: [String], default: [] }, // Danh sách ID bạn bè
     friendRequests: { type: [String], default: [] }, // Danh sách ID người gửi lời mời
+    unlockedSpecies: { type: [String], default: [] }, // Danh sách tên con vật đã mở khóa
 });
 // Dùng dòng này để tránh lỗi đè model nếu file ./models/User.js cũng đang tồn tại
 const User = mongoose.models.User || mongoose.model("User", userSchema);
@@ -396,21 +397,26 @@ app.post("/api/messages", async (req, res) => {
 app.post("/api/register", async (req, res) => {
     try {
         const { email, password, fullName, username } = req.body;
-        const existUser = await User.findOne({
-            $or: [{ email: email }, { username: username }],
-        });
+        
+        // Chỉ tìm kiếm bằng email hoặc username nếu chúng có giá trị
+        const searchConditions = [];
+        if (email) searchConditions.push({ email: email });
+        if (username) searchConditions.push({ username: username });
 
-        if (existUser)
-            return res
-                .status(400)
-                .json({ success: false, message: "Email hoặc tài khoản đã tồn tại!" });
+        if (searchConditions.length > 0) {
+            const existUser = await User.findOne({ $or: searchConditions });
+            if (existUser)
+                return res
+                    .status(400)
+                    .json({ success: false, message: "Email hoặc tài khoản đã tồn tại!" });
+        }
 
         const newUser = new User({
             email: email || username, // Hỗ trợ cả form cũ và mới
             username: username || email,
             password: password,
             fullName: fullName || (email ? email.split("@")[0] : username),
-            avatar: "https://i.pravatar.cc/150?u=" + (email || username),
+            avatar: "https://cdn-icons-png.flaticon.com/512/149/149071.png",
         });
         await newUser.save();
         res.status(201).json({ success: true, message: "Đăng ký thành công!" });
@@ -676,6 +682,47 @@ app.post("/api/forgotpassword", async (req, res) => {
                 .json({ success: false, message: "Không tìm thấy tài khoản này!" });
         }
     } catch (err) {
+        res.status(500).json({ success: false, message: "Lỗi Server!" });
+    }
+});
+
+// ==========================================
+// TÍNH NĂNG MỞ KHÓA ĐỘNG VẬT TRONG SPECIES LIBRARY
+// ==========================================
+
+app.post("/api/users/:id/unlock", async (req, res) => {
+    try {
+        const { speciesName } = req.body;
+        if (!speciesName) {
+            return res.status(400).json({ success: false, message: "Thiếu tên con vật!" });
+        }
+
+        const user = await User.findById(req.params.id);
+        if (!user) {
+            return res.status(404).json({ success: false, message: "Không tìm thấy người dùng" });
+        }
+
+        if (!user.unlockedSpecies) user.unlockedSpecies = [];
+        if (!user.unlockedSpecies.includes(speciesName)) {
+            user.unlockedSpecies.push(speciesName);
+            await user.save();
+        }
+
+        res.json({ success: true, message: `Đã lưu ${speciesName} vào danh sách mở khóa!` });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: "Lỗi Server!" });
+    }
+});
+
+app.get("/api/users/:id/unlocked", async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id);
+        if (!user) {
+            return res.status(404).json({ success: false, message: "Không tìm thấy người dùng" });
+        }
+        res.json({ success: true, unlockedSpecies: user.unlockedSpecies || [] });
+    } catch (error) {
         res.status(500).json({ success: false, message: "Lỗi Server!" });
     }
 });
