@@ -1,6 +1,6 @@
 import { GoogleGenAI } from "@google/genai"
 
-const API_KEY = "AIzaSyB3zrH7UpKkeZajeqPpe916ZDs9Ee0Excg";
+const API_KEY = "";
 const ai = new GoogleGenAI({ apiKey: API_KEY });
 
 /* ════════════════════════════════════════════════════
@@ -210,14 +210,19 @@ async function sendMessage() {
         ? '<span class="typing"><span></span><span></span><span></span></span>'
         : "⚫⚫⚫");
 
+    const lang = window.currentLang || localStorage.getItem("lang") || "EN";
+    const languageRule = lang === "VI"
+        ? "1. Luôn trả lời bằng Tiếng Việt (Vietnamese)."
+        : "1. Luôn trả lời bằng Tiếng Anh (English).";
+
     try {
         const response = await ai.models.generateContent({
             model: 'gemini-2.5-flash',
             contents: userMessage,
             config: {
-                systemInstruction: `Bạn là trợ lý ảo của dự án web Wildlife Guardian.
-                Luật lệ bắt buộc của bạn:
-                1. Luôn trả lời bằng tiếng anh.
+                systemInstruction: `Bạn là Phoenix AI, trợ lý ảo của trang web Wildlife Guardian.
+QUY TẮC BẮT BUỘC VỀ ĐỊNH DẠNG: Tuyệt đối không sử dụng bất kỳ định dạng Markdown nào trong câu trả lời. Không sử dụng dấu sao (*) để in đậm, in nghiêng hay làm gạch đầu dòng. Chỉ trả lời bằng văn bản thuần túy (Plain text). Nếu cần liệt kê, hãy dùng dấu gạch ngang (-). Trả lời ngắn gọn, súc tích và thân thiện.
+                ${languageRule}
                 2. Bạn chỉ được phép tư vấn, trả lời các câu hỏi liên quan đến bảo vệ động vật hoang dã, thiên nhiên, môi trường và các thông tin về trang web Wildlife Guardian.
                 3. Nếu người dùng hỏi về các chủ đề khác (như toán học, lập trình, giải trí, chính trị...), hãy lịch sự từ chối và lái câu chuyện quay về chủ đề động vật hoang dã.
                 4. Trả lời ngắn gọn, thân thiện và súc tích.
@@ -236,20 +241,22 @@ async function sendMessage() {
         chatBox.scrollTop = chatBox.scrollHeight;
 
     } catch (error) {
+        console.error("Chatbot API Error:", error);
+
+        const lang = window.currentLang || localStorage.getItem("lang") || "EN";
+        const friendlyErrorMsg = lang === "VI"
+            ? "Oops! Xin lỗi bạn, hiện tại máy chủ đang hơi quá tải hoặc mất kết nối. Bạn có thể vui lòng đặt lại câu hỏi sau một lát được không? 😓"
+            : "Oops! Sorry, the server is currently experiencing high demand or disconnected. Could you please try asking your question again in a moment? 😓";
+
         if (isNewUI) {
             const bubble = loadEl.querySelector(".msg-bubble");
             if (bubble) {
-                bubble.style.color = "#ef4444";
-                bubble.style.wordBreak = "break-word";
-                bubble.style.overflowWrap = "anywhere";
-                bubble.textContent = error.message;
+                bubble.textContent = friendlyErrorMsg;
             }
         } else {
             const p = loadEl.querySelector("p");
             if (p) {
-                p.style.color = "red";
-                p.style.wordBreak = "break-word";
-                p.textContent = error.message;
+                p.textContent = friendlyErrorMsg;
             }
         }
         chatBox.scrollTop = chatBox.scrollHeight;
@@ -260,4 +267,62 @@ async function sendMessage() {
 if (sendBtn) sendBtn.addEventListener("click", sendMessage);
 if (inputEl) inputEl.addEventListener("keydown", (e) => {
     if (e.key === "Enter") sendMessage();
+});
+
+/* ════════════════════════════════════════════════════
+   QUICK REPLIES LOGIC
+════════════════════════════════════════════════════ */
+document.addEventListener("DOMContentLoaded", () => {
+    const quickRepliesBox = document.getElementById("quickReplies");
+    const chatInput = document.getElementById("cwInput") || document.querySelector(".inputarea input");
+
+    if (quickRepliesBox && chatInput) {
+        const scrollHint = document.querySelector(".qr-scroll-hint");
+
+        // Function to check if scrolled to end
+        const checkScroll = () => {
+            if (!scrollHint) return;
+            // Cho khoảng dung sai 2px
+            if (quickRepliesBox.scrollWidth - quickRepliesBox.clientWidth <= quickRepliesBox.scrollLeft + 2) {
+                scrollHint.classList.add("hidden");
+            } else {
+                scrollHint.classList.remove("hidden");
+            }
+        };
+
+        // Check initially
+        checkScroll();
+
+        // Listen to scroll events
+        quickRepliesBox.addEventListener("scroll", checkScroll);
+
+        // Hỗ trợ cuộn ngang bằng con lăn chuột (Tăng cường UX)
+        quickRepliesBox.addEventListener("wheel", (evt) => {
+            evt.preventDefault();
+            quickRepliesBox.scrollLeft += evt.deltaY;
+            // Không cần gọi checkScroll ở đây vì sự kiện "scroll" sẽ tự bắt
+        });
+
+        const qrButtons = quickRepliesBox.querySelectorAll(".qr-btn");
+        qrButtons.forEach(btn => {
+            btn.addEventListener("click", () => {
+                // Lấy nội dung chữ, loại bỏ các icon emoji (⚡💡🐾🌿)
+                let text = btn.textContent.replace(/[⚡💡🐾🌿]/g, "").trim();
+
+                // Điền vào ô input
+                chatInput.value = text;
+
+                // Kích hoạt animation phản hồi
+                btn.classList.add("selected");
+
+                // Trực tiếp focus vào ô chat để user tiện nhấn Enter ngay
+                chatInput.focus();
+
+                // Gỡ animation sau khi hoàn thành
+                setTimeout(() => {
+                    btn.classList.remove("selected");
+                }, 400);
+            });
+        });
+    }
 });

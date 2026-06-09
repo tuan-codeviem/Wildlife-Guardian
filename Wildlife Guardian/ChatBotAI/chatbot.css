@@ -407,6 +407,120 @@
 }
 
 /* ═══════════════════════════════════════════════
+   QUICK REPLIES (GLASSMORPHISM UI)
+═══════════════════════════════════════════════ */
+.quick-replies-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.qr-scroll-hint {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: calc(100% - 12px);
+  width: 48px;
+  background: linear-gradient(to right, rgba(9, 11, 18, 0), rgba(9, 11, 18, 0.95) 60%);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 8px;
+  pointer-events: none;
+  color: rgba(255, 255, 255, 0.8);
+  transition: opacity 0.3s ease;
+  animation: pulseHint 2s infinite;
+}
+
+.qr-scroll-hint.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+@keyframes pulseHint {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(3px); }
+}
+
+.quick-replies {
+  display: flex;
+  gap: 8px;
+  padding: 0 16px 12px 16px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  scrollbar-width: none; 
+}
+
+.quick-replies::-webkit-scrollbar {
+  display: none; 
+}
+
+.qr-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  flex-shrink: 0; /* KHÔNG CHO NÚT BỊ ÉP NHỎ LẠI */
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  position: relative;
+  overflow: hidden;
+  user-select: none; 
+}
+
+.qr-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.08), transparent);
+  transform: skewX(-20deg);
+  transition: all 0.5s ease;
+}
+
+.qr-btn:hover {
+  background: rgba(22, 163, 74, 0.12); 
+  border-color: rgba(34, 197, 94, 0.4);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(22, 163, 74, 0.2);
+}
+
+.qr-btn:hover::before {
+  left: 150%;
+}
+
+.qr-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 5px rgba(22, 163, 74, 0.1);
+}
+
+.qr-btn span {
+  font-size: 14px;
+  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.3));
+}
+
+.qr-btn.selected {
+  animation: qrClickAnim 0.4s ease forwards;
+}
+
+@keyframes qrClickAnim {
+  0% { transform: scale(1); background: rgba(22, 163, 74, 0.12); }
+  50% { transform: scale(0.93); background: rgba(34, 197, 94, 0.3); }
+  100% { transform: scale(1); background: rgba(22, 163, 74, 0.12); }
+}
+
+/* ═══════════════════════════════════════════════
    RESPONSIVE
 ═══════════════════════════════════════════════ */
 @media screen and (max-width: 768px) {
