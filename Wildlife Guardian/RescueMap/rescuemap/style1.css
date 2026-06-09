@@ -780,19 +780,20 @@ html, body {
     display: flex !important;
     flex-direction: column !important;
     overflow: visible !important;
+    background: transparent !important;
   }
 
-  /* Bỏ overflow:hidden khỏi body trên mobile để phần panel có thể scroll */
   html, body {
     overflow: hidden !important; /* giữ hidden để không có thanh scroll ngang */
   }
 
-  /* Globe: cố định 55%, Cesium canvas sẽ fill vào đây */
+  /* Globe: cố định 65%, trừ đi navbar 68px và khoảng cách gap 4px */
   #interactiveMap {
     position: relative !important;
-    flex: 0 0 calc(55% - 68px) !important;
-    height: calc(55% - 68px) !important;
+    flex: 0 0 calc(65% - 68px - 4px) !important;
+    height: calc(65% - 68px - 4px) !important;
     margin-top: 68px !important;
+    margin-bottom: 4px !important; /* Khoảng cách siêu nhỏ giữa quả cầu và rescue panel */
     width: 100% !important;
     top: auto !important;
     left: auto !important;
@@ -811,12 +812,12 @@ html, body {
     left: 0 !important;
   }
 
-  /* Panel: chiếm 45% dưới, scroll được bên trong */
+  /* Panel: chiếm 35% dưới, scroll được bên trong */
   .floating-panel {
     position: relative !important;
-    flex: 0 0 45% !important;
-    height: 45% !important;
-    max-height: 45% !important;
+    flex: 0 0 35% !important;
+    height: 35% !important;
+    max-height: 35% !important;
     width: 100% !important;
     top: auto !important;
     bottom: auto !important;
@@ -827,14 +828,31 @@ html, body {
     padding-top: 12px !important;
     overflow-y: auto !important;
     z-index: 100 !important;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.3) !important;
   }
 
   /* Nút View Globe: fixed, nằm ngay trên viền panel */
   .view-home-btn {
     position: fixed !important;
-    bottom: calc(45% + 10px) !important;
+    bottom: calc(45% + 15px) !important;
     right: 16px !important;
     top: auto !important;
+    z-index: 200 !important;
+  }
+
+  /* KHI POPUP MỞ TRÊN MOBILE */
+  body.mobile-popup-open .floating-panel {
+    display: none !important;
+  }
+
+  body.mobile-popup-open #interactiveMap {
+    flex: 0 0 calc(100% - 68px) !important;
+    height: calc(100% - 68px) !important;
+    margin-bottom: 0 !important;
+  }
+
+  body.mobile-popup-open .view-home-btn {
+    bottom: calc(50vh + 15px) !important;
   }
 }
 

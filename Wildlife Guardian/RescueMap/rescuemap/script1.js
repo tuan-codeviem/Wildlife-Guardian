@@ -519,11 +519,12 @@ function initRealMap() {
                 #interactiveMap {
                     position: relative !important;
                     width: 100% !important;
-                    height: calc(55% - 68px) !important;
+                    height: calc(65% - 68px - 4px) !important;
                     margin-top: 68px !important;
+                    margin-bottom: 4px !important;
                     display: block !important;
                     overflow: visible !important;
-                    flex: 0 0 calc(55% - 68px) !important;
+                    flex: 0 0 calc(65% - 68px - 4px) !important;
                 }
             }
             #interactiveMap .cesium-viewer,
@@ -604,11 +605,20 @@ function setupCustomPopup() {
             const htmlContent = typeof activeEntity.properties.customHTML.getValue === 'function' ? activeEntity.properties.customHTML.getValue() : activeEntity.properties.customHTML;
             popupDiv.innerHTML = htmlContent;
             popupDiv.style.display = 'block';
+            document.body.classList.add('mobile-popup-open');
 
             const closeBtn = popupDiv.querySelector('.close-btn');
-            if (closeBtn) closeBtn.onclick = () => { popupDiv.style.display = 'none'; activeEntity = null; };
+            if (closeBtn) closeBtn.onclick = () => { 
+                popupDiv.style.display = 'none'; 
+                document.body.classList.remove('mobile-popup-open');
+                activeEntity = null; 
+            };
         } else {
-            activeEntity = null; popupDiv.style.display = 'none';
+            activeEntity = null; 
+            if (popupDiv) {
+                popupDiv.style.display = 'none';
+                document.body.classList.remove('mobile-popup-open');
+            }
         }
     }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
 }
@@ -617,7 +627,10 @@ function renderMarkersToMap(reportsData) {
     if (!viewer) return;
 
     viewer.entities.removeAll();
-    if (popupDiv) popupDiv.style.display = 'none';
+    if (popupDiv) {
+        popupDiv.style.display = 'none';
+        document.body.classList.remove('mobile-popup-open');
+    }
 
     if (reportsData.length === 0) return;
 
