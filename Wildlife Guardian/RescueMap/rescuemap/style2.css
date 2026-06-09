@@ -690,13 +690,13 @@ body {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.report-card.emergency {
+.report-card.report-emergency {
   border-left-color: #d62828;
 }
-.report-card.progress {
+.report-card.report-progress {
   border-left-color: #3b82f6;
 }
-.report-card.rescued {
+.report-card.report-rescued {
   border-left-color: #2a9d8f;
 }
 
@@ -745,15 +745,15 @@ body {
   font-weight: 600;
 }
 
-.report-card.emergency .status-tag {
+.report-card.report-emergency .status-tag {
   background-color: #fee2e2;
   color: #ef4444;
 }
-.report-card.progress .status-tag {
+.report-card.report-progress .status-tag {
   background-color: #e0f2fe;
   color: #0ea5e9;
 }
-.report-card.rescued .status-tag {
+.report-card.report-rescued .status-tag {
   background-color: #dcfce7;
   color: #10b981;
 }

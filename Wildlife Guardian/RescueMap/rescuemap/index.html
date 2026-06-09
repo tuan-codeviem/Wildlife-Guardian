@@ -35,48 +35,13 @@
   <div class="wg-progress" id="wgProgress"></div>
 
   <!-- ==========================================
-       NAVBAR – Copied from Home
+       NAVBAR – Được tạo tự động bởi navbar.js
+       (data-page xác định mục active)
+       (data-report-callback gọi hàm Report Now)
   ========================================== -->
-  <nav class="navbar" id="navbar">
-    <div class="mobile-nav" id="mobileNav">
-      <a href="../../Home/Home.html">Home</a>
-      <a href="index.html" class="active-mobile">Rescue Map</a>
-      <a href="../../Social/frontend/index.html">Social</a>
-      <a href="../../SpeciesLibarary/SpeciesLibarary.html">Species</a>
-      <a href="../../Game/Main/Game/GameUnity.html">Game</a>
-      <a href="../../Contact/Contact.html">Contact Us</a>
-      <div class="mobile-actions">
-        <button class="btn-report" onclick="openCameraModal(event)">🚨 Report Now</button>
-        <button class="btn-login">→ Log in</button>
-      </div>
-    </div>
-    <div class="nav-container">
-      <div class="logo-area">
-        <div class="logo-icon">
-          <svg viewBox="0 0 24 24" fill="currentColor">
-            <rect x="4" y="8" width="4" height="4"></rect>
-            <rect x="16" y="8" width="4" height="4"></rect>
-            <rect x="8" y="4" width="4" height="4"></rect>
-            <rect x="12" y="4" width="4" height="4"></rect>
-            <rect x="6" y="14" width="12" height="6" rx="2"></rect>
-          </svg>
-        </div>
-        <span class="logo-text">Wildlife Guardian</span>
-      </div>
-      <div class="nav-menu" id="navMenu">
-        <a href="../../Home/Home.html" class="nav-item">Home</a>
-        <a href="index.html" class="nav-item active">Rescue Map</a>
-        <a href="../../Social/frontend/index.html" class="nav-item">Social</a>
-        <a href="../../SpeciesLibarary/SpeciesLibarary.html" class="nav-item">Species</a>
-        <a href="../../Game/Main/Game/GameUnity.html" class="nav-item">Game</a>
-        <a href="../../Contact/Contact.html" class="nav-item">Contact Us</a>
-      </div>
-      <div class="nav-actions">
-        <button class="btn-report" onclick="openCameraModal(event)">🚨 Report Now</button>
-        <button class="btn-login">→ Log in</button>
-        <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
-      </div>
-    </div>
+  <nav class="navbar" id="navbar"
+       data-page="rescue-map"
+       data-report-callback="openCameraModal(event)">
   </nav>
   <div class="map-wrapper" id="mapWrapper">
 
@@ -139,7 +104,7 @@
         </div>
 
         <!-- Nearest Clinic -->
-        <div id="nearestClinic" class="clinic-section"></div>
+        <!-- <div id="nearestClinic" class="clinic-section"></div> -->
 
         <!-- ───────── ACTION BUTTONS ───────── -->
         <div class="panel-action-row">
@@ -204,6 +169,23 @@
 
       <!-- Animal Info Form (shown after photo taken) -->
       <div id="previewSection" class="rm-form-section" style="display:none;">
+
+        <!-- Field: Người đăng (auto-fill từ tài khoản đăng nhập) -->
+        <div class="rm-field" id="reporterField">
+          <div class="rm-reporter-wrap">
+            <div class="rm-reporter-avatar" id="reporterAvatar">?</div>
+            <div class="rm-reporter-info">
+              <span class="rm-reporter-label">Người đăng báo cáo</span>
+              <span class="rm-reporter-name" id="reporterName">Đang tải...</span>
+            </div>
+            <span class="rm-reporter-badge" id="reporterBadge">Khách</span>
+          </div>
+          <!-- Hidden inputs để gửi lên backend -->
+          <input type="hidden" id="reporterUserId"   value="">
+          <input type="hidden" id="reporterFullName" value="">
+          <input type="hidden" id="reporterEmail"    value="">
+          <input type="hidden" id="reporterAvatarUrl" value="">
+        </div>
 
         <!-- Field: Animal Name -->
         <div class="rm-field">
@@ -334,7 +316,8 @@
 
   <script type="importmap">{"imports":{"@google/genai":"https://esm.run/@google/genai"}}</script>
   <script type="module" src="/Wildlife%20Guardian/ChatBotAI/chatbotai.js"></script>
-  <script src="/Wildlife%20Guardian/Home/js/nav.js"></script>
+  <!-- Navbar component dùng chung – thay thế nav.js cũ -->
+  <script src="/Wildlife%20Guardian/Home/js/navbar.js"></script>
   <script src="./script1.js"></script>
 
   <script>
@@ -358,24 +341,8 @@
     }
 
 
-    // Login/logout button logic
-    document.addEventListener("DOMContentLoaded", () => {
-      const user = localStorage.getItem("currentUser") || localStorage.getItem("isLoggedIn");
-      document.querySelectorAll(".btn-login").forEach(b => {
-        if (user) {
-          b.textContent = "← Log out";
-          b.onclick = () => {
-            localStorage.removeItem("currentUser");
-            localStorage.removeItem("isLoggedIn");
-            localStorage.removeItem("username");
-            window.location.reload();
-          };
-        } else {
-          b.textContent = "→ Log in";
-          b.onclick = () => { window.location.href = "../../Auth/login.html"; };
-        }
-      });
-    });
+    // Login/logout button logic nay được xử lý bởi navbar.js (WG_Navbar.updateAuthButtons)
+    // Không cần duplicate logic ở đây nữa.
   </script>
 </body>
 

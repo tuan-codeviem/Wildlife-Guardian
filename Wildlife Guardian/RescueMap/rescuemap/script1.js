@@ -109,11 +109,13 @@ function addPanelStyles() {
 }
 
 function escapeHtml(str) {
-    if (!str) return "";
-    return str.replace(/[&<>]/g, function (m) {
+    if (str === null || str === undefined) return "";
+    return String(str).replace(/[&<>"']/g, function (m) {
         if (m === "&") return "&amp;";
         if (m === "<") return "&lt;";
         if (m === ">") return "&gt;";
+        if (m === '"') return "&quot;";
+        if (m === "'") return "&#039;";
         return m;
     });
 }
@@ -382,205 +384,154 @@ async function fetchRescueReports() {
 
 
 function createReportCardHTML(report) {
+    // 1. Định nghĩa trạng thái
     const STATUS = {
-        emergency: {
-            label:   'Khẩn cấp',
-            icon:    'fas fa-circle-exclamation',
-            color:   '#f87171',
-            bg:      'rgba(239,68,68,0.15)',
-            border:  'rgba(239,68,68,0.35)',
-            cls:     'emergency'
-        },
-        progress: {
-            label:   'Đang cứu hộ',
-            icon:    'fas fa-spinner',
-            color:   '#60a5fa',
-            bg:      'rgba(59,130,246,0.15)',
-            border:  'rgba(59,130,246,0.35)',
-            cls:     'progress'
-        },
-        rescued: {
-            label:   'An toàn',
-            icon:    'fas fa-circle-check',
-            color:   '#4ade80',
-            bg:      'rgba(34,197,94,0.15)',
-            border:  'rgba(34,197,94,0.35)',
-            cls:     'rescued'
-        }
+        emergency: { label: 'Khẩn cấp', class: 'report-emergency' },
+        progress:  { label: 'Đang cứu hộ', class: 'report-progress' },
+        rescued:   { label: 'An toàn', class: 'report-rescued' }
     };
-    const st = STATUS[report.status] || STATUS.rescued;
+    const st = STATUS[report.status] || STATUS.emergency;
 
-    const isCoords = /^-?\d+\.\d+°[NS]/.test(report.location || '');
-    const addressHTML = isCoords
-        ? `<span data-report-id="${report.id}"
-               style="color:#64748b; font-style:italic;
-                      display:inline-flex; align-items:center; gap:5px;">
-             <i class="fas fa-circle-notch fa-spin" style="font-size:10px;"></i>
-             ${escapeHtml(report.location)}
-           </span>`
-        : `<span data-report-id="${report.id}" style="line-height:1.35;">
-             ${escapeHtml(report.location || 'Đang xác định...')}
-           </span>`;
-
-    // Lỗi 1 & 5 FIX: chỉ dùng những URL thực sự hợp lệ (chấp nhận http hoặc data:image/ cho ảnh vừa chụp)
+    // 2. Xử lý ảnh (ưu tiên ảnh thật, nếu không có dùng fallback avatar)
+    const fallbackSrc = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(report.animal) + '&background=0a1c12&color=4ade80&size=128&bold=true';
     const photoSrc = (report.photo && (report.photo.startsWith('http') || report.photo.startsWith('data:image/')))
         ? report.photo
-        : `https://ui-avatars.com/api/?name=${encodeURIComponent(report.animal)}&background=0a1c12&color=4ade80&size=128&bold=true`;
+        : fallbackSrc;
 
+    // 3. Xử lý địa chỉ (hiển thị icon loading nếu đang là tọa độ thô)
+    const isCoords = /^-?\d+\.\d+°[NS]/.test(report.location || '');
+    const addrText = escapeHtml(report.location || 'Đang xác định...');
+    const addressHTML = isCoords
+        ? `<i class="fas fa-circle-notch fa-spin" style="font-size:9px;opacity:0.5;"></i> <span data-report-id="${report.id}" style="font-style:italic;color:#94a3b8;">${addrText}</span>`
+        : `<span data-report-id="${report.id}">${addrText}</span>`;
+
+    // 4. Các thông tin phụ trợ (Ngày, Mô tả, SĐT, Người đăng)
+    const dateStr = typeof report.date === 'string' ? report.date : new Date(report.date).toLocaleString('vi-VN');
+    
     const descBlock = report.description
-        ? `<div style="
-              font-size:12.5px; color:#94a3b8;
-              background:rgba(255,255,255,0.04);
-              padding:10px 12px; border-radius:8px;
-              margin-top:12px; font-style:italic;
-              border-left:3px solid ${st.color};
-              line-height:1.55;
-           ">
-             &ldquo;${escapeHtml(report.description)}&rdquo;
-           </div>`
+        ? `<div style="font-size:12px;color:#94a3b8;font-style:italic;margin-top:6px;padding-left:8px;border-left:2px solid rgba(255,255,255,0.2);">&ldquo;${escapeHtml(report.description)}&rdquo;</div>`
         : '';
 
-    return `
-<div class="report-card ${st.cls}" style="align-items: stretch;">
-  <!-- Khối bên trái: Ảnh, Thông tin và Mô tả (Tự động co giãn) -->
-  <div style="flex:1; min-width:0; display:flex; flex-direction:column; justify-content:center;">
-    <div style="display:flex; gap:12px; align-items:flex-start;">
-    <img src="${photoSrc}"
-         alt="${escapeHtml(report.animal)}"
-         style="width:72px; height:72px; object-fit:cover; border-radius:10px;
-                border:1px solid rgba(255,255,255,0.1); flex-shrink:0;
-                box-shadow:0 4px 12px rgba(0,0,0,0.4);"
-         onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(report.animal)}&background=0a1c12&color=4ade80&size=128&bold=true'">
-    <div style="flex:1; min-width:0; display:flex; flex-direction:column; gap:5px;">
-      <h4 style="
-            margin:0; font-size:15px; font-weight:700;
-            color:#f8fafc; white-space:nowrap;
-            overflow:hidden; text-overflow:ellipsis;
-            line-height:1.2;
-         ">${escapeHtml(report.animal)}</h4>
-      <span style="
-              display:inline-flex; align-items:center; gap:5px;
-              width:max-content; padding:4px 12px;
-              border-radius:99px; font-size:11.5px; font-weight:700;
-              color:${st.color}; background:${st.bg};
-              border:1px solid ${st.border};
-              letter-spacing:0.3px;
-           ">
-        <i class="${st.icon}" style="font-size:10px;"></i>
-        ${st.label}
-      </span>
-      <p style="
-           margin:0; font-size:12px; color:#94a3b8;
-           display:flex; align-items:flex-start; gap:6px;
-         ">
-        <i class="fas fa-map-marker-alt"
-           style="color:var(--green-main); margin-top:2px; flex-shrink:0; font-size:11px;"></i>
-        ${addressHTML}
-      </p>
-      <p style="margin:0; font-size:11.5px; color:#64748b; display:flex; align-items:center; gap:5px;">
-        <i class="fas fa-clock" style="font-size:10px;"></i>
-        ${escapeHtml(report.date || '')}
-      </p>
-    </div>
-  </div>
-  ${descBlock}
-  </div>
-  <!-- Khối bên phải: Cụm nút bấm (Cố định chiều rộng không bị ép) -->
-  <div style="display:flex; flex-direction:column; align-items:flex-end; justify-content:center; gap:8px; border-left:1px dashed rgba(150,150,150,0.25); padding-left:14px; margin-left:8px; flex-shrink:0;">
-    <button class="report-action-btn locate-btn"
-            data-lat="${report.lat}" data-lng="${report.lng}"
-            style="
-              width:110px; padding:8px 10px;
-              background:rgba(34,197,94,0.1); color:#4ade80;
-              border:1px solid rgba(34,197,94,0.25); border-radius:var(--radius-pill);
-              font-family:var(--font); font-weight:600; cursor:pointer;
-              font-size:12.5px; display:flex; align-items:center; justify-content:center; gap:6px;
-              transition:all 0.2s;
-            "
-            onmouseover="this.style.background='rgba(34,197,94,0.2)';this.style.transform='translateY(-1px)'"
-            onmouseout="this.style.background='rgba(34,197,94,0.1)';this.style.transform='none'">
-      <i class="fas fa-crosshairs"></i> Vị trí 3D
-    </button>
-    <button class="report-action-btn delete-btn"
-            data-id="${report.id}"
-            style="
-              width:110px; padding:8px 10px;
-              background:rgba(239,68,68,0.1); color:#f87171;
-              border:1px solid rgba(239,68,68,0.25); border-radius:var(--radius-pill);
-              font-family:var(--font); font-weight:600; cursor:pointer;
-              font-size:12.5px; display:flex; align-items:center; justify-content:center; gap:6px;
-              transition:all 0.2s;
-            "
-            onmouseover="this.style.background='rgba(239,68,68,0.2)';this.style.transform='translateY(-1px)'"
-            onmouseout="this.style.background='rgba(239,68,68,0.1)';this.style.transform='none'">
-      <i class="fas fa-trash-alt"></i> Xóa
-    </button>
-  </div>
-</div>`;
-}
+    const phoneBlock = report.phone
+        ? `<div class="location" style="margin-top:4px;"><i class="fas fa-phone-alt" style="color:#60a5fa;"></i> <a href="tel:${escapeHtml(report.phone)}" style="color:#60a5fa;text-decoration:none;font-weight:600;">${escapeHtml(report.phone)}</a></div>`
+        : '';
 
+    const reporter = report.reporterName || 'Khách';
+    const rAvatar = report.reporterAvatar || '';
+    const rInitial = reporter.trim().charAt(0).toUpperCase();
+    const avatarHtml = (rAvatar && (rAvatar.startsWith('http') || rAvatar.startsWith('/')))
+        ? `<img src="${rAvatar}" alt="" style="width:18px;height:18px;border-radius:50%;object-fit:cover;" onerror="this.outerHTML='${rInitial}'">`
+        : `<div style="width:18px;height:18px;border-radius:50%;background:linear-gradient(135deg,#16a34a,#15803d);color:#fff;font-size:9px;font-weight:800;display:flex;align-items:center;justify-content:center;">${rInitial}</div>`;
+
+    // 5. Trả về cấu trúc HTML sạch, không lỗi đóng thẻ
+    return `
+    <div class="report-card ${st.class}" style="background: rgba(6,21,8,0.85); border: 1px solid rgba(255,255,255,0.09);">
+        <div class="report-card-main" style="flex: 1; min-width: 0;">
+            <img class="report-card-thumb" src="${photoSrc}" alt="${escapeHtml(report.animal)}" onerror="this.onerror=null;this.src='${fallbackSrc}'" style="border: 1px solid rgba(255,255,255,0.12);">
+            <div class="report-card-info" style="flex: 1; min-width: 0;">
+                <h4 title="${escapeHtml(report.animal)}" style="color: #f8fafc;">${escapeHtml(report.animal)}</h4>
+                <span class="status-tag" style="margin-bottom: 6px; display: inline-block;">${st.label}</span>
+                <div class="location" style="color: #94a3b8;"><i class="fas fa-map-marker-alt" style="color: #4ade80;"></i> ${addressHTML}</div>
+                ${phoneBlock}
+                <div class="location" style="margin-top:4px; color: #64748b;"><i class="fas fa-clock"></i> ${escapeHtml(dateStr)}</div>
+                ${descBlock}
+                <div style="display:flex;align-items:center;gap:6px;margin-top:8px;padding-top:8px;border-top:1px dashed rgba(255,255,255,0.1);">
+                    ${avatarHtml}
+                    <span style="font-size:11px;color:#64748b;">Đăng bởi: <strong style="color:#94a3b8;">${escapeHtml(reporter)}</strong></span>
+                </div>
+            </div>
+        </div>
+        <div class="report-card-actions">
+            <button class="small-btn locate-btn rcard-locate" data-id="${report.id}" data-lat="${report.lat}" data-lng="${report.lng}">
+                <i class="fas fa-crosshairs"></i> Vị trí 3D
+            </button>
+            <button class="small-btn delete-btn rcard-delete" data-id="${report.id}">
+                <i class="fas fa-trash-alt"></i> Xóa
+            </button>
+        </div>
+    </div>`;
+}
 
 function renderReportsPanel() {
-    const container = document.getElementById("reportsPanel");
+    const container = document.getElementById('reportsPanel');
     if (!container) return;
+    container.innerHTML = '';
     const filtered = filterReports();
     if (filtered.length === 0) {
-        container.innerHTML = `
-          <div style="
-            text-align:center; padding:40px 20px;
-            color:var(--text-muted);
-          ">
-            <i class="fas fa-binoculars"
-               style="font-size:42px; color:rgba(34,197,94,0.3); margin-bottom:14px; display:block;"></i>
-            <h3 style="color:var(--text-light); font-size:16px; margin-bottom:6px;">Chưa có báo cáo nào</h3>
-            <p style="font-size:13px; line-height:1.55;">
-              Nhấn <strong style="color:var(--orange);">🚨 Report Now</strong><br>để báo cáo động vật cần cứu hộ!
-            </p>
-          </div>`;
+        container.innerHTML = '<div style="text-align:center;padding:36px 16px;color:#94a3b8;"><i class="fas fa-binoculars" style="font-size:40px;color:rgba(34,197,94,0.28);margin-bottom:12px;display:block;"></i><h3 style="color:#f8fafc;font-size:15px;margin-bottom:6px;">Địáo cáo nào</h3><p style="font-size:12.5px;line-height:1.6;">Nhấn <strong style="color:#f97316;">&#128680; Report Now</strong><br>trên thanh menu để báo cáo!</p></div>';
         return;
     }
-    container.innerHTML = `
-      <div style="
-        font-size:13px; font-weight:700; color:var(--green-light);
-        border-bottom:1px solid var(--glass-border); padding-bottom:10px; margin-bottom:12px;
-        display:flex; align-items:center; gap:7px; letter-spacing:0.3px;
-      ">
-        <i class="fas fa-list-ul" style="opacity:0.7;"></i>
-        Danh sách báo cáo
-        <span style="
-          background:var(--green-dim); border:1px solid var(--green-border);
-          color:var(--green-light); border-radius:99px;
-          padding:2px 10px; font-size:11px; margin-left:auto;
-        ">${filtered.length}</span>
-      </div>`;
-    filtered.forEach((r) => (container.innerHTML += createReportCardHTML(r)));
-
-    
-    document.querySelectorAll(".locate-btn").forEach((btn) => {
-        btn.onclick = (e) => {
-            e.stopPropagation();
-            const lat = parseFloat(btn.dataset.lat);
-            const lng = parseFloat(btn.dataset.lng);
-            window.setActiveTab("map");
-            setTimeout(() => { 
-                if (viewer) viewer.camera.flyTo({ destination: Cesium.Cartesian3.fromDegrees(lng, lat, 2000), duration: 2 }); 
-            }, 200);
-        };
-    });
-    
-    document.querySelectorAll(".delete-btn").forEach((btn) => {
-        btn.onclick = (e) => {
-            e.stopPropagation();
-            const id = btn.dataset.id;
-            if(confirm("Bạn có chắc muốn ẩn báo cáo này khỏi bản đồ? (Cần có API backend để xóa vĩnh viễn)")) {
-                reports = reports.filter((r) => r.id !== id);
-                renderReportsPanel(); renderNearbyHelpers(); renderNearestClinic();
-                if (viewer) renderMarkersToMap(filterReports());
-                showToast("Đã ẩn báo cáo khỏi giao diện!", "success");
-            }
-        };
+    const heading = document.createElement('div');
+    heading.style.cssText = 'font-size:12.5px;font-weight:700;color:#4ade80;border-bottom:1px solid rgba(255,255,255,0.08);padding-bottom:10px;margin-bottom:12px;display:flex;align-items:center;gap:7px;letter-spacing:0.3px;';
+    heading.innerHTML = '<i class="fas fa-list-ul" style="opacity:0.7;"></i> Danh sách báo cáo <span style="background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.3);color:#4ade80;border-radius:99px;padding:2px 9px;font-size:10.5px;margin-left:auto;">' + filtered.length + '</span>';
+    container.appendChild(heading);
+    filtered.forEach(function(report) {
+        container.insertAdjacentHTML('beforeend', createReportCardHTML(report));
+        var card = container.lastElementChild;
+        if (!card) return;
+        var locBtn = card.querySelector('.rcard-locate');
+        if (locBtn) {
+            locBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                var rid = locBtn.dataset.id;
+                var lat = parseFloat(locBtn.dataset.lat);
+                var lng = parseFloat(locBtn.dataset.lng);
+                if (isNaN(lat) || isNaN(lng)) { showToast('⚠️ Tọa độ không hợp lệ!', 'error'); return; }
+                var orig = locBtn.innerHTML;
+                locBtn.innerHTML = '<i class="fas fa-spinner fa-spin" style="font-size:11px;"></i> Đang bay...';
+                locBtn.disabled = true; locBtn.style.opacity = '0.7';
+                window.setActiveTab('map');
+                function tryOpen(attempts) {
+                    var pd = popupDiv || document.getElementById('customPopup');
+                    var entity = viewer && viewer.entities.getById('report_' + rid);
+                    if (viewer && !viewer.isDestroyed() && entity && pd) {
+                        viewer.camera.flyTo({
+                            destination: Cesium.Cartesian3.fromDegrees(lng, lat, 1200), duration: 2,
+                            complete: function() {
+                                locBtn.innerHTML = orig; locBtn.disabled = false; locBtn.style.opacity = '1';
+                                var html = entity.properties && entity.properties.customHTML
+                                    ? (typeof entity.properties.customHTML.getValue === 'function' ? entity.properties.customHTML.getValue() : entity.properties.customHTML)
+                                    : null;
+                                if (html) {
+                                    activeEntity = entity;
+                                    pd.innerHTML = html; pd.style.display = 'block';
+                                    var cb = pd.querySelector('.close-btn');
+                                    if (cb) cb.onclick = function(){ pd.style.display='none'; activeEntity=null; };
+                                    if (entity.point) {
+                                        entity.point.pixelSize = new Cesium.ConstantProperty(26);
+                                        entity.point.outlineWidth = new Cesium.ConstantProperty(5);
+                                        setTimeout(function(){ if(entity.point){ entity.point.pixelSize=new Cesium.ConstantProperty(18); entity.point.outlineWidth=new Cesium.ConstantProperty(3); } }, 1500);
+                                    }
+                                }
+                            },
+                            cancel: function(){ locBtn.innerHTML=orig; locBtn.disabled=false; locBtn.style.opacity='1'; }
+                        });
+                    } else if (attempts > 0) {
+                        setTimeout(function(){ tryOpen(attempts-1); }, 400);
+                    } else {
+                        locBtn.innerHTML=orig; locBtn.disabled=false; locBtn.style.opacity='1';
+                        showToast('⚠️ Bản đồ chưa sẵn sàng, thử lại!', 'error');
+                    }
+                }
+                tryOpen(10);
+            });
+        }
+        var delBtn = card.querySelector('.rcard-delete');
+        if (delBtn) {
+            delBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                var id = delBtn.dataset.id;
+                if (confirm('Ẩn báo cáo này khỏi danh sách?')) {
+                    reports = reports.filter(function(r){ return r.id !== id; });
+                    renderReportsPanel(); renderNearbyHelpers(); renderNearestClinic();
+                    if (viewer) renderMarkersToMap(filterReports());
+                    showToast('✅ Đã ẩn báo cáo!', 'success');
+                }
+            });
+        }
     });
 }
+
 
 function initRealMap() {
     const mapContainer = document.getElementById("interactiveMap");
@@ -1142,6 +1093,7 @@ window.openCameraModal = async function(e) {
     document.getElementById("captureBtn").innerHTML = '<i class="fas fa-camera"></i> Chụp ảnh';
     
     await initCamera(); await fetchLocationAndAddress();
+    updateReporterInfo(); // Cập nhật thông tin người đăng
 }
 
 window.closeCameraModal = function() {
@@ -1151,6 +1103,62 @@ window.closeCameraModal = function() {
     stopCamera();
 };
 
+function updateReporterInfo() {
+    const wrapper = document.querySelector('.rm-reporter-wrap');
+    const avatarEl = document.getElementById('reporterAvatar');
+    const nameEl   = document.getElementById('reporterName');
+    const badgeEl  = document.getElementById('reporterBadge');
+    const userIdEl   = document.getElementById('reporterUserId');
+    const fullNameEl = document.getElementById('reporterFullName');
+    const emailEl    = document.getElementById('reporterEmail');
+    const avatarUrlEl= document.getElementById('reporterAvatarUrl');
+
+    if (!wrapper || !avatarEl || !nameEl) return;
+    wrapper.style.display = 'flex'; // Đảm bảo hiển thị
+
+    let user = null;
+    try {
+        const raw = localStorage.getItem('currentUser');
+        if (raw) user = JSON.parse(raw);
+    } catch(e) {}
+
+    if (user && (user.fullName || user.userId)) {
+        // ── Đã đăng nhập ──
+        const name    = user.fullName || 'Người dùng';
+        const avatarUrl = user.avatar || '';
+        const initial = name.trim().charAt(0).toUpperCase();
+
+        nameEl.textContent = name;
+        if (badgeEl) badgeEl.textContent = user.email || 'Đã đăng nhập';
+
+        // Nếu avatarEl là <div> thì hiển thị như avatar chữ cái hoặc ảnh
+        if (avatarEl.tagName === 'DIV' || avatarEl.tagName === 'SPAN') {
+            if (avatarUrl) {
+                avatarEl.innerHTML = `<img src="${avatarUrl}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" onerror="this.outerHTML='${initial}'">`;
+            } else {
+                avatarEl.textContent = initial;
+            }
+        } else {
+            // là <img>
+            avatarEl.src = avatarUrl || 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+        }
+
+        if (userIdEl)    userIdEl.value    = user.userId  || '';
+        if (fullNameEl)  fullNameEl.value  = name;
+        if (emailEl)     emailEl.value     = user.email   || '';
+        if (avatarUrlEl) avatarUrlEl.value = avatarUrl;
+
+    } else {
+        // ── Khách ──
+        nameEl.textContent = 'Khách (Guest)';
+        if (badgeEl) badgeEl.textContent = 'Không đăng nhập';
+        if (avatarEl.tagName === 'DIV' || avatarEl.tagName === 'SPAN') {
+            avatarEl.innerHTML = '<i class="fas fa-user" style="font-size:14px;"></i>';
+        } else {
+            avatarEl.src = 'https://cdn-icons-png.flaticon.com/512/6522/6522516.png';
+        }
+    }
+}
 window.setActiveTab = function (tabId) {
     activeTab = tabId;
     document.querySelectorAll(".tab-btn").forEach((btn) => btn.classList.toggle("active", btn.dataset.tab === tabId));

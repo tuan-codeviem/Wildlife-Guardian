@@ -329,9 +329,9 @@ html, body {
   border-left-width: 3px !important;
   border-left-style: solid !important;
 }
-.report-card.emergency { border-left-color: var(--red) !important; }
-.report-card.progress  { border-left-color: var(--blue) !important; }
-.report-card.rescued   { border-left-color: var(--green-main) !important; }
+.report-card.report-emergency { border-left-color: var(--red) !important; }
+.report-card.report-progress  { border-left-color: var(--blue) !important; }
+.report-card.report-rescued   { border-left-color: var(--green-main) !important; }
 
 .report-card:hover {
   background: rgba(34, 197, 94, 0.05) !important;
@@ -681,6 +681,37 @@ html, body {
 .rm-btn-submit:hover::before { transform: translateX(120%); }
 .rm-btn-submit:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(34,197,94,0.5); }
 .rm-btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+/* ═══════════════════════════════
+   REPORTER INFO BADGE (MODAL)
+═══════════════════════════════ */
+#reporterField {
+  margin-bottom: 0; /* The wrap inside will have margin */
+}
+
+.rm-reporter-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  margin-bottom: 18px; /* Replaces .rm-field margin */
+}
+
+.rm-reporter-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.rm-reporter-label { font-size: 11px; color: var(--text-muted); font-weight: 500; }
+.rm-reporter-name { font-size: 14px; color: var(--text-light); font-weight: 600; }
+
 
 /* ═══════════════════════════════
    RESPONSIVE

@@ -1,0 +1,690 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wildlife Guardian</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../Home/css/nav.css" />
+    <link rel="stylesheet" href="../../ChatBotAI/chatbot.css">
+  </head>
+  <body>
+    <!-- HIỆU ỨNG NỀN SAO ĐÊM VÀ GRADIENT (GIỐNG HOME) -->
+    <div class="social-bg-overlay" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -2; pointer-events: none; background: radial-gradient(ellipse 80% 60% at 20% 50%, rgba(5, 78, 22, 0.15) 0%, transparent 70%), radial-gradient(ellipse 60% 80% at 80% 30%, rgba(22, 163, 74, 0.1) 0%, transparent 60%), radial-gradient(ellipse 50% 50% at 60% 80%, rgba(249, 115, 22, 0.05) 0%, transparent 60%), linear-gradient(135deg, #020c05 0%, #041a0a 40%, #061505 100%);"></div>
+    <canvas id="social-canvas" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; pointer-events: none;"></canvas>
+
+    <!-- 1. THANH NAVBAR -->
+    <nav class="navbar" id="navbar">
+      <div class="mobile-nav" id="mobileNav">
+        <a href="../../Home/Home.html" data-i18n="nav_home">Home</a>
+        <a href="../../RescueMap/rescuemap/index.html" data-i18n="nav_rescue">Rescue Map</a>
+        <a href="index.html" class="active-mobile" data-i18n="nav_social">Social</a>
+        <a href="../../Game/Main/SpeciesLibrary/Species.html" data-i18n="nav_species">Species</a>
+        <a href="../../Game/Main/Game/GameUnity.html" data-i18n="nav_game">Game</a>
+        <a href="../../Contact/Contact.html" data-i18n="nav_contact">Contact Us</a>
+        <div class="mobile-actions">
+          <div class="lang-switcher" style="display: flex; align-items: center; justify-content: center; gap: 6px; color: white; font-weight: 600; margin-bottom: 10px;">
+            <span class="lang-text">EN</span>
+            <button class="lang-toggle-btn" style="background: none; border: none; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 4px; transition: transform 0.3s;" title="Switch language">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+              </svg>
+            </button>
+          </div>
+          <button class="btn-report" data-i18n="btn_report">🚨 Report Now</button>
+          <button class="btn-login" style="justify-content: center" data-i18n="btn_login">
+            → Log in
+          </button>
+        </div>
+      </div>
+      <div class="nav-container">
+        <!-- Logo -->
+        <div class="logo-area">
+          <div class="logo-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <rect x="4" y="8" width="4" height="4"></rect>
+              <rect x="16" y="8" width="4" height="4"></rect>
+              <rect x="8" y="4" width="4" height="4"></rect>
+              <rect x="12" y="4" width="4" height="4"></rect>
+              <rect x="6" y="14" width="12" height="6" rx="2"></rect>
+            </svg>
+          </div>
+          <span class="logo-text">Wildlife Guardian</span>
+        </div>
+
+        <!-- Menu Desktop (Sẽ biến mất khi màn hình nhỏ) -->
+        <div class="nav-menu" id="navMenu">
+          <a href="../../Home/Home.html" class="nav-item" data-i18n="nav_home">Home</a>
+          <a href="../../RescueMap/rescuemap/index.html" class="nav-item" data-i18n="nav_rescue"
+            >Rescue Map</a
+          >
+          <a href="index.html" class="nav-item active" data-i18n="nav_social">Social</a>
+          <a href="../../Game/Main/SpeciesLibrary/Species.html" class="nav-item" data-i18n="nav_species"
+            >Species Library</a
+          >
+          <a href="../../Game/Main/Game/GameUnity.html" class="nav-item" data-i18n="nav_game"
+            >Game</a
+          >
+          <a href="../../Contact/Contact.html" class="nav-item" data-i18n="nav_contact">Contact Us</a>
+          <!-- Hai nút này sẽ chỉ hiện trong menu 3 gạch khi màn hình cực nhỏ -->
+          <div class="mobile-only-buttons">
+            <div class="lang-switcher" style="display: flex; align-items: center; justify-content: center; gap: 6px; color: white; font-weight: 600; margin-bottom: 10px;">
+              <span class="lang-text">EN</span>
+              <button class="lang-toggle-btn" style="background: none; border: none; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 4px; transition: transform 0.3s;" title="Switch language">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                </svg>
+              </button>
+            </div>
+            <button class="btn-report" data-i18n="btn_report">🚨 Report Now</button>
+            <button class="btn-login" data-i18n="btn_login">→ Log in</button>
+          </div>
+        </div>
+
+        <!-- Cụm nút bên phải -->
+        <div class="nav-actions">
+          <div class="lang-switcher" style="display: flex; align-items: center; gap: 6px; color: white; font-weight: 600; margin-right: 10px;">
+            <span class="lang-text">EN</span>
+            <button class="lang-toggle-btn" style="background: none; border: none; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 4px; transition: transform 0.3s;" title="Switch language">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+              </svg>
+            </button>
+          </div>
+          <button class="btn-report" data-i18n="btn_report">🚨 Report Now</button>
+          <button class="btn-login" data-i18n="btn_login">→ Log in</button>
+          <!-- Nút 3 gạch (Mặc định ẩn) -->
+          <button class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- 2. POST, BÀI ĐĂNG -->
+    <!-- NỘI DUNG CHÍNH (MAIN CONTENT) -->
+    <main class="social-main">
+      <!-- CỘT TRÁI: KHUNG ĐĂNG BÀI & BẢNG TIN -->
+      <div class="feed-column">
+        <!-- 1. Khung tạo bài viết (Create Post) -->
+        <div class="create-post-card">
+          <div class="post-input-wrapper">
+            <img
+              id="myAvatar"
+              src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+              alt="Avatar"
+              class="avatar"
+            />
+            <textarea
+              id="post-content"
+              data-i18n="post_placeholder"
+              placeholder="Share something with the community..."
+            ></textarea>
+          </div>
+
+          <div
+            id="media-preview-container"
+            style="display: none; position: relative; margin: 10px 0 15px 55px"
+          >
+            <img
+              id="media-preview-img"
+              style="
+                max-width: 100%;
+                max-height: 250px;
+                border-radius: 12px;
+                object-fit: cover;
+                border: 1px solid #e0e6ed;
+              "
+            />
+            <button
+              id="remove-media-btn"
+              style="
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                background: rgba(0, 0, 0, 0.6);
+                color: white;
+                border: none;
+                border-radius: 50%;
+                width: 28px;
+                height: 28px;
+                cursor: pointer;
+                font-weight: bold;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: 0.2s;
+              "
+            >
+              ✕
+            </button>
+          </div>
+
+          <div class="post-actions">
+            <div class="action-left">
+              <!-- Nút Đính kèm Ảnh/Video -->
+              <label class="attach-btn" data-i18n="btn_photo">
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                  <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                  <polyline points="21 15 16 10 5 21"></polyline>
+                </svg>
+                Photo
+                <!-- Thẻ input ẩn để chọn file -->
+                <input
+                  type="file"
+                  id="post-media"
+                  accept="image/*,video/*"
+                  hidden
+                />
+              </label>
+
+              <!-- Dropdown Chọn Thể Loại -->
+              <select id="post-category" class="category-select">
+                <option value="story" data-i18n="cat_story">Story</option>
+                <option value="adoption" data-i18n="cat_adoption">Adoption</option>
+                <option value="donations" data-i18n="cat_donations">Donations</option>
+                <option value="organizations" data-i18n="cat_orgs">Organizations</option>
+              </select>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 15px;">
+              <!-- Nút Đăng Bài -->
+              <button id="btn-post" class="btn-post" data-i18n="btn_post">Post</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Thanh lọc bài viết (Filter Bar) -->
+        <div class="post-filters">
+          <button class="filter-btn active" data-i18n="filter_all" data-category="all posts">All Posts</button>
+          <button class="filter-btn" data-i18n="filter_adoption" data-category="adoption">Adoption</button>
+          <button class="filter-btn" data-i18n="filter_donations" data-category="donations">Donations</button>
+          <button class="filter-btn" data-i18n="filter_orgs" data-category="organizations">Organizations</button>
+          <button class="filter-btn" data-i18n="filter_stories" data-category="story">Stories</button>
+        </div>
+
+        <!-- 3. Khu vực hiển thị các bài viết -->
+        <div id="posts-feed">
+          <!-- Bài viết sẽ được JS đổ vào đây -->
+        </div>
+      </div>
+
+      <!-- CỘT PHẢI: SIDEBAR -->
+      <div class="sidebar-column">
+        
+        <!-- KHU VỰC KẾT BẠN (FRIENDS) -->
+        <div class="friend-requests-card" style="margin-top: 20px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+            <h4 style="margin: 0; font-size: 16px; color: var(--text-primary);" data-i18n="title_friends">Friends</h4>
+            <!-- Nút Chuông Thông Báo -->
+            <div id="btnShowRequests" style="position: relative; cursor: pointer; display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; background: #f8fafc; border-radius: 50%; border: 1px solid #e2e8f0; transition: 0.2s;" title="Friend requests">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+              <span id="requestBadge" style="position: absolute; top: -5px; right: -5px; background: #e91e63; color: white; width: 16px; height: 16px; border-radius: 50%; font-size: 10px; display: none; align-items: center; justify-content: center; font-weight: bold; border: 2px solid white;">0</span>
+            </div>
+          </div>
+          
+          <div style="position: relative; margin-bottom: 15px">
+            <input type="text" id="searchFriendInput" data-i18n="search_friends_placeholder" placeholder="Enter a name to find friends..." style="width: 100%; padding: 10px 15px; border-radius: 20px; border: 1px solid #e0e0e0; background: #f8fafc; outline: none; font-size: 13px; box-sizing: border-box;">
+          </div>
+          
+          <!-- Kết quả tìm kiếm -->
+          <div id="friendSearchResults" style="display: flex; flex-direction: column; gap: 10px; max-height: 200px; overflow-y: auto;">
+            <!-- Dữ liệu JS đổ vào -->
+          </div>
+
+          <!-- Khung chứa lời mời kết bạn (Ẩn theo mặc định, bấm chuông mới hiện) -->
+          <div id="requestsWrapper" style="display: none; margin-top: 15px; border-top: 1px solid #eee; padding-top: 15px;">
+            <h5 style="margin: 0 0 10px 0; font-size: 14px; color: #666;" data-i18n="title_requests">Requests</h5>
+            <div id="pendingRequestsContainer" style="display: flex; flex-direction: column; gap: 10px;">
+              <p style="font-size: 13px; color: #888; text-align: center;" data-i18n="no_invitations">No invitations</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="messages-card">
+          <h4 style="margin: 0 0 15px 0; font-size: 16px; color: var(--text-primary);" data-i18n="title_messages">
+            Messages
+          </h4>
+
+          <div style="position: relative; margin-bottom: 15px">
+            <svg
+              style="
+                position: absolute;
+                left: 12px;
+                top: 50%;
+                transform: translateY(-50%);
+                pointer-events: none;
+              "
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#888"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+
+            <input
+              type="text"
+              id="searchUser"
+              data-i18n="search_messages_placeholder"
+              placeholder="Search friends..."
+              style="
+                width: 100%;
+                padding: 10px 15px 10px 35px;
+                border-radius: 20px;
+                border: 1px solid #e0e0e0;
+                background: #f0eeec;
+                outline: none;
+                font-size: 13px;
+                box-sizing: border-box;
+                font-family: inherit;
+              "
+            />
+          </div>
+
+          <div
+            id="userListContainer"
+            class="chat-list"
+            style="display: flex; flex-direction: column; gap: 15px"
+          ></div>
+        </div>
+      </div>
+    </main>
+
+    <!-- 3. MESSAGES -->
+    <div
+      id="chatBox"
+      style="
+        display: none;
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 320px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+        z-index: 999;
+        flex-direction: column;
+        overflow: hidden;
+      "
+    >
+      <div
+        style="
+          background: #31a24c;
+          color: white;
+          padding: 12px 15px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        "
+      >
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <img id="chatAvatar" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Avatar" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 2px solid white; background: white;">
+            <h4 id="chatName" style="margin: 0; font-size: 16px">User Name</h4>
+        </div>
+        <span
+          id="closeChat"
+          style="cursor: pointer; font-size: 18px; font-weight: bold"
+          >&times;</span
+        >
+      </div>
+
+      <div
+        id="chatMessages"
+        style="
+          height: 300px;
+          padding: 15px;
+          overflow-y: auto;
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+          background: #f0f2f5;
+        "
+      ></div>
+
+      <div
+        style="
+          padding: 10px;
+          border-top: 1px solid #ddd;
+          display: flex;
+          gap: 8px;
+          background: white;
+        "
+      >
+        <input
+          type="text"
+          id="chatInput"
+          placeholder="Aa"
+          style="
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            outline: none;
+          "
+        />
+        <button
+          id="sendChatBtn"
+          style="
+            background: transparent;
+            border: none;
+            color: #31a24c;
+            cursor: pointer;
+          "
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M2 21l21-9L2 3v7l15 2-15 2v7z"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div
+      id="miniProfilePopup"
+      style="
+        display: none;
+        position: absolute;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        padding: 20px;
+        width: 220px;
+        text-align: center;
+        z-index: 9999;
+        border: 1px solid #eee;
+      "
+    >
+      <button
+        id="closeMiniProfile"
+        style="
+          position: absolute;
+          top: 10px;
+          right: 10px;
+          background: none;
+          border: none;
+          font-size: 18px;
+          cursor: pointer;
+          color: #888;
+        "
+      >
+        ✖
+      </button>
+
+      <img
+        id="popupAvatar"
+        src=""
+        alt="Avatar"
+        style="
+          width: 70px;
+          height: 70px;
+          border-radius: 50%;
+          object-fit: cover;
+          margin-bottom: 10px;
+          border: 2px solid #0084ff;
+        "
+      />
+
+      <h4
+        id="popupName"
+        style="margin: 0 0 15px 0; color: #333; font-size: 16px"
+      >
+        User Name
+      </h4>
+
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <button
+          id="popupMessageBtn"
+          data-i18n="btn_message"
+          style="
+            background: #0084ff;
+            color: white;
+            border: none;
+            padding: 8px 0;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+          "
+        >
+          Message
+        </button>
+        <button
+          id="popupAddFriendBtn"
+          data-i18n="btn_add_friend"
+          style="
+            display: none;
+            background: #eefdf4;
+            color: #16a34a;
+            border: none;
+            padding: 8px 0;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+            transition: 0.2s;
+          "
+        >
+          Add friend
+        </button>
+      </div>
+    </div>
+
+    <!-- BẢNG DROPDOWN TÀI KHOẢN (AVATAR GÓC TRÊN PHẢI) -->
+    <div
+      id="userDropdownPopup"
+      class="user-dropdown-popup"
+      style="display: none;"
+    >
+      <img
+        id="dropdownAvatar"
+        src=""
+        alt="Avatar"
+        class="dropdown-avatar-img"
+      />
+      <h4 id="dropdownName" class="dropdown-name-text">User Name</h4>
+
+      <div class="dropdown-actions">
+        <button
+          id="dropdownSettingsBtn"
+          data-i18n="btn_settings"
+          class="dropdown-btn dropdown-btn-settings"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+          Settings
+        </button>
+        <button
+          id="dropdownLogoutBtn"
+          data-i18n="btn_logout"
+          class="dropdown-btn dropdown-btn-logout"
+        >
+          Log out
+        </button>
+      </div>
+    </div>
+
+    <!-- XOÁ BÀI ĐĂNG  -->
+    <div
+      id="customDeleteConfirm"
+      style="
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.65);
+        z-index: 10000;
+        justify-content: center;
+        align-items: center;
+        backdrop-filter: blur(2px);
+      "
+    >
+      <div style="background: white; border-radius: 12px; width: 260px; display: flex; flex-direction: column; overflow: hidden; text-align: center; font-size: 14px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+        <div style="padding: 24px 20px; border-bottom: 1px solid #dbdbdb;">
+          <h3 style="margin: 0 0 8px 0; font-size: 18px; font-weight: 600; color: #000;" data-i18n="del_post_title">Delete post?</h3>
+          <p style="margin: 0; color: #737373; font-size: 14px; line-height: 1.4;" data-i18n="del_post_desc">Are you sure you want to delete this post?</p>
+        </div>
+        <button id="confirmDeleteBtn" data-i18n="btn_delete" style="background: transparent; border: none; border-bottom: 1px solid #dbdbdb; color: #ed4956; font-weight: 700; padding: 14px; cursor: pointer; font-size: 14px; transition: 0.2s;" onmouseover="this.style.background='#f8f9fa'" onmouseout="this.style.background='transparent'">Delete</button>
+        <button id="cancelDeleteBtn" data-i18n="btn_cancel" style="background: transparent; border: none; color: #000; padding: 14px; cursor: pointer; font-size: 14px; transition: 0.2s;" onmouseover="this.style.background='#f8f9fa'" onmouseout="this.style.background='transparent'">Cancel</button>
+      </div>
+    </div>
+
+    <!-- HỘP THOẠI XÓA BÌNH LUẬN (STYLE INSTAGRAM) -->
+    <div id="commentDeleteConfirm" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.65); z-index: 10005; justify-content: center; align-items: center; backdrop-filter: blur(2px);">
+      <div style="background: white; border-radius: 12px; width: 260px; display: flex; flex-direction: column; overflow: hidden; text-align: center; font-size: 14px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+        <div style="padding: 24px 20px; border-bottom: 1px solid #dbdbdb;">
+          <h3 style="margin: 0 0 8px 0; font-size: 18px; font-weight: 600; color: #000;" data-i18n="del_comment_title">Delete comment?</h3>
+          <p style="margin: 0; color: #737373; font-size: 14px; line-height: 1.4;" data-i18n="del_comment_desc">Are you sure you want to delete this comment?</p>
+        </div>
+        <button id="confirmDeleteCommentBtn" data-i18n="btn_delete" style="background: transparent; border: none; border-bottom: 1px solid #dbdbdb; color: #ed4956; font-weight: 700; padding: 14px; cursor: pointer; font-size: 14px; transition: 0.2s;" onmouseover="this.style.background='#f8f9fa'" onmouseout="this.style.background='transparent'">Delete</button>
+        <button id="cancelDeleteCommentBtn" data-i18n="btn_cancel" style="background: transparent; border: none; color: #000; padding: 14px; cursor: pointer; font-size: 14px; transition: 0.2s;" onmouseover="this.style.background='#f8f9fa'" onmouseout="this.style.background='transparent'">Cancel</button>
+      </div>
+    </div>
+
+    <!-- HỘP THOẠI CHỈNH SỬA BÀI VIẾT -->
+    <div id="editPostModal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.65); z-index: 10005; justify-content: center; align-items: center; backdrop-filter: blur(2px);">
+      <div style="background: white; border-radius: 16px; width: 500px; max-width: 90%; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 4px 25px rgba(0,0,0,0.2);">
+        <div style="padding: 16px 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin: 0; font-size: 18px; font-weight: 600; color: #000;" data-i18n="edit_post_title">Edit post</h3>
+          <button id="closeEditModalBtn" style="background: none; border: none; font-size: 20px; cursor: pointer; color: #888; transition: 0.2s;" onmouseover="this.style.color='#dc3545'" onmouseout="this.style.color='#888'">✖</button>
+        </div>
+        <div style="padding: 20px;">
+          <textarea id="editPostContent" style="width: 100%; height: 100px; border: 1px solid #ddd; border-radius: 12px; padding: 12px; font-size: 15px; outline: none; resize: none; box-sizing: border-box; margin-bottom: 15px; font-family: inherit;"></textarea>
+          
+          <select id="editPostCategory" style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #ddd; outline: none; margin-bottom: 15px; font-size: 14px; font-family: inherit; cursor: pointer;">
+            <option value="story" data-i18n="cat_story">Story</option>
+            <option value="adoption" data-i18n="cat_adoption">Adoption</option>
+            <option value="donations" data-i18n="cat_donations">Donations</option>
+            <option value="organizations" data-i18n="cat_orgs">Organizations</option>
+          </select>
+
+          <div id="editMediaPreviewContainer" style="display: none; position: relative; margin-bottom: 15px;">
+            <img id="editMediaPreviewImg" style="width: 100%; max-height: 200px; object-fit: cover; border-radius: 12px; border: 1px solid #eee;">
+            <button id="editRemoveMediaBtn" style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.6); color: white; border: none; border-radius: 50%; width: 28px; height: 28px; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center;">✕</button>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <label class="attach-btn" data-i18n="btn_change_media" style="cursor: pointer; display: flex; align-items: center; gap: 8px; color: #16a34a; font-weight: 600; font-size: 14px; padding: 8px 16px; background: #eefdf4; border-radius: 20px; transition: 0.2s;" onmouseover="this.style.background='#dcfce7'" onmouseout="this.style.background='#eefdf4'">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg> Change media <input type="file" id="editPostMedia" accept="image/*,video/*" hidden>
+            </label>
+            <button id="saveEditPostBtn" data-i18n="btn_save_changes" style="background: #16a34a; color: white; border: none; padding: 10px 24px; border-radius: 20px; font-weight: bold; font-size: 15px; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#15803d'" onmouseout="this.style.background='#16a34a'">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- HỘP THOẠI CẬP NHẬT HỒ SƠ LẦN ĐẦU ĐĂNG NHẬP -->
+    <div id="profileSetupModal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.6); z-index: 10001; justify-content: center; align-items: center; backdrop-filter: blur(5px);">
+      <div style="background: white; padding: 30px; border-radius: 20px; width: 320px; text-align: center; box-shadow: 0 15px 30px rgba(0,0,0,0.2); position: relative;">
+        <button id="closeProfileModal" style="display: none; position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 20px; cursor: pointer; color: #888; transition: 0.2s;">✖</button>
+        <h3 id="profileModalTitle" style="margin: 0 0 10px 0; color: #333; font-size: 20px;" data-i18n="update_profile_title">Update profile</h3>
+        <p id="profileModalDesc" style="font-size: 14px; color: #666; margin-bottom: 20px;" data-i18n="update_profile_desc">Choose an avatar and display name to get started!</p>
+
+        <label style="display: inline-block; position: relative; cursor: pointer; margin-bottom: 20px;" title="Bấm để chọn ảnh">
+          <img id="setupAvatarPreview" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" style="width: 110px; height: 110px; border-radius: 50%; object-fit: cover; border: 3px solid #16a34a; padding: 3px;">
+          <div style="position: absolute; bottom: 5px; right: 5px; background: #16a34a; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid white; font-size: 16px;">
+            📷
+          </div>
+          <input type="file" id="setupAvatarInput" accept="image/*" hidden>
+        </label>
+
+        <input type="text" id="setupNameInput" data-i18n="name_placeholder" placeholder="Your display name..." style="width: 100%; padding: 12px 15px; border-radius: 12px; border: 1px solid #ddd; outline: none; margin-bottom: 20px; box-sizing: border-box; text-align: center; font-weight: 600; font-size: 15px;">
+
+        <button id="saveProfileBtn" data-i18n="btn_save_profile" style="width: 100%; background: #16a34a; color: white; border: none; padding: 12px; border-radius: 12px; font-weight: bold; cursor: pointer; margin-bottom: 12px; transition: 0.2s; font-size: 15px;">Save Profile</button>
+        <button id="skipProfileBtn" data-i18n="btn_skip" style="width: 100%; background: #f1f5f9; color: #666; border: none; padding: 12px; border-radius: 12px; font-weight: bold; cursor: pointer; transition: 0.2s; font-size: 15px;">Skip (Anonymous)</button>
+      </div>
+    </div>
+
+    <div class="chat-bot-AI">
+            
+            <div class="AIassit">
+                <svg class="pixel-phoenix" viewBox="0 0 32 32" width="40" height="40">
+                    <rect x="12" y="16" width="8" height="8" fill="#FF6B35" />
+                    <rect x="14" y="12" width="4" height="4" fill="#FF6B35" />
+                    <rect x="18" y="13" width="2" height="2" fill="#FFD93D" />
+                    <rect x="15" y="13" width="2" height="2" fill="#1a1a1a" />
+                    <rect class="wing" x="8" y="16" width="4" height="6" fill="#FF8C42" />
+                    <rect class="wing" x="20" y="16" width="4" height="6" fill="#FF8C42" />
+                    <rect x="10" y="24" width="2" height="4" fill="#FF6B35" />
+                    <rect x="14" y="24" width="2" height="6" fill="#FFD93D" />
+                    <rect x="18" y="24" width="2" height="4" fill="#FF6B35" />
+                    <rect x="13" y="8" width="2" height="4" fill="#FFD93D" />
+                    <rect x="15" y="6" width="2" height="6" fill="#FF6B35" />
+                    <rect x="17" y="8" width="2" height="4" fill="#FFD93D" />
+                </svg>
+                <div class="sparkle-badge">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+                </div>
+            </div>
+
+            <div class="chatwindow">
+                <div class="chat-header">
+                    <div class="chat-header-info">
+                        <div class="chat-avatar">
+                            <svg viewBox="0 0 32 32" width="20" height="20">
+                                <rect x="12" y="16" width="8" height="8" fill="#FF6B35" />
+                                <rect x="14" y="12" width="4" height="4" fill="#FF6B35" />
+                                <rect x="18" y="13" width="2" height="2" fill="#FFD93D" />
+                                <rect x="15" y="13" width="2" height="2" fill="#1a1a1a" />
+                                <rect x="8" y="16" width="4" height="6" fill="#FF8C42" />
+                                <rect x="20" y="16" width="4" height="6" fill="#FF8C42" />
+                            </svg>
+                        </div>
+                        <div class="chat-title-group">
+                            <h3>Phoenix AI</h3>
+                            <p>Wildlife Assistant</p>
+                        </div>
+                    </div>
+                    <button class="close">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                    </button>
+                </div>
+
+                <div class="chat">
+                    <div class="model">
+                        <p>Hello! I'm Phoenix, your wildlife guardian assistant!</p>
+                    </div>
+                </div>
+
+                <div class="inputarea">
+                    <input type="text" placeholder="Ask Phoenix anything...">
+                    <button>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="importmap">
+    {
+    "imports": {
+      "@google/genai": "https://esm.run/@google/genai"
+    }
+  }
+</script>
+
+    <script type="module" src="../../ChatBotAI/chatbotai.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>

@@ -11,13 +11,9 @@ const rescueSchema = new mongoose.Schema({
     phone:       String,          // SĐT liên hệ
 
     // ── Người đăng báo cáo ─────────────────────────────────────────────
-    // reporter (String) – giữ lại để tương thích ngược với dữ liệu cũ
-    reporter: String,
-
-    // reportedBy (Object) – liên kết đầy đủ với tài khoản người dùng
-    // Được backend điền vào từ JWT session hoặc frontend gửi kèm
-    reportedBy: {
-        userId:   { type: String, default: null },   // _id của User document
+    reporter: String,             // Tương thích ngược (tên người dùng dạng String)
+    reportedBy: {                 // Liên kết đầy đủ với tài khoản người dùng
+        userId:   { type: String, default: null },
         fullName: { type: String, default: 'Khách' },
         email:    { type: String, default: '' },
         avatar:   { type: String, default: '' }
@@ -30,4 +26,5 @@ const rescueSchema = new mongoose.Schema({
     createdAt: { type: Date, default: Date.now }
 });
 
-module.exports = mongoose.model('Rescue', rescueSchema);
+// Dùng mẫu này để tránh lỗi đè model khi require nhiều lần
+module.exports = mongoose.models.Rescue || mongoose.model('Rescue', rescueSchema);
