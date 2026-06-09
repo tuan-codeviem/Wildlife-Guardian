@@ -268,3 +268,61 @@ if (sendBtn) sendBtn.addEventListener("click", sendMessage);
 if (inputEl) inputEl.addEventListener("keydown", (e) => {
     if (e.key === "Enter") sendMessage();
 });
+
+/* ════════════════════════════════════════════════════
+   QUICK REPLIES LOGIC
+════════════════════════════════════════════════════ */
+document.addEventListener("DOMContentLoaded", () => {
+    const quickRepliesBox = document.getElementById("quickReplies");
+    const chatInput = document.getElementById("cwInput") || document.querySelector(".inputarea input");
+
+    if (quickRepliesBox && chatInput) {
+        const scrollHint = document.querySelector(".qr-scroll-hint");
+
+        // Function to check if scrolled to end
+        const checkScroll = () => {
+            if (!scrollHint) return;
+            // Cho khoảng dung sai 2px
+            if (quickRepliesBox.scrollWidth - quickRepliesBox.clientWidth <= quickRepliesBox.scrollLeft + 2) {
+                scrollHint.classList.add("hidden");
+            } else {
+                scrollHint.classList.remove("hidden");
+            }
+        };
+
+        // Check initially
+        checkScroll();
+
+        // Listen to scroll events
+        quickRepliesBox.addEventListener("scroll", checkScroll);
+
+        // Hỗ trợ cuộn ngang bằng con lăn chuột (Tăng cường UX)
+        quickRepliesBox.addEventListener("wheel", (evt) => {
+            evt.preventDefault();
+            quickRepliesBox.scrollLeft += evt.deltaY;
+            // Không cần gọi checkScroll ở đây vì sự kiện "scroll" sẽ tự bắt
+        });
+
+        const qrButtons = quickRepliesBox.querySelectorAll(".qr-btn");
+        qrButtons.forEach(btn => {
+            btn.addEventListener("click", () => {
+                // Lấy nội dung chữ, loại bỏ các icon emoji (⚡💡🐾🌿)
+                let text = btn.textContent.replace(/[⚡💡🐾🌿]/g, "").trim();
+
+                // Điền vào ô input
+                chatInput.value = text;
+
+                // Kích hoạt animation phản hồi
+                btn.classList.add("selected");
+
+                // Trực tiếp focus vào ô chat để user tiện nhấn Enter ngay
+                chatInput.focus();
+
+                // Gỡ animation sau khi hoàn thành
+                setTimeout(() => {
+                    btn.classList.remove("selected");
+                }, 400);
+            });
+        });
+    }
+});
