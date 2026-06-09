@@ -121,8 +121,8 @@ html, body {
 /* View Globe Button – !important needed to beat style2.css override */
 .view-home-btn {
   position: absolute !important;
-  bottom: 30px !important;
-  right: 30px !important;
+  bottom: 90px !important;
+  right: 24px !important;
   top: auto !important;   /* neutralize style2.css top: 20px */
   left: auto !important;  /* neutralize style2.css left: 20px */
   z-index: 200 !important;
@@ -766,7 +766,7 @@ html, body {
 .map-wrapper {
   position: fixed !important;
   top: 0 !important; left: 0 !important;
-  width: 100vw !important; height: 100vh !important;
+  width: 100% !important; height: 100% !important;
   z-index: 0 !important;
 }
 
@@ -779,7 +779,7 @@ html, body {
   .map-wrapper {
     display: flex !important;
     flex-direction: column !important;
-    overflow: hidden !important;
+    overflow: visible !important;
   }
 
   /* Bỏ overflow:hidden khỏi body trên mobile để phần panel có thể scroll */
@@ -787,15 +787,16 @@ html, body {
     overflow: hidden !important; /* giữ hidden để không có thanh scroll ngang */
   }
 
-  /* Globe: cố định 55vh, Cesium canvas sẽ fill vào đây */
+  /* Globe: cố định 55%, Cesium canvas sẽ fill vào đây */
   #interactiveMap {
     position: relative !important;
-    flex: 0 0 55vh !important;
-    height: 55vh !important;
+    flex: 0 0 calc(55% - 68px) !important;
+    height: calc(55% - 68px) !important;
+    margin-top: 68px !important;
     width: 100% !important;
     top: auto !important;
     left: auto !important;
-    overflow: hidden !important;
+    overflow: visible !important;
   }
 
   /* Cesium canvas bên trong phải fill 100% của #interactiveMap */
@@ -810,12 +811,12 @@ html, body {
     left: 0 !important;
   }
 
-  /* Panel: chiếm 45vh dưới, scroll được bên trong */
+  /* Panel: chiếm 45% dưới, scroll được bên trong */
   .floating-panel {
     position: relative !important;
-    flex: 0 0 45vh !important;
-    height: 45vh !important;
-    max-height: 45vh !important;
+    flex: 0 0 45% !important;
+    height: 45% !important;
+    max-height: 45% !important;
     width: 100% !important;
     top: auto !important;
     bottom: auto !important;
@@ -831,7 +832,7 @@ html, body {
   /* Nút View Globe: fixed, nằm ngay trên viền panel */
   .view-home-btn {
     position: fixed !important;
-    bottom: calc(45vh + 10px) !important;
+    bottom: calc(45% + 10px) !important;
     right: 16px !important;
     top: auto !important;
   }
@@ -850,6 +851,10 @@ html, body {
 }
 
 /* (6) Chatbot always top-most – never blocked by Cesium or floating panel */
+.rm-modal-overlay.open ~ .chat-bot-AI,
+.rm-modal-overlay[style*="display: flex"] ~ .chat-bot-AI {
+  display: none !important;
+}
 .wg-chatbot,
 #chatbot-container,
 .chat-bot-AI {
@@ -876,25 +881,6 @@ html, body {
    but whose !important rules we counteract here)
 ══════════════════════════════════════════════ */
 
-/* Nav items: dark mode text (white instead of gray) */
-.nav-item {
-  color: rgba(255,255,255,0.75) !important;
-}
-.nav-item:hover {
-  color: var(--green-light) !important;
-  background: rgba(34, 197, 94, 0.1) !important;
-  border-radius: 10px;
-}
-.nav-item.active {
-  color: var(--green-main) !important;
-  background: rgba(34, 197, 94, 0.12) !important;
-  border-color: rgba(34, 197, 94, 0.3) !important;
-}
-
-/* Logo text: white */
-.logo-text {
-  color: #fff !important;
-}
 
 /* Tab-btn: override Bao's light theme tabs that bleed through */
 .panel-tabs .tab-btn {

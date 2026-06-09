@@ -7,7 +7,8 @@
   <title>Rescue Map – Bản đồ Cứu hộ Động vật | Wildlife Guardian</title>
 
   <!-- FontAwesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    crossorigin="anonymous" referrerpolicy="no-referrer">
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -39,9 +40,7 @@
        (data-page xác định mục active)
        (data-report-callback gọi hàm Report Now)
   ========================================== -->
-  <nav class="navbar" id="navbar"
-       data-page="rescue-map"
-       data-report-callback="openCameraModal(event)">
+  <nav class="navbar" id="navbar" data-page="rescue-map" data-report-callback="openCameraModal(event)">
   </nav>
   <div class="map-wrapper" id="mapWrapper">
 
@@ -94,13 +93,30 @@
       <div class="panel-scroll">
         <div id="reportsPanel" class="reports-list"></div>
 
-        <!-- Nearby Helpers -->
-        <div class="helpers-section">
+        <!-- Cẩm nang sơ cứu nhanh -->
+        <div class="helpers-section first-aid-section">
           <div class="section-header">
-            <i class="fas fa-hand-holding-heart"></i>
-            <span>Người hỗ trợ gần đây</span>
+            <i class="fas fa-book-medical"></i>
+            <span>Cẩm nang sơ cứu nhanh</span>
           </div>
-          <div id="helpersList" class="helpers-list"></div>
+          <div class="first-aid-list" style="padding: 12px; display: flex; flex-direction: column; gap: 10px;">
+            <div style="background: #f8fafc; border-left: 4px solid #f59e0b; padding: 10px 12px; border-radius: 8px;">
+              <h4 style="margin: 0 0 4px 0; color: #b45309; font-size: 13px;"><i class="fas fa-exclamation-triangle"></i> 1. Giữ khoảng cách an toàn</h4>
+              <p style="margin: 0; font-size: 12px; color: #475569;">Đừng vội tiếp cận. Động vật hoang dã khi hoảng sợ có thể tấn công. Hãy quan sát từ xa.</p>
+            </div>
+            <div style="background: #f0fdf4; border-left: 4px solid #10b981; padding: 10px 12px; border-radius: 8px;">
+              <h4 style="margin: 0 0 4px 0; color: #047857; font-size: 13px;"><i class="fas fa-box-open"></i> 2. Chuẩn bị hộp tối</h4>
+              <p style="margin: 0; font-size: 12px; color: #475569;">Dùng hộp các-tông có lỗ thoáng khí. Lót vải mềm bên trong để tạo không gian tối và yên tĩnh.</p>
+            </div>
+            <div style="background: #eff6ff; border-left: 4px solid #3b82f6; padding: 10px 12px; border-radius: 8px;">
+              <h4 style="margin: 0 0 4px 0; color: #1d4ed8; font-size: 13px;"><i class="fas fa-ban"></i> 3. KHÔNG tự ý cho ăn</h4>
+              <p style="margin: 0; font-size: 12px; color: #475569;">Cho ăn sai cách hoặc ép uống nước có thể làm con vật sặc hoặc tử vong ngay lập tức.</p>
+            </div>
+            <div style="background: #fef2f2; border-left: 4px solid #ef4444; padding: 10px 12px; border-radius: 8px; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#fee2e2'" onmouseout="this.style.background='#fef2f2'" onclick="window.open('https://env4wildlife.org/', '_blank')">
+              <h4 style="margin: 0 0 4px 0; color: #b91c1c; font-size: 13px; display: flex; justify-content: space-between;"><span><i class="fas fa-phone-volume"></i> 4. Gọi chuyên gia</span> <i class="fas fa-external-link-alt" style="color: #fca5a5; font-size: 11px;"></i></h4>
+              <p style="margin: 0; font-size: 12px; color: #475569;">Liên hệ ngay đường dây nóng <a href="tel:18001522" style="color: #ef4444; font-weight: 700; text-decoration: none;" onclick="event.stopPropagation()">ENV (1800-1522)</a> hoặc trạm cứu hộ gần nhất để được hỗ trợ.</p>
+            </div>
+          </div>
         </div>
 
         <!-- Nearest Clinic -->
@@ -108,9 +124,9 @@
 
         <!-- ───────── ACTION BUTTONS ───────── -->
         <div class="panel-action-row">
-          <button class="panel-support-btn" id="supportForceBtn">
-            <i class="fas fa-shield-halved"></i>
-            Lực lượng hỗ trợ
+          <button class="panel-support-btn" id="guideBtn" onclick="window.open('https://env4wildlife.org/', '_blank')">
+            <i class="fas fa-book-open"></i>
+            Tìm hiểu thêm tại ENV
           </button>
         </div>
 
@@ -181,9 +197,9 @@
             <span class="rm-reporter-badge" id="reporterBadge">Khách</span>
           </div>
           <!-- Hidden inputs để gửi lên backend -->
-          <input type="hidden" id="reporterUserId"   value="">
+          <input type="hidden" id="reporterUserId" value="">
           <input type="hidden" id="reporterFullName" value="">
-          <input type="hidden" id="reporterEmail"    value="">
+          <input type="hidden" id="reporterEmail" value="">
           <input type="hidden" id="reporterAvatarUrl" value="">
         </div>
 

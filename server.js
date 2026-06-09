@@ -72,6 +72,7 @@ const Rescue = require("./Wildlife Guardian/models/Rescue");
 const Message = require("./Wildlife Guardian/models/Message");
 const User = require("./Wildlife Guardian/models/User");
 const Species = require("./Wildlife Guardian/models/Species");
+const Helper = require("./Wildlife Guardian/models/Helper");
 
 // ==========================================
 // 4. CẤU HÌNH MULTER - CLOUDINARY
@@ -682,6 +683,41 @@ app.get("/api/rescuemap", async (req, res) => {
         res.json(rescues);
     } catch (error) {
         res.status(500).json({ error: "Lỗi tải dữ liệu bản đồ" });
+    }
+});
+
+// ==========================================
+// 9. CÁC API NGƯỜI HỖ TRỢ (HELPERS)
+// ==========================================
+app.get("/api/helpers", async (req, res) => {
+    try {
+        console.log("👉 [GET] Đang tải danh sách Người hỗ trợ từ Database...");
+        const helpers = await Helper.find();
+        res.json(helpers);
+    } catch (error) {
+        console.error("❌ Lỗi DB tải helpers:", error);
+        res.status(500).json({ error: "Lỗi tải dữ liệu người hỗ trợ" });
+    }
+});
+
+app.post("/api/helpers", async (req, res) => {
+    try {
+        const data = req.body;
+        
+        // Dự phòng cấu trúc Database (Bọc lót mọi lỗi lệch tên cột do Schema)
+        if (!data.fullName && data.name) data.fullName = data.name;
+        if (!data.phoneNumber && data.phone) data.phoneNumber = data.phone;
+        if (!data.location && data.lat && data.lng) {
+            data.location = { lat: parseFloat(data.lat), lng: parseFloat(data.lng) };
+        }
+        
+        const newHelper = new Helper(data);
+        await newHelper.save();
+        
+        res.status(201).json({ success: true, message: "Đã thêm người hỗ trợ thành công!", id: newHelper._id });
+    } catch (error) {
+        console.error("❌ Lỗi DB khi lưu Helper:", error);
+        res.status(500).json({ success: false, error: "Lỗi Database: " + error.message });
     }
 });
 

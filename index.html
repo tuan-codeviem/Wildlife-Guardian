@@ -9,60 +9,15 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style1.css" />
   <link rel="stylesheet" href ="style2.css"/>
+  <!-- Navbar CSS (shared from Home) -->
+  <link rel="stylesheet" href="/Wildlife%20Guardian/Home/css/nav.css">
 </head>
 <body>
 
-  <!-- THANH NAVBAR -->
-  <nav class="navbar">
-    <div class="mobile-nav" id="mobileNav">
-      <a href="#">Home</a>
-      <a href="#">Rescue Map</a>
-      <a href="#" class="active-mobile">Social</a>
-      <a href="#">Species</a>
-      <a href="#">Contact</a>
-      <div class="mobile-actions">
-        <button class="btn-report" onclick="openCameraModal(event)">Report Now</button>
-        <button class="btn-login" style="justify-content: center">Login</button>
-      </div>
-    </div>
-    <div class="nav-container">
-      <!-- Logo -->
-      <div class="logo-area">
-        <div class="logo-icon">
-          <svg viewBox="0 0 24 24" fill="currentColor">
-            <rect x="4" y="8" width="4" height="4"></rect>
-            <rect x="16" y="8" width="4" height="4"></rect>
-            <rect x="8" y="4" width="4" height="4"></rect>
-            <rect x="12" y="4" width="4" height="4"></rect>
-            <rect x="6" y="14" width="12" height="6" rx="2"></rect>
-          </svg>
-        </div>
-        <span class="logo-text">Wildlife Guardian</span>
-      </div>
-
-      <div class="nav-menu" id="navMenu">
-        <a href="#" class="nav-item">Home</a>
-        <a href="#" class="nav-item">Rescue Map</a>
-        <a href="#" class="nav-item active">Social</a>
-        <a href="#" class="nav-item">Species</a>
-        <a href="#" class="nav-item">Contact</a>
-        <div class="mobile-only-buttons">
-          <button class="btn-report" onclick="openCameraModal(event)">Report Now</button>
-          <button class="btn-login">Login</button>
-        </div>
-      </div>
-
-      <!-- Cụm nút bên phải -->
-      <div class="nav-actions">
-        <button class="btn-report" onclick="openCameraModal(event)">Report Now</button>
-        <button class="btn-login">Login</button>
-        <button class="hamburger" id="hamburger">
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
-      </div>
-    </div>
+  <!-- ==========================================
+       NAVBAR – Được tạo tự động bởi navbar.js
+  ========================================== -->
+  <nav class="navbar" id="navbar" data-page="rescue-map" data-report-callback="openCameraModal(event)">
   </nav>
 
   <div class="rescue-container">
@@ -204,6 +159,7 @@
   </div>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="/Wildlife%20Guardian/Home/js/navbar.js"></script>
   <script src="./script1.js"></script>
 </body>
 </html>
