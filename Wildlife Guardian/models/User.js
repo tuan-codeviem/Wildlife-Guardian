@@ -9,6 +9,8 @@ const userSchema = new mongoose.Schema({
     friends: { type: [String], default: [] }, // Danh sách ID bạn bè
     friendRequests: { type: [String], default: [] }, // Danh sách ID người gửi lời mời
     unlockedSpecies: { type: [String], default: [] }, // Danh sách tên con vật đã mở khóa
+    highestUnlockedLevel: { type: Number, default: 1 }, // Tiến trình game
+    hasGuardianBadge: { type: Boolean, default: false }, // Có huy hiệu công nhận chưa
     createdAt: { type: Date, default: Date.now },
 });
 

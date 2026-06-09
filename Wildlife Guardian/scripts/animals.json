@@ -38,7 +38,7 @@
     "model3dUrl": "https://example.com/placeholder.glb"
   },
   {
-    "speciesId": "red-panda",
+    "speciesId": "RedPanda",
     "animalName": {
       "en": "Red Panda",
       "vi": "Gấu Trúc Đỏ"
@@ -72,8 +72,8 @@
       "en": "They use their bushy tails as wraparound blankets in the cold.",
       "vi": "Chúng dùng chiếc đuôi xù xì như một chiếc chăn quấn quanh người khi trời lạnh."
     },
-    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1780994811/wildlife-guardian/images/red-panda.avif",
-    "model3dUrl": "https://res.cloudinary.com/dotlymsmk/raw/upload/v1780991945/wildlife-guardian/models/red-panda.glb"
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1781032506/wildlife-guardian/images/RedPanda.avif",
+    "model3dUrl": "https://res.cloudinary.com/dotlymsmk/raw/upload/v1781032539/wildlife-guardian/models/RedPanda.glb"
   },
   {
     "speciesId": "indochinese-tiger",
@@ -380,7 +380,7 @@
     "model3dUrl": "https://example.com/placeholder.glb"
   },
   {
-    "speciesId": "red-fox",
+    "speciesId": "FireFox",
     "animalName": {
       "en": "Red Fox",
       "vi": "Cáo Lửa"
@@ -414,11 +414,11 @@
       "en": "They can use the Earth's magnetic field to calculate the distance and direction of their prey.",
       "vi": "Chúng có thể cảm nhận từ trường Trái đất để tính toán khoảng cách và hướng đi của con mồi."
     },
-    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1780997679/wildlife-guardian/images/red-fox.jpg",
-    "model3dUrl": "https://res.cloudinary.com/dotlymsmk/raw/upload/v1780996780/wildlife-guardian/models/red-fox.glb"
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1781032489/wildlife-guardian/images/FireFox.jpg",
+    "model3dUrl": "https://res.cloudinary.com/dotlymsmk/raw/upload/v1781032529/wildlife-guardian/models/FireFox.glb"
   },
   {
-    "speciesId": "ferret",
+    "speciesId": "Ferret",
     "animalName": {
       "en": "Black-footed Ferret",
       "vi": "Chồn Sương Chân Đen"
@@ -456,7 +456,7 @@
     "model3dUrl": "https://res.cloudinary.com/dotlymsmk/raw/upload/v1780997914/wildlife-guardian/models/ferret.glb"
   },
   {
-    "speciesId": "armadillo",
+    "speciesId": "Armadillo",
     "animalName": {
       "en": "Nine-banded Armadillo",
       "vi": "Tatu Chín Dải"

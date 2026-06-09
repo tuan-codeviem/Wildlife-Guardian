@@ -752,6 +752,48 @@ app.get("/api/users/:id/unlocked", async (req, res) => {
 });
 
 // ==========================================
+// API ĐỒNG BỘ TIẾN TRÌNH GAME (UNITY)
+// ==========================================
+app.put("/api/users/update-game-progress/:id", async (req, res) => {
+    try {
+        const userId = req.params.id;
+        
+        // Nhận 3 biến từ cục JSON của file SaveManager.cs (Unity)
+        const { highestUnlockedLevel, unlockedSpecies, hasGuardianBadge } = req.body;
+
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            {
+                // Cập nhật Level cao nhất và Huy hiệu
+                $set: { 
+                    highestUnlockedLevel: highestUnlockedLevel,
+                    hasGuardianBadge: hasGuardianBadge
+                },
+                // Thêm các loài vật mới vào mảng (không thêm trùng lặp)
+                $addToSet: { 
+                    unlockedSpecies: { $each: unlockedSpecies || [] } 
+                }
+            },
+            { new: true } // Yêu cầu Mongoose trả về data mới nhất
+        );
+
+        if (!updatedUser) {
+            return res.status(404).json({ success: false, message: "Không tìm thấy User!" });
+        }
+
+        res.status(200).json({ 
+            success: true, 
+            message: "Cập nhật tiến trình game thành công!",
+            user: updatedUser 
+        });
+
+    } catch (error) {
+        console.error("Lỗi khi lưu tiến trình game:", error);
+        res.status(500).json({ success: false, message: "Lỗi Server!" });
+    }
+});
+
+// ==========================================
 // 8. CÁC API BẢN ĐỒ CỨU HỘ (RESCUE MAP)
 // ==========================================
 
@@ -773,6 +815,7 @@ app.post("/api/rescuemap", async (req, res) => {
         res.status(400).send({ error: "Không thể lưu báo cáo" });
     }
 });
+
 
 // ==========================================
 // 9. BẬT MÁY CHỦ
