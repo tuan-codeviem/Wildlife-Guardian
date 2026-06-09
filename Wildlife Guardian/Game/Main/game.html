@@ -1,219 +1,254 @@
 <!DOCTYPE html>
 <html lang="en-us">
-
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <title>Unity Web Player | EcoGuardian-Unity</title>
-  <link rel="shortcut icon" href="TemplateData/favicon.ico">
-  <link rel="stylesheet" href="TemplateData/style.css">
-
-  <style>
-    /* Ép game bung full thẻ iframe, xóa dải đen */
-    html,
-    body {
-      width: 100%;
-      height: 100%;
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-      background-color: #231F20;
-    }
-
-    #unity-container {
-      width: 100% !important;
-      height: 100% !important;
-      position: absolute;
-      top: 0;
-      left: 0;
-    }
-
-    #unity-canvas {
-      width: 100% !important;
-      height: 100% !important;
-      display: block;
-    }
-
-    #orientation-warning {
-      display: none;
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background-color: #2b2b2b;
-      color: white;
-      z-index: 9999;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-    }
-
-    .warning-content img {
-      margin-bottom: 20px;
-    }
-
-    /* Cảnh báo khi người dùng cầm dọc điện thoại */
-    @media screen and (orientation: portrait) {
-      #orientation-warning {
-        display: flex;
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Unity Web Player | EcoGuardian-Unity</title>
+    <link rel="shortcut icon" href="TemplateData/favicon.ico">
+    <link rel="stylesheet" href="TemplateData/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet" />
+    <style>
+      /* Đảm bảo game full màn hình iframe */
+      html, body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background-color: #0d0d0d;
+        font-family: 'Outfit', sans-serif;
       }
-
+      
       #unity-container {
-        display: none !important;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
       }
-    }
-  </style>
-</head>
+      
+      #unity-canvas {
+        width: 100% !important;
+        height: 100% !important;
+        background: #0d0d0d;
+      }
 
-<body>
-  <div id="orientation-warning">
-    <div class="warning-content">
-      <img src="https://cdn-icons-png.flaticon.com/512/7036/7036437.png" width="100px" alt="Rotate Device" />
-      <h2>Vui lòng xoay ngang điện thoại</h2>
-      <p>Game Pixel Art cần không gian rộng để hiển thị bản đồ tốt nhất!</p>
+      /* Ẩn phần footer mặc định của Unity vì ta muốn full màn hình */
+      #unity-footer {
+        display: none;
+      }
+
+      /* Lớp phủ yêu cầu xoay màn hình (chỉ hiện khi ở Portrait trên Mobile) */
+      #rotate-overlay {
+        display: none;
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background-color: #05140a;
+        color: white;
+        z-index: 9999;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+      }
+      
+      #rotate-overlay svg {
+        animation: rotatePhone 1.5s infinite ease-in-out alternate;
+      }
+
+      @keyframes rotatePhone {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(-90deg); }
+      }
+
+      #rotate-overlay h2 {
+        font-weight: 800;
+        margin-top: 15px;
+        margin-bottom: 5px;
+      }
+
+      #rotate-overlay p {
+        font-weight: 300;
+        color: #a8b2ac;
+        margin: 0;
+      }
+
+      /* Kích hoạt lớp phủ khi ở màn hình dọc */
+      @media screen and (orientation: portrait) and (max-width: 932px) {
+        #rotate-overlay {
+          display: flex;
+        }
+        #unity-container {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Lớp phủ yêu cầu xoay màn hình -->
+    <div id="rotate-overlay">
+      <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 10px;">
+        <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+        <line x1="12" y1="18" x2="12.01" y2="18"></line>
+      </svg>
+      <h2>Vui lòng xoay ngang màn hình</h2>
+      <p>Trải nghiệm tốt nhất khi chơi ngang (Landscape mode).</p>
     </div>
-  </div>
 
-  <div id="unity-container" class="unity-desktop">
-    <canvas id="unity-canvas" tabindex="-1"></canvas>
-    <div id="unity-loading-bar">
-      <div id="unity-logo"></div>
-      <div id="unity-progress-bar-empty">
-        <div id="unity-progress-bar-full"></div>
+    <div id="unity-container" class="unity-desktop">
+      <canvas id="unity-canvas" width=960 height=600 tabindex="-1"></canvas>
+      <div id="unity-loading-bar">
+        <div id="unity-logo"></div>
+        <div id="unity-progress-bar-empty">
+          <div id="unity-progress-bar-full"></div>
+        </div>
+      </div>
+      <div id="unity-warning"> </div>
+      <div id="unity-footer">
+        <div id="unity-logo-title-footer"></div>
+        <div id="unity-fullscreen-button"></div>
+        <div id="unity-build-title">EcoGuardian-Unity</div>
       </div>
     </div>
-    <div id="unity-warning"> </div>
-    <div id="unity-footer">
-      <div id="unity-logo-title-footer"></div>
-      <div id="unity-fullscreen-button"></div>
-      <div id="unity-build-title">EcoGuardian-Unity</div>
-    </div>
-  </div>
+    <script>
+      var canvas = document.querySelector("#unity-canvas");
 
-  <script>
-    var canvas = document.querySelector("#unity-canvas");
-
-    function unityShowBanner(msg, type) {
-      var warningBanner = document.querySelector("#unity-warning");
-      function updateBannerVisibility() {
-        warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
-      }
-      var div = document.createElement('div');
-      div.innerHTML = msg;
-      warningBanner.appendChild(div);
-      if (type == 'error') div.style = 'background: red; padding: 10px;';
-      else {
-        if (type == 'warning') div.style = 'background: yellow; padding: 10px;';
-        setTimeout(function () { warningBanner.removeChild(div); updateBannerVisibility(); }, 5000);
-      }
-      updateBannerVisibility();
-    }
-
-    var buildUrl = "Build";
-    var loaderUrl = buildUrl + "/BackUp_BWD.loader.js";
-    var config = {
-      arguments: [],
-      dataUrl: buildUrl + "/BackUp_BWD.data",
-      frameworkUrl: buildUrl + "/BackUp_BWD.framework.js",
-      codeUrl: buildUrl + "/BackUp_BWD.wasm",
-      streamingAssetsUrl: "StreamingAssets",
-      companyName: "DefaultCompany",
-      productName: "EcoGuardian-Unity",
-      productVersion: "1.0",
-      showBanner: unityShowBanner,
-    };
-
-    // ÉP UNITY LUÔN HIỂN THỊ FULL 100% CỦA THẺ IFRAME
-    canvas.style.width = "100%";
-    canvas.style.height = "100%";
-
-    var script = document.createElement("script");
-    script.src = loaderUrl;
-    script.onload = () => {
-      createUnityInstance(canvas, config, (progress) => {
-        document.querySelector("#unity-progress-bar-full").style.width = 100 * progress + "%";
-      }).then((unityInstance) => {
-        document.querySelector("#unity-loading-bar").style.display = "none";
-        document.querySelector("#unity-fullscreen-button").onclick = () => {
-          unityInstance.SetFullscreen(1);
-        };
-
-        // Lưu biến unityInstance ra toàn cục để các hàm khác có thể gọi
-        window.myUnityInstance = unityInstance;
-
-        // Hàm này sẽ được Unity gọi (qua Application.ExternalCall) khi nó khởi động xong
-        window.RequestDataFromWeb = function() {
-          const userString = localStorage.getItem("currentUser");
-          if (!userString) return;
-          const user = JSON.parse(userString);
-          const userId = user._id || user.userId;
-
-          // Gọi API Backend để lấy dữ liệu mới nhất
-          fetch(`http://${window.location.hostname}:3000/api/users/game-progress/${userId}`)
-            .then(res => res.json())
-            .then(data => {
-              // Gửi lại cho Unity.
-              // Lưu ý: Đổi 'Save_Manager_AutoCreated' thành tên GameObject chứa script SaveManager trong Unity của bạn
-              window.myUnityInstance.SendMessage('Save_Manager_AutoCreated', 'OnReceiveDataFromWeb', JSON.stringify(data));
-              console.log("Đã gửi dữ liệu cho Unity thành công:", data);
-            })
-            .catch(err => console.error("Lỗi khi fetch dữ liệu cho Unity:", err));
-        };
-
-      }).catch((message) => {
-        alert(message);
-      });
-    };
-    document.body.appendChild(script);
-
-    // === CÁI RỔ HỨNG DATA JSON TỪ UNITY ===
-    window.ReceiveDataFromUnity = function (jsonData) {
-      console.log("Game Unity vừa bắn ra data: ", jsonData);
-
-      // 1. Lấy ID của User đang đăng nhập trên Web
-      const userString = localStorage.getItem("currentUser");
-      if (!userString) {
-        console.warn("Người chơi chưa đăng nhập, không lưu tiến trình!");
-        return; // Nếu chưa đăng nhập thì không gọi API
-      }
-      const user = JSON.parse(userString);
-      const userId = user._id || user.userId;
-
-      // 2. Chuyển JSON của Unity thành Object để cấu trúc lại
-      let gameData = {};
-      try {
-        gameData = JSON.parse(jsonData);
-      } catch (error) {
-        console.error("Lỗi đọc JSON từ Unity:", error);
-        return;
+      // Shows a temporary message banner/ribbon for a few seconds, or
+      // a permanent error message on top of the canvas if type=='error'.
+      // If type=='warning', a yellow highlight color is used.
+      // Modify or remove this function to customize the visually presented
+      // way that non-critical warnings and error messages are presented to the
+      // user.
+      function unityShowBanner(msg, type) {
+        var warningBanner = document.querySelector("#unity-warning");
+        function updateBannerVisibility() {
+          warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
+        }
+        var div = document.createElement('div');
+        div.innerHTML = msg;
+        warningBanner.appendChild(div);
+        if (type == 'error') div.style = 'background: red; padding: 10px;';
+        else {
+          if (type == 'warning') div.style = 'background: yellow; padding: 10px;';
+          setTimeout(function() {
+            warningBanner.removeChild(div);
+            updateBannerVisibility();
+          }, 5000);
+        }
+        updateBannerVisibility();
       }
 
-      // 3. Gọi API gửi lên Node.js Backend
-      fetch(`http://${window.location.hostname}:3000/api/users/update-game-progress/${userId}`, {
-        method: 'PUT', // Dùng PUT vì ta đang cập nhật dữ liệu User có sẵn
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(gameData)
-      })
-        .then(response => response.json())
-        .then(data => {
-          if (data.success) {
-            console.log("✅ Đã đồng bộ tiến trình Game lên MongoDB thành công!");
+      var buildUrl = "Build";
+      var loaderUrl = buildUrl + "/New.loader.js";
+      var config = {
+        arguments: [],
+        dataUrl: buildUrl + "/New.data",
+        frameworkUrl: buildUrl + "/New.framework.js",
+        codeUrl: buildUrl + "/New.wasm",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "DefaultCompany",
+        productName: "EcoGuardian-Unity",
+        productVersion: "1.0",
+        showBanner: unityShowBanner,
+      };
 
-            // (Tùy chọn) Cập nhật luôn localStorage để web nhận diện ngay huy hiệu mới
-            user.unlockedSpecies = data.user.unlockedSpecies;
-            user.hasGuardianBadge = data.user.hasGuardianBadge;
-            user.highestUnlockedLevel = data.user.highestUnlockedLevel;
-            localStorage.setItem("currentUser", JSON.stringify(user));
+      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+        // Mobile device style: fill the whole browser client area with the game canvas:
+
+        var meta = document.createElement('meta');
+        meta.name = 'viewport';
+        meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+        document.getElementsByTagName('head')[0].appendChild(meta);
+        document.querySelector("#unity-container").className = "unity-mobile";
+        canvas.className = "unity-mobile";
+
+        // To lower canvas resolution on mobile devices to gain some
+        // performance, uncomment the following line:
+        // config.devicePixelRatio = 1;
+
+      } else {
+        // Desktop style: Render the game canvas full screen in iframe
+        canvas.style.width = "100%";
+        canvas.style.height = "100%";
+      }
+
+      document.querySelector("#unity-loading-bar").style.display = "block";
+
+      var myUnityInstance = null;
+
+      // Hàm gửi dữ liệu màn chơi cho Unity gọi
+      window.RequestDataFromWeb = function() {
+        const userString = localStorage.getItem("currentUser");
+        if (!userString) {
+          console.warn("User is not logged in! Game progress cannot be loaded.");
+          return;
+        }
+        
+        const currentUser = JSON.parse(userString);
+        const userId = currentUser._id || currentUser.userId;
+        
+        // Đổi localhost thành window.location.hostname để chạy mượt trên mạng LAN hoặc server ngoài
+        fetch(`http://${window.location.hostname}:3000/api/users/game-progress/${userId}`)
+          .then(res => res.json())
+          .then(data => {
+              if (myUnityInstance) {
+                  myUnityInstance.SendMessage('Save_Manager', 'OnReceiveDataFromWeb', JSON.stringify(data));
+              } else {
+                  console.error("Unity Instance not ready yet.");
+              }
+          })
+          .catch(err => console.error("Error fetching game progress:", err));
+      };
+
+      // Hàm nhận dữ liệu từ Unity và cập nhật lên Server
+      window.ReceiveDataFromUnity = function(jsonDataString) {
+        const userString = localStorage.getItem("currentUser");
+        if (!userString) {
+          console.warn("User is not logged in! Game progress cannot be saved.");
+          return;
+        }
+
+        const currentUser = JSON.parse(userString);
+        const userId = currentUser._id || currentUser.userId;
+        const data = JSON.parse(jsonDataString);
+
+        fetch(`http://${window.location.hostname}:3000/api/users/update-game-progress/${userId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        })
+        .then(res => res.json())
+        .then(response => {
+          if (response.success) {
+            console.log("Progress saved successfully!");
           } else {
-            console.warn("⚠️ Lỗi từ Server:", data.message);
+            console.error("Failed to save progress:", response.message);
           }
         })
-        .catch(error => console.error("❌ Lỗi kết nối Server:", error));
-    };
-  </script>
-</body>
+        .catch(err => console.error("Error saving game progress:", err));
+      };
 
+      var script = document.createElement("script");
+      script.src = loaderUrl;
+      script.onload = () => {
+        createUnityInstance(canvas, config, (progress) => {
+          document.querySelector("#unity-progress-bar-full").style.width = 100 * progress + "%";
+              }).then((unityInstance) => {
+                myUnityInstance = unityInstance; // Lưu lại Unity Instance
+                document.querySelector("#unity-loading-bar").style.display = "none";
+                document.querySelector("#unity-fullscreen-button").onclick = () => {
+                  unityInstance.SetFullscreen(1);
+                };
+
+              }).catch((message) => {
+                alert(message);
+              });
+            };
+
+      document.body.appendChild(script);
+
+    </script>
+  </body>
 </html>

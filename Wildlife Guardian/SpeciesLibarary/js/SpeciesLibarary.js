@@ -298,7 +298,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="locked-cta-wrap">
           <span class="locked-cta-label">🔒 3D View Locked</span>
           <button class="locked-cta-btn"
-            onclick="window.location.href='../Game/Main/Game/GameUnity.html'">
+            onclick="window.location.href='../Game/GameUnity.html'">
             <i class="fa-solid fa-gamepad"></i>
             Play Rescue Game to unlock
           </button>

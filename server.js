@@ -421,7 +421,7 @@ app.post("/api/messages", async (req, res) => {
 app.post("/api/register", async (req, res) => {
     try {
         const { email, password, fullName, username } = req.body;
-        
+
         // Chỉ tìm kiếm bằng email hoặc username nếu chúng có giá trị
         const searchConditions = [];
         if (email) searchConditions.push({ email: email });
@@ -757,7 +757,7 @@ app.get("/api/users/:id/unlocked", async (req, res) => {
 app.put("/api/users/update-game-progress/:id", async (req, res) => {
     try {
         const userId = req.params.id;
-        
+
         // Nhận 3 biến từ cục JSON của file SaveManager.cs (Unity)
         const { highestUnlockedLevel, unlockedSpecies, hasGuardianBadge } = req.body;
 
@@ -765,13 +765,13 @@ app.put("/api/users/update-game-progress/:id", async (req, res) => {
             userId,
             {
                 // Cập nhật Level cao nhất và Huy hiệu
-                $set: { 
+                $set: {
                     highestUnlockedLevel: highestUnlockedLevel,
                     hasGuardianBadge: hasGuardianBadge
                 },
                 // Thêm các loài vật mới vào mảng (không thêm trùng lặp)
-                $addToSet: { 
-                    unlockedSpecies: { $each: unlockedSpecies || [] } 
+                $addToSet: {
+                    unlockedSpecies: { $each: unlockedSpecies || [] }
                 }
             },
             { new: true } // Yêu cầu Mongoose trả về data mới nhất
@@ -781,15 +781,31 @@ app.put("/api/users/update-game-progress/:id", async (req, res) => {
             return res.status(404).json({ success: false, message: "Không tìm thấy User!" });
         }
 
-        res.status(200).json({ 
-            success: true, 
+        res.status(200).json({
+            success: true,
             message: "Cập nhật tiến trình game thành công!",
-            user: updatedUser 
+            user: updatedUser
         });
 
     } catch (error) {
         console.error("Lỗi khi lưu tiến trình game:", error);
         res.status(500).json({ success: false, message: "Lỗi Server!" });
+    }
+});
+// Thêm vào server.js
+app.get("/api/users/game-progress/:id", async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id);
+        if (!user) return res.status(404).json({ success: false, message: "User not found" });
+
+        // Trả về đúng cấu trúc PlayerData trong Unity
+        res.json({
+            highestUnlockedLevel: user.highestUnlockedLevel || 1,
+            unlockedSpecies: user.unlockedSpecies || [],
+            hasGuardianBadge: user.hasGuardianBadge || false
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, message: "Lỗi Server" });
     }
 });
 
