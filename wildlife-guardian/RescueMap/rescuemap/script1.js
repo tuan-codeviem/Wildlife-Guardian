@@ -113,8 +113,11 @@ function getSampleImage(animalType) {
 }
 
 function getApiUrl(path) {
-    let host = window.location.hostname || 'localhost';
-    return `http://${host}:3000${path}`;
+    const hostname = window.location.hostname;
+    if (hostname === 'localhost' || hostname === '127.0.0.1') {
+        return `http://${hostname}:3000${path}`;
+    }
+    return `${window.location.origin}${path}`;
 }
 
 // ═══════════════════════════════════════════════════════════════

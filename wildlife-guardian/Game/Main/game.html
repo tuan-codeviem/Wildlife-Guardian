@@ -188,7 +188,8 @@
         const userId = currentUser._id || currentUser.userId;
         
         // Đổi localhost thành window.location.hostname để chạy mượt trên mạng LAN hoặc server ngoài
-        fetch(`http://${window.location.hostname}:3000/api/users/game-progress/${userId}`)
+        const _base = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:3000' : location.origin;
+        fetch(`${_base}/api/users/game-progress/${userId}`)
           .then(res => res.json())
           .then(data => {
               if (myUnityInstance) {
@@ -212,7 +213,8 @@
         const userId = currentUser._id || currentUser.userId;
         const data = JSON.parse(jsonDataString);
 
-        fetch(`http://${window.location.hostname}:3000/api/users/update-game-progress/${userId}`, {
+        const _base2 = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:3000' : location.origin;
+        fetch(`${_base2}/api/users/update-game-progress/${userId}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json'

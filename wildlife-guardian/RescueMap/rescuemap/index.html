@@ -665,7 +665,7 @@
           if (file) formData.append("media", file);
 
           try {
-            const res = await fetch(`http://${window.location.hostname}:3000/api/users/${me._id || me.userId}`, { method: "PUT", body: formData });
+            const res = await fetch(`${(location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:3000' : location.origin}/api/users/${me._id || me.userId}`, { method: "PUT", body: formData });
             const data = await res.json();
             if (data.success && data.user) {
               me.fullName = data.user.fullName;

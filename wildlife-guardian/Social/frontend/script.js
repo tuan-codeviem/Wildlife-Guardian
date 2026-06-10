@@ -1,3 +1,6 @@
+// Auto-detect API base URL: localhost:3000 for dev, origin for production
+const API_BASE_URL = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:3000' : location.origin;
+
 // Hàm hỗ trợ lấy ngôn ngữ hiện tại an toàn
 function getLang() {
   return window.currentLang || localStorage.getItem("appLang") || "EN";
@@ -164,7 +167,7 @@ navItems.forEach((item) => {
 //              2. POST, BÀI ĐĂNG
 // ==========================================
 
-const API_URL = `http://${window.location.hostname}:3000/api/posts`; // Cổng backend của Tuấn
+const API_URL = `${API_BASE_URL}/api/posts`;
 
 // 2.1. TÌM VÀ KẾT NỐI VỚI CÁC THÀNH PHẦN TRÊN HTML
 const postBtn = document.getElementById("btn-post");
@@ -1153,7 +1156,7 @@ if (searchFriendInput) {
     try {
       const t = window.translations[getLang()];
       const response = await fetch(
-        `http://${window.location.hostname}:3000/api/users/search-new/${myId}?q=${keyword}`,
+        `${API_BASE_URL}/api/users/search-new/${myId}?q=${keyword}`,
       );
       const data = await response.json();
 
@@ -1199,7 +1202,7 @@ window.toggleFriendRequest = async function (targetId, btnElement) {
   const t = window.translations[getLang()];
   try {
     const res = await fetch(
-      `http://${window.location.hostname}:3000/api/friends/request`,
+      `${API_BASE_URL}/api/friends/request`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -1231,7 +1234,7 @@ async function loadFriendRequests() {
 
   try {
     const res = await fetch(
-      `http://${window.location.hostname}:3000/api/friends/requests/${myId}`,
+      `${API_BASE_URL}/api/friends/requests/${myId}`,
     );
     const data = await res.json();
 
@@ -1271,7 +1274,7 @@ window.respondRequest = async function (requesterId, action) {
   const meString = localStorage.getItem("currentUser");
   const myId = JSON.parse(meString)._id || JSON.parse(meString).userId;
 
-  await fetch(`http://${window.location.hostname}:3000/api/friends/respond`, {
+  await fetch(`${API_BASE_URL}/api/friends/respond`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ myId, requesterId, action }),
@@ -1311,7 +1314,7 @@ async function loadChatMessages() {
     const myId = me._id || me.userId; // Lại dùng chiêu bao lô ở đây
 
     const response = await fetch(
-      `http://${window.location.hostname}:3000/api/messages/${myId}/${currentPartnerId}`,
+      `${API_BASE_URL}/api/messages/${myId}/${currentPartnerId}`,
     );
     const data = await response.json();
     const messageList = data.messages || data || [];
@@ -1356,7 +1359,7 @@ async function sendMessage() {
   const myId = me._id || me.userId;
 
   try {
-    await fetch(`http://${window.location.hostname}:3000/api/messages`, {
+    await fetch(`${API_BASE_URL}/api/messages`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -1398,11 +1401,11 @@ async function loadUsersForChat(searchKeyword = "") {
     const myId = me._id || me.id || me.userId;
 
     // ĐÃ SỬA: Thay vì tìm toàn bộ mạng xã hội, giờ chỉ tìm những người LÀ BẠN BÈ
-    let url = `http://${window.location.hostname}:3000/api/users/friends/${myId}?search=${searchKeyword}`;
+    let url = `${API_BASE_URL}/api/users/friends/${myId}?search=${searchKeyword}`;
 
     // Nếu không nhập từ khóa tìm kiếm, chỉ lấy những người đã từng nhắn tin
     if (searchKeyword.trim() === "") {
-      url = `http://${window.location.hostname}:3000/api/users/recent/${myId}`;
+      url = `${API_BASE_URL}/api/users/recent/${myId}`;
     }
 
     const response = await fetch(url);
@@ -1549,7 +1552,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       try {
         const res = await fetch(
-          `http://${window.location.hostname}:3000/api/users/${me._id || me.userId}`,
+          `${API_BASE_URL}/api/users/${me._id || me.userId}`,
           { method: "PUT", body: formData },
         );
         const data = await res.json();
@@ -1598,7 +1601,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       try {
         const res = await fetch(
-          `http://${window.location.hostname}:3000/api/users/${me._id || me.userId}`,
+          `${API_BASE_URL}/api/users/${me._id || me.userId}`,
           { method: "PUT", body: formData },
         );
         const data = await res.json();
@@ -1677,7 +1680,7 @@ document.addEventListener("click", async function (e) {
         // Tìm kiếm thông tin người này để check trạng thái bạn bè
         if (popupAddFriendBtn) {
           fetch(
-            `http://${window.location.hostname}:3000/api/users/search-new/${myId}?q=${encodeURIComponent(name)}`,
+            `${API_BASE_URL}/api/users/search-new/${myId}?q=${encodeURIComponent(name)}`,
           )
             .then((res) => res.json())
             .then((data) => {

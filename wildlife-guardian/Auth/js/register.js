@@ -1,3 +1,6 @@
+// Auto-detect API base URL: localhost:3000 for dev, origin for production
+const API_BASE_URL = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:3000' : location.origin;
+
 const fullnameInput = document.getElementById("fullname");
 const regEmailInput = document.getElementById("regEmail");
 const regPasswordInput = document.getElementById("regPassword");
@@ -121,7 +124,7 @@ async function handleRegisterSubmit(event) {
 
   try {
     // 1. Đổi đường dẫn thành cổng 3000 của Backend Node.js
-    const response = await fetch("http://localhost:3000/api/register", {
+    const response = await fetch(`${API_BASE_URL}/api/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

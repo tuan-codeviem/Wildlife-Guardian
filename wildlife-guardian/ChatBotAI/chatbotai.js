@@ -1,4 +1,7 @@
 
+// Auto-detect API base URL: localhost:3000 for dev, origin for production
+const API_BASE_URL = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:3000' : location.origin;
+
 const ai = new GoogleGenAI({ apiKey: API_KEY });
 
 /* ════════════════════════════════════════════════════
@@ -214,7 +217,7 @@ async function sendMessage() {
         : "1. Luôn trả lời bằng Tiếng Anh (English).";
 
     try {
-                const res = await fetch('http://localhost:3000/api/chatbot', {
+                const res = await fetch(`${API_BASE_URL}/api/chatbot`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ userMessage, languageRule })

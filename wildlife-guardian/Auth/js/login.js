@@ -1,3 +1,6 @@
+// Auto-detect API base URL: localhost:3000 for dev, origin for production
+const API_BASE_URL = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:3000' : location.origin;
+
 const emailInput = document.getElementById("email");
 const passwordInput = document.getElementById("password");
 const emailGroup = document.getElementById("emailGroup");
@@ -64,7 +67,7 @@ async function handleLoginSubmit(event) {
   loginBtn.textContent = "Đang đăng nhập...";
 
   try {
-    const response = await fetch(`http://localhost:3000/api/login`, {
+    const response = await fetch(`${API_BASE_URL}/api/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
