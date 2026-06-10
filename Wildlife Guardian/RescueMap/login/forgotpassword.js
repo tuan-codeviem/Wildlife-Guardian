@@ -26,7 +26,8 @@ async function handleForgotSubmit(event) {
     resetBtn.textContent = 'Sending...';
 
     try {
-        const response = await fetch('/api/forgot-password', {
+        // Chỉ đích danh vào server Node thay vì localhost của Live Server Frontend
+        const response = await fetch('http://localhost:3000/api/forgot-password', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email: email })

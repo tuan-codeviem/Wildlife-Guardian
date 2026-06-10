@@ -1,156 +1,13 @@
-// 1. THANH NAVBAR
-
-const hamburger = document.getElementById("hamburger");
-const mobileNav = document.getElementById("mobileNav");
-
-// Khi nhấn vào nút 3 gạch
-hamburger.addEventListener("click", () => {
-  // Bật/tắt class 'active' để dấu 3 gạch biến thành dấu X
-  hamburger.classList.toggle("active");
-
-  // Bật/tắt class 'show' để hiện hoặc ẩn menu
-  mobileNav.classList.toggle("show");
-});
-
-// Xử lý khi nhấn vào các tab trên máy tính (đổi màu xanh)
-const navItems = document.querySelectorAll(".nav-item");
-navItems.forEach((item) => {
-  item.addEventListener("click", function () {
-    document.querySelector(".nav-item.active").classList.remove("active");
-    this.classList.add("active");
-  });
-});
-
-// \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+// Cấu hình Token Cesium
+Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2ZmM2MjY2ZS03ZDI3LTQ3YzgtYTMxMi0wNDg3ZDc5YzRlNTYiLCJpZCI6NDM4ODM2LCJpc3MiOiJodHRwczovL2FwaS5jZXNpdW0uY29tIiwiYXVkIjoidW5kZWZpbmVkX2RlZmF1bHQiLCJpYXQiOjE3ODAyOTY2OTl9.tDMoMdaTI7NA8otfGmZ1bwnMZFub0aSsaJLdYu54j6M';
 
 let reports = [];
-let nextId = 1;
-const helpersData = [
-  {
-    name: "Danh Thái",
-    role: "Bác sĩ Thú y",
-    verified: true,
-    phone: "0912 345 678",
-    lat: 16.058,
-    lng: 108.22,
-    address: "Số 12 Trần Phú, Đà Nẵng",
-    isClinic: false,
-  },
-  {
-    name: "Thu Trần",
-    role: "Cứu hộ động vật hoang dã",
-    verified: true,
-    phone: "0988 765 432",
-    lat: 16.062,
-    lng: 108.215,
-    address: "Số 45 Bạch Đằng, Đà Nẵng",
-    isClinic: false,
-  },
-  {
-    name: "Hải Lê",
-    role: "Vận chuyển động vật",
-    verified: false,
-    phone: "0933 221 144",
-    lat: 16.045,
-    lng: 108.21,
-    address: "Số 78 Hùng Vương, Đà Nẵng",
-    isClinic: false,
-  },
-  {
-    name: "Minh Tuấn",
-    role: "Tình nguyện viên",
-    verified: true,
-    phone: "0909 888 777",
-    lat: 16.055,
-    lng: 108.218,
-    address: "Số 234 Trưng Nữ Vương, Đà Nẵng",
-    isClinic: false,
-  },
-  {
-    name: "Thanh Hưng",
-    role: "Bác sĩ thú y chuyên nghiệp",
-    verified: true,
-    phone: "0903 456 789",
-    lat: 10.8231,
-    lng: 106.6297,
-    address: "Số 123 Nguyễn Đình Chiểu, Quận 3, TP.HCM",
-    city: "TP.Hồ Chí Minh",
-    available: "24/7",
-    specialty: "Cấp cứu khẩn cấp",
-    isClinic: false,
-  },
-  {
-    name: "Bác sĩ Huyền Trang",
-    role: "Bác sĩ thú y",
-    verified: true,
-    phone: "0983 456 123",
-    lat: 21.0285,
-    lng: 105.8542,
-    address: "Số 67 Láng Hạ, Đống Đa, Hà Nội",
-    city: "Hà Nội",
-    available: "24/7",
-    specialty: "Cấp cứu thú cưng",
-    isClinic: false,
-  },
-  {
-    name: "Thái Bảo",
-    role: "Bác sĩ thú y",
-    verified: true,
-    phone: "0943 210 987",
-    lat: 16.4637,
-    lng: 107.5909,
-    address: "Số 56 Lê Lợi, Huế",
-    city: "Huế",
-    available: "8h-20h",
-    specialty: "Động vật cung đình",
-    isClinic: false,
-  },
-  {
-    name: "Phòng khám Thú y Sài Gòn Xanh",
-    role: "Phòng khám thú y",
-    verified: true,
-    phone: "028 6686 1234",
-    lat: 10.8281,
-    lng: 106.6397,
-    address: "120/4 Lê Văn Việt, Quận 9, TP. Thủ Đức, HCM",
-    city: "TP.Hồ Chí Minh",
-    available: "24/7",
-    specialty: "Cấp cứu 24/7 - X-quang - Siêu âm",
-    isClinic: true,
-  },
-  {
-    name: "Phòng khám Thú y Hà Nội",
-    role: "Phòng khám thú y",
-    verified: true,
-    phone: "024 3832 8888",
-    lat: 21.0245,
-    lng: 105.8442,
-    address: "67 Láng Hạ, Đống Đa, Hà Nội",
-    city: "Hà Nội",
-    available: "24/7",
-    specialty: "Cấp cứu - Ngoại khoa - Xét nghiệm",
-    isClinic: true,
-  },
-  {
-    name: "Phòng khám Thú y Đà Nẵng",
-    role: "Phòng khám thú y",
-    verified: true,
-    phone: "0236 389 9999",
-    lat: 16.06,
-    lng: 108.222,
-    address: "234 Trưng Nữ Vương, Hải Châu, Đà Nẵng",
-    city: "Đà Nẵng",
-    available: "8h-21h",
-    specialty: "Cấp cứu - Chăm sóc đặc biệt",
-    isClinic: true,
-  },
-];
 
-let activeCircle = null;
 let activeTab = "all";
 let searchKeyword = "";
-let map = null;
-let markersLayer = null;
+let viewer = null;
+let popupDiv = null;
+let activeEntity = null;
 
 let video = null;
 let canvas = null;
@@ -158,767 +15,1155 @@ let stream = null;
 let capturedPhoto = null;
 let currentLocation = null;
 let currentAddress = "";
-
 let toastContainer = null;
 
+function dataURItoBlob(dataURI) {
+    const byteString = atob(dataURI.split(',')[1]);
+    const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+    }
+    return new Blob([ab], { type: mimeString });
+}
+
 function createToastContainer() {
-  if (document.getElementById("customToastContainer")) return;
-  const container = document.createElement("div");
-  container.id = "customToastContainer";
-  container.style.cssText = `position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 10000; pointer-events: none;`;
-  document.body.appendChild(container);
-  toastContainer = container;
+    if (document.getElementById("customToastContainer")) return;
+    const container = document.createElement("div");
+    container.id = "customToastContainer";
+    container.style.cssText = `position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 10000; pointer-events: none;`;
+    document.body.appendChild(container);
+    toastContainer = container;
 }
 
 function showToast(message, type = "success") {
-  createToastContainer();
-  const toast = document.createElement("div");
-  toast.style.cssText = `background: ${type === "success" ? "linear-gradient(135deg, #2a9d8f, #1a5e2a)" : "linear-gradient(135deg, #e76f51, #d62828)"}; color: white; padding: 14px 24px; border-radius: 50px; display: flex; align-items: center; gap: 12px; font-weight: bold; box-shadow: 0 10px 25px rgba(0,0,0,0.2); margin-bottom: 10px; animation: slideUp 0.3s ease; font-size: 14px; pointer-events: none;`;
-  const icon = document.createElement("i");
-  icon.className =
-    type === "success" ? "fas fa-check-circle" : "fas fa-exclamation-triangle";
-  icon.style.fontSize = "20px";
-  const text = document.createElement("span");
-  text.textContent = message;
-  toast.appendChild(icon);
-  toast.appendChild(text);
-  toastContainer.appendChild(toast);
-  setTimeout(() => {
-    toast.style.animation = "slideDown 0.3s ease";
-    setTimeout(() => toast.remove(), 300);
-  }, 3000);
+    createToastContainer();
+    const toast = document.createElement("div");
+    toast.style.cssText = `background: ${type === "success" ? "linear-gradient(135deg, #2a9d8f, #1a5e2a)" : "linear-gradient(135deg, #e76f51, #d62828)"}; color: white; padding: 14px 24px; border-radius: 50px; display: flex; align-items: center; gap: 12px; font-weight: bold; box-shadow: 0 10px 25px rgba(0,0,0,0.2); margin-bottom: 10px; animation: slideUp 0.3s ease; font-size: 14px; pointer-events: none;`;
+    const icon = document.createElement("i");
+    icon.className = type === "success" ? "fas fa-check-circle" : "fas fa-exclamation-triangle";
+    icon.style.fontSize = "20px";
+    const text = document.createElement("span");
+    text.textContent = message;
+    toast.appendChild(icon);
+    toast.appendChild(text);
+    toastContainer.appendChild(toast);
+    setTimeout(() => {
+        toast.style.animation = "slideDown 0.3s ease";
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
 }
 
 function addToastAnimations() {
-  if (document.getElementById("toastAnimations")) return;
-  const style = document.createElement("style");
-  style.id = "toastAnimations";
-  style.textContent = `
-    @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes slideDown { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(20px); } }
-  `;
-  document.head.appendChild(style);
+    if (document.getElementById("toastAnimations")) return;
+    const style = document.createElement("style");
+    style.id = "toastAnimations";
+    style.textContent = `
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideDown { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(20px); } }
+        .report-action-btn:hover { filter: brightness(0.95); transform: translateY(-1px); }
+        .report-action-btn:active { transform: translateY(0); }
+    `;
+    document.head.appendChild(style);
+}
+
+function addPanelStyles() {
+    if (document.getElementById("panelFixStyles")) return;
+    const style = document.createElement("style");
+    style.id = "panelFixStyles";
+    style.textContent = `
+        #reportsPanel { max-height: calc(100vh - 250px); overflow-y: auto; padding-right: 8px; }
+        #reportsPanel::-webkit-scrollbar { width: 6px; }
+        #reportsPanel::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
+        #reportsPanel::-webkit-scrollbar-thumb { background: #c1c1c1; border-radius: 4px; }
+        #reportsPanel::-webkit-scrollbar-thumb:hover { background: #a8a8a8; }
+    `;
+    document.head.appendChild(style);
 }
 
 function escapeHtml(str) {
-  if (!str) return "";
-  return str.replace(/[&<>]/g, function (m) {
-    if (m === "&") return "&amp;";
-    if (m === "<") return "&lt;";
-    if (m === ">") return "&gt;";
-    return m;
-  });
+    if (str === null || str === undefined) return "";
+    return String(str).replace(/[&<>"']/g, function (m) {
+        if (m === "&") return "&amp;";
+        if (m === "<") return "&lt;";
+        if (m === ">") return "&gt;";
+        if (m === '"') return "&quot;";
+        if (m === "'") return "&#039;";
+        return m;
+    });
 }
 
 function calculateDistance(lat1, lon1, lat2, lon2) {
-  const R = 6371;
-  const dLat = ((lat2 - lat1) * Math.PI) / 180;
-  const dLon = ((lon2 - lon1) * Math.PI) / 180;
-  const a =
-    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos((lat1 * Math.PI) / 180) *
-      Math.cos((lat2 * Math.PI) / 180) *
-      Math.sin(dLon / 2) *
-      Math.sin(dLon / 2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  return R * c;
+    const R = 6371;
+    const dLat = ((lat2 - lat1) * Math.PI) / 180;
+    const dLon = ((lon2 - lon1) * Math.PI) / 180;
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos((lat1 * Math.PI) / 180) * Math.cos((lat2 * Math.PI) / 180) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
 }
 
 function formatDistance(distance) {
-  if (distance === null) return "?";
-  if (distance < 1) return `${Math.round(distance * 1000)}m`;
-  return `${distance.toFixed(1)}km`;
-}
-
-function findNearestHelper(lat, lng) {
-  let nearest = null,
-    minDistance = Infinity;
-  helpersData.forEach((helper) => {
-    if (helper.isClinic) return;
-    const dist = calculateDistance(lat, lng, helper.lat, helper.lng);
-    if (dist < minDistance) {
-      minDistance = dist;
-      nearest = { ...helper, distance: dist };
-    }
-  });
-  return nearest;
-}
-
-function findNearestClinic(lat, lng) {
-  let nearest = null,
-    minDistance = Infinity;
-  helpersData.forEach((helper) => {
-    if (!helper.isClinic) return;
-    const dist = calculateDistance(lat, lng, helper.lat, helper.lng);
-    if (dist < minDistance) {
-      minDistance = dist;
-      nearest = { ...helper, distance: dist };
-    }
-  });
-  return nearest;
-}
-
-function clearRadiusCircle() {
-  if (activeCircle && map) {
-    map.removeLayer(activeCircle);
-    activeCircle = null;
-  }
-}
-
-function showRadiusCircle(lat, lng) {
-  clearRadiusCircle();
-  activeCircle = L.circle([lat, lng], {
-    color: "#ff6b35",
-    fillColor: "#ff6b35",
-    fillOpacity: 0.15,
-    radius: 500,
-    weight: 2,
-    opacity: 0.6,
-  }).addTo(map);
-  setTimeout(() => {
-    if (activeCircle && map) {
-      map.removeLayer(activeCircle);
-      activeCircle = null;
-    }
-  }, 5000);
+    if (distance === null) return "?";
+    if (distance < 1) return `${Math.round(distance * 1000)}m`;
+    return `${distance.toFixed(1)}km`;
 }
 
 function filterReports() {
-  let filtered = [...reports];
-  if (activeTab !== "all" && activeTab !== "map" && activeTab !== "list") {
-    filtered = filtered.filter((r) => r.status === activeTab);
-  }
-  if (searchKeyword && searchKeyword.trim() !== "") {
-    const kw = searchKeyword.toLowerCase().trim();
-    filtered = filtered.filter(
-      (r) =>
-        r.animal.toLowerCase().includes(kw) ||
-        r.location.toLowerCase().includes(kw),
-    );
-  }
-  return filtered;
-}
-
-function deleteReport(reportId) {
-  const modal = document.createElement("div");
-  modal.style.cssText = `position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); display:flex; align-items:center; justify-content:center; z-index:10001;`;
-  const dialog = document.createElement("div");
-  dialog.style.cssText = `background:white; border-radius:20px; padding:24px; width:300px; text-align:center; box-shadow:0 10px 30px rgba(0,0,0,0.3);`;
-  dialog.innerHTML = `<i class="fas fa-trash-alt" style="font-size:48px; color:#d62828; margin-bottom:16px;"></i><h3>Xóa báo cáo?</h3><p>Bạn có chắc muốn xóa?</p><div style="display:flex; gap:12px; margin-top:20px;"><button id="confirmDeleteBtn" style="flex:1; background:#d62828; color:white; border:none; padding:10px; border-radius:30px; cursor:pointer;">Xóa</button><button id="cancelDeleteBtn" style="flex:1; background:#ccc; border:none; padding:10px; border-radius:30px; cursor:pointer;">Hủy</button></div>`;
-  modal.appendChild(dialog);
-  document.body.appendChild(modal);
-  document.getElementById("confirmDeleteBtn").onclick = () => {
-    reports = reports.filter((r) => r.id !== reportId);
-    renderReportsPanel();
-    renderNearbyHelpers();
-    renderNearestClinic();
-    if (map) updateMapMarkers();
-    showToast("Đã xóa báo cáo!", "success");
-    modal.remove();
-  };
-  document.getElementById("cancelDeleteBtn").onclick = () => modal.remove();
-}
-
-function updateReport(report) {
-  const newAnimal = prompt("✏️ Nhập tên/loài động vật:", report.animal);
-  if (!newAnimal || newAnimal.trim() === "") {
-    showToast("Tên không được để trống!", "error");
-    return;
-  }
-  const newStatus = prompt(
-    "📌 Chọn tình trạng (emergency/progress/rescued):",
-    report.status,
-  );
-  if (!newStatus || !["emergency", "progress", "rescued"].includes(newStatus)) {
-    showToast("Tình trạng không hợp lệ!", "error");
-    return;
-  }
-  const newDesc = prompt("📝 Mô tả thêm:", report.description || "");
-  report.animal = newAnimal.trim();
-  report.status = newStatus;
-  report.description = newDesc || "";
-  report.date = new Date().toLocaleString("vi-VN");
-  renderReportsPanel();
-  renderNearbyHelpers();
-  renderNearestClinic();
-  if (map) updateMapMarkers();
-  showToast("Đã cập nhật báo cáo!", "success");
-}
-
-function createReportCardHTML(report) {
-  let statusDisplay = "",
-    statusIcon = "",
-    statusClass = "";
-  if (report.status === "emergency") {
-    statusDisplay = "🚨 Khẩn cấp";
-    statusIcon = "🔴";
-    statusClass = "emergency";
-  } else if (report.status === "progress") {
-    statusDisplay = "⏳ Đang xử lý";
-    statusIcon = "🟡";
-    statusClass = "progress";
-  } else {
-    statusDisplay = "✅ Đã cứu";
-    statusIcon = "🟢";
-    statusClass = "rescued";
-  }
-  return `<div class="report-card ${statusClass}" style="background:white; border-radius:12px; padding:12px; margin-bottom:12px; box-shadow:0 2px 6px rgba(0,0,0,0.1); border-left:4px solid ${report.status === "emergency" ? "#d62828" : report.status === "progress" ? "#3b82f6" : "#2a9d8f"}"><div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span style="font-weight:bold;"><i class="fas fa-paw"></i> ${escapeHtml(report.animal)}</span><span class="status-tag">${statusIcon} ${statusDisplay}</span></div><div style="font-size:13px; color:#555;"><i class="fas fa-map-marker-alt"></i> ${escapeHtml(report.location)}</div><div style="font-size:12px; color:#888;"><i class="fas fa-calendar-alt"></i> ${report.date}</div>${report.photo ? `<img src="${report.photo}" style="width:100%; max-height:150px; object-fit:cover; border-radius:8px; margin:8px 0;">` : ""}${report.description ? `<div style="font-size:13px; margin:8px 0;">${escapeHtml(report.description)}</div>` : ""}<div style="display:flex; gap:8px; margin-top:8px;"><button class="small-btn locate-btn" data-lat="${report.lat}" data-lng="${report.lng}" style="background:#2a9d8f; color:white; border:none; padding:6px 12px; border-radius:20px; cursor:pointer;"><i class="fas fa-location-dot"></i> Định vị</button><button class="small-btn update-btn" data-id="${report.id}" style="background:#3b82f6; color:white; border:none; padding:6px 12px; border-radius:20px; cursor:pointer;"><i class="fas fa-edit"></i> Cập nhật</button><button class="small-btn delete-btn" data-id="${report.id}" style="background:#d62828; color:white; border:none; padding:6px 12px; border-radius:20px; cursor:pointer;"><i class="fas fa-trash"></i> Xóa</button></div></div>`;
-}
-
-function attachCardEvents() {
-  document.querySelectorAll(".locate-btn").forEach((btn) => {
-    btn.onclick = (e) => {
-      e.stopPropagation();
-      const lat = parseFloat(btn.dataset.lat);
-      const lng = parseFloat(btn.dataset.lng);
-      setActiveTab("map");
-      setTimeout(() => {
-        if (map) {
-          map.setView([lat, lng], 16);
-          showRadiusCircle(lat, lng);
-          setTimeout(() => {
-            markersLayer.eachLayer((layer) => {
-              if (
-                Math.abs(layer.getLatLng().lat - lat) < 0.0001 &&
-                Math.abs(layer.getLatLng().lng - lng) < 0.0001
-              ) {
-                layer.openPopup();
-              }
-            });
-          }, 300);
-        }
-      }, 200);
-    };
-  });
-  document.querySelectorAll(".update-btn").forEach((btn) => {
-    btn.onclick = (e) => {
-      e.stopPropagation();
-      const id = parseInt(btn.dataset.id);
-      const report = reports.find((r) => r.id === id);
-      if (report) updateReport(report);
-    };
-  });
-  document.querySelectorAll(".delete-btn").forEach((btn) => {
-    btn.onclick = (e) => {
-      e.stopPropagation();
-      const id = parseInt(btn.dataset.id);
-      deleteReport(id);
-    };
-  });
-}
-
-function initRealMap() {
-  const mapContainer = document.getElementById("interactiveMap");
-  if (!mapContainer) return;
-  if (typeof L === "undefined") {
-    console.error("Leaflet chưa tải");
-    return;
-  }
-  if (map) map.remove();
-  map = L.map("interactiveMap").setView([16.0545, 108.2171], 14);
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution: "&copy; OpenStreetMap",
-    maxZoom: 19,
-  }).addTo(map);
-  markersLayer = L.layerGroup().addTo(map);
-  updateMapMarkers();
-}
-
-function updateMapMarkers() {
-  if (!markersLayer) return;
-  markersLayer.clearLayers();
-  const filteredReports = filterReports();
-  filteredReports.forEach((report) => {
-    let markerColor = "#d62828";
-    let statusText = "🚨 KHẨN CẤP";
-    if (report.status === "rescued") {
-      markerColor = "#2a9d8f";
-      statusText = "✅ ĐÃ CỨU";
-    } else if (report.status === "progress") {
-      markerColor = "#3b82f6";
-      statusText = "⏳ ĐANG XỬ LÝ";
+    let filtered = [...reports];
+    if (activeTab !== "all" && activeTab !== "map" && activeTab !== "list") {
+        filtered = filtered.filter((r) => r.status === activeTab);
     }
-    const nearestHelper = findNearestHelper(report.lat, report.lng);
-    const nearestClinic = findNearestClinic(report.lat, report.lng);
-    const markerIcon = L.divIcon({
-      className: "custom-marker",
-      html: `<div style="background-color: ${markerColor}; width: 28px; height: 28px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 8px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; font-size: 14px;">📍</div>`,
-      iconSize: [28, 28],
-      iconAnchor: [14, 14],
-      popupAnchor: [0, -14],
-    });
-    const marker = L.marker([report.lat, report.lng], {
-      icon: markerIcon,
-    }).addTo(markersLayer);
-    let helperHtml = nearestHelper
-      ? `<div style="background:#f0fdf4; padding:10px; border-radius:8px; margin:8px 0;"><div style="font-weight:bold;">🏥 Người hỗ trợ gần nhất:</div><div>👨‍⚕️ <strong>${escapeHtml(nearestHelper.name)}</strong><br>📍 Cách ${formatDistance(nearestHelper.distance)}<br>📞 ${nearestHelper.phone}</div></div>`
-      : `<div style="background:#fff3cd; padding:8px; border-radius:8px;">⚠️ Chưa có người hỗ trợ gần</div>`;
-    let clinicHtml = nearestClinic
-      ? `<div style="background:#e8f5e9; padding:10px; border-radius:8px;"><div style="font-weight:bold;">🏪 Phòng khám gần nhất:</div><div>🏥 <strong>${escapeHtml(nearestClinic.name)}</strong><br>📍 Cách ${formatDistance(nearestClinic.distance)}<br>📞 ${nearestClinic.phone}<br>🕐 ${nearestClinic.available}</div></div>`
-      : "";
-    const popupContent = `<div style="min-width:260px;"><div style="font-weight:bold; font-size:16px;">🐾 ${escapeHtml(report.animal)}</div><div><i class="fas fa-map-marker-alt"></i> ${escapeHtml(report.location)}</div><div><i class="fas fa-calendar-alt"></i> ${report.date}</div>${report.photo ? `<img src="${report.photo}" style="width:100%; border-radius:8px; margin:8px 0; max-height:150px;">` : ""}${report.description ? `<div>${escapeHtml(report.description)}</div>` : ""}<div><span style="background:${markerColor}; color:white; padding:3px 10px; border-radius:20px;">${statusText}</span></div>${helperHtml}${clinicHtml}<hr><div style="font-size:11px; text-align:center;">🔘 Nhấn vào marker để hiện bán kính 500m</div></div>`;
-    marker.bindPopup(popupContent);
-    marker.on("click", function () {
-      showRadiusCircle(report.lat, report.lng);
-    });
-  });
-  if (filteredReports.length === 1)
-    map.setView([filteredReports[0].lat, filteredReports[0].lng], 15);
-  else if (filteredReports.length > 1)
-    map.fitBounds(filteredReports.map((r) => [r.lat, r.lng]));
-}
-
-function renderReportsPanel() {
-  const container = document.getElementById("reportsPanel");
-  if (!container) return;
-  const filtered = filterReports();
-  if (filtered.length === 0) {
-    container.innerHTML = `<div style="text-align:center; padding:40px;"><i class="fas fa-camera" style="font-size:48px; color:#ccc;"></i><h3>Chưa có báo cáo</h3><p>Nhấn "Report Now" để báo cáo động vật cần cứu!</p></div>`;
-    return;
-  }
-  container.innerHTML = `<div style="margin-bottom:12px; font-weight:bold;">📋 Danh sách báo cáo (${filtered.length})</div>`;
-  filtered.forEach((r) => (container.innerHTML += createReportCardHTML(r)));
-  attachCardEvents();
-}
-
-function renderNearbyHelpers() {
-  const helpersDiv = document.getElementById("helpersList");
-  if (!helpersDiv) return;
-  const currentReports = filterReports();
-  const onlyHelpers = helpersData.filter((h) => !h.isClinic);
-  const helpersWithDistance = onlyHelpers.map((helper) => {
-    let minDistance = Infinity,
-      nearestReport = null;
-    currentReports.forEach((report) => {
-      const dist = calculateDistance(
-        helper.lat,
-        helper.lng,
-        report.lat,
-        report.lng,
-      );
-      if (dist < minDistance) {
-        minDistance = dist;
-        nearestReport = report;
-      }
-    });
-    return { ...helper, nearestDistance: minDistance, nearestReport };
-  });
-  const filteredHelpers = helpersWithDistance.filter(
-    (h) => h.nearestDistance !== Infinity && h.nearestDistance <= 5,
-  );
-  filteredHelpers.sort((a, b) => a.nearestDistance - b.nearestDistance);
-  if (filteredHelpers.length === 0) {
-    helpersDiv.innerHTML = `<div style="text-align:center; padding:20px; color:#999;"><i class="fas fa-user-md"></i><p>Không có người hỗ trợ trong bán kính 5km</p></div>`;
-    return;
-  }
-  helpersDiv.innerHTML = "";
-  filteredHelpers.forEach((helper) => {
-    const card = document.createElement("div");
-    card.className = "helper-card";
-    card.style.cssText =
-      "background:#fff; border-radius:12px; padding:12px; margin-bottom:10px; box-shadow:0 1px 4px rgba(0,0,0,0.1); display:flex; justify-content:space-between; align-items:center;";
-    card.innerHTML = `<div><h4 style="margin:0;"><i class="fas fa-user-md"></i> ${escapeHtml(helper.name)}</h4><p style="margin:4px 0; font-size:12px;">${escapeHtml(helper.role)} ${helper.verified ? "✓ Đã xác thực" : "⚠️ Chưa xác thực"}</p><div style="font-size:12px;"><i class="fas fa-location-dot"></i> Cách ${formatDistance(helper.nearestDistance)} đến <strong>${escapeHtml(helper.nearestReport.animal)}</strong></div><div style="font-size:11px; color:#888;">${escapeHtml(helper.address)}</div></div><button class="contact-btn" data-phone="${helper.phone}" data-name="${escapeHtml(helper.name)}" style="background:#2a9d8f; color:white; border:none; padding:8px 16px; border-radius:20px; cursor:pointer;"><i class="fas fa-phone"></i> Gọi</button>`;
-    helpersDiv.appendChild(card);
-  });
-  document.querySelectorAll(".contact-btn").forEach((btn) => {
-    btn.onclick = () => {
-      if (confirm(`📞 Gọi cho ${btn.dataset.name}?`))
-        window.location.href = `tel:${btn.dataset.phone}`;
-    };
-  });
-}
-
-function renderNearestClinic() {
-  const clinicDiv = document.getElementById("nearestClinic");
-  if (!clinicDiv) return;
-  const currentReports = filterReports();
-  const clinics = helpersData.filter((h) => h.isClinic === true);
-  if (clinics.length === 0) {
-    clinicDiv.innerHTML = `<div style="text-align:center; padding:20px;"><i class="fas fa-hospital"></i><p>Không có phòng khám</p></div>`;
-    return;
-  }
-  let targetLat = 16.0545,
-    targetLng = 108.2171;
-  if (currentReports.length > 0) {
-    const priority =
-      currentReports.find((r) => r.status === "emergency") || currentReports[0];
-    targetLat = priority.lat;
-    targetLng = priority.lng;
-  }
-  const clinicsWithDistance = clinics.map((c) => ({
-    ...c,
-    distance: calculateDistance(targetLat, targetLng, c.lat, c.lng),
-  }));
-  clinicsWithDistance.sort((a, b) => a.distance - b.distance);
-  const nearest = clinicsWithDistance[0];
-  const distText = formatDistance(nearest.distance);
-  clinicDiv.innerHTML = `<div style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9); border-radius:12px; padding:14px; border-left:4px solid #2a9d8f;"><div style="display:flex; gap:12px; align-items:center;"><div style="background:#2a9d8f; width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center;"><i class="fas fa-hospital" style="color:white;"></i></div><div><h4 style="margin:0;">🏥 ${escapeHtml(nearest.name)}</h4><div>📍 Cách ${distText}</div></div></div><div style="margin-top:8px; font-size:12px;">${nearest.address} | 🕐 ${nearest.available} | 📋 ${nearest.specialty}</div><button class="clinic-contact-btn" data-phone="${nearest.phone}" data-name="${escapeHtml(nearest.name)}" style="margin-top:10px; background:#2a9d8f; color:white; border:none; padding:8px; width:100%; border-radius:30px; cursor:pointer;"><i class="fas fa-phone"></i> Gọi ngay</button></div>`;
-  const btn = clinicDiv.querySelector(".clinic-contact-btn");
-  if (btn)
-    btn.onclick = () => {
-      if (confirm(`📞 Gọi cho ${btn.dataset.name}?`))
-        window.location.href = `tel:${btn.dataset.phone}`;
-    };
+    if (searchKeyword && searchKeyword.trim() !== "") {
+        const kw = searchKeyword.toLowerCase().trim();
+        filtered = filtered.filter((r) => r.animal.toLowerCase().includes(kw) || r.location.toLowerCase().includes(kw));
+    }
+    return filtered;
 }
 
 function getSampleImage(animalType) {
-  const canvas = document.createElement("canvas");
-  canvas.width = 200;
-  canvas.height = 200;
-  const ctx = canvas.getContext("2d");
-  ctx.fillStyle = "#f0f0f0";
-  ctx.fillRect(0, 0, 200, 200);
-  ctx.fillStyle = "#ff6b35";
-  ctx.font = 'bold 60px "Segoe UI Emoji"';
-  ctx.textAlign = "center";
-  ctx.textBaseline = "middle";
-  let emoji = "🐾";
-  if (animalType.includes("Chó")) emoji = "🐕";
-  else if (animalType.includes("Mèo")) emoji = "🐈";
-  else if (animalType.includes("Chim")) emoji = "🐦";
-  else if (animalType.includes("Nhím")) emoji = "🦔";
-  else if (animalType.includes("Thỏ")) emoji = "🐇";
-  else if (animalType.includes("Rùa")) emoji = "🐢";
-  else if (animalType.includes("khỉ")) emoji = "🐒";
-  ctx.fillText(emoji, 100, 80);
-  ctx.font = 'bold 14px "Segoe UI"';
-  ctx.fillStyle = "#333";
-  ctx.fillText(animalType, 100, 150);
-  ctx.font = '12px "Segoe UI"';
-  ctx.fillStyle = "#999";
-  ctx.fillText("Đang cần cứu hộ", 100, 180);
-  return canvas.toDataURL("image/jpeg", 0.8);
+    return null;
 }
 
-const daNangLat = 16.0545,
-  daNangLng = 108.2171,
-  HCMLat = 10.8231,
-  HCMLng = 106.6297,
-  HanoiLat = 21.0285,
-  HanoiLng = 105.8542;
-function offsetCoordinate(base, maxOffset = 0.002) {
-  return base + (Math.random() - 0.5) * maxOffset;
+function getApiUrl(path) {
+    let host = window.location.hostname || 'localhost';
+    return `http://${host}:3000${path}`;
 }
-const sampleReports = [
-  {
-    animal: "Chó hoang bị thương",
-    location: "Hẻm 491 Trưng Nữ Vương, Đà Nẵng",
-    status: "emergency",
-    lat: offsetCoordinate(daNangLat, 0.0015),
-    lng: offsetCoordinate(daNangLng, 0.0015),
-    description: "Chó bị gãy chân trước, cần hỗ trợ khẩn cấp",
-  },
-  {
-    animal: "Mèo mắc kẹt trên mái nhà",
-    location: "Kiệt 483 Trưng Nữ Vương, Đà Nẵng",
-    status: "progress",
-    lat: offsetCoordinate(daNangLat, 0.002),
-    lng: offsetCoordinate(daNangLng, -0.0018),
-    description: "Mèo kêu thảm thiết",
-  },
-  {
-    animal: "Chim bồ câu gãy cánh",
-    location: "Công viên 29/3",
-    status: "rescued",
-    lat: offsetCoordinate(daNangLat, -0.0012),
-    lng: offsetCoordinate(daNangLng, 0.0022),
-    description: "Đã cứu",
-  },
-  {
-    animal: "Nhím cảnh bị bỏ rơi",
-    location: "Đường Nguyễn Văn Linh",
-    status: "emergency",
-    lat: offsetCoordinate(daNangLat, 0.0025),
-    lng: offsetCoordinate(daNangLng, 0.001),
-    description: "Nhím trong thùng carton",
-  },
-  {
-    animal: "Khỉ bị thương",
-    location: "Khu du lịch Suối Tiên, HCM",
-    status: "progress",
-    lat: offsetCoordinate(HCMLat, 0.0015),
-    lng: offsetCoordinate(HCMLng, 0.0018),
-    description: "Cần cứu giúp",
-  },
-  {
-    animal: "Rùa bị bắt cóc",
-    location: "Gần trường Bách Khoa Hà Nội",
-    status: "emergency",
-    lat: offsetCoordinate(HanoiLat, 0.0013),
-    lng: offsetCoordinate(HanoiLng, -0.0017),
-    description: "Cần hỗ trợ gấp",
-  },
-];
-sampleReports.forEach((report) => {
-  report.photo = getSampleImage(report.animal);
-  report.date = new Date().toLocaleString("vi-VN");
-});
-if (reports.length === 0) {
-  sampleReports.forEach((report) => {
-    reports.push({ id: nextId++, ...report });
-  });
+
+// ═══════════════════════════════════════════════════════════════
+// REVERSE GEOCODE
+// ═══════════════════════════════════════════════════════════════
+async function reverseGeocode(lat, lng) {
+    try {
+        const url = getApiUrl(`/api/geocode?lat=${lat}&lng=${lng}&zoom=16`);
+        const res = await fetch(url);
+        const data = await res.json();
+        if (data && data.address) {
+            const a = data.address;
+            const parts = [
+                a.house_number,
+                a.road || a.pedestrian || a.footway,
+                a.suburb || a.neighbourhood || a.quarter,
+                a.city || a.town || a.county || a.state
+            ].filter(Boolean);
+            return parts.length > 0
+                ? parts.join(', ')
+                : (data.display_name || `${lat.toFixed(5)}, ${lng.toFixed(5)}`);
+        }
+        return `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
+    } catch {
+        return `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
+    }
+}
+
+function updateCardAddress(reportId, newAddress) {
+    const locEls = document.querySelectorAll(`[data-report-id="${reportId}"]`);
+    locEls.forEach(el => {
+        el.style.transition = 'opacity 0.3s ease';
+        el.style.opacity = '0';
+        setTimeout(() => {
+            el.innerHTML = escapeHtml(newAddress);
+            el.removeAttribute('style');
+            el.style.cssText = `
+                line-height: 1.35;
+                color: #86efac;
+                font-style: normal;
+                transition: color 1.5s ease;
+            `;
+            el.style.opacity = '1';
+            setTimeout(() => {
+                el.style.color = '#94a3b8';
+            }, 2000);
+        }, 300);
+    });
+    const r = reports.find(x => x.id === reportId);
+    if (r) {
+        r.location = newAddress;
+        r._needGeocode = false;
+    }
+}
+
+async function resolveAddressesInBackground(reportsList) {
+    const needResolve = reportsList.filter(r =>
+        r._needGeocode === true && !isNaN(r.lat) && !isNaN(r.lng)
+    );
+    if (needResolve.length === 0) return;
+    for (const report of needResolve) {
+        await new Promise(r => setTimeout(r, 1500));
+        const addr = await reverseGeocode(report.lat, report.lng);
+        updateCardAddress(report.id, addr);
+
+        if (report.id) {
+            try {
+                await fetch(getApiUrl(`/api/rescuemap/${report.id}/address`), {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ address: addr })
+                });
+            } catch (e) { console.warn("Lỗi lưu address vào DB:", e); }
+        }
+    }
+}
+
+async function fetchRescueReports() {
+    try {
+        const response = await fetch(getApiUrl(`/api/rescuemap?t=${new Date().getTime()}`), { cache: 'no-store' });
+        const dbData = await response.json();
+
+        if (dbData && dbData.length > 0) {
+            reports = dbData.map(item => {
+                const latVal = item.location && item.location.lat !== undefined ? parseFloat(item.location.lat) : NaN;
+                const lngVal = item.location && item.location.lng !== undefined ? parseFloat(item.location.lng) : NaN;
+
+                const rawAddr = (item.address || '').trim();
+                const BAD = ['', 'chưa rõ địa chỉ', 'chưa rõ', 'undefined', 'null', 'không rõ'];
+                const hasAddr = rawAddr && !BAD.includes(rawAddr.toLowerCase());
+
+                let displayAddr;
+                let needGeocode = false;
+
+                if (hasAddr) {
+                    displayAddr = rawAddr;
+                } else if (!isNaN(latVal) && !isNaN(lngVal)) {
+                    displayAddr = `${latVal.toFixed(4)}°N, ${lngVal.toFixed(4)}°E`;
+                    needGeocode = true;
+                } else {
+                    displayAddr = 'Đang xác định vị trí...';
+                }
+                const rawPhoto = item.photo && typeof item.photo === 'string' && item.photo.trim() !== ''
+                    ? item.photo.trim()
+                    : null;
+
+                return {
+                    id: item._id ? item._id.toString() : "",
+                    animal: item.animalName || item.animal || "Chưa rõ tên",
+                    location: displayAddr,
+                    status: item.status || "emergency",
+                    lat: latVal,
+                    lng: lngVal,
+                    date: item.createdAt || item.date || new Date().toLocaleString("vi-VN"),
+                    description: item.description || item.note || "",
+                    photo: rawPhoto,
+                    _needGeocode: needGeocode,
+                    reporterName: item.reportedBy?.fullName || item.reporter || "Khách",
+                    reporterAvatar: item.reportedBy?.avatar || "",
+                    reporterUserId: item.reportedBy?.userId || null
+                };
+            }).filter(report => !isNaN(report.lat) && !isNaN(report.lng));
+        } else {
+            reports = [];
+        }
+
+        renderReportsPanel();
+
+        function tryAddMarkers(attempts) {
+            if (viewer) {
+                renderMarkersToMap(filterReports());
+            } else if (attempts > 0) {
+                setTimeout(() => tryAddMarkers(attempts - 1), 800);
+            }
+        }
+        tryAddMarkers(5);
+
+        setTimeout(() => resolveAddressesInBackground([...reports]), 1500);
+
+    } catch (error) {
+        console.error("❌ Lỗi khi tải dữ liệu từ DB:", error);
+    }
+}
+
+
+function tr(key, fallback) {
+    if (window.translations && window.currentLang && window.translations[window.currentLang]) {
+        return window.translations[window.currentLang][key] || fallback;
+    }
+    return fallback;
+}
+
+function createReportCardHTML(report) {
+    const statusMap = {
+        emergency: { label: tr('rm_tab_emergency', 'Khẩn cấp'), class: 'report-emergency' },
+        progress: { label: tr('rm_tab_progress', 'Đang xử lý'), class: 'report-progress' },
+        rescued: { label: tr('rm_tab_rescued', 'Đã cứu'), class: 'report-rescued' },
+        unknown: { label: tr('rm_tab_all', 'Không rõ'), class: '' }
+    };
+    const st = statusMap[report.status] || statusMap.emergency;
+
+    const fallbackSrc = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(report.animal) + '&background=0a1c12&color=4ade80&size=128&bold=true';
+    const photoSrc = (report.photo && (report.photo.startsWith('http') || report.photo.startsWith('data:image/')))
+        ? report.photo
+        : fallbackSrc;
+
+    const isCoords = /^-?\d+\.\d+°[NS]/.test(report.location || '');
+    const addrText = escapeHtml(report.location || 'Đang xác định...');
+    const addressHTML = isCoords
+        ? `<i class="fas fa-circle-notch fa-spin" style="font-size:9px;opacity:0.5;"></i> <span data-report-id="${report.id}" style="font-style:italic;color:#94a3b8;">${addrText}</span>`
+        : `<span data-report-id="${report.id}">${addrText}</span>`;
+
+    const dateStr = typeof report.date === 'string' ? report.date : new Date(report.date).toLocaleString('vi-VN');
+
+    const descBlock = report.description
+        ? `<div style="font-size:12px;color:#94a3b8;font-style:italic;margin-top:6px;padding-left:8px;border-left:2px solid rgba(255,255,255,0.2);">&ldquo;${escapeHtml(report.description)}&rdquo;</div>`
+        : '';
+
+    const phoneBlock = report.phone
+        ? `<div class="location" style="margin-top:4px;"><i class="fas fa-phone-alt" style="color:#60a5fa;"></i> <a href="tel:${escapeHtml(report.phone)}" style="color:#60a5fa;text-decoration:none;font-weight:600;">${escapeHtml(report.phone)}</a></div>`
+        : '';
+
+    const reporter = report.reporterName || tr('rm_reporter_guest', 'Khách');
+    const rAvatar = report.reporterAvatar || '';
+    const rInitial = reporter.trim().charAt(0).toUpperCase();
+    const avatarHtml = (rAvatar && (rAvatar.startsWith('http') || rAvatar.startsWith('/')))
+        ? `<img src="${rAvatar}" alt="" style="width:18px;height:18px;border-radius:50%;object-fit:cover;" onerror="this.outerHTML='${rInitial}'">`
+        : `<div style="width:18px;height:18px;border-radius:50%;background:linear-gradient(135deg,#16a34a,#15803d);color:#fff;font-size:9px;font-weight:800;display:flex;align-items:center;justify-content:center;">${rInitial}</div>`;
+
+    let currentUserId = null;
+    try {
+        const userStr = localStorage.getItem('currentUser');
+        if (userStr) {
+            const userObj = JSON.parse(userStr);
+            // Ép về String để tránh lỗi so sánh ObjectId vs String
+            currentUserId = (userObj.userId || userObj._id || '').toString().trim();
+        }
+    } catch (e) { }
+
+    // Ép cả reporterUserId về String trước khi so sánh
+    const reportOwnerIdStr = report.reporterUserId ? report.reporterUserId.toString().trim() : null;
+    const isOwner = !!(currentUserId && reportOwnerIdStr && currentUserId === reportOwnerIdStr);
+    const deleteBtnHtml = isOwner ? `<button class="small-btn delete-btn rcard-delete" data-id="${report.id}"><i class="fas fa-trash-alt"></i> Xóa</button>` : '';
+
+    return `
+    <div class="report-card ${st.class}" style="background: rgba(6,21,8,0.85); border: 1px solid rgba(255,255,255,0.09);">
+        <div class="report-card-main" style="flex: 1; min-width: 0;">
+            <img class="report-card-thumb" src="${photoSrc}" alt="${escapeHtml(report.animal)}" onerror="this.onerror=null;this.src='${fallbackSrc}'" style="border: 1px solid rgba(255,255,255,0.12);">
+            <div class="report-card-info" style="flex: 1; min-width: 0;">
+                <h4 title="${escapeHtml(report.animal)}" style="color: #f8fafc;">${escapeHtml(report.animal)}</h4>
+                <span class="status-tag" style="margin-bottom: 6px; display: inline-block;">${st.label}</span>
+                <div class="location" style="color: #94a3b8;"><i class="fas fa-map-marker-alt" style="color: #4ade80;"></i> ${addressHTML}</div>
+                ${phoneBlock}
+                <div class="location" style="margin-top:4px; color: #64748b;"><i class="fas fa-clock"></i> ${escapeHtml(dateStr)}</div>
+                ${descBlock}
+                <div style="display:flex;align-items:center;gap:6px;margin-top:8px;padding-top:8px;border-top:1px dashed rgba(255,255,255,0.1);">
+                    ${avatarHtml}
+                    <span style="font-size:11px;color:#64748b;">${tr('rm_card_reporter', 'Đăng bởi: ')}<strong style="color:#94a3b8;">${escapeHtml(reporter)}</strong></span>
+                </div>
+            </div>
+        </div>
+        <div class="report-card-actions">
+            <button class="small-btn locate-btn rcard-locate" data-id="${report.id}" data-lat="${report.lat}" data-lng="${report.lng}">
+                <i class="fas fa-crosshairs"></i> Vị trí 3D
+            </button>
+            ${deleteBtnHtml}
+        </div>
+    </div>`;
+}
+
+function renderReportsPanel() {
+    const container = document.getElementById('reportsPanel');
+    if (!container) return;
+    container.innerHTML = '';
+    const filtered = filterReports();
+    if (filtered.length === 0) {
+        container.innerHTML = '<div style="text-align:center;padding:36px 16px;color:#94a3b8;"><i class="fas fa-binoculars" style="font-size:40px;color:rgba(34,197,94,0.28);margin-bottom:12px;display:block;"></i><h3 style="color:#f8fafc;font-size:15px;margin-bottom:6px;">Chưa có báo cáo nào</h3><p style="font-size:12.5px;line-height:1.6;">Nhấn <strong style="color:#f97316;">&#128680; Report Now</strong><br>trên thanh menu để báo cáo!</p></div>';
+        return;
+    }
+    const heading = document.createElement('div');
+    heading.style.cssText = 'font-size:12.5px;font-weight:700;color:#4ade80;border-bottom:1px solid rgba(255,255,255,0.08);padding-bottom:10px;margin-bottom:12px;display:flex;align-items:center;gap:7px;letter-spacing:0.3px;';
+    heading.innerHTML = '<i class="fas fa-list-ul" style="opacity:0.7;"></i> Danh sách báo cáo <span style="background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.3);color:#4ade80;border-radius:99px;padding:2px 9px;font-size:10.5px;margin-left:auto;">' + filtered.length + '</span>';
+    container.appendChild(heading);
+
+    filtered.forEach(function (report) {
+        container.insertAdjacentHTML('beforeend', createReportCardHTML(report));
+        var card = container.lastElementChild;
+        if (!card) return;
+
+        var locBtn = card.querySelector('.rcard-locate');
+        if (locBtn) {
+            locBtn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                var rid = locBtn.dataset.id;
+                var lat = parseFloat(locBtn.dataset.lat);
+                var lng = parseFloat(locBtn.dataset.lng);
+                if (isNaN(lat) || isNaN(lng)) { showToast('⚠️ Tọa độ không hợp lệ!', 'error'); return; }
+                var orig = locBtn.innerHTML;
+                locBtn.innerHTML = '<i class="fas fa-spinner fa-spin" style="font-size:11px;"></i> Đang bay...';
+                locBtn.disabled = true; locBtn.style.opacity = '0.7';
+                window.setActiveTab('map');
+                function tryOpen(attempts) {
+                    var pd = popupDiv || document.getElementById('customPopup');
+                    var entity = viewer && viewer.entities.getById('report_' + rid);
+                    if (viewer && !viewer.isDestroyed() && entity && pd) {
+                        viewer.camera.flyTo({
+                            destination: Cesium.Cartesian3.fromDegrees(lng, lat, 1200), duration: 2,
+                            complete: function () {
+                                locBtn.innerHTML = orig; locBtn.disabled = false; locBtn.style.opacity = '1';
+                                var html = entity.properties && entity.properties.customHTML
+                                    ? (typeof entity.properties.customHTML.getValue === 'function' ? entity.properties.customHTML.getValue() : entity.properties.customHTML)
+                                    : null;
+                                if (html) {
+                                    activeEntity = entity;
+                                    pd.innerHTML = html; pd.style.display = 'block';
+                                    var cb = pd.querySelector('.close-btn');
+                                    if (cb) cb.onclick = function () { pd.style.display = 'none'; activeEntity = null; };
+                                    if (entity.point) {
+                                        entity.point.pixelSize = new Cesium.ConstantProperty(26);
+                                        entity.point.outlineWidth = new Cesium.ConstantProperty(5);
+                                        setTimeout(function () { if (entity.point) { entity.point.pixelSize = new Cesium.ConstantProperty(18); entity.point.outlineWidth = new Cesium.ConstantProperty(3); } }, 1500);
+                                    }
+                                }
+                            },
+                            cancel: function () { locBtn.innerHTML = orig; locBtn.disabled = false; locBtn.style.opacity = '1'; }
+                        });
+                    } else if (attempts > 0) {
+                        setTimeout(function () { tryOpen(attempts - 1); }, 400);
+                    } else {
+                        locBtn.innerHTML = orig; locBtn.disabled = false; locBtn.style.opacity = '1';
+                        showToast('⚠️ Bản đồ chưa sẵn sàng, thử lại!', 'error');
+                    }
+                }
+                tryOpen(10);
+            });
+        }
+
+        // --- ĐOẠN ĐÃ ĐƯỢC FIX LỖI BẤM XÓA ---
+        var delBtn = card.querySelector('.rcard-delete');
+        if (delBtn) {
+            delBtn.addEventListener('click', async function (e) {
+                e.stopPropagation();
+                var id = delBtn.dataset.id;
+
+                // Chặn đứng ngay lập tức nếu bài viết bị lỗi rỗng ID (Nguyên nhân gây ra URL lỗi 404 HTML)
+                if (!id || id === 'undefined' || id.trim() === '') {
+                    showToast('❌ Báo cáo này bị lỗi dữ liệu (Không có ID gốc) nên không thể xóa!', 'error');
+                    return;
+                }
+
+                if (confirm('Bạn có chắc chắn muốn xóa báo cáo này khỏi hệ thống?')) {
+
+                    let myUserId = "";
+                    try {
+                        const me = JSON.parse(localStorage.getItem('currentUser'));
+                        // Ép về String để đảm bảo khớp với ownerId lưu trong MongoDB (String)
+                        if (me) myUserId = (me.userId || me._id || '').toString().trim();
+                    } catch (err) { }
+
+                    console.log('🗑️ [DELETE] Gửi xóa báo cáo ID:', id, '| Với userId:', myUserId);
+
+                    // Validation: Chặn khi không có thông tin user
+                    if (!myUserId) {
+                        showToast('❌ Bạn chưa đăng nhập hoặc không lấy được thông tin phiên đăng nhập!', 'error');
+                        return;
+                    }
+
+                    delBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                    delBtn.disabled = true;
+
+                    try {
+                        // Mã hóa URL để không bị lỗi Fetch Error do khoảng trắng
+                        // Fix thêm lỗi "undefined" nếu lỡ bài viết đó chưa có ID
+                        const safeId = encodeURIComponent((id || '').toString().trim());
+                        const safeUserId = encodeURIComponent((myUserId || '').toString().trim());
+                        const url = getApiUrl(`/api/rescuemap/${safeId}?userId=${safeUserId}`);
+
+                        const response = await fetch(url, {
+                            method: 'DELETE',
+                            headers: { 'Accept': 'application/json' }
+                        });
+
+                        // Chống lỗi "Parse JSON" (Tách bạch xem server trả JSON hay HTML Error)
+                        const contentType = response.headers.get("content-type");
+                        let result;
+                        if (contentType && contentType.includes("application/json")) {
+                            result = await response.json();
+                        } else {
+                            const textError = await response.text();
+                            console.error("❌ Lỗi Server trả về (Không phải JSON):", textError);
+                            throw new Error(`Server trả về HTML lỗi (Status ${response.status}). F12 xem chi tiết.`);
+                        }
+
+                        if (response.ok && result.success) {
+                            reports = reports.filter(function (r) { return r.id !== id; });
+                            renderReportsPanel();
+                            if (viewer) renderMarkersToMap(filterReports());
+                            showToast('✅ ' + result.message, 'success');
+                        } else {
+                            showToast('❌ ' + (result.message || 'Không thể xóa báo cáo!'), 'error');
+                            delBtn.innerHTML = '<i class="fas fa-trash-alt"></i> Xóa';
+                            delBtn.disabled = false;
+                        }
+                    } catch (error) {
+                        console.error('🚨 Lỗi hệ thống khi gọi DELETE:', error);
+                        // ĐÃ SỬA: In thẳng tên lỗi lên màn hình để dễ dàng biết bệnh
+                        showToast(`❌ Lỗi: ${error.message || 'Mất kết nối tới Server'}`, 'error');
+                        delBtn.innerHTML = '<i class="fas fa-trash-alt"></i> Xóa';
+                        delBtn.disabled = false;
+                    }
+                }
+            });
+        }
+        // -------------------------------------
+    });
+}
+
+
+function initRealMap() {
+    const mapContainer = document.getElementById("interactiveMap");
+    if (!mapContainer) return;
+
+    if (!document.getElementById("cesiumFixStyles")) {
+        const style = document.createElement("style");
+        style.id = "cesiumFixStyles";
+        style.textContent = `
+            @media (min-width: 769px) {
+                #interactiveMap {
+                    position: absolute !important;
+                    top: 0 !important; left: 0 !important;
+                    width: 100% !important; height: 100% !important;
+                    display: block !important;
+                    overflow: visible !important;
+                }
+            }
+            @media (max-width: 768px) {
+                #interactiveMap {
+                    position: relative !important;
+                    width: 100% !important;
+                    height: calc(65% - 68px - 4px) !important;
+                    margin-top: 68px !important;
+                    margin-bottom: 4px !important;
+                    display: block !important;
+                    overflow: visible !important;
+                    flex: 0 0 calc(65% - 68px - 4px) !important;
+                }
+            }
+            #interactiveMap .cesium-viewer,
+            #interactiveMap .cesium-viewer-cesiumWidgetContainer,
+            #interactiveMap .cesium-widget,
+            #interactiveMap canvas {
+                width: 100% !important; height: 100% !important;
+                display: block !important;
+                position: absolute !important;
+                top: 0 !important; left: 0 !important;
+            }
+            .cesium-viewer-toolbar { display: none !important; }
+            .cesium-widget-credits { display: none !important; }
+        `;
+        document.head.appendChild(style);
+    }
+
+    if (viewer) { viewer.destroy(); viewer = null; }
+
+    // Cấu hình Terrain an toàn hỗ trợ đa phiên bản Cesium (Chống crash WebGL)
+    let terrainConfig = {};
+    try {
+        terrainConfig = { terrain: Cesium.Terrain.fromWorldTerrain() };
+    } catch (e) {
+        try { terrainConfig = { terrainProvider: Cesium.createWorldTerrain() }; } catch (err) { }
+    }
+
+    viewer = new Cesium.Viewer('interactiveMap', {
+        ...terrainConfig,
+        animation: false, timeline: false, infoBox: false, selectionIndicator: false,
+        baseLayerPicker: false, geocoder: false, homeButton: false, navigationHelpButton: false, sceneModePicker: false,
+        fullscreenButton: true, fullscreenElement: 'interactiveMap'
+    });
+
+    if (viewer.cesiumWidget.creditContainer) {
+        viewer.cesiumWidget.creditContainer.style.display = "none";
+    }
+
+    viewer.scene.camera.frustum.far = 100000000;
+    viewer.camera.flyTo({ destination: Cesium.Cartesian3.fromDegrees(108.2171, 16.0545, 25000000), duration: 2 });
+
+    let resizeTimeout;
+    const resizeObserver = new ResizeObserver(() => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+            if (viewer && viewer.resize) {
+                try { viewer.resize(); } catch (e) { console.log("Cesium resize ignored"); }
+            }
+        }, 100);
+    });
+    resizeObserver.observe(mapContainer);
+
+    setupCustomPopup();
+    renderMarkersToMap(filterReports());
+}
+
+function setupCustomPopup() {
+    const container = document.getElementById("interactiveMap");
+    if (!container) return;
+    container.style.position = 'relative';
+    if (popupDiv) popupDiv.remove();
+
+    popupDiv = document.createElement('div');
+    popupDiv.id = 'cesiumPopupDiv';
+    popupDiv.className = 'cesium-popup-overlay';
+    // Các style position, top, right đã được chuyển sang CSS để Responsive tốt hơn
+    popupDiv.style.backgroundColor = 'transparent';
+    popupDiv.style.padding = '0px';
+    popupDiv.style.display = 'none';
+    popupDiv.style.pointerEvents = 'auto';
+    container.appendChild(popupDiv);
+
+    const handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
+    handler.setInputAction(function (movement) {
+        const pickedObject = viewer.scene.pick(movement.position);
+        if (Cesium.defined(pickedObject) && pickedObject.id && pickedObject.id.properties && pickedObject.id.properties.customHTML) {
+            activeEntity = pickedObject.id;
+            const htmlContent = typeof activeEntity.properties.customHTML.getValue === 'function' ? activeEntity.properties.customHTML.getValue() : activeEntity.properties.customHTML;
+            popupDiv.innerHTML = htmlContent;
+            popupDiv.style.display = 'block';
+
+            const closeBtn = popupDiv.querySelector('.close-btn');
+            if (closeBtn) closeBtn.onclick = () => { 
+                popupDiv.style.display = 'none'; 
+                activeEntity = null; 
+            };
+        } else {
+            activeEntity = null; 
+            if (popupDiv) {
+                popupDiv.style.display = 'none';
+            }
+        }
+    }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+}
+
+function renderMarkersToMap(reportsData) {
+    if (!viewer) return;
+
+    viewer.entities.removeAll();
+    if (popupDiv) {
+        popupDiv.style.display = 'none';
+    }
+
+    if (reportsData.length === 0) return;
+
+    const locationCount = {};
+
+    reportsData.forEach(report => {
+        let markerColor = Cesium.Color.fromCssColorString('#ef4444');
+        let statusText = '🆘 ' + tr('rm_status_text_emergency', 'KHẨN CẤP'); let statusColor = '#dc2626'; let badgeBg = '#fef2f2';
+
+        if (report.status === 'rescued') {
+            markerColor = Cesium.Color.fromCssColorString('#22c55e');
+            statusText = '🌿 ' + tr('rm_status_text_rescued', 'AN TOÀN'); statusColor = '#16a34a'; badgeBg = '#dcfce7';
+        } else if (report.status === 'progress') {
+            markerColor = Cesium.Color.fromCssColorString('#3b82f6');
+            statusText = '🏃 ' + tr('rm_status_text_progress', 'ĐANG CỨU HỘ'); statusColor = '#0284c7'; badgeBg = '#f0f9ff';
+        }
+
+        const hasRealPhoto = report.photo && (report.photo.startsWith('http') || report.photo.startsWith('data:image/'));
+        const bgImage = hasRealPhoto
+            ? report.photo
+            : null;
+
+        const helpersHtml = `
+            <div class="detail-item" style="flex-direction: column; align-items: flex-start; margin-bottom: 10px; background: rgba(239, 68, 68, 0.1); padding: 10px; border-radius: 12px; border: 1px solid rgba(239, 68, 68, 0.2); cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='rgba(239, 68, 68, 0.2)'" onmouseout="this.style.background='rgba(239, 68, 68, 0.1)'" onclick="window.open('https://env4wildlife.org/', '_blank')">
+                <div style="display:flex; justify-content:space-between; width:100%;">
+                    <span style="color: #f87171; font-weight: 700;"><i class="fas fa-phone-alt"></i> Hotline ENV (Miễn phí)</span>
+                    <i class="fas fa-external-link-alt" style="color: #fca5a5; font-size: 12px;"></i>
+                </div>
+                <div style="color: #fecaca; font-size: 12px; margin-top: 4px;">📞 <a href="tel:18001522" style="color: #f87171; font-weight: 700; text-decoration: none;" onclick="event.stopPropagation()">1800-1522</a> (Báo cáo vi phạm & Hỗ trợ)</div>
+            </div>
+        `;
+
+        const clinicHtml = `
+            <div class="detail-item" style="flex-direction: column; align-items: flex-start; background: rgba(16, 185, 129, 0.1); padding: 10px; border-radius: 12px; border: 1px solid rgba(16, 185, 129, 0.2);">
+                <div style="display:flex; justify-content:space-between; width:100%;">
+                    <span style="color: #34d399; font-weight: 700;"><i class="fas fa-info-circle"></i> ${tr('rm_card_btn_guide', 'Sơ cứu nhanh')}</span>
+                </div>
+                <div style="color: #a7f3d0; font-size: 12px; margin-top: 4px;">Giữ yên tĩnh, giữ ấm, KHÔNG tự ý cho ăn uống.</div>
+            </div>
+        `;
+
+        const popupContent = `
+            <div class="rescue-popup dark-glass-theme">
+                <button class="close-btn"><i class="fas fa-times"></i></button>
+                <div class="rescue-header" style="${bgImage ? `background-image: url('${bgImage}');` : 'background-color: rgba(16, 185, 129, 0.1);'}">
+                    ${!bgImage ? `
+                    <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; pointer-events:none;">
+                        <div style="text-align:center; opacity:0.8;">
+                            <i class="fas fa-paw" style="font-size:40px; color:#34d399;"></i>
+                        </div>
+                    </div>` : ''}
+                    <span class="rescue-badge" style="color: ${statusColor}; background-color: ${badgeBg}; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">${statusText}</span>
+                    <div class="rescue-title-container">
+                        <h2 class="rescue-title"><i class="fas fa-paw"></i> ${escapeHtml(report.animal)}</h2>
+                    </div>
+                </div>
+
+                <div class="rescue-details">
+                    <div class="detail-section">
+                        <div class="detail-title" style="color:#34d399;"><i class="fas fa-map-marker-alt"></i> ĐỊA ĐIỂM CỨU HỘ</div>
+                        <div class="detail-box">
+                            <div class="detail-item">
+                                <div class="detail-item-title"><i class="fas fa-location-arrow"></i> Vị trí</div>
+                                <div class="detail-item-value">${escapeHtml(report.location)}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-item-title"><i class="far fa-clock"></i> Thời gian</div>
+                                <div class="detail-item-value">${report.date}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="detail-section">
+                        <div class="detail-title" style="color:#fbbf24;"><i class="fas fa-info-circle"></i> MÔ TẢ TÌNH TRẠNG</div>
+                        <div class="detail-box" style="font-style: italic; font-size: 13px; color: #cbd5e1; border-left: 3px solid #fbbf24; background: rgba(251, 191, 36, 0.1);">
+                            ${escapeHtml(report.description || "Chưa có mô tả chi tiết.")}
+                        </div>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <div class="detail-title" style="color:#10b981;"><i class="fas fa-first-aid"></i> HƯỚNG DẪN SƠ CỨU</div>
+                        <div class="detail-box" style="padding: 0; background: transparent; border: none;">${clinicHtml}</div>
+                    </div>
+
+                    <div class="detail-section">
+                        <div class="detail-title" style="color:#60a5fa;"><i class="fas fa-phone-volume"></i> LIÊN HỆ KHẨN CẤP</div>
+                        <div class="detail-box" style="padding: 0; background: transparent; border: none;">${helpersHtml}</div>
+                    </div>
+                    
+                    <hr style="border: 0; border-top: 1px dashed rgba(255,255,255,0.2); margin: 15px 0;">
+                    <div style="display: flex; gap: 8px; justify-content: space-between;">
+                        <button onclick="window.location.href='tel:${report.phone || ''}'" style="flex: 1; background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; padding: 12px; border-radius: 12px; cursor: pointer; font-size: 14px; font-weight: bold; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); transition: transform 0.2s;">
+                            <i class="fas fa-phone-volume"></i> ${tr('rm_card_btn_call', 'Gọi liên hệ khẩn cấp')}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        const locKey = `${report.lat.toFixed(5)}_${report.lng.toFixed(5)}`;
+        if (!locationCount[locKey]) locationCount[locKey] = 0;
+
+        const count = locationCount[locKey];
+        let renderLat = report.lat;
+        let renderLng = report.lng;
+        if (count > 0) {
+            const offsetRadius = 0.0002;
+            const angle = count * (Math.PI / 3);
+            renderLat += offsetRadius * Math.cos(angle);
+            renderLng += offsetRadius * Math.sin(angle);
+        }
+        locationCount[locKey]++;
+
+        viewer.entities.add({
+            id: `report_${report.id}`,
+            position: Cesium.Cartesian3.fromDegrees(renderLng, renderLat),
+            point: { pixelSize: 18, color: markerColor, outlineColor: Cesium.Color.WHITE, outlineWidth: 3, disableDepthTestDistance: Number.POSITIVE_INFINITY },
+            properties: { customHTML: popupContent }
+        });
+    });
 }
 
 async function initCamera() {
-  video = document.getElementById("video");
-  if (!video) return false;
-  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-    showToast("❌ Trình duyệt không hỗ trợ camera", "error");
-    return false;
-  }
-  try {
-    const constraints = {
-      video: {
-        facingMode: {
-          exact: "environment",
-        },
-        width: { ideal: 1280 },
-        height: { ideal: 720 },
-      },
-    };
+    video = document.getElementById("video");
+    if (!video) return false;
     try {
-      stream = await navigator.mediaDevices.getUserMedia(constraints);
+        stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+        video.srcObject = stream; video.setAttribute("playsinline", true);
+        await video.play(); return true;
     } catch (err) {
-      stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        showToast(`❌ Không thể truy cập camera`, "error"); return false;
     }
-    video.srcObject = stream;
-    video.setAttribute("playsinline", true);
-    await video.play();
-    return true;
-  } catch (err) {
-    showToast(`❌ Không thể truy cập camera: ${err.message}`, "error");
-    return false;
-  }
 }
+
 function stopCamera() {
-  if (stream) {
-    stream.getTracks().forEach((track) => track.stop());
-    stream = null;
-  }
-  if (video) video.srcObject = null;
+    if (stream) { stream.getTracks().forEach((track) => track.stop()); stream = null; }
+    if (video) video.srcObject = null;
 }
+
 function capturePhoto() {
-  if (!video || !video.videoWidth) {
-    showToast("Camera chưa sẵn sàng!", "error");
-    return;
-  }
-  canvas = document.createElement("canvas");
-  canvas.width = video.videoWidth;
-  canvas.height = video.videoHeight;
-  canvas.getContext("2d").drawImage(video, 0, 0);
-  capturedPhoto = canvas.toDataURL("image/jpeg", 0.8);
-  document.getElementById("previewImg").src = capturedPhoto;
-  document.getElementById("previewSection").style.display = "block";
-  document.getElementById("captureBtn").style.display = "none";
-  document.getElementById("retakeBtn").style.display = "flex";
-  stopCamera();
-  video.style.display = "none";
+    if (!video) return;
+    canvas = document.createElement("canvas");
+    canvas.width = video.videoWidth; canvas.height = video.videoHeight;
+    canvas.getContext("2d").drawImage(video, 0, 0);
+    capturedPhoto = canvas.toDataURL("image/jpeg", 0.8);
+
+    const previewImg = document.getElementById("previewImg");
+    previewImg.src = capturedPhoto;
+    previewImg.style.display = "block";
+
+    document.getElementById("previewSection").style.display = "block";
+    document.getElementById("captureBtn").style.display = "none";
+    document.getElementById("retakeBtn").style.display = "flex";
+    document.getElementById("scanOverlay").style.display = "none";
+    stopCamera(); video.style.display = "none";
 }
+
 function retakePhoto() {
-  capturedPhoto = null;
-  document.getElementById("previewSection").style.display = "none";
-  document.getElementById("captureBtn").style.display = "flex";
-  document.getElementById("retakeBtn").style.display = "none";
-  video.style.display = "block";
+    capturedPhoto = null;
+    const previewImg = document.getElementById("previewImg");
+    if (previewImg) previewImg.style.display = "none";
+    document.getElementById("previewSection").style.display = "none";
+    document.getElementById("captureBtn").style.display = "flex";
+    document.getElementById("retakeBtn").style.display = "none";
+    document.getElementById("scanOverlay").style.display = "flex";
+    video.style.display = "block";
+    initCamera();
+}
 
-  initCamera();
-}
-async function getCurrentLocation() {
-  return new Promise((resolve, reject) => {
-    if (!navigator.geolocation) reject("GPS không hỗ trợ");
-    else
-      navigator.geolocation.getCurrentPosition(resolve, reject, {
-        enableHighAccuracy: true,
-        timeout: 15000,
-      });
-  });
-}
-async function getAddressFromCoords(lat, lng) {
-  try {
-    const res = await fetch(
-      `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18`,
-    );
-    const data = await res.json();
-    if (data.display_name)
-      return (
-        data.display_name.split(",")[0] +
-        "," +
-        data.display_name.split(",")[1] +
-        "," +
-        data.display_name.split(",")[2]
-      );
-    return `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
-  } catch (e) {
-    return `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
-  }
-}
 async function fetchLocationAndAddress() {
-  const locationLoading = document.getElementById("locationLoading");
-  const addressText = document.getElementById("addressText");
-  locationLoading.style.display = "block";
-  try {
-    const pos = await getCurrentLocation();
-    currentLocation = { lat: pos.coords.latitude, lng: pos.coords.longitude };
-    currentAddress = await getAddressFromCoords(
-      currentLocation.lat,
-      currentLocation.lng,
-    );
-    addressText.innerHTML = `<i class="fas fa-map-marker-alt"></i> ${escapeHtml(currentAddress)}`;
-    locationLoading.style.display = "none";
-    return true;
-  } catch (e) {
-    locationLoading.style.display = "none";
-    showToast("Không lấy được vị trí, bật GPS", "error");
-    return false;
-  }
-}
-async function submitReport() {
-  const animalName = document.getElementById("animalName").value.trim();
-  const animalStatus = document.getElementById("animalStatus").value;
-  const animalDesc = document.getElementById("animalDesc").value.trim();
-  if (!animalName) {
-    showToast("Nhập tên động vật!", "error");
-    return;
-  }
-  if (!capturedPhoto) {
-    showToast("Chụp ảnh động vật!", "error");
-    return;
-  }
-  if (!currentLocation) {
-    showToast("Chờ lấy vị trí GPS...", "error");
-    return;
-  }
-  const newReport = {
-    id: nextId++,
-    animal: animalName,
-    location: currentAddress,
-    status: animalStatus,
-    lat: currentLocation.lat,
-    lng: currentLocation.lng,
-    date: new Date().toLocaleString("vi-VN"),
-    description: animalDesc,
-    photo: capturedPhoto,
-  };
-  reports.push(newReport);
-  closeCameraModal();
-  renderReportsPanel();
-  renderNearbyHelpers();
-  renderNearestClinic();
-  if (map) {
-    updateMapMarkers();
-    setActiveTab("map");
-    setTimeout(() => {
-      map.setView([currentLocation.lat, currentLocation.lng], 16);
-      showRadiusCircle(currentLocation.lat, currentLocation.lng);
-    }, 500);
-  }
-  showToast("✅ Gửi báo cáo thành công!", "success");
-}
-async function openCameraModal(e) {
-  if (e) e.preventDefault();
-  const modal = document.getElementById("cameraModal");
-  if (!modal) return;
-  modal.style.display = "block";
-  document.getElementById("animalName").value = "";
-  document.getElementById("animalDesc").value = "";
-  document.getElementById("animalStatus").value = "emergency";
-  document.getElementById("previewSection").style.display = "none";
-  document.getElementById("captureBtn").style.display = "flex";
-  document.getElementById("retakeBtn").style.display = "none";
-  capturedPhoto = null;
-  currentLocation = null;
-  video = document.getElementById("video");
-  video.style.display = "block";
-  const captureBtn = document.getElementById("captureBtn");
-  captureBtn.disabled = true;
-  captureBtn.innerHTML =
-    '<i class="fas fa-spinner fa-spin"></i> Đang khởi tạo...';
-  const ok = await initCamera();
-  if (ok) {
-    captureBtn.disabled = false;
-    captureBtn.innerHTML = '<i class="fas fa-camera"></i> Chụp ảnh';
-    await fetchLocationAndAddress();
-  } else {
-    captureBtn.disabled = false;
-    captureBtn.innerHTML = '<i class="fas fa-camera"></i> Chụp ảnh';
-  }
-}
-function closeCameraModal() {
-  const modal = document.getElementById("cameraModal");
-  if (modal) modal.style.display = "none";
-  stopCamera();
+    const locationLoading = document.getElementById("locationLoading");
+    const locationInfo = document.getElementById("locationInfo");
+    const addressText = document.getElementById("addressText");
+
+    if (locationLoading) locationLoading.style.display = "block";
+    if (locationInfo) locationInfo.style.display = "none";
+
+    try {
+        if (!navigator.geolocation) {
+            throw new Error("Trình duyệt không hỗ trợ GPS");
+        }
+
+        const pos = await new Promise((resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(resolve, reject, {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 0
+            });
+        });
+        currentLocation = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+
+        try {
+            const res = await fetch(getApiUrl(`/api/geocode?lat=${currentLocation.lat}&lng=${currentLocation.lng}&zoom=18`));
+            const data = await res.json();
+            currentAddress = data.display_name ? data.display_name : `${currentLocation.lat.toFixed(5)}, ${currentLocation.lng.toFixed(5)}`;
+        } catch (apiError) {
+            currentAddress = `${currentLocation.lat.toFixed(5)}, ${currentLocation.lng.toFixed(5)}`;
+        }
+
+        if (addressText) addressText.innerHTML = escapeHtml(currentAddress);
+        if (locationLoading) locationLoading.style.display = "none";
+        if (locationInfo) locationInfo.style.display = "flex";
+    } catch (e) {
+        if (locationLoading) locationLoading.style.display = "none";
+        let errorMsg = "Không lấy được vị trí GPS. Hãy bật Vị trí và dùng link có HTTPS/localhost.";
+        if (e.code === 1) errorMsg = "Bạn đã từ chối quyền truy cập vị trí. Hãy bật lại!";
+        else if (e.code === 2) errorMsg = "Không tìm thấy tín hiệu GPS hiện tại.";
+        else if (e.code === 3) errorMsg = "Hết thời gian chờ lấy vị trí GPS.";
+
+        showToast(errorMsg, "error");
+    }
 }
 
-window.setActiveTab = function (tabId) {
-  activeTab = tabId;
-  const mapContainer = document.querySelector(".map-container");
-  const reportsPanel = document.getElementById("reportsPanel");
-  document
-    .querySelectorAll(".tab-btn")
-    .forEach((btn) =>
-      btn.classList.toggle("active", btn.dataset.tab === tabId),
-    );
-  if (tabId === "map") {
-    if (mapContainer) mapContainer.style.display = "block";
-    if (reportsPanel) reportsPanel.style.display = "none";
-    if (!map) initRealMap();
-    else {
-      map.invalidateSize();
-      updateMapMarkers();
+async function submitReport() {
+    let currentUser = null;
+    try {
+        const rawUser = localStorage.getItem('currentUser');
+        if (rawUser) currentUser = JSON.parse(rawUser);
+    } catch (e) { }
+
+    if (localStorage.getItem('isLoggedIn') !== 'true' && !currentUser) {
+        return showToast("Vui lòng đăng nhập tài khoản trước khi gửi báo cáo!", "error");
     }
-  } else {
-    if (mapContainer) mapContainer.style.display = "none";
-    if (reportsPanel) reportsPanel.style.display = "block";
-    renderReportsPanel();
-    renderNearbyHelpers();
-    renderNearestClinic();
-    if (map) updateMapMarkers();
-  }
-};
-function handleSearch() {
-  searchKeyword = document.getElementById("searchInput")?.value || "";
-  if (activeTab === "list") {
-    renderReportsPanel();
-    renderNearbyHelpers();
-    renderNearestClinic();
-  }
-  if (map) updateMapMarkers();
+
+    const animalName = document.getElementById("animalName")?.value.trim() || "";
+    const animalStatus = document.getElementById("animalStatus")?.value || "emergency";
+    const animalDesc = document.getElementById("animalDesc")?.value.trim() || "";
+
+    if (!animalName) {
+        return showToast("Vui lòng nhập tên động vật!", "error");
+    }
+    if (!currentLocation) {
+        return showToast("Chưa lấy được vị trí GPS. Hãy thử lại!", "error");
+    }
+
+    const submitBtn = document.getElementById('submitReportBtn');
+    const originalBtnHTML = submitBtn ? submitBtn.innerHTML : '';
+    if (submitBtn) {
+        submitBtn.disabled = true;
+    }
+
+    let finalPhotoUrl = capturedPhoto;
+
+    if (capturedPhoto) {
+        try {
+            if (submitBtn) submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>Đang tải ảnh lên...</span>';
+
+            const formData = new FormData();
+            formData.append('image', dataURItoBlob(capturedPhoto), 'capture.jpg');
+
+            console.log("Đang tải ảnh lên Cloudinary qua API backend...");
+            const uploadRes = await fetch(getApiUrl('/api/upload'), {
+                method: 'POST',
+                body: formData
+            });
+
+            const uploadData = await uploadRes.json();
+            if (uploadRes.ok) {
+                finalPhotoUrl = uploadData.secure_url || uploadData.url || uploadData.imageUrl || capturedPhoto;
+                console.log("✅ Tải ảnh thành công:", finalPhotoUrl);
+            } else {
+                console.warn("⚠️ API upload lỗi, tự động chuyển sang lưu ảnh dạng Base64 gốc.");
+            }
+        } catch (error) {
+            console.warn("❌ Lỗi mạng khi gọi API tải ảnh. Tự động chuyển sang lưu Base64.", error);
+        }
+    }
+
+    if (submitBtn) submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>Đang gửi báo cáo...</span>';
+
+    const payload = {
+        animalName: animalName,
+        status: animalStatus,
+        description: animalDesc,
+        location: { lat: currentLocation.lat, lng: currentLocation.lng },
+        address: currentAddress || `${currentLocation.lat.toFixed(5)}, ${currentLocation.lng.toFixed(5)}`,
+        date: new Date().toLocaleString("vi-VN"),
+        photo: finalPhotoUrl,
+        reporter: currentUser ? currentUser.fullName : "Khách",
+        reportedBy: currentUser ? {
+            // Ép về String để đảm bảo nhất quán với schema { type: String }
+            userId: (currentUser.userId || currentUser._id || '').toString().trim(),
+            fullName: currentUser.fullName || 'Khách',
+            email: currentUser.email || '',
+            avatar: currentUser.avatar || ''
+        } : undefined
+    };
+
+    try {
+        const response = await fetch(getApiUrl('/api/rescuemap'), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        const contentType = response.headers.get("content-type") || "";
+        let result;
+        if (contentType.includes("application/json")) {
+            result = await response.json();
+        } else {
+            const rawText = await response.text();
+            if (submitBtn) { submitBtn.disabled = false; submitBtn.innerHTML = originalBtnHTML; }
+            return showToast(`❌ Lỗi Server. Mở F12 để xem chi tiết!`, "error");
+        }
+
+        if (response.ok) {
+            showToast("✅ Báo cáo đã được lưu lên bản đồ!", "success");
+
+            const savedId = result && result.id ? result.id : null;
+            const savedPhotoUrl = finalPhotoUrl;
+
+            await closeCameraModal();
+            await fetchRescueReports();
+
+            if (savedPhotoUrl && savedId) {
+                const newReport = reports.find(r => r.id === savedId);
+
+                if (newReport && !newReport.photo) {
+                    try {
+                        const patchRes = await fetch(getApiUrl(`/api/rescuemap/${savedId}/photo`), {
+                            method: 'PATCH',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ photo: savedPhotoUrl })
+                        });
+                        if (patchRes.ok) {
+                            newReport.photo = savedPhotoUrl;
+                        }
+                    } catch (e) { }
+                } else if (!newReport) {
+                    if (reports.length > 0) {
+                        const last = reports[reports.length - 1];
+                        if (!last.photo && last.id) {
+                            try {
+                                await fetch(getApiUrl(`/api/rescuemap/${last.id}/photo`), {
+                                    method: 'PATCH',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ photo: savedPhotoUrl })
+                                });
+                                last.photo = savedPhotoUrl;
+                            } catch (e) { }
+                        }
+                    }
+                }
+
+                renderReportsPanel();
+                if (viewer) renderMarkersToMap(filterReports());
+            }
+
+            if (viewer && currentLocation) {
+                window.setActiveTab("map");
+                viewer.camera.flyTo({
+                    destination: Cesium.Cartesian3.fromDegrees(currentLocation.lng, currentLocation.lat, 1500),
+                    duration: 2,
+                    complete: function () {
+                        if (reports.length > 0) {
+                            const newReport = reports[reports.length - 1];
+                            const entity = viewer.entities.getById(`report_${newReport.id}`);
+                            if (entity && popupDiv) {
+                                activeEntity = entity;
+                                const html = typeof entity.properties.customHTML.getValue === 'function'
+                                    ? entity.properties.customHTML.getValue()
+                                    : entity.properties.customHTML;
+                                popupDiv.innerHTML = html;
+                                popupDiv.style.display = 'block';
+                                const closeBtn = popupDiv.querySelector('.close-btn');
+                                if (closeBtn) closeBtn.onclick = () => { popupDiv.style.display = 'none'; activeEntity = null; };
+                            }
+                        }
+                    }
+                });
+            }
+        } else {
+            const errMsg = result?.error || result?.message || `HTTP ${response.status}`;
+            if (submitBtn) { submitBtn.disabled = false; submitBtn.innerHTML = originalBtnHTML; }
+            showToast(`❌ Server lỗi: ${errMsg}`, "error");
+        }
+    } catch (networkError) {
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.innerHTML = originalBtnHTML; }
+        showToast(`❌ Lỗi kết nối. Kiểm tra server có đang chạy không?`, "error");
+    }
 }
+
+window.openCameraModal = async function (e) {
+    if (e) e.preventDefault();
+    const modal = document.getElementById("cameraModal");
+    if (!modal) return;
+    modal.classList.add("open");
+    document.body.style.overflow = 'hidden';
+
+    document.getElementById("animalName").value = "";
+    document.getElementById("animalDesc").value = "";
+    document.getElementById("previewSection").style.display = "none";
+    document.getElementById("captureBtn").style.display = "flex";
+    document.getElementById("retakeBtn").style.display = "none";
+    document.getElementById("locationInfo").style.display = "none";
+
+    const previewImg = document.getElementById("previewImg");
+    if (previewImg) previewImg.style.display = "none";
+
+    capturedPhoto = null; currentLocation = null; currentAddress = "";
+
+    video = document.getElementById("video"); video.style.display = "block";
+    document.getElementById("scanOverlay").style.display = "flex";
+    document.getElementById("captureBtn").innerHTML = '<i class="fas fa-camera"></i> Chụp ảnh';
+
+    await initCamera(); await fetchLocationAndAddress();
+    updateReporterInfo();
+}
+
+window.closeCameraModal = function () {
+    const modal = document.getElementById("cameraModal");
+    if (modal) modal.classList.remove("open");
+    document.body.style.overflow = '';
+    stopCamera();
+};
+
+function updateReporterInfo() {
+    const wrapper = document.querySelector('.rm-reporter-wrap');
+    const avatarEl = document.getElementById('reporterAvatar');
+    const nameEl = document.getElementById('reporterName');
+    const badgeEl = document.getElementById('reporterBadge');
+    const userIdEl = document.getElementById('reporterUserId');
+    const fullNameEl = document.getElementById('reporterFullName');
+    const emailEl = document.getElementById('reporterEmail');
+    const avatarUrlEl = document.getElementById('reporterAvatarUrl');
+
+    if (!wrapper || !avatarEl || !nameEl) return;
+    wrapper.style.display = 'flex';
+
+    let user = null;
+    try {
+        const raw = localStorage.getItem('currentUser');
+        if (raw) user = JSON.parse(raw);
+    } catch (e) { }
+
+    if (user && (user.fullName || user.userId)) {
+        const name = user.fullName || 'Người dùng';
+        const avatarUrl = user.avatar || '';
+        const initial = name.trim().charAt(0).toUpperCase();
+
+        nameEl.textContent = name;
+        if (badgeEl) badgeEl.textContent = user.email || 'Đã đăng nhập';
+
+        if (avatarEl.tagName === 'DIV' || avatarEl.tagName === 'SPAN') {
+            if (avatarUrl) {
+                avatarEl.innerHTML = `<img src="${avatarUrl}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" onerror="this.outerHTML='${initial}'">`;
+            } else {
+                avatarEl.textContent = initial;
+            }
+        } else {
+            avatarEl.src = avatarUrl || 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+        }
+
+        if (userIdEl) userIdEl.value = user.userId || '';
+        if (fullNameEl) fullNameEl.value = name;
+        if (emailEl) emailEl.value = user.email || '';
+        if (avatarUrlEl) avatarUrlEl.value = avatarUrl;
+
+    } else {
+        nameEl.textContent = 'Khách (Guest)';
+        if (badgeEl) badgeEl.textContent = 'Không đăng nhập';
+        if (avatarEl.tagName === 'DIV' || avatarEl.tagName === 'SPAN') {
+            avatarEl.innerHTML = '<i class="fas fa-user" style="font-size:14px;"></i>';
+        } else {
+            avatarEl.src = 'https://cdn-icons-png.flaticon.com/512/6522/6522516.png';
+        }
+    }
+}
+window.setActiveTab = function (tabId) {
+    activeTab = tabId;
+    document.querySelectorAll(".tab-btn").forEach((btn) => btn.classList.toggle("active", btn.dataset.tab === tabId));
+
+    renderReportsPanel();
+
+    if (!viewer) {
+        initRealMap();
+    } else {
+        renderMarkersToMap(filterReports());
+        setTimeout(() => { if (viewer && viewer.resize) viewer.resize(); }, 50);
+    }
+};
 
 document.addEventListener("DOMContentLoaded", () => {
-  addToastAnimations();
-  setTimeout(() => {
-    if (typeof L !== "undefined") initRealMap();
-  }, 500);
-  renderReportsPanel();
-  renderNearbyHelpers();
-  renderNearestClinic();
-  document
-    .querySelectorAll(".tab-btn")
-    .forEach((btn) =>
-      btn.addEventListener("click", () => window.setActiveTab(btn.dataset.tab)),
-    );
-  const searchBtn = document.getElementById("searchBtn");
-  const searchInput = document.getElementById("searchInput");
-  if (searchBtn) searchBtn.addEventListener("click", handleSearch);
-  if (searchInput)
-    searchInput.addEventListener("keyup", (e) => {
-      if (e.key === "Enter") handleSearch();
+    addToastAnimations();
+    addPanelStyles();
+    // Chặn lỗi sập JS nếu hàm updateNavbarAuth không tồn tại
+    if (typeof updateNavbarAuth === 'function') updateNavbarAuth();
+    setTimeout(() => { if (typeof Cesium !== "undefined") initRealMap(); }, 500);
+
+    fetchRescueReports();
+
+    document.querySelectorAll(".tab-btn").forEach((btn) => btn.addEventListener("click", () => window.setActiveTab(btn.dataset.tab)));
+
+    document.getElementById("searchBtn")?.addEventListener("click", () => { searchKeyword = document.getElementById("searchInput").value; window.setActiveTab("map"); renderReportsPanel(); });
+    document.getElementById("searchInput")?.addEventListener("keyup", (e) => { if (e.key === "Enter") { searchKeyword = e.target.value; window.setActiveTab("map"); renderReportsPanel(); } });
+
+    document.getElementById("captureBtn")?.addEventListener("click", capturePhoto);
+    document.getElementById("retakeBtn")?.addEventListener("click", retakePhoto);
+    document.getElementById("submitReportBtn")?.addEventListener("click", submitReport);
+
+    window.addEventListener("click", (e) => {
+        if (e.target.id === "cameraModal") window.closeCameraModal();
     });
-  const reportBtn = document.getElementById("reportNowBtn");
-  if (reportBtn) reportBtn.addEventListener("click", openCameraModal);
-  document
-    .getElementById("captureBtn")
-    ?.addEventListener("click", capturePhoto);
-  document.getElementById("retakeBtn")?.addEventListener("click", retakePhoto);
-  document
-    .getElementById("submitReportBtn")
-    ?.addEventListener("click", submitReport);
-  document
-    .querySelectorAll(".close-modal")
-    .forEach((btn) => btn.addEventListener("click", closeCameraModal));
-  window.addEventListener("click", (e) => {
-    if (e.target.classList?.contains("modal")) closeCameraModal();
-  });
-  window.setActiveTab("map");
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+            window.closeCameraModal();
+        }
+    });
+
+    const viewHomeBtn = document.getElementById("viewHomeBtn");
+    if (viewHomeBtn) {
+        viewHomeBtn.addEventListener("click", () => {
+            if (viewer) {
+                viewer.camera.flyTo({ destination: Cesium.Cartesian3.fromDegrees(108.2171, 16.0545, 25000000), duration: 2 });
+                if (popupDiv) popupDiv.style.display = 'none'; activeEntity = null;
+            }
+        });
+    }
+
+    window.setActiveTab("all");
+
+    // Re-render when language changes
+    const langBtns = document.querySelectorAll('.lang-toggle-btn');
+    langBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            setTimeout(() => {
+                renderReportsPanel();
+                if (viewer) renderMarkersToMap(filterReports());
+            }, 100);
+        });
+    });
 });

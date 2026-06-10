@@ -1,504 +1,1131 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+/* ═══════════════════════════════════════════════════════
+   WILDLIFE GUARDIAN – Rescue Map style1.css (PREMIUM)
+   Full-screen 3D Map + Floating Glass Panel + Premium Modal
+═══════════════════════════════════════════════════════ */
+
+/* ── DESIGN TOKENS – Đồng bộ 100% với Home.css ── */
+:root {
+  /* ── Nền chủ đạo: Dark Green Gradient (giống hệt hero Home) ── */
+  --bg-deep:       #020c05;           /* nền sâu nhất */
+  --bg-base:       #041a0a;           /* nền layer 1 */
+  --bg-surface:    #061505;           /* nền card/panel */
+  --bg-gradient:   linear-gradient(135deg, #020c05 0%, #041a0a 40%, #061505 100%);
+
+  /* ── Màu nhấn chính: Vibrant Green (đúng Home palette) ── */
+  --green-main:    #22c55e;
+  --green-dark:    #15803d;
+  --green-light:   #4ade80;
+  --green-dim:     rgba(34, 197, 94, 0.12);   /* dùng cho badge nền */
+  --green-border:  rgba(34, 197, 94, 0.28);   /* viền active */
+  --green-glow:    rgba(34, 197, 94, 0.25);   /* box-shadow glow */
+
+  /* ── CTA: Orange/Coral gradient + glow (giống btn-primary Home) ── */
+  --orange:        #f97316;
+  --orange-dark:   #dc2626;
+  --orange-cta:    linear-gradient(135deg, #f97316, #dc2626);
+  --orange-glow:   rgba(249, 115, 22, 0.4);
+  --orange-glow-h: rgba(249, 115, 22, 0.55);  /* hover state */
+
+  /* ── Status colors ── */
+  --red:           #ef4444;
+  --blue:          #3b82f6;
+  --teal:          #2a9d8f;
+
+  /* ── Typography (đúng contrast trên nền tối) ── */
+  --text-light:    #f8fafc;           /* heading/title – trắng */
+  --text-body:     #e2e8f0;           /* body text – gần trắng */
+  --text-muted:    #94a3b8;           /* phụ: thời gian, mô tả */
+  --text-subtle:   #64748b;           /* rất mờ */
+
+  /* ── Glassmorphism panel (nâng cấp blur & opacity) ── */
+  --glass-bg:      rgba(4, 26, 10, 0.60);    /* tối hơn, xanh hơn */
+  --glass-bg-card: rgba(6, 21, 5, 0.45);     /* thẻ card nhẹ hơn */
+  --glass-border:  rgba(255, 255, 255, 0.08);
+  --glass-border-g:rgba(34, 197, 94, 0.18);  /* viền xanh cho card hover */
+  --glass-blur:    blur(24px);
+  --glass-blur-sm: blur(14px);
+
+  /* ── Spacing & Shape ── */
+  --radius-xs:     8px;
+  --radius-sm:     10px;
+  --radius-md:     16px;
+  --radius-lg:     24px;
+  --radius-pill:   99px;
+
+  /* ── Layout ── */
+  --font:          "Outfit", "Segoe UI", system-ui, sans-serif;
+  --panel-width:   380px;
+  --nav-height:    68px;
+
+  /* ── Transitions ── */
+  --ease-out:      cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast:      0.2s;
+  --dur-mid:       0.35s;
 }
 
-body {
-  background: linear-gradient(135deg, #e8f5e9 0%, #c8e6df 100%);
-  font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+/* ── RESET ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  font-family: var(--font);
+  overflow: hidden;
+  /* Nền dark green gradient – đồng bộ Home hero */
+  background: var(--bg-gradient);
+  color: var(--text-light);
 }
 
-.rescue-container {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 20px;
+/* ── SCROLL PROGRESS ── */
+.wg-progress {
+  position: fixed; top: 0; left: 0;
+  height: 3px; width: 100%;
+  transform: scaleX(0); transform-origin: left;
+  background: linear-gradient(90deg, var(--green-main), var(--green-light), var(--orange));
+  z-index: 9999; pointer-events: none;
+  transition: transform 0.1s linear;
 }
 
-.header {
-  background: linear-gradient(135deg, #1e5a4a, #0f3b30);
-  border-radius: 28px;
-  padding: 20px 28px;
-  color: white;
-  margin-bottom: 24px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
+::-webkit-scrollbar-thumb { background: linear-gradient(var(--green-main), var(--green-dark)); border-radius: 99px; }
+
+/* ═══════════════════════════════
+   FULL-SCREEN MAP WRAPPER
+═══════════════════════════════ */
+.map-wrapper {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  z-index: 0;
 }
 
-.header h1 {
-  font-size: 1.8rem;
-  display: flex;
-  align-items: center;
-  gap: 12px;
+#interactiveMap {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
 }
 
-.header p {
-  opacity: 0.9;
-  margin-top: 8px;
-  font-size: 0.95rem;
+/* Cesium overrides – fill container */
+#interactiveMap .cesium-viewer,
+#interactiveMap .cesium-viewer-cesiumWidgetContainer,
+#interactiveMap .cesium-widget,
+#interactiveMap canvas {
+  width: 100% !important;
+  height: 100% !important;
+  position: absolute !important;
+  top: 0; left: 0;
 }
 
-.nav-report-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 15px;
-  margin-top: 18px;
-}
- 
- .search-bar {
-  background-color : white ; 
-  border-radius : 60px ; 
-  display :flex ; 
-  align-items : center ; 
-  padding : 4px 4px 4px 18px ; 
-  flex : 2 ; 
-  min-width : 100px ; 
-  box-shadow : 0 2px 10px rgba(0,0,0,0.1) ; 
- }
-.search-bar i {
-  color: #1e5a4a;
-}
 
-.search-bar input {
-  flex: 1;
-  border: none;
-  padding: 12px 10px;
-  font-size: 14px;
-  outline: none;
-  background: transparent;
-}
-
-.search-bar button {
-  background: #1e5a4a;
-  border: none;
-  color: white;
-  padding: 8px 18px;
-  border-radius: 40px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: 0.2s;
-} 
-
-
-
-.search-bar button:hover {
-  background: #0f3b30;
-  transform: scale(0.97);
-}
-
-.report-now-btn {
-  background: #ff6b35;
-  border: none;
-  color: white;
-  padding: 12px 28px;
-  border-radius: 40px;
-  font-size: 1rem;
-  font-weight: bold;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  transition: all 0.2s;
-  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
-}
-
-.report-now-btn:hover {
-  background: #e85d2c;
-  transform: scale(1.02);
-}
-
-.tabs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 20px;
-  background: white;
+/* View Globe Button – !important needed to beat style2.css override */
+.view-home-btn {
+  position: absolute !important;
+  bottom: 90px !important;
+  right: 24px !important;
+  top: auto !important;   /* neutralize style2.css top: 20px */
+  left: auto !important;  /* neutralize style2.css left: 20px */
+  z-index: 200 !important;
+  background: var(--glass-bg) !important;
+  backdrop-filter: var(--glass-blur) !important;
+  -webkit-backdrop-filter: var(--glass-blur) !important;
+  border: 1px solid var(--glass-border) !important;
+  color: var(--text-light) !important;
   padding: 12px 20px;
-  border-radius: 60px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border-radius: 99px;
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex; align-items: center; gap: 8px;
+  transition: all 0.3s;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+}
+.view-home-btn:hover {
+  background: rgba(34, 197, 94, 0.15);
+  border-color: rgba(34, 197, 94, 0.3);
+  transform: translateY(-2px);
+}
+
+/* ═══════════════════════════════
+   FLOATING GLASS PANEL (LEFT)
+═══════════════════════════════ */
+.floating-panel {
+  position: absolute;
+  top: 0; left: 0;
+  width: var(--panel-width);
+  height: 100%;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  /* Glassmorphism – nền xanh tối trong suốt như Home hero overlay */
+  background:
+    radial-gradient(ellipse 120% 60% at 50% 0%, rgba(5, 78, 22, 0.35) 0%, transparent 60%),
+    var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-right: 1px solid var(--glass-border);
+  box-shadow: 4px 0 48px rgba(0, 0, 0, 0.4), inset -1px 0 0 rgba(34,197,94,0.06);
+  padding-top: var(--nav-height);
+  overflow: hidden;
+}
+
+/* Panel Header */
+.panel-header {
+  padding: 20px 20px 16px;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.panel-title {
+  display: flex; align-items: center; gap: 12px;
+}
+
+.panel-title-icon {
+  width: 42px; height: 42px;
+  background: linear-gradient(135deg, var(--green-main), var(--green-dark));
+  border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+  box-shadow: 0 4px 14px rgba(34, 197, 94, 0.3);
+}
+
+.panel-title h2 {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--text-light);
+}
+
+.panel-title p {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* Search Bar */
+.panel-search {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.search-glass {
+  display: flex; align-items: center; gap: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 99px;
+  padding: 4px 4px 4px 16px;
+  transition: all 0.3s;
+}
+
+.search-glass:focus-within {
+  border-color: rgba(34, 197, 94, 0.4);
+  background: rgba(34, 197, 94, 0.08);
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+}
+
+.search-glass i { color: var(--text-muted); font-size: 14px; }
+
+.search-glass input {
+  flex: 1;
+  background: transparent;
+  border: none; outline: none;
+  color: var(--text-light);
+  font-family: var(--font);
+  font-size: 14px;
+}
+
+.search-glass input::placeholder { color: var(--text-muted); }
+
+.search-glass button {
+  background: var(--green-main);
+  border: none; cursor: pointer;
+  width: 34px; height: 34px;
+  border-radius: 99px;
+  color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+.search-glass button:hover { background: var(--green-dark); transform: scale(1.05); }
+
+/* Filter Tabs – pill shape */
+.panel-tabs {
+  display: flex; gap: 6px; flex-wrap: wrap;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--glass-border);
 }
 
 .tab-btn {
-  background: transparent;
-  border: none;
-  padding: 8px 20px;
-  border-radius: 40px;
+  padding: 7px 16px;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--radius-pill);
+  background: rgba(255,255,255,0.04);
+  color: var(--text-muted);
+  font-family: var(--font);
+  font-size: 12px;
   font-weight: 600;
   cursor: pointer;
-  transition: 0.2s;
-  color: #2c3e2f;
+  transition: all var(--dur-fast) var(--ease-out);
+  white-space: nowrap;
+  letter-spacing: 0.2px;
 }
-
+.tab-btn:hover {
+  background: rgba(255,255,255,0.09);
+  color: var(--text-light);
+  transform: translateY(-1px);
+}
 .tab-btn.active {
-  background: #1e5a4a;
-  color: white;
+  background: var(--green-main);
+  border-color: var(--green-main);
+  color: #fff;
+  box-shadow: 0 4px 14px var(--green-glow);
+}
+.tab-btn.emergency-tab.active {
+  background: var(--red);
+  border-color: var(--red);
+  box-shadow: 0 4px 14px rgba(239,68,68,0.35);
+}
+.tab-btn.progress-tab.active {
+  background: var(--blue);
+  border-color: var(--blue);
+  box-shadow: 0 4px 14px rgba(59,130,246,0.35);
 }
 
-.main-content {
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
+/* Legend */
+.panel-legend {
+  display: flex; gap: 16px; flex-wrap: wrap;
+  padding: 10px 20px;
+  border-bottom: 1px solid var(--glass-border);
+  font-size: 12px; color: var(--text-muted);
 }
+.legend-dot {
+  display: inline-block; width: 10px; height: 10px;
+  border-radius: 50%; margin-right: 5px;
+}
+.emergency-dot { background: var(--red); box-shadow: 0 0 6px var(--red); }
+.progress-dot { background: var(--blue); box-shadow: 0 0 6px var(--blue); }
+.rescued-dot { background: var(--green-main); box-shadow: 0 0 6px var(--green-main); }
 
-.reports-panel {
-  flex: 1.2;
-  min-width: 320px;
-  background: white;
-  border-radius: 24px;
-  padding: 20px;
-  max-height: 70vh;
+/* Scrollable Content */
+.panel-scroll {
+  flex: 1;
   overflow-y: auto;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 16px 16px 100px;
 }
 
-.map-panel {
-  flex: 2.5;
-  min-width: 480px;
-  background: white;
-  border-radius: 24px;
-  padding: 15px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+/* Reports List inside Panel */
+.reports-list { display: flex; flex-direction: column; gap: 12px; }
+
+/* Report Card – glassmorphism dark, đồng bộ Home card style */
+.report-card {
+  background: rgba(255,255,255,0.03) !important;
+  border: 1px solid var(--glass-border) !important;
+  border-radius: var(--radius-md) !important;
+  padding: 14px !important;
+  color: var(--text-light) !important;
+  transition: all var(--dur-mid) var(--ease-out) !important;
+  cursor: pointer;
+  /* Viền trái theo trạng thái – giữ nguyên colorful signal */
+  border-left-width: 3px !important;
+  border-left-style: solid !important;
+}
+.report-card.report-emergency { border-left-color: var(--red) !important; }
+.report-card.report-progress  { border-left-color: var(--blue) !important; }
+.report-card.report-rescued   { border-left-color: var(--green-main) !important; }
+
+.report-card:hover {
+  background: rgba(34, 197, 94, 0.05) !important;
+  border-color: var(--glass-border-g) !important;
+  transform: translateX(4px) !important;
+  box-shadow: 0 8px 28px rgba(0,0,0,0.25) !important;
 }
 
-.map-canvas {
-  height: 380px;
-  border-radius: 20px;
+/* Helpers Section */
+.helpers-section {
+  margin-top: 24px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
   overflow: hidden;
-  margin: 15px 0;
-  background: #e9ecef;
 }
 
-.map-legend, .status-legend-bottom {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  font-size: 12px;
-  padding: 8px 12px;
-  background: #f8f9fa;
-  border-radius: 40px;
-}
-
-.legend-items {
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
-}
-
-.nearby-helpers {
-  margin-top: 15px;
-  background: #f8f9fa;
-  border-radius: 20px;
-  padding: 12px;
-}
-
-.helpers-header {
-  font-weight: bold;
-  margin-bottom: 10px;
-  color: #1e5a4a;
+.section-header {
+  display: flex; align-items: center; gap: 8px;
+  padding: 12px 16px;
+  font-weight: 700;
+  color: var(--green-light);
+  font-size: 13px;
+  border-bottom: 1px solid var(--glass-border);
+  letter-spacing: 0.3px;
 }
 
 .helpers-list {
-  max-height: 180px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+  padding: 10px;
+  display: flex; flex-direction: column; gap: 8px;
 }
 
 .helper-card {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: white;
+  display: flex; justify-content: space-between; align-items: center;
+  background: rgba(255,255,255,0.03);
   padding: 10px 12px;
-  border-radius: 16px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-}
-
-.helper-info h4 {
-  font-size: 14px;
-  margin-bottom: 4px;
-}
-
-.helper-info p {
-  font-size: 12px;
-  color: #666;
-}
-
-.contact-btn {
-  background: #1e5a4a;
-  color: white;
-  border: none;
-  padding: 6px 14px;
-  border-radius: 30px;
-  cursor: pointer;
-  font-size: 12px;
-}
-
-
-.report-card{
-  background-color: #ffffff;
-  border-radius :20px ; 
-  padding :14px ; 
-  margin-bottom :12px ; 
-  border-left :5px solid #ccc ; 
-  box-shadow : 0 2px 6px rgba(0,0,0,0.05) ; 
-}
-.report-card.emergency { border-left-color: #d62828; }
-.report-card.progress { border-left-color: #3b82f6; }
-.report-card.rescued { border-left-color: #2a9d8f; }
-
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 8px;
-}
-
-.animal-name {
-  font-weight: bold;
-  font-size: 16px;
-}
-
-.status-tag {
-  font-size: 12px;
-  padding: 2px 10px;
-  border-radius: 20px;
-  background: #f0f0f0;
-}
-
-.location {
-  font-size: 13px;
-  color: #555;
-  margin-bottom: 5px;
-}
-
-.date {
-  font-size: 11px;
-  color: #999;
-  margin-bottom: 8px;
-}
-
-.report-photo {
-  width: 100%;
-  border-radius: 12px;
-  margin: 8px 0;
-  max-height: 150px;
-  object-fit: cover;
-}
-
-.description {
-  font-size: 12px;
-  color: #666;
-  margin-bottom: 10px;
-  padding: 8px;
-  background: #f5f5f5;
-  border-radius: 12px;
-}
-
-.action-buttons {
-  display: flex;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--glass-border);
   gap: 10px;
-  flex-wrap: wrap;
+  transition: all var(--dur-fast) ease;
+}
+.helper-card:hover {
+  background: rgba(34,197,94,0.06);
+  border-color: var(--glass-border-g);
 }
 
-.small-btn {
-  background: #eef2ff;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 30px;
-  font-size: 12px;
-  cursor: pointer;
-  transition: 0.1s;
+/* Contact button – pill shape, green gradient */
+.contact-btn {
+  background: linear-gradient(135deg, var(--green-main), var(--green-dark));
+  color: #fff; border: none;
+  padding: 7px 16px; border-radius: var(--radius-pill);
+  cursor: pointer; font-size: 12px;
+  font-family: var(--font); font-weight: 700;
+  transition: transform var(--dur-fast), box-shadow var(--dur-fast);
+  white-space: nowrap;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px var(--green-glow);
+}
+.contact-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px var(--green-glow);
 }
 
-.small-btn:hover {
-  background: #dee4f5;
+/* Clinic Section */
+.clinic-section {
+  margin-top: 16px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
 }
 
-/* Modal Camera */
-.modal {
+/* ═══════════════════════════════
+   CAMERA / REPORT MODAL
+═══════════════════════════════ */
+.rm-modal-overlay {
   display: none;
-  position: fixed;
-  z-index: 1000;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0,0,0,0.8);
-  backdrop-filter: blur(3px);
+  position: fixed; top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(2, 12, 5, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 9000;
+  align-items: center; justify-content: center;
 }
+.rm-modal-overlay.open { display: flex; }
 
-.modal-content {
-  background: white;
-  margin: 20px auto;
-  width: 90%;
-  max-width: 550px;
-  border-radius: 28px;
-  animation: slideDown 0.3s ease;
+.rm-modal {
+  background: rgba(5, 20, 11, 0.9);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: var(--radius-lg);
+  width: 95%;
+  max-width: 560px;
   max-height: 90vh;
   overflow-y: auto;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+  animation: modalSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-.camera-modal {
-  max-width: 600px;
+@keyframes modalSlideUp {
+  from { opacity: 0; transform: translateY(30px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-@keyframes slideDown {
-  from { transform: translateY(-50px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  padding: 18px 22px;
-  background: #1e5a4a;
-  color: white;
-  border-radius: 28px 28px 0 0;
-  position: sticky;
-  top: 0;
+/* Modal Header */
+.rm-modal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  position: sticky; top: 0;
+  background: rgba(5, 20, 11, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   z-index: 10;
 }
 
-.close-modal {
-  font-size: 28px;
-  cursor: pointer;
+.rm-modal-title {
+  display: flex; align-items: center; gap: 10px;
+  font-weight: 700; font-size: 1.1rem;
 }
+.rm-modal-title i { color: var(--green-main); font-size: 1.2rem; }
 
-.modal-body {
-  padding: 0;
+.rm-modal-close {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: var(--text-muted);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: all 0.3s;
 }
+.rm-modal-close:hover { background: rgba(239,68,68,0.15); color: var(--red); transform: rotate(90deg); }
 
-.camera-container {
+/* Camera Viewfinder */
+.rm-camera-wrap {
   position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  background: #000;
+  overflow: hidden;
 }
 
 #video {
-  width: 100%;
-  height: auto;
-  background: #000;
-  border-radius: 0;
-}
-
-.camera-controls {
-  padding: 15px;
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  background: #f5f5f5;
-}
-
-.capture-btn, .retake-btn {
-  background: #ff6b35;
-  color: white;
-  border: none;
-  padding: 12px 30px;
-  border-radius: 40px;
-  font-size: 16px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  transition: 0.2s;
-}
-
-.retake-btn {
-  background: #6c757d;
-}
-
-.capture-btn:hover, .retake-btn:hover {
-  transform: scale(0.98);
-}
-
-.preview-img {
-  width: 100%;
-  max-height: 300px;
+  width: 100%; height: 100%;
   object-fit: cover;
-}
-
-.animal-info-form {
-  padding: 20px;
-}
-
-.form-group {
-  margin-bottom: 16px;
-}
-
-.form-group label {
   display: block;
-  margin-bottom: 6px;
+}
+
+.rm-preview-img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Scanning Overlay */
+.scan-overlay {
+  position: absolute; inset: 0;
+  pointer-events: none;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.scan-corners {
+  position: absolute; inset: 20px;
+}
+
+.corner {
+  position: absolute;
+  width: 28px; height: 28px;
+  border-color: var(--green-main);
+  border-style: solid;
+  border-width: 0;
+}
+.corner.tl { top: 0; left: 0; border-top-width: 3px; border-left-width: 3px; border-radius: 4px 0 0 0; }
+.corner.tr { top: 0; right: 0; border-top-width: 3px; border-right-width: 3px; border-radius: 0 4px 0 0; }
+.corner.bl { bottom: 0; left: 0; border-bottom-width: 3px; border-left-width: 3px; border-radius: 0 0 0 4px; }
+.corner.br { bottom: 0; right: 0; border-bottom-width: 3px; border-right-width: 3px; border-radius: 0 0 4px 0; }
+
+.scan-line {
+  position: absolute;
+  left: 20px; right: 20px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--green-main), transparent);
+  box-shadow: 0 0 10px var(--green-main);
+  animation: scanMove 2.5s ease-in-out infinite;
+  top: 20px;
+}
+
+@keyframes scanMove {
+  0%   { top: 20px; }
+  50%  { top: calc(100% - 22px); }
+  100% { top: 20px; }
+}
+
+.scan-label {
+  position: absolute;
+  bottom: 28px;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(4px);
+  color: var(--green-light);
+  font-size: 13px;
   font-weight: 600;
-  color: #1e5a4a;
+  padding: 6px 14px;
+  border-radius: 99px;
+  border: 1px solid rgba(34,197,94,0.3);
+  display: flex; align-items: center; gap: 6px;
 }
 
-.form-group input, .form-group select, .form-group textarea {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 16px;
+/* Camera Action Buttons */
+.rm-camera-actions {
+  display: flex; justify-content: center; gap: 12px;
+  padding: 16px 24px;
+  background: rgba(255,255,255,0.03);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.rm-btn-capture, .rm-btn-retake {
+  display: flex; align-items: center; gap: 8px;
+  padding: 12px 28px;
+  border: none; border-radius: 99px;
+  font-family: var(--font); font-size: 15px; font-weight: 700;
+  cursor: pointer; transition: all 0.25s;
+}
+
+.rm-btn-capture {
+  background: linear-gradient(135deg, var(--orange), #dc2626);
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(249,115,22,0.35);
+}
+.rm-btn-capture:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(249,115,22,0.5); }
+
+.rm-btn-retake {
+  background: rgba(255,255,255,0.08);
+  color: var(--text-light);
+  border: 1px solid rgba(255,255,255,0.12);
+}
+.rm-btn-retake:hover { background: rgba(255,255,255,0.15); transform: translateY(-2px); }
+
+/* Form Section */
+.rm-form-section { padding: 20px 24px; }
+
+/* Floating Label Fields */
+.rm-field { margin-bottom: 18px; }
+
+.rm-input-wrap {
+  position: relative;
+  display: flex; align-items: center;
+}
+
+.rm-field-icon {
+  position: absolute;
+  left: 16px;
+  color: var(--text-muted);
   font-size: 14px;
+  z-index: 2;
+  pointer-events: none;
+  transition: color 0.3s;
 }
 
-.location-loading {
-  text-align: center;
-  padding: 15px;
-  background: #e3f2fd;
-  border-radius: 16px;
-  margin-bottom: 15px;
-  color: #1976d2;
+.rm-input {
+  width: 100%;
+  padding: 18px 16px 8px 42px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--radius-sm);
+  color: var(--text-light);
+  font-family: var(--font);
+  font-size: 14px;
+  outline: none;
+  transition: all 0.3s;
+  resize: none;
 }
 
-.location-info {
-  padding: 12px;
-  background: #e8f5e9;
-  border-radius: 16px;
-  margin-bottom: 15px;
+.rm-input:focus {
+  border-color: var(--green-main);
+  background: rgba(34,197,94,0.06);
+  box-shadow: 0 0 0 3px rgba(34,197,94,0.12);
+}
+
+.rm-input:focus + .rm-label,
+.rm-input:not(:placeholder-shown) + .rm-label,
+.rm-label-active {
+  top: 6px !important;
+  font-size: 11px !important;
+  color: var(--green-main) !important;
+}
+
+.rm-input:focus ~ .rm-field-icon {
+  color: var(--green-main);
+}
+
+.rm-label {
+  position: absolute;
+  left: 42px; top: 14px;
+  font-size: 14px;
+  color: var(--text-muted);
+  pointer-events: none;
+  transition: all 0.25s;
+  font-family: var(--font);
+}
+
+.rm-select { padding-top: 18px; padding-bottom: 8px; }
+.rm-textarea { padding-top: 18px; min-height: 90px; }
+
+/* Location */
+.rm-location-loading {
+  display: flex; align-items: center; gap: 8px;
+  padding: 12px 16px;
+  background: rgba(59,130,246,0.1);
+  border: 1px solid rgba(59,130,246,0.2);
+  border-radius: var(--radius-sm);
+  color: var(--blue);
+  font-size: 13px; font-weight: 500;
+  margin-bottom: 14px;
+}
+
+.rm-location-info {
+  display: flex; align-items: flex-start; gap: 8px;
+  padding: 12px 16px;
+  background: rgba(34,197,94,0.08);
+  border: 1px solid rgba(34,197,94,0.2);
+  border-radius: var(--radius-sm);
+  color: var(--green-light);
+  font-size: 13px;
+  margin-bottom: 14px;
+  line-height: 1.5;
+}
+
+/* Submit Button */
+.rm-btn-submit {
+  width: 100%;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  padding: 16px;
+  background: linear-gradient(135deg, var(--green-main), var(--green-dark));
+  border: none; border-radius: var(--radius-md);
+  color: #fff;
+  font-family: var(--font); font-size: 16px; font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 6px 20px rgba(34,197,94,0.35);
+  position: relative; overflow: hidden;
+}
+.rm-btn-submit::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.25) 50%, transparent 60%);
+  transform: translateX(-120%);
+  transition: transform 0.6s ease;
+}
+.rm-btn-submit:hover::before { transform: translateX(120%); }
+.rm-btn-submit:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(34,197,94,0.5); }
+.rm-btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+/* ═══════════════════════════════
+   REPORTER INFO BADGE (MODAL)
+═══════════════════════════════ */
+#reporterField {
+  margin-bottom: 0; /* The wrap inside will have margin */
+}
+
+.rm-reporter-wrap {
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-size: 13px;
-  color: #2e7d32;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  margin-bottom: 18px; /* Replaces .rm-field margin */
 }
 
-.submit-report-btn {
-  width: 100%;
-  background: #1e5a4a;
-  color: white;
-  border: none;
-  padding: 14px;
-  border-radius: 40px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
+.rm-reporter-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.rm-reporter-label { font-size: 11px; color: var(--text-muted); font-weight: 500; }
+.rm-reporter-name { font-size: 14px; color: var(--text-light); font-weight: 600; }
+
+
+/* ═══════════════════════════════
+   RESPONSIVE
+═══════════════════════════════ */
+@media (max-width: 768px) {
+  :root { --panel-width: 100vw; }
+
+  /* Cosmetic only – layout rules are in the media query after the CRITICAL block below */
+  .view-home-btn {
+    padding: 10px 14px;
+    font-size: 12px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════
+   MERGE-CONFLICT FIXES
+   These rules MUST come after style2.css overrides to win
+   the cascade. style1.css is loaded BEFORE style2.css so
+   normally style2 would win – but we use !important here
+   for the critical layout properties only.
+═══════════════════════════════════════════════════════ */
+
+/* (1) CRITICAL: Body must be overflow:hidden + dark bg for full-screen map */
+html, body {
+  overflow: hidden !important;
+  background: var(--green-bg) !important;
+}
+
+/* (2) CRITICAL: Navbar must be position:fixed above the map – never sticky */
+.navbar {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  z-index: 1000 !important;
+  background: rgba(2, 12, 5, 0.0) !important;  /* transparent by default */
+  transition: background 0.4s ease, box-shadow 0.4s ease !important;
+  backdrop-filter: none !important;
+}
+
+/* Navbar gets glass background once .scrolled class is added by JS */
+.navbar.scrolled {
+  background: rgba(2, 12, 5, 0.85) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
+  border-bottom: 1px solid rgba(255,255,255,0.08) !important;
+}
+
+/* (3) CRITICAL: Map wrapper must be truly full-screen on desktop */
+.map-wrapper {
+  position: fixed !important;
+  top: 0 !important; left: 0 !important;
+  width: 100% !important; height: 100% !important;
+  z-index: 0 !important;
+}
+
+/* (3b) MOBILE OVERRIDE: On small screens, make .map-wrapper a flex column
+   so globe and panel share the viewport without overlapping.
+   This media query comes AFTER the CRITICAL block above in the cascade,
+   so !important rules here override the general ones above. */
+@media (max-width: 768px) {
+  /* Wrapper chứa cả globe + panel, chia theo chiều dọc */
+  .map-wrapper {
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: visible !important;
+    background: transparent !important;
+  }
+
+  html, body {
+    overflow: hidden !important; /* giữ hidden để không có thanh scroll ngang */
+  }
+
+  /* Globe: cố định 65%, trừ đi navbar 68px và khoảng cách gap 4px */
+  #interactiveMap {
+    position: relative !important;
+    flex: 0 0 calc(65% - 68px - 4px) !important;
+    height: calc(65% - 68px - 4px) !important;
+    margin-top: 68px !important;
+    margin-bottom: 4px !important; /* Khoảng cách siêu nhỏ giữa quả cầu và rescue panel */
+    width: 100% !important;
+    top: auto !important;
+    left: auto !important;
+    overflow: visible !important;
+  }
+
+  /* Cesium canvas bên trong phải fill 100% của #interactiveMap */
+  #interactiveMap .cesium-viewer,
+  #interactiveMap .cesium-viewer-cesiumWidgetContainer,
+  #interactiveMap .cesium-widget,
+  #interactiveMap canvas {
+    width: 100% !important;
+    height: 100% !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+  }
+
+  /* Panel: chiếm 35% dưới, scroll được bên trong */
+  .floating-panel {
+    position: relative !important;
+    flex: 0 0 35% !important;
+    height: 35% !important;
+    max-height: 35% !important;
+    width: 100% !important;
+    top: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    border-right: none !important;
+    border-top: 1px solid var(--glass-border) !important;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0 !important;
+    padding-top: 12px !important;
+    overflow-y: auto !important;
+    z-index: 100 !important;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.3) !important;
+  }
+
+  /* Nút View Globe: fixed, nằm ngay trên viền panel */
+  .view-home-btn {
+    position: fixed !important;
+    bottom: calc(45% + 15px) !important;
+    right: 16px !important;
+    top: auto !important;
+    z-index: 200 !important;
+  }
+}
+
+/* (4) CRITICAL: Cesium canvas must NOT have pointer-events blocked */
+#interactiveMap canvas {
+  pointer-events: auto !important;
+}
+
+/* (5) Hide Cesium credits bar */
+.cesium-widget-credits,
+.cesium-credit-logoContainer,
+.cesium-credit-textContainer {
+  display: none !important;
+}
+
+/* (6) Chatbot always top-most – never blocked by Cesium or floating panel */
+.rm-modal-overlay.open ~ .chat-bot-AI,
+.rm-modal-overlay[style*="display: flex"] ~ .chat-bot-AI {
+  display: none !important;
+}
+.wg-chatbot,
+#chatbot-container,
+.chat-bot-AI {
+  position: fixed !important;
+  bottom: 24px !important;
+  right: 24px !important;
+  z-index: 9500 !important;
+  pointer-events: auto !important;
+}
+
+/* (7) Report card text color – must be readable over dark panel */
+.report-card h4,
+.report-card p,
+.report-card span {
+  color: var(--text-light) !important;
+}
+.report-card .report-action-btn {
+  pointer-events: auto !important;
+}
+
+/* ══════════════════════════════════════════════
+   FINAL OVERRIDE BLOCK – runs after ALL other CSS
+   including style2.css (which loads after this file
+   but whose !important rules we counteract here)
+══════════════════════════════════════════════ */
+
+
+/* Tab-btn: override Bao's light theme tabs that bleed through */
+.panel-tabs .tab-btn {
+  color: var(--text-muted) !important;
+}
+.panel-tabs .tab-btn.active {
+  color: #fff !important;
+  background: var(--green-main) !important;
+}
+.panel-tabs .tab-btn.emergency-tab.active {
+  background: var(--red) !important;
+}
+.panel-tabs .tab-btn.progress-tab.active {
+  background: var(--blue) !important;
+}
+
+/* Ensure the map wrapper z-index is 0 so navbar (z:1000) is above it */
+.map-wrapper {
+  z-index: 0 !important;
+}
+
+/* The floating panel must NOT intercept mouse events on the map outside its area */
+.floating-panel {
+  pointer-events: auto;
+}
+/* But the map area to the right of the panel must be fully interactive */
+#interactiveMap {
+  pointer-events: auto !important;
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   Z-INDEX FIX – CUSTOM CESIUM POPUP (popupDiv)
+   ══════════════════════════════════════════════════════════
+
+   VẤN ĐỀ:
+   • popupDiv được append vào #interactiveMap (z-index: 0)
+   • popupDiv.style.zIndex = '1000' → bằng với navbar (1000)
+     → navbar đè lên hoặc popup bị kẹp dưới stacking context
+
+   GIẢI PHÁP (3 tầng):
+   1. popupDiv inline z-index được script1.js set lên 1050
+      (script sẽ được patch bên dưới bằng CSS override)
+   2. Ta dùng CSS override trực tiếp bằng ID selector #cesiumPopup
+      (script1.js đặt id này sau khi tạo div)
+   3. Đảm bảo .map-wrapper tạo stacking context đúng để popup
+      không bị clip bởi overflow:hidden của các element cha
+
+   THỨ TỰ Z-INDEX:
+   #interactiveMap(0) < .floating-panel(100) < .navbar(1000)
+   < popupDiv(1050) < .rm-modal-overlay(9000) < chatbot(9500)
+   ══════════════════════════════════════════════════════════ */
+
+/* Override: bất kỳ div trực tiếp con của #interactiveMap
+   mà có class rescue-popup-container (JS sẽ add class này)
+   phải nằm TRÊN navbar */
+#interactiveMap > div[style*="position: absolute"][style*="z-index"] {
+  z-index: 1050 !important;
+}
+
+/* Hoặc nếu script không thể patch: class helper */
+.cesium-popup-overlay {
+  position: absolute !important;
+  z-index: 1050 !important;
+  pointer-events: auto !important;
+}
+
+/* Đảm bảo #interactiveMap không clip con trực tiếp */
+#interactiveMap {
+  overflow: visible !important;
+}
+
+/* .map-wrapper phải là stacking context NHƯNG không clip children */
+.map-wrapper {
+  overflow: visible !important;
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   PANEL ACTION BUTTONS (Support + Feedback)
+   Đồng bộ với glass-panel dark style
+   ══════════════════════════════════════════════════════════ */
+.panel-action-row {
+  display: flex;
+  gap: 8px;
+  padding: 14px 16px 16px;
+  border-top: 1px solid var(--glass-border);
+  margin-top: 8px;
+  flex-shrink: 0;
+}
+
+.panel-support-btn,
+.panel-feedback-btn {
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 7px;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  border: none;
+  font-family: var(--font);
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s;
+  letter-spacing: 0.2px;
+}
+
+/* Lực lượng hỗ trợ – màu xanh */
+.panel-support-btn {
+  background: rgba(59, 130, 246, 0.12);
+  color: #60a5fa;
+  border: 1px solid rgba(59, 130, 246, 0.25);
+}
+.panel-support-btn:hover {
+  background: #3b82f6;
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3);
+}
+.panel-support-btn i { font-size: 13px; }
+
+/* Phản hồi – màu cam/đỏ nổi bật */
+.panel-feedback-btn {
+  background: linear-gradient(135deg, rgba(249, 115, 22, 0.15), rgba(220, 38, 38, 0.15));
+  color: #fb923c;
+  border: 1px solid rgba(249, 115, 22, 0.3);
+}
+.panel-feedback-btn:hover {
+  background: linear-gradient(135deg, #f97316, #dc2626);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(249, 115, 22, 0.35);
+}
+.panel-feedback-btn i { font-size: 13px; }
+
+
+/* ══════════════════════════════════════════════════════════
+   FEEDBACK MODAL – glassmorphism, đồng bộ dark theme
+   ══════════════════════════════════════════════════════════ */
+.feedback-modal-box {
+  max-width: 500px;
+}
+
+/* Header icon cam */
+.feedback-modal-box .rm-modal-title i {
+  color: var(--orange) !important;
+}
+
+/* Star Rating */
+.fb-rating-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   gap: 10px;
-  transition: 0.2s;
+  padding: 16px 24px 10px;
+  background: rgba(249, 115, 22, 0.06);
+  border-bottom: 1px solid rgba(249, 115, 22, 0.12);
+}
+.fb-rating-label {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+.fb-stars {
+  display: flex;
+  gap: 8px;
+}
+.fb-star {
+  font-size: 26px;
+  color: rgba(255, 255, 255, 0.15);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.fb-star:hover,
+.fb-star.fb-star-lit {
+  color: #fbbf24;
+  transform: scale(1.15);
+}
+.fb-star.fb-star-selected {
+  color: #f97316;
 }
 
-.submit-report-btn:hover {
-  background: #0f3b30;
+/* Form fields: reuse rm-modal styles; no extra padding needed */
+.fb-form .rm-form-section {
+  padding-top: 0;
 }
 
-.status-badge {
-  display: inline-block;
-  width: 14px;
-  height: 14px;
-  border-radius: 14px;
-  margin-right: 6px;
+/* Action buttons row */
+.fb-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 6px;
 }
 
-.status-badge.injured { background: #d62828; }
-.status-badge.rescued { background: #2a9d8f; }
-.status-badge.active { background: #3b82f6; }
+.fb-btn-cancel {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  font-family: var(--font);
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.22s;
+}
+.fb-btn-cancel:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--text-light);
+}
 
-@media (max-width: 800px) {
-  .main-content {
-    flex-direction: column;
-  }
-  .map-panel, .reports-panel {
-    min-width: auto;
-  }
+.fb-btn-submit {
+  flex: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  background: linear-gradient(135deg, #f97316, #dc2626);
+  border: none;
+  border-radius: var(--radius-sm);
+  color: #fff;
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s;
+  box-shadow: 0 6px 20px rgba(249, 115, 22, 0.3);
+}
+.fb-btn-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(249, 115, 22, 0.45);
+}
+.fb-btn-submit:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
