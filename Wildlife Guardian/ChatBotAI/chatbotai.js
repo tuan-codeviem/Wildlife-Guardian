@@ -1,6 +1,4 @@
-import { GoogleGenAI } from "@google/genai"
 
-const API_KEY = "";
 const ai = new GoogleGenAI({ apiKey: API_KEY });
 
 /* ════════════════════════════════════════════════════
@@ -216,19 +214,13 @@ async function sendMessage() {
         : "1. Luôn trả lời bằng Tiếng Anh (English).";
 
     try {
-        const response = await ai.models.generateContent({
-            model: 'gemini-2.5-flash',
-            contents: userMessage,
-            config: {
-                systemInstruction: `Bạn là Phoenix AI, trợ lý ảo của trang web Wildlife Guardian.
-QUY TẮC BẮT BUỘC VỀ ĐỊNH DẠNG: Tuyệt đối không sử dụng bất kỳ định dạng Markdown nào trong câu trả lời. Không sử dụng dấu sao (*) để in đậm, in nghiêng hay làm gạch đầu dòng. Chỉ trả lời bằng văn bản thuần túy (Plain text). Nếu cần liệt kê, hãy dùng dấu gạch ngang (-). Trả lời ngắn gọn, súc tích và thân thiện.
-                ${languageRule}
-                2. Bạn chỉ được phép tư vấn, trả lời các câu hỏi liên quan đến bảo vệ động vật hoang dã, thiên nhiên, môi trường và các thông tin về trang web Wildlife Guardian.
-                3. Nếu người dùng hỏi về các chủ đề khác (như toán học, lập trình, giải trí, chính trị...), hãy lịch sự từ chối và lái câu chuyện quay về chủ đề động vật hoang dã.
-                4. Trả lời ngắn gọn, thân thiện và súc tích.
-                5. Bạn có thể trả lời về các vấn đề liên quan tới sơ cứu cơ bản cho động vật bị thương`
-            }
+                const res = await fetch('http://localhost:3000/api/chatbot', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userMessage, languageRule })
         });
+        const response = await res.json();
+        if (!response.success) throw new Error(response.error || 'Server error');
 
         // Replace loading with actual response
         if (isNewUI) {
