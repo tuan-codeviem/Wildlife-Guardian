@@ -1018,21 +1018,21 @@ body {
     right: auto !important;
     transform: translateX(-50%);
     width: 95%;
+    max-height: 90%; /* Giới hạn chiều cao overlay tối đa 90% của map */
     display: flex;
     justify-content: center;
   }
 
   .rescue-popup.dark-glass-theme {
     width: 100% !important;
-    max-height: none !important;
-    /* Hiển thị full không cuộn */
+    max-height: 100% !important;
     display: flex;
     flex-direction: column;
   }
 
   .rescue-popup.dark-glass-theme .rescue-header {
-    min-height: 250px !important;
-    /* Hiển thị đầy đủ ảnh động vật thay vì thu gọn */
+    min-height: 150px !important;
+    flex-shrink: 0;
     padding: 10px;
   }
 
@@ -1042,8 +1042,8 @@ body {
   }
 
   .rescue-popup.dark-glass-theme .rescue-details {
-    flex: none;
-    overflow-y: visible;
+    flex: 1;
+    overflow-y: auto !important; /* Bật cuộn cho phần chi tiết */
     max-height: none !important;
     padding: 10px;
   }
