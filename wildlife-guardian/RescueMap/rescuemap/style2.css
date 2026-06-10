@@ -92,9 +92,6 @@ body {
 /* Ensure existing .wg-chatbot also gets correct z-index */
 .wg-chatbot,
 .chat-bot-AI {
-  position: fixed !important;
-  bottom: 24px !important;
-  right: 24px !important;
   z-index: 9500 !important;
   pointer-events: auto !important;
 }

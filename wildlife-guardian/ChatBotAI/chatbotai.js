@@ -3,6 +3,89 @@
 const API_BASE_URL = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:3000' : location.origin;
 
 /* ════════════════════════════════════════════════════
+   AUTO-INJECT: Chatbot HTML if not present
+════════════════════════════════════════════════════ */
+if (!document.getElementById("wgChatbot") && !document.querySelector(".chat-bot-AI")) {
+    const chatbotHTML = `
+  <div class="wg-chatbot" id="wgChatbot">
+    <button class="chatbot-btn" id="chatbotBtn" title="Drag me anywhere!">
+      <svg class="pixel-phoenix" viewBox="0 0 32 32" width="32" height="32">
+        <rect x="12" y="16" width="8" height="8" fill="#FF6B35" />
+        <rect x="14" y="12" width="4" height="4" fill="#FF6B35" />
+        <rect x="18" y="13" width="2" height="2" fill="#FFD93D" />
+        <rect x="15" y="13" width="2" height="2" fill="#1a1a1a" />
+        <rect x="8" y="16" width="4" height="6" fill="#FF8C42" />
+        <rect x="20" y="16" width="4" height="6" fill="#FF8C42" />
+        <rect x="10" y="24" width="2" height="4" fill="#FF6B35" />
+        <rect x="14" y="24" width="2" height="6" fill="#FFD93D" />
+        <rect x="18" y="24" width="2" height="4" fill="#FF6B35" />
+        <rect x="13" y="8" width="2" height="4" fill="#FFD93D" />
+        <rect x="15" y="6" width="2" height="6" fill="#FF6B35" />
+        <rect x="17" y="8" width="2" height="4" fill="#FFD93D" />
+      </svg>
+      <div class="cb-ring r1"></div>
+      <div class="cb-ring r2"></div>
+      <div class="cb-star">✦</div>
+    </button>
+
+    <div class="chatbot-window" id="chatbotWindow">
+      <div class="cw-header" id="cwHeader">
+        <div class="cwh-info">
+          <div class="cwh-avatar">
+            <svg viewBox="0 0 32 32" width="22" height="22">
+              <rect x="12" y="16" width="8" height="8" fill="#FF6B35" />
+              <rect x="14" y="12" width="4" height="4" fill="#FF6B35" />
+              <rect x="18" y="13" width="2" height="2" fill="#FFD93D" />
+              <rect x="15" y="13" width="2" height="2" fill="#1a1a1a" />
+              <rect x="8" y="16" width="4" height="6" fill="#FF8C42" />
+              <rect x="20" y="16" width="4" height="6" fill="#FF8C42" />
+            </svg>
+            <span class="cwh-online"></span>
+          </div>
+          <div>
+            <h4>Phoenix AI</h4>
+            <p>Wildlife Assistant · Online</p>
+          </div>
+        </div>
+        <button class="cw-close" id="cwClose">✕</button>
+      </div>
+      <div class="cw-msgs" id="cwMsgs">
+        <div class="msg bot">
+          <div class="msg-av"><svg viewBox="0 0 32 32" width="15" height="15">
+              <rect x="12" y="16" width="8" height="8" fill="#FF6B35" />
+              <rect x="14" y="12" width="4" height="4" fill="#FF6B35" />
+              <rect x="8" y="16" width="4" height="6" fill="#FF8C42" />
+              <rect x="20" y="16" width="4" height="6" fill="#FF8C42" />
+            </svg></div>
+          <div class="msg-bubble" data-i18n="chatbot_greeting">Hello! I'm Phoenix 🦅 Your wildlife guardian assistant! How can I help you today?
+          </div>
+        </div>
+      </div>
+      <div class="quick-replies-wrapper" id="qrWrapper">
+        <div class="quick-replies" id="quickReplies">
+          <button class="qr-btn" data-i18n="qr_1"><span>⚡</span> How can I report an emergency?</button>
+          <button class="qr-btn" data-i18n="qr_2"><span>💡</span> What is Wildlife Guardian?</button>
+          <button class="qr-btn" data-i18n="qr_3"><span>🐾</span> Can I donate to a specific animal?</button>
+          <button class="qr-btn" data-i18n="qr_4"><span>🌿</span> Tips for helping local birds?</button>
+        </div>
+        <div class="qr-scroll-hint">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
+        </div>
+      </div>
+      <div class="cw-input">
+        <input type="text" id="cwInput" placeholder="Ask Phoenix anything…" />
+        <button id="cwSend"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg></button>
+      </div>
+    </div>
+  </div>`;
+    document.body.insertAdjacentHTML('beforeend', chatbotHTML);
+}
+
+/* ════════════════════════════════════════════════════
    AUTO-DETECT: new UI (wg-chatbot) vs old UI (chat-bot-AI)
 ════════════════════════════════════════════════════ */
 const isNewUI = !!document.getElementById("wgChatbot");
@@ -59,6 +142,9 @@ function onDragStart(e) {
     document.body.style.userSelect = "none";
     if (isNewUI) chatbotContainer.classList.add("is-dragging");
 
+    // Ngăn iframe/canvas Unity nuốt mất sự kiện chuột khi kéo
+    document.querySelectorAll('iframe, canvas').forEach(el => el.style.pointerEvents = 'none');
+
     if (e.type.includes('touch')) {
         document.addEventListener("touchmove", onDragMove, { passive: false });
         document.addEventListener("touchend", onDragEnd);
@@ -88,6 +174,9 @@ function onDragMove(e) {
 function onDragEnd() {
     document.body.style.userSelect = "";
     if (isNewUI) chatbotContainer.classList.remove("is-dragging");
+
+    // Khôi phục lại sự kiện chuột cho Game Unity
+    document.querySelectorAll('iframe, canvas').forEach(el => el.style.pointerEvents = '');
     document.removeEventListener("mousemove", onDragMove);
     document.removeEventListener("mouseup", onDragEnd);
     document.removeEventListener("touchmove", onDragMove);
@@ -104,11 +193,13 @@ function clampToViewport() {
     let x = rect.left;
     let y = rect.top;
     let moved = false;
+    
+    const PAD = 15; // Safe padding
 
-    if (activeRect.right > window.innerWidth) { x -= (activeRect.right - window.innerWidth); moved = true; }
-    if (activeRect.bottom > window.innerHeight) { y -= (activeRect.bottom - window.innerHeight); moved = true; }
-    if (activeRect.left < 0) { x -= activeRect.left; moved = true; }
-    if (activeRect.top < 0) { y -= activeRect.top; moved = true; }
+    if (activeRect.right > window.innerWidth - PAD) { x -= (activeRect.right - (window.innerWidth - PAD)); moved = true; }
+    if (activeRect.bottom > window.innerHeight - PAD) { y -= (activeRect.bottom - (window.innerHeight - PAD)); moved = true; }
+    if (activeRect.left < PAD) { x += (PAD - activeRect.left); moved = true; }
+    if (activeRect.top < PAD) { y += (PAD - activeRect.top); moved = true; }
 
     if (moved || chatbotContainer.style.left !== "") {
         chatbotContainer.style.left = x + "px";
@@ -139,6 +230,8 @@ if (openBtn && chatWindow) {
                 openBtn.style.pointerEvents = "none";
             }
             clampToViewport();
+            setTimeout(clampToViewport, 50); // Bắt ngay khi DOM bắt đầu render class active
+            setTimeout(clampToViewport, 360); // Đảm bảo clamp sau khi animation kết thúc
             if (chatBox) chatBox.scrollTop = chatBox.scrollHeight;
         }
     });

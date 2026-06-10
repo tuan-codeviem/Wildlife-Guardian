@@ -870,9 +870,6 @@ html, body {
 .wg-chatbot,
 #chatbot-container,
 .chat-bot-AI {
-  position: fixed !important;
-  bottom: 24px !important;
-  right: 24px !important;
   z-index: 9500 !important;
   pointer-events: auto !important;
 }
