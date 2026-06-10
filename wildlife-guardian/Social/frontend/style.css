@@ -160,7 +160,6 @@ button {
     linear-gradient(135deg, #020c05 0%, #041a0a 40%, #061505 100%);
 }
 
-
 /* ═══════════════════════════════════════════════════════════
    MAIN LAYOUT
 ════════════════════════════════════════════════════════════ */
@@ -181,6 +180,31 @@ button {
   flex: 1;
   min-width: 290px;
   max-width: 340px;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   CREATE POST (DESKTOP INLINE, MOBILE MODAL)
+════════════════════════════════════════════════════════════ */
+@media screen and (min-width: 769px) {
+  #createPostModalOverlay {
+    display: block !important;
+    position: static !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    width: 100% !important;
+    height: auto !important;
+    margin-bottom: 24px;
+    z-index: 1 !important;
+  }
+  #createPostModalOverlay .create-post-card {
+    width: 100% !important;
+    max-width: none !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+  #closeCreatePostModal {
+    display: none !important;
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -922,6 +946,7 @@ button {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  overflow-x: hidden;
 }
 
 .chat-item {
@@ -948,7 +973,7 @@ button {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  width: 320px;
+  width: 350px;
   border-radius: 16px;
   overflow: hidden;
   z-index: 999;
@@ -961,7 +986,6 @@ button {
     0 0 24px var(--green-glow) !important;
 }
 
-/* Chat header bar */
 #chatBox > div:first-child {
   background: linear-gradient(
     135deg,
@@ -975,8 +999,16 @@ button {
   color: #fff;
 }
 
+/* Đổi chỗ Avatar và Nút Tắt/Back (Áp dụng cho cả PC và Mobile) */
+#closeChat {
+  order: 2;
+}
+#chatBox > div:first-child > div {
+  order: 1;
+}
+
 #chatMessages {
-  height: 300px;
+  flex: 1;
   padding: 15px;
   overflow-y: auto;
   display: flex;
@@ -1005,6 +1037,62 @@ button {
   border: none !important;
   color: #fff !important;
   box-shadow: 0 4px 14px rgba(22, 163, 74, 0.3) !important;
+}
+
+/* ─ Chat Structure Classes ─ */
+.chat-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: grab;
+}
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-right: 5px;
+}
+
+.chat-footer {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid var(--divider);
+  display: flex;
+  gap: 8px;
+}
+
+.chat-input {
+  flex: 1;
+  padding: 10px 15px;
+  border: 1px solid var(--input-border);
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border-radius: 20px;
+  outline: none;
+}
+
+.chat-send-btn {
+  background: var(--green-600) !important;
+  border: none;
+  color: white !important;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    transform 0.2s,
+    background 0.2s;
+}
+
+.chat-send-btn:hover {
+  transform: scale(1.1);
+  background: var(--green-500) !important;
 }
 
 /* Chat input area */
@@ -1527,6 +1615,16 @@ button {
 }
 
 /* ═══════════════════════════════════════════════════════════
+   10.5 MOBILE SIDEBAR BUBBLE & TABS (Default hidden on PC)
+════════════════════════════════════════════════════════════ */
+.mobile-sidebar-bubble {
+  display: none;
+}
+.mobile-sidebar-header {
+  display: none;
+}
+
+/* ═══════════════════════════════════════════════════════════
    11. MOBILE RESPONSIVE
 ════════════════════════════════════════════════════════════ */
 @media screen and (max-width: 768px) {
@@ -1538,10 +1636,120 @@ button {
   }
 
   .sidebar-column {
-    width: 100% !important;
-    min-width: unset;
-    max-width: unset;
-    order: 2;
+    display: none; /* Ẩn sidebar mặc định trên mobile */
+  }
+
+  .sidebar-column.show-mobile {
+    display: flex !important;
+    flex-direction: column;
+    position: fixed;
+    top: 15vh;
+    left: 5vw;
+    width: 90vw !important;
+    height: 70vh;
+    z-index: 10005;
+    background: rgba(4, 14, 8, 0.98) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    border-radius: 20px;
+    padding: 20px 15px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+    animation: fadeInMobilePanel 0.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  }
+
+  @keyframes fadeInMobilePanel {
+    from {
+      opacity: 0;
+      margin-top: 10px;
+    }
+    to {
+      opacity: 1;
+      margin-top: 0;
+    }
+  }
+
+  .mobile-sidebar-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+  }
+
+  .mobile-bubbles-container {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    z-index: 9999;
+  }
+
+  .mobile-sidebar-bubble {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(135deg, var(--green-500), var(--green-700));
+    color: white;
+    border-radius: 50%;
+    border: none;
+    box-shadow: 0 4px 20px rgba(22, 163, 74, 0.5);
+    cursor: pointer;
+    transition:
+      transform 0.2s,
+      box-shadow 0.2s;
+    position: relative;
+  }
+
+  .mobile-sidebar-bubble:hover,
+  .mobile-sidebar-bubble:active {
+    transform: scale(1.05);
+  }
+
+  .bubble-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #e91e63;
+    color: white;
+    font-size: 11px;
+    font-weight: bold;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #041a0a;
+  }
+
+  .friend-requests-card,
+  .messages-card {
+    flex: 1;
+    overflow-y: auto;
+    margin: 0 !important;
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 0 5px !important;
+    display: none;
+  }
+
+  .friend-requests-card.active-tab,
+  .messages-card.active-tab {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .friend-requests-card::before,
+  .friend-requests-card::after,
+  .messages-card::before,
+  .messages-card::after {
+    display: none !important;
   }
 
   .feed-column,
@@ -1588,4 +1796,80 @@ button {
   border-radius: 50%;
   animation: starTwinkle 3s ease-in-out infinite;
   pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   13. DESKTOP & MOBILE CHATBOX OVERRIDES
+════════════════════════════════════════════════════════════ */
+
+/* Mặc định trên PC: hiện nút X, ẩn nút <- */
+#closeChat .icon-back {
+  display: none;
+}
+#closeChat .icon-close {
+  display: block;
+}
+
+@media screen and (min-width: 769px) {
+  /* Luôn hiện danh sách bạn bè trên Desktop dù JS có ẩn */
+  /* Luôn hiện danh sách bạn bè trên Desktop dù JS có ẩn */
+  #messagesListScreen {
+    display: flex !important;
+  }
+
+  /* Cố định chiều cao chatBox trên Desktop */
+  #chatBox {
+    height: 500px !important;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  #closeChat .icon-back {
+    display: block;
+  }
+  #closeChat .icon-close {
+    display: none;
+  }
+
+  /* Đảo chiều mũi tên back thành -> trên Mobile */
+  #closeChat .icon-back svg {
+    transform: rotate(180deg);
+  }
+
+  /* Trên mobile, khung chat được đưa hẳn VÀO TRONG messages-card bằng JS */
+  /* Do đó nó chỉ cần chiếm trọn không gian, tắt hết fixed/border/shadow đi */
+  #chatBox {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    width: 100% !important;
+    height: 100% !important;
+    flex: 1;
+    margin: 0 !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    z-index: auto !important;
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+  }
+
+  #chatBox > div:first-child {
+    /* Loại bỏ khối xanh cồng kềnh, làm header trong suốt và mượt mà */
+    background: transparent !important;
+    margin: 0 !important;
+    padding: 0 0 15px 0 !important;
+    border-radius: 0 !important;
+    border-bottom: 1px solid var(--divider) !important;
+  }
+
+  #chatBox > div:last-child {
+    /* Làm trong suốt footer chứa input để hòa quyện với khung */
+    background: transparent !important;
+    margin: 0 !important;
+    padding: 15px 0 0 0 !important;
+    border-top: 1px solid var(--divider) !important;
+  }
 }

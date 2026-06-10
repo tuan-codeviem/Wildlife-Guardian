@@ -1,5 +1,8 @@
 // Auto-detect API base URL: localhost:3000 for dev, origin for production
-const API_BASE_URL = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:3000' : location.origin;
+const API_BASE_URL =
+  location.hostname === "localhost" || location.hostname === "127.0.0.1"
+    ? "http://localhost:3000"
+    : location.origin;
 
 // Hàm hỗ trợ lấy ngôn ngữ hiện tại an toàn
 function getLang() {
@@ -153,8 +156,6 @@ function openSettingsModal() {
     profileModal.style.display = "flex";
   }
 }
-
-
 
 // ==========================================
 //              2. POST, BÀI ĐĂNG
@@ -461,7 +462,6 @@ async function loadPosts(category = "all posts") {
 
                 </div>
                 `;
-      postsFeed.innerHTML += postHTML;
       allPostsHTML += postHTML;
     });
     postsFeed.innerHTML = allPostsHTML;
@@ -654,6 +654,10 @@ postBtn.addEventListener("click", async function () {
 
       // QUAN TRỌNG: Gọi lại hàm này để bài mới hiện lên ngay lập tức
       loadPosts();
+      
+      // Đóng modal đăng bài nếu đang mở
+      const createModal = document.getElementById("createPostModalOverlay");
+      if (createModal) createModal.style.display = "none";
     } else {
       console.error("❌ Lỗi: " + data.message);
     }
@@ -1194,14 +1198,11 @@ window.toggleFriendRequest = async function (targetId, btnElement) {
   btnElement.innerText = "...";
   const t = window.translations[getLang()];
   try {
-    const res = await fetch(
-      `${API_BASE_URL}/api/friends/request`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ myId, targetId }),
-      },
-    );
+    const res = await fetch(`${API_BASE_URL}/api/friends/request`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ myId, targetId }),
+    });
     const data = await res.json();
 
     if (data.action === "sent") {
@@ -1226,9 +1227,7 @@ async function loadFriendRequests() {
   const myId = JSON.parse(meString)._id || JSON.parse(meString).userId;
 
   try {
-    const res = await fetch(
-      `${API_BASE_URL}/api/friends/requests/${myId}`,
-    );
+    const res = await fetch(`${API_BASE_URL}/api/friends/requests/${myId}`);
     const data = await res.json();
 
     // TỐI ƯU HÓA: Chỉ vẽ lại màn hình khi có lời mời kết bạn MỚI
@@ -1239,6 +1238,11 @@ async function loadFriendRequests() {
     if (data.requests.length > 0) {
       requestBadge.style.display = "flex"; // Sửa lại thành flex để căn giữa số cho đẹp
       requestBadge.innerText = data.requests.length;
+      const mobileBubbleBadge = document.getElementById("mobileBubbleBadge");
+      if (mobileBubbleBadge) {
+        mobileBubbleBadge.style.display = "flex";
+        mobileBubbleBadge.innerText = data.requests.length;
+      }
       pendingRequestsContainer.innerHTML = "";
 
       data.requests.forEach((req) => {
@@ -1257,6 +1261,8 @@ async function loadFriendRequests() {
       });
     } else {
       requestBadge.style.display = "none";
+      const mobileBubbleBadge = document.getElementById("mobileBubbleBadge");
+      if (mobileBubbleBadge) mobileBubbleBadge.style.display = "none";
       pendingRequestsContainer.innerHTML = `<p style="font-size: 13px; color: #888; text-align: center;">${window.translations[getLang()].no_friend_requests}</p>`;
     }
   } catch (err) {}
@@ -1291,11 +1297,81 @@ const sendChatBtn = document.getElementById("sendChatBtn");
 let chatInterval = null; // Biến dùng để auto-load tin nhắn
 let lastMessagesString = ""; // Bộ nhớ đệm tin nhắn
 
-// 2. ĐÓNG KHUNG CHAT
+const messagesListScreen = document.getElementById("messagesListScreen");
+
+// ==========================================
+// KÉO THẢ KHUNG CHAT (DRAGGABLE CHAT BOX)
+// ==========================================
+const chatBoxHeader = document.getElementById("chatBoxHeader");
+if (chatBoxHeader && chatBox) {
+  let isDraggingChat = false;
+  let chatOffsetX = 0;
+  let chatOffsetY = 0;
+
+  chatBoxHeader.addEventListener("mousedown", (e) => {
+    if (window.innerWidth <= 768) return; // Không kéo thả trên mobile
+    // Đừng kéo nếu bấm vào nút close
+    if (e.target.closest('#closeChat')) return;
+    
+    isDraggingChat = true;
+    chatBoxHeader.style.cursor = "grabbing";
+    chatOffsetX = e.clientX - chatBox.getBoundingClientRect().left;
+    chatOffsetY = e.clientY - chatBox.getBoundingClientRect().top;
+    document.body.style.userSelect = "none";
+  });
+
+  document.addEventListener("mousemove", (e) => {
+    if (!isDraggingChat) return;
+    
+    let newX = e.clientX - chatOffsetX;
+    let newY = e.clientY - chatOffsetY;
+    
+    const maxX = window.innerWidth - chatBox.offsetWidth;
+    const maxY = window.innerHeight - chatBox.offsetHeight;
+    
+    if (newX < 0) newX = 0;
+    if (newY < 0) newY = 0;
+    if (newX > maxX) newX = maxX;
+    if (newY > maxY) newY = maxY;
+    
+    chatBox.style.left = newX + "px";
+    chatBox.style.top = newY + "px";
+    chatBox.style.bottom = "auto";
+    chatBox.style.right = "auto";
+    chatBox.style.margin = "0";
+  });
+
+  document.addEventListener("mouseup", () => {
+    if (isDraggingChat) {
+      isDraggingChat = false;
+      chatBoxHeader.style.cursor = "grab";
+      document.body.style.userSelect = "auto";
+    }
+  });
+}
+
+// 2. NÚT QUAY LẠI (TỪ CHAT VỀ DANH SÁCH)
 closeChat.addEventListener("click", () => {
   chatBox.style.display = "none";
+  if (messagesListScreen) messagesListScreen.style.display = "flex";
+  
+  // Trả chatBox về body để không ảnh hưởng cấu trúc khi sang PC
+  if (window.innerWidth <= 768) {
+    document.body.appendChild(chatBox);
+  }
+
   if (chatInterval) clearInterval(chatInterval); // Tắt auto-refresh
   lastMessagesString = ""; // Reset trạng thái
+});
+
+// Lắng nghe sự kiện resize để đảm bảo chatBox luôn ở đúng vị trí DOM
+window.addEventListener("resize", () => {
+  if (window.innerWidth > 768) {
+    document.body.appendChild(chatBox);
+  } else if (chatBox.style.display === "flex") {
+    const messagesCard = document.getElementById("messagesCard");
+    if (messagesCard) messagesCard.appendChild(chatBox);
+  }
 });
 
 // 3. HÀM TẢI TIN NHẮN TỪ SERVER VÀ VẼ RA MÀN HÌNH
@@ -1393,13 +1469,9 @@ async function loadUsersForChat(searchKeyword = "") {
     // Lọc bỏ chính mình ra khỏi danh sách
     const myId = me._id || me.id || me.userId;
 
-    // ĐÃ SỬA: Thay vì tìm toàn bộ mạng xã hội, giờ chỉ tìm những người LÀ BẠN BÈ
+    // Thay vì chỉ tìm những người đã từng nhắn tin, ta luôn lấy danh sách BẠN BÈ.
+    // Điều này giúp bạn bè mới kết bạn sẽ hiện ra ở mục nhắn tin ngay lập tức.
     let url = `${API_BASE_URL}/api/users/friends/${myId}?search=${searchKeyword}`;
-
-    // Nếu không nhập từ khóa tìm kiếm, chỉ lấy những người đã từng nhắn tin
-    if (searchKeyword.trim() === "") {
-      url = `${API_BASE_URL}/api/users/recent/${myId}`;
-    }
 
     const response = await fetch(url);
     const data = await response.json();
@@ -1438,12 +1510,23 @@ async function loadUsersForChat(searchKeyword = "") {
                 </div>
             `;
 
-      // SỰ KIỆN KHI BẤM CHỌN 1 NGƯỜI ĐỂ CHAT (Vị trí 3 đã nằm gọn ở đây)
+      // SỰ KIỆN KHI BẤM CHỌN 1 NGƯỜI ĐỂ CHAT
       userDiv.onclick = () => {
         currentPartnerId = user._id; // Chốt ID người nhận tin nhắn
 
-        // Mở khung chat (Dúi nhớ check biến chatBox xem có đúng tên không nhé)
-        if (typeof chatBox !== "undefined") chatBox.style.display = "flex";
+        // Chuyển màn hình từ Danh sách sang Chat
+        if (typeof chatBox !== "undefined") {
+          // NẾU TRÊN MOBILE, DI CHUYỂN CHATBOX VÀO TRONG MESSAGES CARD ĐỂ NÓ NẰM GỌN BÊN TRONG
+          if (window.innerWidth <= 768) {
+            const messagesCard = document.getElementById("messagesCard");
+            if (messagesCard) messagesCard.appendChild(chatBox);
+          }
+
+          chatBox.style.display = "flex";
+          const messagesListScreen = document.getElementById("messagesListScreen");
+          if (messagesListScreen) messagesListScreen.style.display = "none";
+        }
+        
         document.getElementById("chatName").innerText = user.fullName;
         const chatAvatar = document.getElementById("chatAvatar");
         if (chatAvatar)
@@ -2029,3 +2112,175 @@ const initParticles = () => {
   requestAnimationFrame(animate);
 };
 initParticles();
+
+// ==========================================
+// MOBILE BUBBLES LOGIC
+// ==========================================
+document.addEventListener("DOMContentLoaded", () => {
+  const mobileMessagesBubble = document.getElementById("mobileMessagesBubble");
+  const mobileFriendsBubble = document.getElementById("mobileFriendsBubble");
+  const mobileCreatePostBubble = document.getElementById("mobileCreatePostBubble");
+  const sidebarColumn = document.getElementById("sidebarColumn");
+  const closeMobileSidebar = document.getElementById("closeMobileSidebar");
+  const mobileSidebarTitle = document.getElementById("mobileSidebarTitle");
+  const mobileSidebarHeader = document.querySelector(".mobile-sidebar-header");
+  
+  const createPostModalOverlay = document.getElementById("createPostModalOverlay");
+  const closeCreatePostModal = document.getElementById("closeCreatePostModal");
+
+  const messagesCard = document.getElementById("messagesCard");
+  const friendRequestsCard = document.getElementById("friendRequestsCard");
+
+  if (sidebarColumn) {
+    const openSidebar = (type) => {
+      sidebarColumn.classList.add("show-mobile");
+      if (messagesCard) messagesCard.classList.remove("active-tab");
+      if (friendRequestsCard) friendRequestsCard.classList.remove("active-tab");
+      
+      const t = window.translations ? window.translations[getLang()] : null;
+
+      if (type === "messages") {
+        if (messagesCard) messagesCard.classList.add("active-tab");
+        if (mobileSidebarTitle) mobileSidebarTitle.innerText = ""; // Bỏ chữ to để tránh trùng lặp
+      } else if (type === "friends") {
+        if (friendRequestsCard) friendRequestsCard.classList.add("active-tab");
+        if (mobileSidebarTitle) mobileSidebarTitle.innerText = ""; // Bỏ chữ to để tránh trùng lặp
+      }
+    };
+
+    if (mobileMessagesBubble) {
+      mobileMessagesBubble.addEventListener("click", (e) => {
+        e.stopPropagation();
+        openSidebar("messages");
+      });
+    }
+    
+    if (mobileFriendsBubble) {
+      mobileFriendsBubble.addEventListener("click", (e) => {
+        e.stopPropagation();
+        openSidebar("friends");
+      });
+    }
+
+    if (closeMobileSidebar) {
+      closeMobileSidebar.addEventListener("click", () => {
+        sidebarColumn.classList.remove("show-mobile");
+      });
+    }
+
+    // Logic cho Create Post Modal
+    if (mobileCreatePostBubble) {
+      mobileCreatePostBubble.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (createPostModalOverlay) {
+          createPostModalOverlay.style.display = "flex";
+        }
+      });
+    }
+
+    if (closeCreatePostModal) {
+      closeCreatePostModal.addEventListener("click", () => {
+        if (createPostModalOverlay) {
+          createPostModalOverlay.style.display = "none";
+        }
+      });
+    }
+
+    // Đóng khi click ra ngoài
+    document.addEventListener("mousedown", (e) => {
+      if (sidebarColumn && sidebarColumn.classList.contains("show-mobile")) {
+        if (!sidebarColumn.contains(e.target) && 
+            (!mobileMessagesBubble || !mobileMessagesBubble.contains(e.target)) && 
+            (!mobileFriendsBubble || !mobileFriendsBubble.contains(e.target))) {
+          sidebarColumn.classList.remove("show-mobile");
+        }
+      }
+      if (createPostModalOverlay && createPostModalOverlay.style.display === "flex") {
+        if (e.target === createPostModalOverlay) {
+          createPostModalOverlay.style.display = "none";
+        }
+      }
+    });
+
+    document.addEventListener("touchstart", (e) => {
+      if (sidebarColumn && sidebarColumn.classList.contains("show-mobile")) {
+        if (!sidebarColumn.contains(e.target) && 
+            (!mobileMessagesBubble || !mobileMessagesBubble.contains(e.target)) && 
+            (!mobileFriendsBubble || !mobileFriendsBubble.contains(e.target))) {
+          sidebarColumn.classList.remove("show-mobile");
+        }
+      }
+      if (createPostModalOverlay && createPostModalOverlay.style.display === "flex") {
+        if (e.target === createPostModalOverlay) {
+          createPostModalOverlay.style.display = "none";
+        }
+      }
+    });
+
+    // Kéo thả Sidebar Panel
+    if (mobileSidebarHeader) {
+      mobileSidebarHeader.style.cursor = "grab";
+      let isPanelDragging = false;
+      let pCurrentX = 0, pCurrentY = 0;
+      let pInitialX = 0, pInitialY = 0;
+      let pXOffset = 0, pYOffset = 0;
+
+      // Mouse events
+      mobileSidebarHeader.addEventListener("mousedown", (e) => {
+        if (closeMobileSidebar && (e.target === closeMobileSidebar || closeMobileSidebar.contains(e.target))) return;
+        pInitialX = e.clientX - pXOffset;
+        pInitialY = e.clientY - pYOffset;
+        isPanelDragging = true;
+        mobileSidebarHeader.style.cursor = "grabbing";
+      });
+
+      document.addEventListener("mouseup", () => {
+        if (isPanelDragging) {
+          pInitialX = pCurrentX;
+          pInitialY = pCurrentY;
+          isPanelDragging = false;
+          mobileSidebarHeader.style.cursor = "grab";
+        }
+      });
+
+      document.addEventListener("mousemove", (e) => {
+        if (isPanelDragging) {
+          e.preventDefault();
+          pCurrentX = e.clientX - pInitialX;
+          pCurrentY = e.clientY - pInitialY;
+          pXOffset = pCurrentX;
+          pYOffset = pCurrentY;
+          sidebarColumn.style.transform = `translate3d(${pCurrentX}px, ${pCurrentY}px, 0)`;
+        }
+      });
+
+      // Touch events cho điện thoại
+      mobileSidebarHeader.addEventListener("touchstart", (e) => {
+        if (closeMobileSidebar && (e.target === closeMobileSidebar || closeMobileSidebar.contains(e.target))) return;
+        pInitialX = e.touches[0].clientX - pXOffset;
+        pInitialY = e.touches[0].clientY - pYOffset;
+        isPanelDragging = true;
+      }, { passive: false });
+
+      document.addEventListener("touchend", () => {
+        if (isPanelDragging) {
+          pInitialX = pCurrentX;
+          pInitialY = pCurrentY;
+          isPanelDragging = false;
+        }
+      });
+
+      document.addEventListener("touchmove", (e) => {
+        if (isPanelDragging) {
+          // PreventDefault để chặn trang web bị cuộn lên xuống khi đang kéo bảng
+          if (e.cancelable) e.preventDefault();
+          pCurrentX = e.touches[0].clientX - pInitialX;
+          pCurrentY = e.touches[0].clientY - pInitialY;
+          pXOffset = pCurrentX;
+          pYOffset = pCurrentY;
+          sidebarColumn.style.transform = `translate3d(${pCurrentX}px, ${pCurrentY}px, 0)`;
+        }
+      }, { passive: false });
+    }
+  }
+});
