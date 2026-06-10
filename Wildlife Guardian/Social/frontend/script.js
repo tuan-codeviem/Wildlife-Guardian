@@ -1,3 +1,8 @@
+// Hàm hỗ trợ lấy ngôn ngữ hiện tại an toàn
+function getLang() {
+  return window.currentLang || localStorage.getItem("appLang") || "EN";
+}
+
 // ==========================================
 // 0. QUẢN LÝ TRẠNG THÁI LOGIN / LOGOUT THÔNG MINH
 // ==========================================
@@ -7,7 +12,9 @@ const loginBtns = document.querySelectorAll(".btn-login");
 if (userString) {
   // TRƯỜNG HỢP 1: ĐÃ ĐĂNG NHẬP
   const currentUser = JSON.parse(userString);
-  const userAvatar = currentUser.avatar || "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+  const userAvatar =
+    currentUser.avatar ||
+    "https://cdn-icons-png.flaticon.com/512/149/149071.png";
 
   loginBtns.forEach((btn) => {
     // 1. Đổi nút "Log in" thành Avatar
@@ -43,16 +50,16 @@ if (userString) {
           popup.style.transform = "translateY(10px) translateX(-50%)";
         } else {
           const rect = btn.getBoundingClientRect();
-          popup.style.top = (rect.bottom + 10) + "px";
+          popup.style.top = rect.bottom + 10 + "px";
           if (window.innerWidth < 768) {
             popup.style.left = "50%";
           } else {
-            popup.style.left = (rect.left + rect.width / 2) + "px";
+            popup.style.left = rect.left + rect.width / 2 + "px";
           }
           popup.style.right = "auto";
           popup.style.transform = "translateY(10px) translateX(-50%)";
           popup.style.display = "block";
-          
+
           // Anim
           setTimeout(() => {
             popup.style.opacity = "1";
@@ -128,7 +135,7 @@ function openSettingsModal() {
   const closeProfileModal = document.getElementById("closeProfileModal");
 
   if (profileModal) {
-    const t = window.translations[currentLang];
+    const t = window.translations[getLang()];
     if (profileModalTitle)
       profileModalTitle.innerText = t.profile_settings_title;
     if (profileModalDesc) profileModalDesc.innerText = t.profile_settings_desc;
@@ -150,210 +157,6 @@ navItems.forEach((item) => {
   item.addEventListener("click", function () {
     document.querySelector(".nav-item.active").classList.remove("active");
     this.classList.add("active");
-  });
-});
-
-// ==========================================
-// QUẢN LÝ NGÔN NGỮ (EN / VI)
-// ==========================================
-const translations = {
-  EN: {
-    nav_home: "Home",
-    nav_rescue: "Rescue Map",
-    nav_social: "Social",
-    nav_species: "Species Library",
-    nav_game: "Game",
-    nav_contact: "Contact Us",
-    btn_report: "🚨 Report Now",
-    btn_login: "→ Log in",
-    post_placeholder: "Share something with the community...",
-    btn_photo: " Photo",
-    cat_story: "Story",
-    cat_adoption: "Adoption",
-    cat_donations: "Donations",
-    cat_orgs: "Organizations",
-    btn_post: "Post",
-    filter_all: "All Posts",
-    filter_adoption: "Adoption",
-    filter_donations: "Donations",
-    filter_orgs: "Organizations",
-    filter_stories: "Stories",
-    title_friends: "Friends",
-    search_friends_placeholder: "Enter a name to find friends...",
-    title_requests: "Requests",
-    no_invitations: "No invitations",
-    title_messages: "Messages",
-    search_messages_placeholder: "Search friends...",
-    btn_message: "Message",
-    btn_add_friend: "Add friend",
-    btn_settings: " Settings",
-    btn_logout: " Log out",
-    del_post_title: "Delete post?",
-    del_post_desc: "Are you sure you want to delete this post?",
-    btn_delete: "Delete",
-    btn_cancel: "Cancel",
-    del_comment_title: "Delete comment?",
-    del_comment_desc: "Are you sure you want to delete this comment?",
-    edit_post_title: "Edit post",
-    btn_change_media: " Change media",
-    btn_save_changes: "Save changes",
-    update_profile_title: "Update profile",
-    update_profile_desc: "Choose an avatar and display name to get started!",
-    name_placeholder: "Your display name...",
-    btn_save_profile: "Save Profile",
-    btn_skip: "Skip (Anonymous)",
-    view_replies: "View replies",
-    hide_replies: "Hide replies",
-    anonymous_user: "Anonymous user",
-    write_comment: "Write a comment...",
-    attach_image: " Attach image",
-    btn_send: "Send",
-    saving: "Saving...",
-    cancel_request: "Cancel request",
-    no_friend_requests: "No friend requests",
-    click_to_message: "Click to message...",
-    please_enter_name: "Please enter a name!",
-    error_try_again: "Error! Please try again",
-    network_error: "Network error! Try again",
-    processing: "Processing...",
-    search_to_start: "Let's search to start a conversation!",
-    like: "Like",
-    likes: "Likes",
-    reply: "Reply",
-    tooltip_edit_post: "Edit post",
-    tooltip_delete_post: "Delete post",
-    tooltip_delete_comment: "Delete comment",
-    profile_settings_title: "Profile settings",
-    profile_settings_desc: "Change your name and avatar.",
-  },
-  VI: {
-    nav_home: "Trang chủ",
-    nav_rescue: "Bản đồ cứu hộ",
-    nav_social: "Cộng đồng",
-    nav_species: "Thư viện loài",
-    nav_game: "Trò chơi",
-    nav_contact: "Liên hệ",
-    btn_report: "🚨 Báo cáo",
-    btn_login: "→ Đăng nhập",
-    post_placeholder: "Chia sẻ điều gì đó với cộng đồng...",
-    btn_photo: " Ảnh",
-    cat_story: "Câu chuyện",
-    cat_adoption: "Nhận nuôi",
-    cat_donations: "Quyên góp",
-    cat_orgs: "Tổ chức",
-    btn_post: "Đăng",
-    filter_all: "Tất cả",
-    filter_adoption: "Nhận nuôi",
-    filter_donations: "Quyên góp",
-    filter_orgs: "Tổ chức",
-    filter_stories: "Câu chuyện",
-    title_friends: "Bạn bè",
-    search_friends_placeholder: "Nhập tên để tìm bạn...",
-    title_requests: "Lời mời",
-    no_invitations: "Không có lời mời",
-    title_messages: "Tin nhắn",
-    search_messages_placeholder: "Tìm kiếm bạn bè...",
-    btn_message: "Nhắn tin",
-    btn_add_friend: "Thêm bạn bè",
-    btn_settings: " Cài đặt",
-    btn_logout: " Đăng xuất",
-    del_post_title: "Xóa bài viết?",
-    del_post_desc: "Bạn có chắc chắn muốn xóa bài viết này không?",
-    btn_delete: "Xóa",
-    btn_cancel: "Hủy",
-    del_comment_title: "Xóa bình luận?",
-    del_comment_desc: "Bạn có chắc chắn muốn xóa bình luận này không?",
-    edit_post_title: "Chỉnh sửa bài viết",
-    btn_change_media: " Đổi ảnh/video",
-    btn_save_changes: "Lưu thay đổi",
-    update_profile_title: "Cập nhật hồ sơ",
-    update_profile_desc:
-      "Hãy chọn ảnh đại diện và tên hiển thị để bắt đầu nhé!",
-    name_placeholder: "Tên hiển thị của bạn...",
-    btn_save_profile: "Lưu hồ sơ",
-    btn_skip: "Để sau (Ẩn danh)",
-    view_replies: "Xem câu trả lời",
-    hide_replies: "Ẩn câu trả lời",
-    anonymous_user: "Người dùng ẩn danh",
-    write_comment: "Viết bình luận...",
-    attach_image: " Đính kèm ảnh",
-    btn_send: "Gửi",
-    saving: "Đang lưu...",
-    cancel_request: "Hủy lời mời",
-    no_friend_requests: "Chưa có lời mời",
-    click_to_message: "Bấm để nhắn tin...",
-    please_enter_name: "Vui lòng nhập tên!",
-    error_try_again: "Lỗi! Vui lòng thử lại",
-    network_error: "Lỗi mạng! Thử lại",
-    processing: "Đang xử lý...",
-    search_to_start: "Hãy tìm kiếm để bắt đầu cuộc trò chuyện!",
-    like: "Thích",
-    likes: "Thích",
-    reply: "Trả lời",
-    tooltip_edit_post: "Sửa bài viết",
-    tooltip_delete_post: "Xóa bài viết",
-    tooltip_delete_comment: "Xóa bình luận",
-    profile_settings_title: "Cài đặt hồ sơ",
-    profile_settings_desc: "Thay đổi tên và ảnh đại diện của bạn.",
-  },
-};
-window.translations = translations;
-
-function applyLanguage() {
-  const t = translations[currentLang];
-  document.querySelectorAll("[data-i18n]").forEach((el) => {
-    const key = el.getAttribute("data-i18n");
-    if (t[key]) {
-      if (el.tagName === "INPUT" || el.tagName === "TEXTAREA") {
-        el.setAttribute("placeholder", t[key]);
-      } else {
-        if (el.children.length === 0) {
-          el.textContent = t[key];
-        } else {
-          for (let node of el.childNodes) {
-            if (node.nodeType === 3 && node.nodeValue.trim().length > 0) {
-              node.nodeValue = t[key];
-              break;
-            }
-          }
-        }
-      }
-    }
-  });
-
-  if (typeof loadPosts === "function") {
-    const activeBtn = document.querySelector(".filter-btn.active");
-    loadPosts(
-      activeBtn ? activeBtn.getAttribute("data-category") : "all posts",
-    );
-  }
-
-  if (typeof loadFriendRequests === "function") loadFriendRequests();
-  if (typeof loadUsersForChat === "function")
-    loadUsersForChat(document.getElementById("searchUser")?.value || "");
-}
-
-const langToggleBtns = document.querySelectorAll(".lang-toggle-btn");
-const langTexts = document.querySelectorAll(".lang-text");
-let currentLang = localStorage.getItem("appLang") || "EN";
-
-// Nạp ngôn ngữ vào lúc mới khởi động trang
-langTexts.forEach((span) => (span.innerText = currentLang));
-applyLanguage();
-
-langToggleBtns.forEach((btn) => {
-  btn.addEventListener("click", () => {
-    currentLang = currentLang === "EN" ? "VI" : "EN";
-    localStorage.setItem("appLang", currentLang); // Lưu vào bộ nhớ máy để dùng cho tính năng đa ngôn ngữ
-    langTexts.forEach((span) => (span.innerText = currentLang));
-    applyLanguage();
-
-    langToggleBtns.forEach((b) => {
-      let currentRotation = parseInt(b.getAttribute("data-rotation") || "0");
-      let newRotation = currentRotation + 180; // Xoay thêm nửa vòng 180 độ
-      b.style.transform = `rotate(${newRotation}deg)`;
-      b.setAttribute("data-rotation", newRotation);
-    });
   });
 });
 
@@ -427,8 +230,8 @@ window.renderCommentsHTML = function (
 
   const renderComment = (c, isReply = false) => {
     const replies = repliesByParent[c._id] || [];
-    const t = window.translations[currentLang];
-    const dateLocale = currentLang === "EN" ? "en-US" : "vi-VN";
+    const t = window.translations[getLang()];
+    const dateLocale = getLang() === "EN" ? "en-US" : "vi-VN";
     const replyHtml = isReply
       ? ""
       : `
@@ -487,7 +290,7 @@ window.renderCommentsHTML = function (
               <div style="display: flex; gap: 16px; margin-top: 6px; font-size: 12px; font-weight: 600; color: #737373; align-items: center;">
                   <span style="font-weight: 400; color: #8e8e8e;">${new Date(c.createdAt).toLocaleDateString(dateLocale, { day: "numeric", month: "short" })}</span>
                   <button class="comment-like-btn" data-post-id="${postId}" data-comment-id="${c._id}" style="background: none; border: none; color: #737373; font-weight: 600; cursor: pointer; padding: 0;">
-                      <span class="comment-like-count">${c.likes && c.likes.length > 0 ? c.likes.length + " " + (currentLang === "EN" && c.likes.length > 1 ? t.likes : t.like) : t.like}</span>
+                      <span class="comment-like-count">${c.likes && c.likes.length > 0 ? c.likes.length + " " + (getLang() === "EN" && c.likes.length > 1 ? t.likes : t.like) : t.like}</span>
                   </button>
                   <button class="comment-reply-btn" data-post-id="${postId}" data-user="${c.user}" data-comment-id="${isReply ? c.replyTo : c._id}" style="background: none; border: none; color: #737373; font-weight: 600; cursor: pointer; padding: 0;">${t.reply}</button>
                   ${deleteBtn}
@@ -503,10 +306,15 @@ window.renderCommentsHTML = function (
 // 2.3. HÀM TẢI & HIỂN THỊ BÀI VIẾT (GIAO DIỆN CHUẨN ẢNH)
 async function loadPosts(category = "all posts") {
   try {
-    const t = window.translations[currentLang];
+    const t = window.translations[getLang()];
     // Gửi yêu cầu lọc theo category lên server
     const response = await fetch(`${API_URL}?category=${category}`);
     const posts = await response.json();
+
+    if (!Array.isArray(posts)) {
+      console.error("❌ Lỗi dữ liệu từ Server (có thể do lỗi Backend):", posts);
+      return;
+    }
     console.log("📥 Danh sách bài viết từ Server:", posts);
 
     const postsFeed = document.getElementById("posts-feed");
@@ -528,7 +336,7 @@ async function loadPosts(category = "all posts") {
       myId = anonId;
     }
 
-    const dateLocale = currentLang === "EN" ? "en-US" : "vi-VN";
+    const dateLocale = getLang() === "EN" ? "en-US" : "vi-VN";
     let allPostsHTML = "";
     posts.forEach((post) => {
       // Xử lý hiển thị Ảnh hoặc Video thông minh
@@ -558,6 +366,11 @@ async function loadPosts(category = "all posts") {
         </div>`
         : "";
 
+      // Tạo HTML cho Huy hiệu bằng thẻ <img> thay vì SVG
+      const badgeHTML = post.authorHasBadge
+        ? `<img src="badge.png" title="Guardian Badge" style="width: 18px; height: 18px; margin-left: 6px; object-fit: contain;">`
+        : "";
+
       let displayName = post.authorName || t.anonymous_user;
       if (
         displayName === "Người dùng ẩn danh" ||
@@ -583,7 +396,7 @@ async function loadPosts(category = "all posts") {
                         <div style="display: flex; gap: 12px; align-items: center;">
     <img class="profile-trigger" data-id="${post.authorId || ""}" data-name="${displayName}" data-avatar="${post.authorAvatar || "https://cdn-icons-png.flaticon.com/512/149/149071.png"}" src="${post.authorAvatar || "https://cdn-icons-png.flaticon.com/512/149/149071.png"}" alt="Avatar" style="width: 45px; height: 45px; border-radius: 50%; object-fit: cover; cursor: pointer;">
     <div>
-        <h4 class="profile-trigger" data-id="${post.authorId || ""}" data-name="${displayName}" data-avatar="${post.authorAvatar || "https://cdn-icons-png.flaticon.com/512/149/149071.png"}" style="margin: 0 0 4px 0; font-size: 15px; color: #333; font-weight: bold; cursor: pointer;">${displayName}</h4>
+        <h4 class="profile-trigger" data-id="${post.authorId || ""}" data-name="${displayName}" data-avatar="${post.authorAvatar || "https://cdn-icons-png.flaticon.com/512/149/149071.png"}" style="margin: 0 0 4px 0; font-size: 15px; color: #333; font-weight: bold; cursor: pointer; display: flex; align-items: center;">${displayName}${badgeHTML}</h4>
         <span style="font-size: 12px; color: #888;">${new Date(post.createdAt).toLocaleString(dateLocale, { hour: "2-digit", minute: "2-digit", day: "numeric", month: "short", year: "numeric" })}</span>
     </div>
 </div>
@@ -690,7 +503,8 @@ async function loadPosts(category = "all posts") {
 
     // CẬP NHẬT AVATAR COMMENT NẾU NGƯỜI DÙNG ĐÃ ĐĂNG NHẬP
     if (meString) {
-      const userAvatar = me.avatar || "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+      const userAvatar =
+        me.avatar || "https://cdn-icons-png.flaticon.com/512/149/149071.png";
       const allCommentAvatars = document.querySelectorAll(
         "[id^='comment-avatar-']",
       );
@@ -763,7 +577,7 @@ if (saveEditPostBtn) {
       formData.append("media", file);
     }
 
-    const t = window.translations[currentLang];
+    const t = window.translations[getLang()];
     saveEditPostBtn.innerText = t.saving;
     saveEditPostBtn.disabled = true;
 
@@ -1002,14 +816,15 @@ postsFeedContainer.addEventListener("click", async function (e) {
     try {
       // Lấy info người dùng từ localStorage
       const meString = localStorage.getItem("currentUser");
-      let userName = window.translations[currentLang].anonymous_user;
+      let userName = window.translations[getLang()].anonymous_user;
       let userAvatar = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
       let myUserId = "ẩn_danh";
 
       if (meString) {
         const me = JSON.parse(meString);
         userName = me.fullName || "Người dùng";
-        userAvatar = me.avatar || "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+        userAvatar =
+          me.avatar || "https://cdn-icons-png.flaticon.com/512/149/149071.png";
         myUserId = me._id || me.userId || "user_macdinh";
       }
 
@@ -1085,7 +900,7 @@ postsFeedContainer.addEventListener("click", async function (e) {
           repliesContainer.style.display = "block";
           if (toggleBtn) {
             const span = toggleBtn.querySelector("span");
-            const t = window.translations[currentLang];
+            const t = window.translations[getLang()];
             if (span)
               span.innerText = span.innerText.replace(
                 t.view_replies.split(" ")[0],
@@ -1212,7 +1027,7 @@ postsFeedContainer.addEventListener("click", async function (e) {
           countSpan.innerText =
             data.likesCount > 0
               ? `${data.likesCount} ` +
-                (currentLang === "EN" && data.likesCount > 1 ? t.likes : t.like)
+                (getLang() === "EN" && data.likesCount > 1 ? t.likes : t.like)
               : t.like;
         }
 
@@ -1258,7 +1073,7 @@ postsFeedContainer.addEventListener("click", async function (e) {
     const targetId = toggleRepliesBtn.getAttribute("data-target");
     const repliesContainer = document.getElementById(targetId);
     const span = toggleRepliesBtn.querySelector("span");
-    const t = window.translations[currentLang];
+    const t = window.translations[getLang()];
 
     if (repliesContainer.style.display === "none") {
       repliesContainer.style.display = "block";
@@ -1336,7 +1151,7 @@ if (searchFriendInput) {
     const myId = JSON.parse(meString)._id || JSON.parse(meString).userId;
 
     try {
-      const t = window.translations[currentLang];
+      const t = window.translations[getLang()];
       const response = await fetch(
         `http://${window.location.hostname}:3000/api/users/search-new/${myId}?q=${keyword}`,
       );
@@ -1381,7 +1196,7 @@ window.toggleFriendRequest = async function (targetId, btnElement) {
   const myId = JSON.parse(meString)._id || JSON.parse(meString).userId;
 
   btnElement.innerText = "...";
-  const t = window.translations[currentLang];
+  const t = window.translations[getLang()];
   try {
     const res = await fetch(
       `http://${window.location.hostname}:3000/api/friends/request`,
@@ -1446,7 +1261,7 @@ async function loadFriendRequests() {
       });
     } else {
       requestBadge.style.display = "none";
-      pendingRequestsContainer.innerHTML = `<p style="font-size: 13px; color: #888; text-align: center;">${window.translations[currentLang].no_friend_requests}</p>`;
+      pendingRequestsContainer.innerHTML = `<p style="font-size: 13px; color: #888; text-align: center;">${window.translations[getLang()].no_friend_requests}</p>`;
     }
   } catch (err) {}
 }
@@ -1604,7 +1419,7 @@ async function loadUsersForChat(searchKeyword = "") {
     userListContainer.innerHTML = "";
 
     if (otherUsers.length === 0) {
-      userListContainer.innerHTML = `<p style="text-align: center; color: #888; font-size: 13px; margin-top: 20px;">${window.translations[currentLang].search_to_start}</p>`;
+      userListContainer.innerHTML = `<p style="text-align: center; color: #888; font-size: 13px; margin-top: 20px;">${window.translations[getLang()].search_to_start}</p>`;
       return;
     }
 
@@ -1623,7 +1438,7 @@ async function loadUsersForChat(searchKeyword = "") {
                 </div>
                 <div class="chat-info">
                     <h5 style="margin: 0; font-size: 14px; color: #333">${user.fullName}</h5>
-                    <p style="margin: 2px 0 0 0; font-size: 12px; color: #888">${window.translations[currentLang].click_to_message}</p>
+                    <p style="margin: 2px 0 0 0; font-size: 12px; color: #888">${window.translations[getLang()].click_to_message}</p>
                 </div>
             `;
 
@@ -1636,7 +1451,9 @@ async function loadUsersForChat(searchKeyword = "") {
         document.getElementById("chatName").innerText = user.fullName;
         const chatAvatar = document.getElementById("chatAvatar");
         if (chatAvatar)
-          chatAvatar.src = user.avatar || "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+          chatAvatar.src =
+            user.avatar ||
+            "https://cdn-icons-png.flaticon.com/512/149/149071.png";
         lastMessagesString = ""; // Reset để tải tin nhắn người mới mượt hơn
 
         // Gọi hàm tải tin nhắn cũ
@@ -1714,7 +1531,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const file = setupAvatarInput.files[0];
 
       if (!name) {
-        const t = window.translations[currentLang];
+        const t = window.translations[getLang()];
         saveProfileBtn.innerText = t.please_enter_name;
         setTimeout(() => {
           saveProfileBtn.innerText = t.btn_save_profile;
@@ -1722,7 +1539,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      const t = window.translations[currentLang];
+      const t = window.translations[getLang()];
       saveProfileBtn.innerText = t.saving;
       saveProfileBtn.disabled = true;
 
@@ -1768,7 +1585,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (skipProfileBtn) {
     skipProfileBtn.addEventListener("click", async () => {
       const me = JSON.parse(localStorage.getItem("currentUser"));
-      const t = window.translations[currentLang];
+      const t = window.translations[getLang()];
       skipProfileBtn.innerText = t.processing;
       skipProfileBtn.disabled = true;
 
@@ -1840,7 +1657,7 @@ document.addEventListener("click", async function (e) {
     const popupMessageBtn = document.getElementById("popupMessageBtn");
     const popupAddFriendBtn = document.getElementById("popupAddFriendBtn");
 
-    const t = window.translations[currentLang];
+    const t = window.translations[getLang()];
     // Đặt lại giao diện mặc định
     if (popupMessageBtn) popupMessageBtn.style.display = "block";
     if (popupAddFriendBtn) {
