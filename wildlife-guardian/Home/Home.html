@@ -1,0 +1,1066 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Wildlife Guardian – Join the global community protecting wildlife worldwide." />
+  <title>Wildlife Guardian – Protect Wildlife, Together</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="css/nav.css" />
+  <link rel="stylesheet" href="css/Home.css" />
+  <link rel="stylesheet" href="../ChatBotAI/chatbot.css">
+</head>
+
+<body>
+
+  <!-- SCROLL PROGRESS -->
+  <div class="wg-progress" id="wgProgress"></div>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="mobile-nav" id="mobileNav">
+      <a href="Home.html" class="active-mobile" data-i18n="nav_home">Home</a>
+      <a href="../RescueMap/rescuemap/index.html" data-i18n="nav_rescue">Rescue Map</a>
+      <a href="../Social/frontend/index.html" data-i18n="nav_social">Social</a>
+      <a href="../SpeciesLibarary/SpeciesLibarary.html" data-i18n="nav_species">Species Library</a>
+      <a href="../Game/GameUnity.html" data-i18n="nav_game">Game</a>
+      <a href="../Contact/Contact.html" data-i18n="nav_contact">Contact Us</a>
+      <div class="mobile-actions">
+        <button class="btn-report" data-i18n="btn_report"
+          onclick="window.location.href='../RescueMap/rescuemap/index.html?action=report'">🚨 Report Now</button>
+        <button class="btn-login" data-i18n="btn_login">→ Log in</button>
+      </div>
+    </div>
+    <div class="nav-container">
+      <div class="logo-area">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <rect x="4" y="8" width="4" height="4" />
+            <rect x="16" y="8" width="4" height="4" />
+            <rect x="8" y="4" width="4" height="4" />
+            <rect x="12" y="4" width="4" height="4" />
+            <rect x="6" y="14" width="12" height="6" rx="2" />
+          </svg>
+        </div>
+        <span class="logo-text">Wildlife Guardian</span>
+      </div>
+      <div class="nav-menu">
+        <a href="Home.html" class="nav-item active" data-i18n="nav_home">Home</a>
+        <a href="../RescueMap/rescuemap/index.html" class="nav-item" data-i18n="nav_rescue">Rescue Map</a>
+        <a href="../Social/frontend/index.html" class="nav-item" data-i18n="nav_social">Social</a>
+        <a href="../SpeciesLibarary/SpeciesLibarary.html" class="nav-item" data-i18n="nav_species">Species Library</a>
+        <a href="../Game/GameUnity.html" class="nav-item" data-i18n="nav_game">Game</a>
+        <a href="../Contact/Contact.html" class="nav-item" data-i18n="nav_contact">Contact Us</a>
+      </div>
+      <div class="nav-actions">
+        <div class="lang-switcher"
+          style="display: flex; align-items: center; gap: 6px; color: white; font-weight: 600; margin-right: 10px;">
+          <span class="lang-text">EN</span>
+          <button class="lang-toggle-btn"
+            style="background: none; border: none; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 4px; transition: transform 0.3s;"
+            title="Switch language">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path
+                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
+              </path>
+            </svg>
+          </button>
+        </div>
+        <button class="btn-report" data-i18n="btn_report"
+          onclick="window.location.href='../RescueMap/rescuemap/index.html?action=report'">🚨 Report Now</button>
+        <button class="btn-login" data-i18n="btn_login">→ Log in</button>
+        <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+
+    <!-- ████ HERO ████ -->
+    <section class="hero">
+      <!-- Canvas particle background (replaces video) -->
+      <canvas id="hero-canvas"></canvas>
+      <div class="hero-overlay"></div>
+
+      <!-- Single flex row: text + image ALWAYS stay together -->
+      <div class="hero-inner">
+
+        <!-- LEFT: text content -->
+        <div class="hero-text">
+          <div class="hero-badge">
+            <span class="badge-pulse"></span>
+            <span data-i18n="hero_badge">Join the Movement</span>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path
+                d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z" />
+            </svg>
+          </div>
+
+          <h1 class="hero-title" data-i18n="hero_title">
+            Protect Wildlife, Together.
+          </h1>
+
+          <p class="hero-desc" data-i18n="hero_desc">
+            Be part of a global community dedicated to rescuing, protecting,
+            and preserving wildlife. Report emergencies, connect with rescuers,
+            and learn about the amazing creatures we share our planet with.
+          </p>
+
+          <div class="hero-ctas">
+            <a href="../RescueMap/rescuemap/index.html" class="btn-primary">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path
+                  d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
+              <span data-i18n="hero_btn_report">Report Emergency</span>
+            </a>
+            <a href="../SpeciesLibarary/SpeciesLibarary.html" class="btn-ghost">
+              <span data-i18n="hero_btn_explore">Explore Species</span>
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14" />
+                <path d="m12 5 7 7-7 7" />
+              </svg>
+            </a>
+          </div>
+
+          <div class="hero-stats-row">
+            <div class="hs-item">
+              <span class="hs-num">35K+</span>
+              <span class="hs-lbl" data-i18n="stat_guardians">Guardians</span>
+            </div>
+            <div class="hs-sep"></div>
+            <div class="hs-item">
+              <span class="hs-num">2.1K</span>
+              <span class="hs-lbl" data-i18n="stat_rescued">Rescued</span>
+            </div>
+            <div class="hs-sep"></div>
+            <div class="hs-item">
+              <span class="hs-num">136</span>
+              <span class="hs-lbl" data-i18n="stat_communities">Communities</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: image (in same flex container, never separates from text) -->
+        <div class="hero-visual">
+          <div class="visual-frame">
+            <div class="frame-ring"></div>
+            <img src="https://res.cloudinary.com/dotlymsmk/image/upload/v1780975035/panda_hero_mydyyx.jpg"
+              alt="Giant panda in bamboo forest" class="panda-img"
+              onerror="this.src='https://images.unsplash.com/photo-1564349683136-77e08dba1ef7?w=600&h=450&fit=crop'" />
+            <div class="frame-shine"></div>
+            <div class="float-badge fb-left">
+              <div class="fb-icon green-fb">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M16 7h6v6" />
+                  <path d="m22 7-8.5 8.5-5-5L2 17" />
+                </svg>
+              </div>
+              <div class="fb-text">
+                <strong>+247</strong>
+                <small data-i18n="badge_rescues">Rescues this month</small>
+              </div>
+            </div>
+            <div class="float-badge fb-right">
+              <div class="fb-icon orange-fb">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path
+                    d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5" />
+                </svg>
+              </div>
+              <div class="fb-text">
+                <strong>1.2K</strong>
+                <small data-i18n="badge_vets">Vets online</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /hero-inner -->
+
+      <div class="scroll-hint">
+        <div class="sh-mouse">
+          <div class="sh-wheel"></div>
+        </div>
+        <span>Scroll</span>
+      </div>
+    </section>
+
+    <!-- ████ STATS ████ -->
+    <section class="stats-section">
+      <div class="stats-bg-glow"></div>
+      <div class="container">
+        <div class="stats-label-top wg-reveal" data-i18n="impact_title">Our Impact in Numbers</div>
+        <div class="stats-grid">
+
+          <div class="stat-item wg-reveal" data-delay="0">
+            <div class="stat-glow-ring"></div>
+            <div class="stat-icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                <path d="M16 3.128a4 4 0 0 1 0 7.744" />
+                <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                <circle cx="9" cy="7" r="4" />
+              </svg>
+            </div>
+            <div class="stat-num" data-count="12960">0</div>
+            <div class="stat-label" data-i18n="impact_guardians">Active Guardians</div>
+            <div class="stat-track">
+              <div class="stat-fill"></div>
+            </div>
+          </div>
+
+          <div class="stat-item wg-reveal" data-delay="100">
+            <div class="stat-glow-ring"></div>
+            <div class="stat-icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path
+                  d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5" />
+              </svg>
+            </div>
+            <div class="stat-num" data-count="2120">0</div>
+            <div class="stat-label" data-i18n="impact_rescued">Animals Rescued</div>
+            <div class="stat-track">
+              <div class="stat-fill"></div>
+            </div>
+          </div>
+
+          <div class="stat-item wg-reveal" data-delay="200">
+            <div class="stat-glow-ring"></div>
+            <div class="stat-icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10" />
+                <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+                <path d="M2 12h20" />
+              </svg>
+            </div>
+            <div class="stat-num" data-count="136">0</div>
+            <div class="stat-label" data-i18n="impact_communities">Communities</div>
+            <div class="stat-track">
+              <div class="stat-fill"></div>
+            </div>
+          </div>
+
+          <div class="stat-item wg-reveal" data-delay="300">
+            <div class="stat-glow-ring"></div>
+            <div class="stat-icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 7v14" />
+                <path
+                  d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z" />
+              </svg>
+            </div>
+            <div class="stat-num" data-count="100">0</div>
+            <div class="stat-label" data-i18n="impact_species">Species Documented</div>
+            <div class="stat-track">
+              <div class="stat-fill"></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ████ HOW YOU CAN HELP ████ -->
+    <section class="section-features">
+      <div class="container">
+        <div class="sec-head wg-reveal">
+          <div class="sec-chip" data-i18n="help_chip">🌿 Get Involved</div>
+          <h2 data-i18n="help_title">How You Can Help</h2>
+          <p data-i18n="help_desc">Every action counts. From reporting an injured animal to joining a community, there
+            are many ways to
+            contribute to wildlife conservation.</p>
+        </div>
+        <div class="features-bento">
+          <!-- Card 1 - Large (spans 2 rows) -->
+          <a href="../RescueMap/rescuemap/index.html" class="feat-card feat-card--large" data-delay="0"
+            data-color="#ef4444">
+            <div class="fc-ico-wrap">
+              <div class="fc-ico" style="--c:#fee2e2;--t:#ef4444">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path
+                    d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" />
+                  <circle cx="12" cy="10" r="3" />
+                </svg>
+              </div>
+              <div class="fc-glow" style="--gc:rgba(239,68,68,.3)"></div>
+            </div>
+            <div class="fc-content">
+              <h3 data-i18n="help_map_title">Rescue Map</h3>
+              <p data-i18n="help_map_desc">Report and track injured animals in real-time with our interactive emergency
+                map.</p>
+              <span class="fc-link"><span data-i18n="learn_more">Learn more</span> <svg width="14" height="14"
+                  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <path d="M5 12h14" />
+                  <path d="m12 5 7 7-7 7" />
+                </svg></span>
+            </div>
+            <div class="fc-number">01</div>
+            <div class="fc-accent" style="--ac:#ef4444"></div>
+          </a>
+
+          <!-- Card 2 - Normal -->
+          <a href="../Social/frontend/index.html" class="feat-card" data-delay="80" data-color="#16a34a">
+            <div class="fc-ico-wrap">
+              <div class="fc-ico" style="--c:#dcfce7;--t:#16a34a">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                  <path d="M16 3.128a4 4 0 0 1 0 7.744" />
+                  <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                  <circle cx="9" cy="7" r="4" />
+                </svg>
+              </div>
+              <div class="fc-glow" style="--gc:rgba(22,163,74,.3)"></div>
+            </div>
+            <div class="fc-content">
+              <h3 data-i18n="help_community_title">Community</h3>
+              <p data-i18n="help_community_desc">Connect with fellow wildlife enthusiasts, share stories, and organize
+                rescue efforts.</p>
+              <span class="fc-link"><span data-i18n="learn_more">Learn more</span> <svg width="14" height="14"
+                  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <path d="M5 12h14" />
+                  <path d="m12 5 7 7-7 7" />
+                </svg></span>
+            </div>
+            <div class="fc-number">02</div>
+            <div class="fc-accent" style="--ac:#16a34a"></div>
+          </a>
+
+          <!-- Card 3 - Normal -->
+          <a href="../SpeciesLibarary/SpeciesLibarary.html" class="feat-card" data-delay="160" data-color="#f97316">
+            <div class="fc-ico-wrap">
+              <div class="fc-ico" style="--c:#fff7ed;--t:#f97316">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 7v14" />
+                  <path
+                    d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z" />
+                </svg>
+              </div>
+              <div class="fc-glow" style="--gc:rgba(249,115,22,.3)"></div>
+            </div>
+            <div class="fc-content">
+              <h3 data-i18n="help_library_title">Species Library</h3>
+              <p data-i18n="help_library_desc">Explore our comprehensive encyclopedia of wildlife species with
+                AI-powered identification.</p>
+              <span class="fc-link"><span data-i18n="learn_more">Learn more</span> <svg width="14" height="14"
+                  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <path d="M5 12h14" />
+                  <path d="m12 5 7 7-7 7" />
+                </svg></span>
+            </div>
+            <div class="fc-number">03</div>
+            <div class="fc-accent" style="--ac:#f97316"></div>
+          </a>
+
+          <!-- Card 4 - Wide (spans 2 columns) -->
+          <a href="#" class="feat-card feat-card--wide" data-delay="0" data-color="#3b82f6">
+            <div class="fc-ico-wrap">
+              <div class="fc-ico" style="--c:#eff6ff;--t:#3b82f6">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path
+                    d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
+                </svg>
+              </div>
+              <div class="fc-glow" style="--gc:rgba(59,130,246,.3)"></div>
+            </div>
+            <div class="fc-content">
+              <h3 data-i18n="help_network_title">Protection Network</h3>
+              <p data-i18n="help_network_desc">Join verified volunteer networks and local animal rescue organizations
+                near you.</p>
+              <span class="fc-link"><span data-i18n="learn_more">Learn more</span> <svg width="14" height="14"
+                  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <path d="M5 12h14" />
+                  <path d="m12 5 7 7-7 7" />
+                </svg></span>
+            </div>
+            <div class="fc-number">04</div>
+            <div class="fc-accent" style="--ac:#3b82f6"></div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ████ COMMUNITIES ████ -->
+    <section class="section-comm">
+      <div class="container">
+        <div class="sec-head wg-reveal">
+          <div class="sec-chip" data-i18n="comm_chip">👥 Network</div>
+          <h2 data-i18n="comm_title">Active Communities</h2>
+          <p data-i18n="comm_desc">Join like-minded wildlife enthusiasts in your area</p>
+        </div>
+        <!-- BALANCED 3-COLUMN GRID -->
+        <div class="comm-grid-3">
+
+          <div class="comm-card-v2" data-delay="0">
+            <div class="ccv2-img">
+              <img src="https://images.unsplash.com/photo-1437622368342-7a3d73a34c8f?w=400&h=260&fit=crop"
+                alt="Coastal Wildlife Protectors" />
+              <div class="ccv2-overlay"></div>
+              <div class="ccv2-badge">👥 2,341 members</div>
+            </div>
+            <div class="ccv2-body">
+              <h3 data-i18n="comm_c1_title">Coastal Wildlife Protectors</h3>
+              <p data-i18n="comm_c1_desc">Protecting shorelines from human impact through collective conservation.</p>
+              <div class="ccv2-footer">
+                <span class="ccv2-tag" data-i18n="comm_c1_tag">Coastal</span>
+                <a href="https://protectmarinewildlife.org/" target="_blank">
+                  <button class="cc-join" data-i18n="btn_join">
+                    Join
+                  </button></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="comm-card-v2" data-delay="80">
+            <div class="ccv2-img">
+              <img src="https://images.unsplash.com/photo-1444464666168-49d633b86797?w=400&h=260&fit=crop"
+                alt="Bird Sanctuary Alliance" />
+              <div class="ccv2-overlay"></div>
+              <div class="ccv2-badge">👥 1,234 members</div>
+            </div>
+            <div class="ccv2-body">
+              <h3 data-i18n="comm_c2_title">Bird Sanctuary Alliance</h3>
+              <p data-i18n="comm_c2_desc">A global alliance of birders and conservationists preserving avian habitats.
+              </p>
+              <div class="ccv2-footer">
+                <span class="ccv2-tag" data-i18n="comm_c2_tag">Avian</span>
+                <a href="https://birdallianceoregon.org/our-work/steward/portland-audubon-wildlife-sanctuary/"
+                  target="_blank">
+                  <button class="cc-join" data-i18n="btn_join">
+                    Join
+                  </button></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="comm-card-v2" data-delay="160">
+            <div class="ccv2-img">
+              <img src="https://japantourist.vn/Data/Sites/1/media/blog/diadiemyeuthich/trung/gaudo2_11zon.webp"
+                alt="Forest Friends Network" />
+              <div class="ccv2-overlay"></div>
+              <div class="ccv2-badge">👥 1,892 members</div>
+            </div>
+            <div class="ccv2-body">
+              <h3 data-i18n="comm_c3_title">Forest Friends Network</h3>
+              <p data-i18n="comm_c3_desc">Safeguarding ancient forests and the wildlife that call them home.</p>
+              <div class="ccv2-footer">
+                <span class="ccv2-tag" data-i18n="comm_c3_tag">Forest</span>
+                <a href="https://forestfriends.eco/" target="_blank">
+                  <button class="cc-join" data-i18n="btn_join">
+                    Join</button></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="comm-card-v2" data-delay="100">
+            <div class="ccv2-img">
+              <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&h=260&fit=crop"
+                alt="Marine Life Guardians" />
+              <div class="ccv2-overlay"></div>
+              <div class="ccv2-badge">👥 987 members</div>
+            </div>
+            <div class="ccv2-body">
+              <h3 data-i18n="comm_c4_title">Marine Life Guardians</h3>
+              <p data-i18n="comm_c4_desc">Dedicated to protecting ocean ecosystems and marine biodiversity worldwide.
+              </p>
+              <div class="ccv2-footer">
+                <span class="ccv2-tag" data-i18n="comm_c4_tag">Marine</span>
+                <a href="https://www.theguardian.com/environment/marine-life" target="_blank">
+                  <button class="cc-join" data-i18n="btn_join">
+                    Join</button></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="comm-card-v2" data-delay="180">
+            <div class="ccv2-img">
+              <img src="https://images.unsplash.com/photo-1425082661705-1834bfd09dca?w=400&h=260&fit=crop"
+                alt="Urban Wildlife Watch" />
+              <div class="ccv2-overlay"></div>
+              <div class="ccv2-badge">👥 1,567 members</div>
+            </div>
+            <div class="ccv2-body">
+              <h3 data-i18n="comm_c5_title">Urban Wildlife Watch</h3>
+              <p data-i18n="comm_c5_desc">Monitoring and protecting wildlife in and around urban environments.</p>
+              <div class="ccv2-footer">
+                <span class="ccv2-tag" data-i18n="comm_c5_tag">Urban</span>
+                <a href="https://sagelandcollaborative.org/wasatch-wildlife-watch" target="_blank">
+                  <button class="cc-join" data-i18n="btn_join">
+                    Join</button></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="comm-card-v2" data-delay="260">
+            <div class="ccv2-img">
+              <img src="https://images.unsplash.com/photo-1504450874802-0ba2bcd9b5ae?w=400&h=260&fit=crop"
+                alt="Reptile Rescue Rangers" />
+              <div class="ccv2-overlay"></div>
+              <div class="ccv2-badge">👥 756 members</div>
+            </div>
+            <div class="ccv2-body">
+              <h3 data-i18n="comm_c6_title">Reptile Rescue Rangers</h3>
+              <p data-i18n="comm_c6_desc">Specialized rescue teams focused on reptile conservation and welfare.</p>
+              <div class="ccv2-footer">
+                <span class="ccv2-tag" data-i18n="comm_c6_tag">Reptile</span>
+                <a href="https://www.rescueranch.com/2026/06/08/541042/reptile-rangers-elementary-summer-camp"
+                  target="_blank">
+                  <button class="cc-join" data-i18n="btn_join">
+                    Join</button></a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="center-wrap wg-reveal">
+          <a href="../Social/frontend/index.html">
+            <button class="btn-border"><span data-i18n="btn_view_all_comm">View All Communities</span> <svg width="15"
+                height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14" />
+                <path d="m12 5 7 7-7 7" />
+              </svg></button>
+          </a>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ████ NEWS ████ -->
+    <section class="section-news">
+      <div class="container">
+        <div class="sec-head wg-reveal">
+          <div class="sec-chip" data-i18n="news_chip">📰 Latest</div>
+          <h2 data-i18n="news_title">Wildlife News</h2>
+          <p data-i18n="news_desc">Stay updated with the latest conservation news and discoveries</p>
+        </div>
+        <!-- BENTO: 1 big featured left + 3 stacked right -->
+        <div class="news-bento">
+          <!-- FEATURED: takes left half, spans full height -->
+          <div class="news-card news-featured wg-reveal" data-delay="0"
+            onclick="window.open('https://www.worldwildlife.org/news/stories/the-truth-about-white-tigers/', '_blank')">
+            <div class="news-feat-bg"></div>
+            <div class="news-feat-body">
+              <div class="nc-top"><span class="nc-tag" data-i18n="news_f_tag">Discovery</span><span class="nc-time"
+                  data-i18n="news_f_time">2 hours ago</span></div>
+              <h3 data-i18n="news_f_title">Rare White Tiger Spotted in National Park</h3>
+              <p data-i18n="news_f_desc">Wildlife researchers are excited after a rare white tiger was photographed in
+                the wild for the first
+                time in decades.</p>
+              <span class="nc-read nc-read-lg" data-i18n="news_f_read">Read full story →</span>
+            </div>
+          </div>
+
+          <!-- RIGHT STACK: 3 compact cards -->
+
+          <div class="news-bento-right">
+            <div class="news-card wg-reveal" data-delay="80"
+              onclick="window.open('https://www.reuters.com/world/asia-pacific/new-zealand-rescuers-tries-save-10-stranded-dolphins-2022-08-12/', '_blank')">
+              <div class="nc-top"><span class="nc-tag blue" data-i18n="news_1_tag">Rescue</span><span class="nc-time"
+                  data-i18n="news_1_time">1 day ago</span></div>
+              <h3 data-i18n="news_1_title">Community Effort Saves 200 Stranded Dolphins</h3>
+              <p data-i18n="news_1_desc">Local volunteers and Wildlife Guardian members work together in a successful
+                rescue operation along the
+                coast.</p>
+              <span class="nc-read" data-i18n="news_read_more">Read more →</span>
+            </div>
+            <div class="news-card wg-reveal" data-delay="160"
+              onclick="window.open('https://www.scientificamerican.com/article/how-ai-can-help-save-endangered-species/', '_blank')">
+              <div class="nc-top"><span class="nc-tag purple" data-i18n="news_2_tag">Technology</span><span
+                  class="nc-time" data-i18n="news_2_time">5 hours ago</span>
+              </div>
+              <h3 data-i18n="news_2_title">AI Technology Helps Track Endangered Species</h3>
+              <p data-i18n="news_2_desc">New machine learning models are revolutionizing how conservationists monitor
+                wildlife populations
+                globally.</p>
+              <span class="nc-read" data-i18n="news_read_more">Read more →</span>
+            </div>
+            <div class="news-card wg-reveal" data-delay="240"
+              onclick="window.open('https://vietnamnews.vn/environment/1689009/deputy-pm-approves-the-expansion-of-new-marine-protected-areas.html', '_blank')">
+              <div class="nc-top"><span class="nc-tag orange" data-i18n="news_3_tag">Policy</span><span class="nc-time"
+                  data-i18n="news_3_time">2 days ago</span></div>
+              <h3 data-i18n="news_3_title">New Marine Protection Zone Established</h3>
+              <p data-i18n="news_3_desc">Government announces a 500km protected marine area to safeguard endangered
+                sea
+                turtle populations
+                worldwide.</p>
+              <span class="nc-read" data-i18n="news_read_more">Read more →</span>
+            </div>
+          </div>
+        </div>
+        <a href="https://news.mongabay.com/list/wildlife/" target="_blank">
+          <div class="center-wrap wg-reveal">
+            <button class="btn-border"><span data-i18n="btn_view_all_news">View All News</span> <svg width="15"
+                height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14" />
+                <path d="m12 5 7 7-7 7" />
+              </svg></button>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- ████ CTA ████ -->
+    <section class="section-cta">
+      <!-- WAVE DIVIDER top -->
+      <div class="cta-wave-top">
+        <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0,40 C360,80 1080,0 1440,40 L1440,0 L0,0 Z" fill="#d1fae5" />
+        </svg>
+      </div>
+      <div class="cta-orbs">
+        <div class="co co1"></div>
+        <div class="co co2"></div>
+        <div class="co co3"></div>
+      </div>
+      <!-- Grid of floating icons as background decor -->
+      <div class="cta-decor-grid" aria-hidden="true">
+        <span>🦁</span><span>🐋</span><span>🦅</span><span>🐘</span>
+        <span>🦓</span><span>🐢</span><span>🦜</span><span>🦈</span>
+      </div>
+      <div class="container">
+        <div class="cta-inner wg-reveal">
+          <div class="cta-badge" data-i18n="cta_badge">🌍 Join the Movement</div>
+          <h2 data-i18n="cta_title">Ready to Make a Difference?</h2>
+          <p data-i18n="cta_desc">Join thousands of wildlife guardians protecting our planet's most precious creatures.
+            Every report, every
+            share, every action counts.</p>
+          <div class="cta-btns">
+            <button class="btn-cta-glow" onclick="window.location.href='../Social/frontend/index.html'"><span
+                data-i18n="cta_btn_start">Get Started Free</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M5 12h14" />
+                <path d="m12 5 7 7-7 7" />
+              </svg>
+            </button>
+            <button class="btn-ghost" onclick="window.location.href='../Contact/Contact.html'">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path
+                  d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719" />
+              </svg>
+              <span data-i18n="cta_btn_contact">Contact Us</span>
+            </button>
+          </div>
+          <div class="cta-trust">
+            <span data-i18n="cta_trust_1">✓ Free to join</span>
+            <span data-i18n="cta_trust_2">✓ No credit card required</span>
+            <span data-i18n="cta_trust_3">✓ Instant access</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ████ FOOTER ████ -->
+    <footer class="site-footer">
+      <div class="container">
+        <div class="footer-top">
+          <div class="ft-brand">
+            <div class="ft-logo">
+              <div class="logo-icon"><svg viewBox="0 0 24 24" fill="currentColor">
+                  <rect x="4" y="8" width="4" height="4" />
+                  <rect x="16" y="8" width="4" height="4" />
+                  <rect x="8" y="4" width="4" height="4" />
+                  <rect x="12" y="4" width="4" height="4" />
+                  <rect x="6" y="14" width="12" height="6" rx="2" />
+                </svg></div>
+              <span>Wildlife Guardian</span>
+            </div>
+            <p data-i18n="ft_desc">Protecting wildlife together, one rescue at a time.</p>
+          </div>
+          <div class="ft-nav">
+            <div class="ft-col">
+              <h4 data-i18n="ft_platform">Platform</h4><a href="../RescueMap/rescuemap/index.html"
+                data-i18n="nav_rescue">Rescue Map</a><a href="../Social/frontend/index.html"
+                data-i18n="nav_social">Community</a><a href="../SpeciesLibarary/SpeciesLibarary.html"
+                data-i18n="nav_species">Species Library</a><a href="../Game/GameUnity.html"
+                data-i18n="nav_game">Game</a>
+
+            </div>
+            <div class="ft-col">
+              <h4 data-i18n="ft_support">Support</h4><a href="../Contact/Contact.html" data-i18n="nav_contact">Contact
+                Us</a><a href="#">FAQ</a><a href="#">Report a
+                Bug</a>
+            </div>
+            <div class="ft-col">
+              <h4 data-i18n="ft_legal">Legal</h4><a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a
+                href="#">Cookie Policy</a>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <span data-i18n="ft_rights">© 2026 Wildlife Guardian. All rights reserved.</span>
+          <div class="ft-social"><a href="#">𝕏</a><a href="#">IG</a><a href="#">FB</a></div>
+        </div>
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- ████ CHATBOT (DRAGGABLE) ████ -->
+  <div class="wg-chatbot" id="wgChatbot">
+    <button class="chatbot-btn" id="chatbotBtn" title="Drag me anywhere!">
+      <svg class="pixel-phoenix" viewBox="0 0 32 32" width="32" height="32">
+        <rect x="12" y="16" width="8" height="8" fill="#FF6B35" />
+        <rect x="14" y="12" width="4" height="4" fill="#FF6B35" />
+        <rect x="18" y="13" width="2" height="2" fill="#FFD93D" />
+        <rect x="15" y="13" width="2" height="2" fill="#1a1a1a" />
+        <rect x="8" y="16" width="4" height="6" fill="#FF8C42" />
+        <rect x="20" y="16" width="4" height="6" fill="#FF8C42" />
+        <rect x="10" y="24" width="2" height="4" fill="#FF6B35" />
+        <rect x="14" y="24" width="2" height="6" fill="#FFD93D" />
+        <rect x="18" y="24" width="2" height="4" fill="#FF6B35" />
+        <rect x="13" y="8" width="2" height="4" fill="#FFD93D" />
+        <rect x="15" y="6" width="2" height="6" fill="#FF6B35" />
+        <rect x="17" y="8" width="2" height="4" fill="#FFD93D" />
+      </svg>
+      <div class="cb-ring r1"></div>
+      <div class="cb-ring r2"></div>
+      <div class="cb-star">✦</div>
+    </button>
+
+    <div class="chatbot-window" id="chatbotWindow">
+      <div class="cw-header" id="cwHeader">
+        <div class="cwh-info">
+          <div class="cwh-avatar">
+            <svg viewBox="0 0 32 32" width="22" height="22">
+              <rect x="12" y="16" width="8" height="8" fill="#FF6B35" />
+              <rect x="14" y="12" width="4" height="4" fill="#FF6B35" />
+              <rect x="18" y="13" width="2" height="2" fill="#FFD93D" />
+              <rect x="15" y="13" width="2" height="2" fill="#1a1a1a" />
+              <rect x="8" y="16" width="4" height="6" fill="#FF8C42" />
+              <rect x="20" y="16" width="4" height="6" fill="#FF8C42" />
+            </svg>
+            <span class="cwh-online"></span>
+          </div>
+          <div>
+            <h4>Phoenix AI</h4>
+            <p>Wildlife Assistant · Online</p>
+          </div>
+        </div>
+        <button class="cw-close" id="cwClose">✕</button>
+      </div>
+      <div class="cw-msgs" id="cwMsgs">
+        <div class="msg bot">
+          <div class="msg-av"><svg viewBox="0 0 32 32" width="15" height="15">
+              <rect x="12" y="16" width="8" height="8" fill="#FF6B35" />
+              <rect x="14" y="12" width="4" height="4" fill="#FF6B35" />
+              <rect x="8" y="16" width="4" height="6" fill="#FF8C42" />
+              <rect x="20" y="16" width="4" height="6" fill="#FF8C42" />
+            </svg></div>
+          <div class="msg-bubble" data-i18n="chatbot_greeting">Hello! I'm Phoenix 🦅 Your wildlife guardian assistant!
+            How can I help you today?
+          </div>
+        </div>
+      </div>
+      <!-- ██ BẮT ĐẦU: QUICK REPLIES ██ -->
+      <div class="quick-replies-wrapper" id="qrWrapper">
+        <div class="quick-replies" id="quickReplies">
+          <button class="qr-btn" data-i18n="qr_1"><span>⚡</span> How can I report an emergency?</button>
+          <button class="qr-btn" data-i18n="qr_2"><span>💡</span> What is Wildlife Guardian?</button>
+          <button class="qr-btn" data-i18n="qr_3"><span>🐾</span> Can I donate to a specific animal?</button>
+          <button class="qr-btn" data-i18n="qr_4"><span>🌿</span> Tips for helping local birds?</button>
+        </div>
+        <div class="qr-scroll-hint">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="m9 18 6-6-6-6" />
+          </svg>
+        </div>
+      </div>
+      <!-- ██ KẾT THÚC: QUICK REPLIES ██ -->
+      <div class="cw-input">
+        <input type="text" id="cwInput" placeholder="Ask Phoenix anything…" />
+        <button id="cwSend"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2">
+            <path
+              d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719" />
+          </svg></button>
+      </div>
+    </div>
+  </div>
+
+  <script type="importmap">{"imports":{"@google/genai":"https://esm.run/@google/genai"}}</script>
+  <script type="module" src="../ChatBotAI/chatbotai.js"></script>
+  <script src="js/nav.js"></script>
+  <script src="js/scroll.js"></script>
+  <script src="../ChatBotAI/chatbot.js"></script>
+
+  <!-- BẢNG DROPDOWN TÀI KHOẢN (AVATAR GÓC TRÊN PHẢI) -->
+  <div id="userDropdownPopup" class="user-dropdown-popup" style="display: none;">
+    <img id="dropdownAvatar" src="" alt="Avatar" class="dropdown-avatar-img" />
+    <h4 id="dropdownName" class="dropdown-name-text">User Name</h4>
+    <div class="dropdown-actions">
+      <button id="dropdownSettingsBtn" data-i18n="btn_settings" class="dropdown-btn dropdown-btn-settings">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path
+            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+          </path>
+        </svg>
+        Settings
+      </button>
+      <button id="dropdownLogoutBtn" data-i18n="btn_logout" class="dropdown-btn dropdown-btn-logout">
+        Log out
+      </button>
+    </div>
+  </div>
+
+  <!-- HỘP THOẠI CẬP NHẬT HỒ SƠ LẦN ĐẦU ĐĂNG NHẬP -->
+  <div id="profileSetupModal"
+    style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.6); z-index: 10001; justify-content: center; align-items: center; backdrop-filter: blur(5px);">
+    <div
+      style="background: white; padding: 30px; border-radius: 20px; width: 320px; text-align: center; box-shadow: 0 15px 30px rgba(0,0,0,0.2); position: relative;">
+      <button id="closeProfileModal"
+        style="display: none; position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 20px; cursor: pointer; color: #888; transition: 0.2s;">✖</button>
+      <h3 id="profileModalTitle" style="margin: 0 0 10px 0; color: #333; font-size: 20px;"
+        data-i18n="update_profile_title">Update profile</h3>
+      <p id="profileModalDesc" style="font-size: 14px; color: #666; margin-bottom: 20px;"
+        data-i18n="update_profile_desc">Choose an avatar and display name to get started!</p>
+
+      <label style="display: inline-block; position: relative; cursor: pointer; margin-bottom: 20px;"
+        title="Bấm để chọn ảnh">
+        <img id="setupAvatarPreview" src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+          style="width: 110px; height: 110px; border-radius: 50%; object-fit: cover; border: 3px solid #16a34a; padding: 3px;">
+        <div
+          style="position: absolute; bottom: 5px; right: 5px; background: #16a34a; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid white; font-size: 16px;">
+          📷
+        </div>
+        <input type="file" id="setupAvatarInput" accept="image/*" hidden>
+      </label>
+
+      <input type="text" id="setupNameInput" data-i18n="name_placeholder" placeholder="Your display name..."
+        style="width: 100%; padding: 12px 15px; border-radius: 12px; border: 1px solid #ddd; outline: none; margin-bottom: 20px; box-sizing: border-box; text-align: center; font-weight: 600; font-size: 15px;">
+
+      <button id="saveProfileBtn" data-i18n="btn_save_profile"
+        style="width: 100%; background: #16a34a; color: white; border: none; padding: 12px; border-radius: 12px; font-weight: bold; cursor: pointer; margin-bottom: 12px; transition: 0.2s; font-size: 15px;">Save
+        Profile</button>
+      <button id="skipProfileBtn" data-i18n="btn_skip"
+        style="width: 100%; background: #f1f5f9; color: #666; border: none; padding: 12px; border-radius: 12px; font-weight: bold; cursor: pointer; transition: 0.2s; font-size: 15px;">Skip
+        (Anonymous)</button>
+    </div>
+  </div>
+
+  <!-- Script xử lý Avatar và Ngôn ngữ -->
+  <script src="js/language_EN_VI.js"></script>
+  <script>
+    // ==========================================
+    // 2. KHỞI TẠO TÀI KHOẢN (AVATAR DROPDOWN)
+    // ==========================================
+    const userString = localStorage.getItem("currentUser");
+    const loginBtns = document.querySelectorAll(".btn-login");
+
+    if (userString) {
+      // TRƯỜNG HỢP 1: ĐÃ ĐĂNG NHẬP
+      const currentUser = JSON.parse(userString);
+      const userAvatar = currentUser.avatar || "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+
+      loginBtns.forEach((btn) => {
+        // 1. Đổi nút "Log in" thành Avatar
+        btn.className = 'avatar-btn';
+        btn.innerHTML = `<img src="${userAvatar}" style="width: 38px; height: 38px; border-radius: 50%; object-fit: cover; background: white;">`;
+        btn.style.padding = "0";
+        btn.style.background = "transparent";
+        btn.style.minWidth = "auto";
+        btn.style.borderRadius = "50%";
+        btn.style.display = "flex";
+        btn.style.alignItems = "center";
+        btn.style.justifyContent = "center";
+
+        // 2. Cài đặt hành động: Bấm vào thì mở bảng Mini Profile Tài Khoản
+        btn.onclick = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          const popup = document.getElementById("userDropdownPopup");
+          if (popup) {
+            document.getElementById("dropdownAvatar").src = userAvatar;
+            document.getElementById("dropdownName").innerText =
+              currentUser.fullName || "User";
+
+            // Bật / tắt popup
+            if (popup.style.display === "block") {
+              popup.style.display = "none";
+              popup.style.opacity = "0";
+              popup.style.transform = "translateY(10px) translateX(-50%)";
+            } else {
+              // Định vị popup nằm ngay dưới nút Avatar
+              const rect = btn.getBoundingClientRect();
+              popup.style.top = (rect.bottom + 10) + "px";
+              if (window.innerWidth < 768) {
+                popup.style.left = "50%";
+              } else {
+                popup.style.left = (rect.left + rect.width / 2) + "px";
+              }
+              popup.style.right = "auto";
+              popup.style.transform = "translateY(10px) translateX(-50%)";
+              popup.style.display = "block";
+
+              // Anim
+              setTimeout(() => {
+                popup.style.opacity = "1";
+                popup.style.transform = "translateY(0) translateX(-50%)";
+              }, 10);
+            }
+          }
+        };
+      });
+
+      // Ẩn popup khi click ra ngoài
+      document.addEventListener("click", (e) => {
+        const popup = document.getElementById("userDropdownPopup");
+        if (popup && popup.style.display === "block") {
+          let isClickInside = false;
+          loginBtns.forEach(b => { if (b.contains(e.target)) isClickInside = true; });
+          if (!popup.contains(e.target) && !isClickInside) {
+            popup.style.display = "none";
+            popup.style.opacity = "0";
+            popup.style.transform = "translateY(10px)";
+          }
+        }
+      });
+    } else {
+      // TRƯỜNG HỢP 2: CHƯA ĐĂNG NHẬP
+      loginBtns.forEach((btn) => {
+        btn.onclick = (e) => {
+          e.preventDefault();
+          sessionStorage.setItem("redirectAfterLogin", window.location.href);
+          window.location.href = "../Auth/login.html";
+        };
+      });
+    }
+
+    // Cài đặt sự kiện cho Dropdown Tài khoản
+    const dropdownSettingsBtn = document.getElementById("dropdownSettingsBtn");
+    const dropdownLogoutBtn = document.getElementById("dropdownLogoutBtn");
+
+    if (dropdownSettingsBtn) {
+      dropdownSettingsBtn.addEventListener("click", () => {
+        document.getElementById("userDropdownPopup").style.display = "none";
+        openSettingsModal();
+      });
+    }
+    if (dropdownLogoutBtn) {
+      dropdownLogoutBtn.addEventListener("click", () => {
+        localStorage.removeItem("currentUser");
+        window.location.reload();
+      });
+    }
+
+    // Hàm mở bảng Cài đặt hồ sơ
+    function openSettingsModal() {
+      const meString = localStorage.getItem("currentUser");
+      if (!meString) return;
+      const me = JSON.parse(meString);
+
+      const profileModal = document.getElementById("profileSetupModal");
+      const setupNameInput = document.getElementById("setupNameInput");
+      const setupAvatarPreview = document.getElementById("setupAvatarPreview");
+      const profileModalTitle = document.getElementById("profileModalTitle");
+      const profileModalDesc = document.getElementById("profileModalDesc");
+      const skipProfileBtn = document.getElementById("skipProfileBtn");
+      const closeProfileModal = document.getElementById("closeProfileModal");
+
+      if (profileModal) {
+        const t = window.translations ? window.translations[window.currentLang || "EN"] : {};
+        if (profileModalTitle && t.profile_settings_title)
+          profileModalTitle.innerText = t.profile_settings_title;
+        if (profileModalDesc && t.profile_settings_desc) profileModalDesc.innerText = t.profile_settings_desc;
+        if (setupNameInput) setupNameInput.value = me.fullName || "";
+        if (setupAvatarPreview)
+          setupAvatarPreview.src =
+            me.avatar || "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+
+        if (skipProfileBtn) skipProfileBtn.style.display = "none"; // Ẩn nút bỏ qua
+        if (closeProfileModal) closeProfileModal.style.display = "block"; // Hiện nút X để đóng
+
+        profileModal.style.display = "flex";
+      }
+    }
+
+    // Lắng nghe sự kiện cho các nút trong Modal Cài Đặt Hồ Sơ
+    document.addEventListener("DOMContentLoaded", () => {
+      // 1. Hiển thị ảnh xem trước khi chọn
+      const setupAvatarInput = document.getElementById("setupAvatarInput");
+      const setupAvatarPreview = document.getElementById("setupAvatarPreview");
+      if (setupAvatarInput) {
+        setupAvatarInput.addEventListener("change", function () {
+          const file = this.files[0];
+          if (file) setupAvatarPreview.src = URL.createObjectURL(file);
+        });
+      }
+
+      // 2. Bấm nút Lưu Hồ Sơ
+      const saveProfileBtn = document.getElementById("saveProfileBtn");
+      if (saveProfileBtn) {
+        saveProfileBtn.addEventListener("click", async () => {
+          const meString = localStorage.getItem("currentUser");
+          if (!meString) return;
+          const me = JSON.parse(meString);
+
+          const name = document.getElementById("setupNameInput").value.trim();
+          const file = setupAvatarInput.files[0];
+
+          const t = window.translations ? window.translations[window.currentLang || "EN"] : {
+            please_enter_name: "Please enter a name!", btn_save_profile: "Save Profile", saving: "Saving...", error_try_again: "Error", network_error: "Network error"
+          };
+
+          if (!name) {
+            saveProfileBtn.innerText = t.please_enter_name;
+            setTimeout(() => { saveProfileBtn.innerText = t.btn_save_profile; }, 2000);
+            return;
+          }
+
+          saveProfileBtn.innerText = t.saving;
+          saveProfileBtn.disabled = true;
+
+          const formData = new FormData();
+          formData.append("fullName", name);
+          if (file) formData.append("media", file);
+
+          try {
+            const res = await fetch(`${(location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:3000' : location.origin}/api/users/${me._id || me.userId}`, { method: "PUT", body: formData });
+            const data = await res.json();
+            if (data.success && data.user) {
+              me.fullName = data.user.fullName;
+              me.avatar = data.user.avatar;
+              localStorage.setItem("currentUser", JSON.stringify(me));
+              window.location.reload();
+            } else {
+              saveProfileBtn.innerText = t.error_try_again + " " + (data.message || "");
+              saveProfileBtn.disabled = false;
+            }
+          } catch (e) {
+            console.error("Lỗi cập nhật:", e);
+            saveProfileBtn.innerText = t.network_error;
+            saveProfileBtn.disabled = false;
+          }
+        });
+      }
+
+      // 3. Bấm nút X để đóng Cài đặt
+      const closeProfileModalBtn = document.getElementById("closeProfileModal");
+      if (closeProfileModalBtn) {
+        closeProfileModalBtn.addEventListener("click", () => {
+          document.getElementById("profileSetupModal").style.display = "none";
+        });
+      }
+
+      // 4. Bấm nút Bỏ qua
+      const skipProfileBtn = document.getElementById("skipProfileBtn");
+      if (skipProfileBtn) {
+        skipProfileBtn.addEventListener("click", () => {
+          document.getElementById("profileSetupModal").style.display = "none";
+        });
+      }
+    });
+  </script>
+</body>
+
+</html>

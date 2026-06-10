@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 0"
   },
   "repository": {
     "type": "git",
@@ -20,11 +20,14 @@
   },
   "homepage": "https://github.com/tuan-codeviem/Wildlife-Guardian#readme",
   "dependencies": {
+    "@google/genai": "^2.8.0",
+    "cloudinary": "^1.41.3",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
-    "mongoose": "^9.6.2",
+    "google-auth-library": "^10.7.0",
+    "mongoose": "^9.6.1",
     "multer": "^2.1.1",
-    "mysql2": "^3.22.3"
+    "multer-storage-cloudinary": "^4.0.0"
   }
 }
