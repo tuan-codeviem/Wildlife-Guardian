@@ -33,6 +33,11 @@ app.use(express.static(".")); // Để chạy được file HTML/CSS/JS
 // Sửa dòng này
 app.use("/uploads", express.static(path.join(__dirname, "wildlife-guardian/Social/uploads")));
 
+// Chuyển hướng người dùng về trang chủ khi truy cập đường dẫn gốc "/"
+app.get("/", (req, res) => {
+  res.redirect("/wildlife-guardian/Home/Home.html");
+});
+
 // ==========================================
 // 2. KẾT NỐI MONGODB
 // ==========================================
