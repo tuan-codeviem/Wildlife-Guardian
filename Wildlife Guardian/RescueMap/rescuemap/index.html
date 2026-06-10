@@ -21,8 +21,9 @@
   <link href="https://cesium.com/downloads/cesiumjs/releases/1.116/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
 
   <!-- Styles -->
-  <link rel="stylesheet" href="style1.css?v=3">
-  <link rel="stylesheet" href="style2.css?v=3">
+  <link rel="stylesheet" href="../../Home/css/nav.css">
+  <link rel="stylesheet" href="style1.css?v=4">
+  <link rel="stylesheet" href="style2.css?v=4">
   <link rel="stylesheet" href="../../ChatBotAI/chatbot.css">
 
   <!-- Navbar CSS (shared from Home) -->
@@ -414,7 +415,63 @@
   <script type="module" src="../../ChatBotAI/chatbotai.js"></script>
   <script src="../../Home/js/language_EN_VI.js"></script>
   <script src="../../Home/js/nav.js"></script>
-  <script src="./script1.js"></script>
+  <script src="./script1.js?v=3"></script>
+
+  <!-- BẢNG DROPDOWN TÀI KHOẢN (AVATAR GÓC TRÊN PHẢI) -->
+  <div id="userDropdownPopup" class="user-dropdown-popup" style="display: none;">
+    <img id="dropdownAvatar" src="" alt="Avatar" class="dropdown-avatar-img" />
+    <h4 id="dropdownName" class="dropdown-name-text">User Name</h4>
+    <div class="dropdown-actions">
+      <button id="dropdownSettingsBtn" data-i18n="btn_settings" class="dropdown-btn dropdown-btn-settings">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path
+            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+          </path>
+        </svg>
+        Settings
+      </button>
+      <button id="dropdownLogoutBtn" data-i18n="btn_logout" class="dropdown-btn dropdown-btn-logout">
+        Log out
+      </button>
+    </div>
+  </div>
+
+  <!-- HỘP THOẠI CẬP NHẬT HỒ SƠ LẦN ĐẦU ĐĂNG NHẬP -->
+  <div id="profileSetupModal"
+    style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.6); z-index: 10001; justify-content: center; align-items: center; backdrop-filter: blur(5px);">
+    <div
+      style="background: white; padding: 30px; border-radius: 20px; width: 320px; text-align: center; box-shadow: 0 15px 30px rgba(0,0,0,0.2); position: relative;">
+      <button id="closeProfileModal"
+        style="display: none; position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 20px; cursor: pointer; color: #888; transition: 0.2s;">✖</button>
+      <h3 id="profileModalTitle" style="margin: 0 0 10px 0; color: #333; font-size: 20px;"
+        data-i18n="update_profile_title">Update profile</h3>
+      <p id="profileModalDesc" style="font-size: 14px; color: #666; margin-bottom: 20px;"
+        data-i18n="update_profile_desc">Choose an avatar and display name to get started!</p>
+
+      <label style="display: inline-block; position: relative; cursor: pointer; margin-bottom: 20px;"
+        title="Bấm để chọn ảnh">
+        <img id="setupAvatarPreview" src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+          style="width: 110px; height: 110px; border-radius: 50%; object-fit: cover; border: 3px solid #16a34a; padding: 3px;">
+        <div
+          style="position: absolute; bottom: 5px; right: 5px; background: #16a34a; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid white; font-size: 16px;">
+          📷
+        </div>
+        <input type="file" id="setupAvatarInput" accept="image/*" hidden>
+      </label>
+
+      <input type="text" id="setupNameInput" data-i18n="name_placeholder" placeholder="Your display name..."
+        style="width: 100%; padding: 12px 15px; border-radius: 12px; border: 1px solid #ddd; outline: none; margin-bottom: 20px; box-sizing: border-box; text-align: center; font-weight: 600; font-size: 15px;">
+
+      <button id="saveProfileBtn" data-i18n="btn_save_profile"
+        style="width: 100%; background: #16a34a; color: white; border: none; padding: 12px; border-radius: 12px; font-weight: bold; cursor: pointer; margin-bottom: 12px; transition: 0.2s; font-size: 15px;">Save
+        Profile</button>
+      <button id="skipProfileBtn" data-i18n="btn_skip"
+        style="width: 100%; background: #f1f5f9; color: #666; border: none; padding: 12px; border-radius: 12px; font-weight: bold; cursor: pointer; transition: 0.2s; font-size: 15px;">Skip
+        (Anonymous)</button>
+    </div>
+  </div>
 
   <script>
     // Declare variables first
@@ -422,7 +479,6 @@
     const navbar = document.getElementById('navbar');
 
     // Navbar: trigger scrolled class on load (body overflow:hidden, map is fixed)
-    // so window.scroll won't fire. We use the floating panel's scroll instead.
     if (navbar) navbar.classList.add('scrolled'); // Always show navbar bg on map page
 
     // Optionally: listen to floating-panel scroll for progress bar
@@ -436,9 +492,214 @@
       }, { passive: true });
     }
 
+    // ==========================================
+    // 2. KHỞI TẠO TÀI KHOẢN (AVATAR DROPDOWN)
+    // ==========================================
+    const userString = localStorage.getItem("currentUser");
+    const loginBtns = document.querySelectorAll(".btn-login");
 
-    // Login/logout button logic nay được xử lý bởi navbar.js (WG_Navbar.updateAuthButtons)
-    // Không cần duplicate logic ở đây nữa.
+    if (userString) {
+      // TRƯỜNG HỢP 1: ĐÃ ĐĂNG NHẬP
+      const currentUser = JSON.parse(userString);
+      const userAvatar = currentUser.avatar || "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+
+      loginBtns.forEach((btn) => {
+        // 1. Đổi nút "Log in" thành Avatar
+        btn.className = 'avatar-btn';
+        btn.innerHTML = `<img src="${userAvatar}" style="width: 38px; height: 38px; border-radius: 50%; object-fit: cover; background: white;">`;
+        btn.style.padding = "0";
+        btn.style.background = "transparent";
+        btn.style.minWidth = "auto";
+        btn.style.borderRadius = "50%";
+        btn.style.display = "flex";
+        btn.style.alignItems = "center";
+        btn.style.justifyContent = "center";
+
+        // 2. Cài đặt hành động: Bấm vào thì mở bảng Mini Profile Tài Khoản
+        btn.onclick = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          const popup = document.getElementById("userDropdownPopup");
+          if (popup) {
+            document.getElementById("dropdownAvatar").src = userAvatar;
+            document.getElementById("dropdownName").innerText = currentUser.fullName || "User";
+
+            // Bật / tắt popup
+            if (popup.style.display === "block") {
+              popup.style.display = "none";
+              popup.style.opacity = "0";
+              popup.style.transform = "translateY(10px) translateX(-50%)";
+            } else {
+              // Định vị popup nằm ngay dưới nút Avatar
+              const rect = btn.getBoundingClientRect();
+              popup.style.top = (rect.bottom + 10) + "px";
+              if (window.innerWidth < 768) {
+                popup.style.left = "50%";
+              } else {
+                popup.style.left = (rect.left + rect.width / 2) + "px";
+              }
+              popup.style.right = "auto";
+              popup.style.transform = "translateY(10px) translateX(-50%)";
+              popup.style.display = "block";
+
+              // Anim
+              setTimeout(() => {
+                popup.style.opacity = "1";
+                popup.style.transform = "translateY(0) translateX(-50%)";
+              }, 10);
+            }
+          }
+        };
+      });
+
+      // Ẩn popup khi click ra ngoài
+      document.addEventListener("click", (e) => {
+        const popup = document.getElementById("userDropdownPopup");
+        if (popup && popup.style.display === "block") {
+          let isClickInside = false;
+          loginBtns.forEach(b => { if (b.contains(e.target)) isClickInside = true; });
+          if (!popup.contains(e.target) && !isClickInside) {
+            popup.style.display = "none";
+            popup.style.opacity = "0";
+            popup.style.transform = "translateY(10px)";
+          }
+        }
+      });
+    } else {
+      // TRƯỜNG HỢP 2: CHƯA ĐĂNG NHẬP
+      loginBtns.forEach((btn) => {
+        btn.onclick = (e) => {
+          e.preventDefault();
+          sessionStorage.setItem("redirectAfterLogin", window.location.href);
+          window.location.href = "../../Auth/login.html";
+        };
+      });
+    }
+
+    // Cài đặt sự kiện cho Dropdown Tài khoản
+    const dropdownSettingsBtn = document.getElementById("dropdownSettingsBtn");
+    const dropdownLogoutBtn = document.getElementById("dropdownLogoutBtn");
+
+    if (dropdownSettingsBtn) {
+      dropdownSettingsBtn.addEventListener("click", () => {
+        document.getElementById("userDropdownPopup").style.display = "none";
+        if (typeof openSettingsModal === 'function') openSettingsModal();
+      });
+    }
+    if (dropdownLogoutBtn) {
+      dropdownLogoutBtn.addEventListener("click", () => {
+        localStorage.removeItem("currentUser");
+        window.location.reload();
+      });
+    }
+
+    // Hàm mở bảng Cài đặt hồ sơ
+    function openSettingsModal() {
+      const meString = localStorage.getItem("currentUser");
+      if (!meString) return;
+      const me = JSON.parse(meString);
+
+      const profileModal = document.getElementById("profileSetupModal");
+      const setupNameInput = document.getElementById("setupNameInput");
+      const setupAvatarPreview = document.getElementById("setupAvatarPreview");
+      const profileModalTitle = document.getElementById("profileModalTitle");
+      const profileModalDesc = document.getElementById("profileModalDesc");
+      const skipProfileBtn = document.getElementById("skipProfileBtn");
+      const closeProfileModal = document.getElementById("closeProfileModal");
+
+      if (profileModal) {
+        const t = window.translations ? window.translations[window.currentLang || "EN"] : {};
+        if (profileModalTitle && t.profile_settings_title)
+          profileModalTitle.innerText = t.profile_settings_title;
+        if (profileModalDesc && t.profile_settings_desc) profileModalDesc.innerText = t.profile_settings_desc;
+        if (setupNameInput) setupNameInput.value = me.fullName || "";
+        if (setupAvatarPreview)
+          setupAvatarPreview.src =
+            me.avatar || "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+
+        if (skipProfileBtn) skipProfileBtn.style.display = "none"; // Ẩn nút bỏ qua
+        if (closeProfileModal) closeProfileModal.style.display = "block"; // Hiện nút X để đóng
+
+        profileModal.style.display = "flex";
+      }
+    }
+
+    // Lắng nghe sự kiện cho các nút trong Modal Cài Đặt Hồ Sơ
+    document.addEventListener("DOMContentLoaded", () => {
+      // 1. Hiển thị ảnh xem trước khi chọn
+      const setupAvatarInput = document.getElementById("setupAvatarInput");
+      const setupAvatarPreview = document.getElementById("setupAvatarPreview");
+      if (setupAvatarInput) {
+        setupAvatarInput.addEventListener("change", function () {
+          const file = this.files[0];
+          if (file) setupAvatarPreview.src = URL.createObjectURL(file);
+        });
+      }
+
+      // 2. Bấm nút Lưu Hồ Sơ
+      const saveProfileBtn = document.getElementById("saveProfileBtn");
+      if (saveProfileBtn) {
+        saveProfileBtn.addEventListener("click", async () => {
+          const meString = localStorage.getItem("currentUser");
+          if (!meString) return;
+          const me = JSON.parse(meString);
+
+          const name = document.getElementById("setupNameInput").value.trim();
+          const file = setupAvatarInput.files[0];
+
+          const t = window.translations ? window.translations[window.currentLang || "EN"] : {
+            please_enter_name: "Please enter a name!", btn_save_profile: "Save Profile", saving: "Saving...", error_try_again: "Error", network_error: "Network error"
+          };
+
+          if (!name) {
+            saveProfileBtn.innerText = t.please_enter_name;
+            setTimeout(() => { saveProfileBtn.innerText = t.btn_save_profile; }, 2000);
+            return;
+          }
+
+          saveProfileBtn.innerText = t.saving;
+          saveProfileBtn.disabled = true;
+
+          const formData = new FormData();
+          formData.append("fullName", name);
+          if (file) formData.append("media", file);
+
+          try {
+            const res = await fetch(`http://${window.location.hostname}:3000/api/users/${me._id || me.userId}`, { method: "PUT", body: formData });
+            const data = await res.json();
+            if (data.success && data.user) {
+              me.fullName = data.user.fullName;
+              me.avatar = data.user.avatar;
+              localStorage.setItem("currentUser", JSON.stringify(me));
+              window.location.reload();
+            } else {
+              saveProfileBtn.innerText = t.error_try_again + " " + (data.message || "");
+              saveProfileBtn.disabled = false;
+            }
+          } catch (e) {
+            console.error("Lỗi cập nhật:", e);
+            saveProfileBtn.innerText = t.network_error;
+            saveProfileBtn.disabled = false;
+          }
+        });
+      }
+
+      // 3. Bấm nút X để đóng Cài đặt
+      const closeProfileModalBtn = document.getElementById("closeProfileModal");
+      if (closeProfileModalBtn) {
+        closeProfileModalBtn.addEventListener("click", () => {
+          document.getElementById("profileSetupModal").style.display = "none";
+        });
+      }
+
+      // 4. Bấm nút Bỏ qua
+      const skipProfileBtn = document.getElementById("skipProfileBtn");
+      if (skipProfileBtn) {
+        skipProfileBtn.addEventListener("click", () => {
+          document.getElementById("profileSetupModal").style.display = "none";
+        });
+      }
+    });
   </script>
 </body>
 

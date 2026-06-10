@@ -69,17 +69,8 @@ function addToastAnimations() {
 }
 
 function addPanelStyles() {
-    if (document.getElementById("panelFixStyles")) return;
-    const style = document.createElement("style");
-    style.id = "panelFixStyles";
-    style.textContent = `
-        #reportsPanel { max-height: calc(100vh - 250px); overflow-y: auto; padding-right: 8px; }
-        #reportsPanel::-webkit-scrollbar { width: 6px; }
-        #reportsPanel::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
-        #reportsPanel::-webkit-scrollbar-thumb { background: #c1c1c1; border-radius: 4px; }
-        #reportsPanel::-webkit-scrollbar-thumb:hover { background: #a8a8a8; }
-    `;
-    document.head.appendChild(style);
+    // Không làm gì cả để tránh tạo thanh cuộn thứ 2 (double scrollbar)
+    // CSS đã được xử lý chuẩn ở .panel-scroll trong style1.css
 }
 
 function escapeHtml(str) {
@@ -613,6 +604,12 @@ function setupCustomPopup() {
             const htmlContent = typeof activeEntity.properties.customHTML.getValue === 'function' ? activeEntity.properties.customHTML.getValue() : activeEntity.properties.customHTML;
             popupDiv.innerHTML = htmlContent;
             popupDiv.style.display = 'block';
+
+            // Phóng to mượt mà vào marker
+            viewer.flyTo(activeEntity, {
+                duration: 1.5,
+                offset: new Cesium.HeadingPitchRange(0, Cesium.Math.toRadians(-45), 15000) // Cao độ 15km, góc nghiêng 45 độ
+            });
 
             const closeBtn = popupDiv.querySelector('.close-btn');
             if (closeBtn) closeBtn.onclick = () => { 
@@ -1166,4 +1163,15 @@ document.addEventListener("DOMContentLoaded", () => {
             }, 100);
         });
     });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('action') === 'report') {
+    setTimeout(() => {
+      if (typeof window.openCameraModal === 'function') {
+        window.openCameraModal(new Event('click'));
+      }
+    }, 800);
+  }
 });
