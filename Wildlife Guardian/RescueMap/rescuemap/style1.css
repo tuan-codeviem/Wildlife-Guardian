@@ -839,21 +839,6 @@ html, body {
     top: auto !important;
     z-index: 200 !important;
   }
-
-  /* KHI POPUP MỞ TRÊN MOBILE */
-  body.mobile-popup-open .floating-panel {
-    display: none !important;
-  }
-
-  body.mobile-popup-open #interactiveMap {
-    flex: 0 0 calc(100% - 68px) !important;
-    height: calc(100% - 68px) !important;
-    margin-bottom: 0 !important;
-  }
-
-  body.mobile-popup-open .view-home-btn {
-    bottom: calc(50vh + 15px) !important;
-  }
 }
 
 /* (4) CRITICAL: Cesium canvas must NOT have pointer-events blocked */

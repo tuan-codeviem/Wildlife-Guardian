@@ -1024,40 +1024,41 @@ body {
 
   .rescue-popup.dark-glass-theme {
     width: 100% !important;
-    max-height: 48vh !important;
-    /* Giới hạn nửa màn hình dưới để không che mất quả cầu phía trên */
+    max-height: none !important;
+    /* Hiển thị full không cuộn */
     display: flex;
     flex-direction: column;
   }
 
   .rescue-popup.dark-glass-theme .rescue-header {
-    height: 110px;
-    /* Tăng chiều cao header */
-    padding: 15px;
+    height: auto !important;
+    /* Thu gọn header */
+    padding: 10px;
   }
 
   .rescue-popup.dark-glass-theme .rescue-title {
-    font-size: 20px;
+    font-size: 16px;
+    margin-bottom: 5px;
   }
 
   .rescue-popup.dark-glass-theme .rescue-details {
-    flex: 1;
-    overflow-y: auto;
+    flex: none;
+    overflow-y: visible;
     max-height: none !important;
-    padding: 15px;
+    padding: 10px;
   }
 
   .detail-title {
-    font-size: 14px;
+    font-size: 12px;
   }
 
   .detail-box {
-    padding: 12px;
+    padding: 8px;
   }
 
   .detail-item {
-    font-size: 14px;
-    margin-bottom: 8px;
+    font-size: 13px;
+    margin-bottom: 5px;
   }
 }
 
@@ -1299,45 +1300,45 @@ body {
    ======================================================== */
 @media (max-width: 768px) {
   /* Tiêu đề & Header */
-  .panel-title h2 { font-size: 28px !important; font-weight: 900 !important; margin-bottom: 5px !important; }
-  .panel-title p { font-size: 16px !important; }
-  .panel-title-icon { width: 56px !important; height: 56px !important; font-size: 26px !important; }
+  .panel-title h2 { font-size: 20px !important; font-weight: 700 !important; margin-bottom: 5px !important; }
+  .panel-title p { font-size: 14px !important; }
+  .panel-title-icon { width: 44px !important; height: 44px !important; font-size: 20px !important; }
   
   /* Thanh tìm kiếm */
-  .search-glass { padding: 14px 18px !important; }
-  .search-glass input { font-size: 17px !important; }
-  .search-glass i, .search-glass button { font-size: 18px !important; width: 40px !important; height: 40px !important; }
+  .search-glass { padding: 12px 16px !important; }
+  .search-glass input { font-size: 14px !important; }
+  .search-glass i, .search-glass button { font-size: 16px !important; width: 36px !important; height: 36px !important; }
 
   /* Tabs */
-  .panel-tabs { padding: 8px !important; border-radius: 16px !important; }
-  .panel-tabs .tab-btn { font-size: 15px !important; padding: 14px 12px !important; }
+  .panel-tabs { padding: 6px !important; border-radius: 12px !important; }
+  .panel-tabs .tab-btn { font-size: 14px !important; padding: 10px 12px !important; }
 
   /* Legend */
-  .panel-legend { font-size: 15px !important; padding: 16px !important; }
+  .panel-legend { font-size: 14px !important; padding: 12px !important; }
 
   /* Thẻ báo cáo (Report Card) */
-  .report-card { padding: 18px !important; margin-bottom: 18px !important; border-radius: 20px !important; }
-  .report-card-info h4 { font-size: 20px !important; margin-bottom: 8px !important; font-weight: 800 !important; }
-  .report-card-info .location { font-size: 15px !important; margin-top: 8px !important; margin-bottom: 8px !important; line-height: 1.5 !important; }
-  .status-tag { font-size: 14px !important; padding: 8px 16px !important; border-radius: 20px !important; }
+  .report-card { padding: 15px !important; margin-bottom: 15px !important; border-radius: 16px !important; }
+  .report-card-info h4 { font-size: 16px !important; margin-bottom: 5px !important; font-weight: 700 !important; }
+  .report-card-info .location { font-size: 14px !important; margin-top: 5px !important; margin-bottom: 5px !important; line-height: 1.4 !important; }
+  .status-tag { font-size: 13px !important; padding: 6px 12px !important; border-radius: 16px !important; }
   
   /* Ghi đè inline style của script1.js */
   .report-card-info div[style*="font-size:12px"],
-  .report-card-info div[style*="font-size: 12px"] { font-size: 15px !important; margin-top: 10px !important; line-height: 1.5 !important; padding: 10px !important; }
+  .report-card-info div[style*="font-size: 12px"] { font-size: 14px !important; margin-top: 8px !important; line-height: 1.4 !important; padding: 8px !important; }
   .report-card-info span[style*="font-size:11px"],
-  .report-card-info span[style*="font-size: 11px"] { font-size: 14px !important; }
+  .report-card-info span[style*="font-size: 11px"] { font-size: 13px !important; }
 
   /* Nút thao tác thẻ */
-  .small-btn { font-size: 15px !important; padding: 12px 18px !important; width: auto !important; min-width: 110px !important; border-radius: 14px !important; font-weight: 700 !important; }
+  .small-btn { font-size: 14px !important; padding: 10px 15px !important; width: auto !important; min-width: 90px !important; border-radius: 10px !important; font-weight: 600 !important; }
 
   /* Cẩm nang sơ cứu */
-  .first-aid-section .section-header { font-size: 18px !important; padding-bottom: 14px !important; margin-bottom: 14px !important; }
-  .first-aid-list > div { padding: 16px 20px !important; border-radius: 12px !important; }
-  .first-aid-list h4 { font-size: 18px !important; margin-bottom: 8px !important; line-height: 1.4 !important; font-weight: 800 !important; }
-  .first-aid-list p { font-size: 15px !important; line-height: 1.6 !important; }
+  .first-aid-section .section-header { font-size: 16px !important; padding-bottom: 10px !important; margin-bottom: 10px !important; }
+  .first-aid-list > div { padding: 12px 15px !important; border-radius: 10px !important; }
+  .first-aid-list h4 { font-size: 16px !important; margin-bottom: 5px !important; line-height: 1.4 !important; font-weight: 700 !important; }
+  .first-aid-list p { font-size: 14px !important; line-height: 1.5 !important; }
 
   /* Nút hỗ trợ dưới cùng */
-  .panel-support-btn { font-size: 18px !important; padding: 18px !important; border-radius: 18px !important; }
+  .panel-support-btn { font-size: 15px !important; padding: 15px !important; border-radius: 15px !important; }
 }
 
 /* ── NEUTRALIZE style2.css mobile overrides ──────────────────
