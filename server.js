@@ -30,10 +30,8 @@ const port = process.env.PORT || 3000;
 app.use(cors()); // Bắt buộc phải có để Frontend và Backend nói chuyện được với nhau
 app.use(express.json()); // Giúp server đọc được dữ liệu dạng chữ
 app.use(express.static(".")); // Để chạy được file HTML/CSS/JS
-app.use(
-  "/uploads",
-  express.static(path.join(__dirname, "Wildlife Guardian/Social/uploads")),
-); // Cho phép lấy ảnh từ thư mục uploads
+// Sửa dòng này
+app.use("/uploads", express.static(path.join(__dirname, "wildlife-guardian/Social/uploads")));
 
 // ==========================================
 // 2. KẾT NỐI MONGODB
@@ -52,11 +50,12 @@ mongoose
 // ==========================================
 // 3. KHỞI TẠO CÁC MODEL DATABASE
 // ==========================================
-const Post = require("./Wildlife Guardian/models/Post");
-const Rescue = require("./Wildlife Guardian/models/Rescue");
-const Message = require("./Wildlife Guardian/models/Message");
-const User = require("./Wildlife Guardian/models/User");
-const Species = require("./Wildlife Guardian/models/Species");
+// Sửa lại thành như thế này
+const Post = require("./wildlife-guardian/models/Post");
+const Rescue = require("./wildlife-guardian/models/Rescue");
+const Message = require("./wildlife-guardian/models/Message");
+const User = require("./wildlife-guardian/models/User");
+const Species = require("./wildlife-guardian/models/Species");
 
 // ==========================================
 // 4. CẤU HÌNH MULTER (Trợ lý nhận file) - CLOUDINARY
