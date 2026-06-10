@@ -3,6 +3,8 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const multer = require("multer");
 const path = require("path");
+const fs = require("fs");
+const zlib = require("zlib");
 require("dotenv").config();
 
 // ===== GOOGLE AUTH SETUP =====
@@ -33,6 +35,8 @@ const port = process.env.PORT || 3000;
 
 app.use(cors()); // Bắt buộc phải có để Frontend và Backend nói chuyện được với nhau
 app.use(express.json()); // Giúp server đọc được dữ liệu dạng chữ
+
+// Xử lý file tĩnh bình thường
 app.use(express.static(".")); // Để chạy được file HTML/CSS/JS
 // Sửa dòng này
 app.use("/uploads", express.static(path.join(__dirname, "wildlife-guardian/Social/uploads")));

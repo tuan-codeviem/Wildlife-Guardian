@@ -29,6 +29,11 @@
       overflow-x: hidden;
       font-family: 'Outfit', sans-serif;
     }
+    
+    /* Đảm bảo Navbar luôn nổi lên trên cùng, không bị đè chữ khi cuộn */
+    .navbar {
+      z-index: 1000 !important;
+    }
 
     /* ── SCROLLBAR ── */
     ::-webkit-scrollbar { width: 5px; }
@@ -85,6 +90,13 @@
     .ft-social a { color: rgba(255,255,255,.2); text-decoration: none; font-weight: 600; transition: .2s; }
     .ft-social a:hover { color: #fff; }
 
+    @media (max-width: 768px) {
+      .footer-top { flex-direction: column; gap: 40px; text-align: center; }
+      .ft-brand { flex: 1; align-items: center; }
+      .ft-nav { flex-direction: column; gap: 30px; }
+      .footer-bottom { justify-content: center; gap: 15px; flex-direction: column; }
+    }
+
     /* ==========================================
        TỐI ƯU RESPONSIVE CHO ĐIỆN THOẠI
        ========================================== */
@@ -138,6 +150,53 @@
         display: flex;
         align-items: center;
         justify-content: center;
+      }
+    }
+    /* OVERLAY YÊU CẦU XOAY NGANG */
+    .rotate-overlay {
+      display: none;
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      /* Nền gradient bóng ở giữa, viền là #05140a để hòa quyện với Navbar không có dải phân cách */
+      background: radial-gradient(circle at center, rgba(34, 197, 94, 0.25) 0%, #05140a 70%);
+      z-index: 20;
+      color: white;
+      text-align: center;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      box-shadow: inset 0 0 100px rgba(0,0,0,0.5);
+    }
+    .rotate-overlay svg {
+      margin-bottom: 25px;
+      filter: drop-shadow(0 0 20px rgba(74, 222, 128, 0.6));
+      animation: rotatePhoneAnim 2s infinite ease-in-out alternate;
+    }
+    .rotate-overlay h2 {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    }
+    @keyframes rotatePhoneAnim {
+      0% { transform: rotate(0deg); }
+      50% { transform: rotate(-90deg) scale(1.1); }
+      100% { transform: rotate(0deg); }
+    }
+    
+    /* KHI CẦM DỌC TRÊN MOBILE */
+    @media screen and (orientation: portrait) and (max-width: 932px) {
+      .game-view {
+        height: calc(100vh - 130px); 
+        border-bottom: 2px solid rgba(34, 197, 94, 0.4); 
+      }
+      .content-view { display: block; }
+      .rotate-overlay {
+        display: flex;
+      }
+      .game-iframe {
+        opacity: 0;
+        pointer-events: none;
       }
     }
   </style>
@@ -199,6 +258,15 @@
   </nav>
 
   <main class="game-view" id="gameView">
+    <!-- Overlay yêu cầu xoay ngang màn hình -->
+    <div id="rotate-overlay" class="rotate-overlay">
+      <svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+        <line x1="12" y1="18" x2="12.01" y2="18"></line>
+      </svg>
+      <h2 data-i18n="rotate_device">Trải nghiệm tốt nhất khi xoay ngang<br>(Landscape Mode)</h2>
+    </div>
+
     <iframe src="Main/game.html" class="game-iframe" id="gameIframe" allow="fullscreen"></iframe>
     <button id="mobileFullscreenBtn" class="fullscreen-btn" title="Fullscreen">
       <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">

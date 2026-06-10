@@ -4,15 +4,103 @@
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Unity Web Player | EcoGuardian-Unity</title>
+    <script>
+      if (!localStorage.getItem("currentUser")) {
+        sessionStorage.setItem("redirectAfterLogin", window.location.href);
+        window.location.replace("../../Auth/login.html");
+      }
+    </script>
     <link rel="shortcut icon" href="TemplateData/favicon.ico">
     <link rel="stylesheet" href="TemplateData/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet" />
     <style>
-      body { margin: 0; padding: 0; overflow: hidden; background-color: transparent; }
-      #unity-container { width: 100vw !important; height: 100vh !important; position: absolute; top: 0; left: 0; }
-      #unity-canvas { width: 100% !important; height: 100% !important; }
+      /* Đảm bảo game full màn hình iframe */
+      html, body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background-color: #0d0d0d;
+        font-family: 'Outfit', sans-serif;
+      }
+      
+      #unity-container {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+      
+      #unity-canvas {
+        width: 100% !important;
+        height: 100% !important;
+        background: #0d0d0d;
+      }
+
+      /* Ẩn phần footer mặc định của Unity vì ta muốn full màn hình */
+      #unity-footer {
+        display: none;
+      }
+
+      /* Lớp phủ yêu cầu xoay màn hình (chỉ hiện khi ở Portrait trên Mobile) */
+      #rotate-overlay {
+        display: none;
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background-color: #05140a;
+        color: white;
+        z-index: 9999;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+      }
+      
+      #rotate-overlay svg {
+        animation: rotatePhone 1.5s infinite ease-in-out alternate;
+      }
+
+      @keyframes rotatePhone {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(-90deg); }
+      }
+
+      #rotate-overlay h2 {
+        font-weight: 800;
+        margin-top: 15px;
+        margin-bottom: 5px;
+      }
+
+      #rotate-overlay p {
+        font-weight: 300;
+        color: #a8b2ac;
+        margin: 0;
+      }
+
+      /* Kích hoạt lớp phủ khi ở màn hình dọc */
+      @media screen and (orientation: portrait) and (max-width: 932px) {
+        #rotate-overlay {
+          display: flex;
+        }
+        #unity-container {
+          display: none;
+        }
+      }
     </style>
   </head>
   <body>
+    <!-- Lớp phủ yêu cầu xoay màn hình -->
+    <div id="rotate-overlay">
+      <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 10px;">
+        <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+        <line x1="12" y1="18" x2="12.01" y2="18"></line>
+      </svg>
+      <h2>Vui lòng xoay ngang màn hình</h2>
+      <p>Trải nghiệm tốt nhất khi chơi ngang (Landscape mode).</p>
+    </div>
+
     <div id="unity-container" class="unity-desktop">
       <canvas id="unity-canvas" width=960 height=600 tabindex="-1"></canvas>
       <div id="unity-loading-bar">
@@ -21,7 +109,12 @@
           <div id="unity-progress-bar-full"></div>
         </div>
       </div>
-
+      <div id="unity-warning"> </div>
+      <div id="unity-footer">
+        <div id="unity-logo-title-footer"></div>
+        <div id="unity-fullscreen-button"></div>
+        <div id="unity-build-title">EcoGuardian-Unity</div>
+      </div>
     </div>
     <script>
       var canvas = document.querySelector("#unity-canvas");
@@ -63,29 +156,7 @@
         productName: "EcoGuardian-Unity",
         productVersion: "1.0",
         showBanner: unityShowBanner,
-        // errorHandler: function(err, url, line) {
-        //    alert("error " + err + " occurred at line " + line);
-        //    // Return 'true' if you handled this error and don't want Unity
-        //    // to process it further, 'false' otherwise.
-        //    return true;
-        // },
       };
-
-      // By default, Unity keeps WebGL canvas render target size matched with
-      // the DOM size of the canvas element (scaled by window.devicePixelRatio)
-      // Set this to false if you want to decouple this synchronization from
-      // happening inside the engine, and you would instead like to size up
-      // the canvas DOM size and WebGL render target sizes yourself.
-      // config.matchWebGLToCanvasSize = false;
-
-      // If you would like all file writes inside Unity Application.persistentDataPath
-      // directory to automatically persist so that the contents are remembered when
-      // the user revisits the site the next time, uncomment the following line:
-      // config.autoSyncPersistentDataPath = true;
-      // This autosyncing is currently not the default behavior to avoid regressing
-      // existing user projects that might rely on the earlier manual
-      // JS_FileSystem_Sync() behavior, but in future Unity version, this will be
-      // expected to change.
 
       if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
         // Mobile device style: fill the whole browser client area with the game canvas:
@@ -100,7 +171,6 @@
         // To lower canvas resolution on mobile devices to gain some
         // performance, uncomment the following line:
         // config.devicePixelRatio = 1;
-
 
       } else {
         // Desktop style: Render the game canvas full screen in iframe
@@ -176,7 +246,9 @@
               }).then((unityInstance) => {
                 myUnityInstance = unityInstance; // Lưu lại Unity Instance
                 document.querySelector("#unity-loading-bar").style.display = "none";
-
+                document.querySelector("#unity-fullscreen-button").onclick = () => {
+                  unityInstance.SetFullscreen(1);
+                };
 
               }).catch((message) => {
                 alert(message);
