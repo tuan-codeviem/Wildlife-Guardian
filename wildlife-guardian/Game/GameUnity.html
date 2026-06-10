@@ -102,19 +102,42 @@
       .content-view { display: block; }
     }
 
-    /* 2. KHI XOAY NGANG (Landscape): GIỮ LẠI NAVBAR VÀ CHỈ ẨN FOOTER */
+    /* 2. KHI XOAY NGANG (Landscape): ẨN NAVBAR VÀ FOOTER ĐỂ CHƠI GAME FULL MÀN HÌNH */
     @media screen and (orientation: landscape) and (max-height: 600px) {
-      .navbar { display: flex !important; }         /* Ép Navbar luôn hiển thị định dạng Flex */
+      .navbar { display: none !important; }         /* Ẩn Navbar để lấy chỗ chơi game */
       .content-view { display: none !important; }   /* Ẩn hoàn toàn khối chứa Footer phía dưới */
       
       body { 
-        padding-top: 68px !important;             /* Giữ nguyên khoảng trống 68px của Navbar */
+        padding-top: 0 !important;                /* Bỏ khoảng trống Navbar */
         overflow: hidden;                         /* Khóa cứng thanh cuộn của trình duyệt */
       } 
       
       .game-view {
-        height: calc(100vh - 68px) !important;    /* Game chiếm trọn 100% không gian còn lại dưới Navbar */
+        height: 100dvh !important;                /* Dùng 100dvh để thích ứng với thanh địa chỉ Safari/Chrome */
         border-bottom: none;
+      }
+    }
+
+    /* NÚT FULLSCREEN TRÊN MOBILE */
+    .fullscreen-btn {
+      display: none;
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 10;
+      background: rgba(0, 0, 0, 0.6);
+      color: white;
+      border: 2px solid rgba(255, 255, 255, 0.5);
+      border-radius: 8px;
+      padding: 8px;
+      cursor: pointer;
+      backdrop-filter: blur(4px);
+    }
+    @media screen and (orientation: landscape) and (max-height: 600px) {
+      .fullscreen-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
     }
   </style>
@@ -175,8 +198,13 @@
     </div>
   </nav>
 
-  <main class="game-view">
-    <iframe src="Main/game.html" class="game-iframe"></iframe>
+  <main class="game-view" id="gameView">
+    <iframe src="Main/game.html" class="game-iframe" id="gameIframe" allow="fullscreen"></iframe>
+    <button id="mobileFullscreenBtn" class="fullscreen-btn" title="Fullscreen">
+      <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+      </svg>
+    </button>
   </main>
 
   <div class="content-view">
@@ -234,6 +262,29 @@
         hamburger.addEventListener("click", () => {
           hamburger.classList.toggle("active");
           mobileNav.classList.toggle("show");
+        });
+      }
+
+      // Logic cho nút Fullscreen trên Mobile Landscape
+      const fsBtn = document.getElementById('mobileFullscreenBtn');
+      const gameView = document.getElementById('gameView');
+      if (fsBtn && gameView) {
+        fsBtn.addEventListener('click', () => {
+          if (!document.fullscreenElement) {
+            if (gameView.requestFullscreen) {
+              gameView.requestFullscreen();
+            } else if (gameView.webkitRequestFullscreen) { // Safari
+              gameView.webkitRequestFullscreen();
+            } else if (gameView.msRequestFullscreen) { // IE11
+              gameView.msRequestFullscreen();
+            }
+          } else {
+            if (document.exitFullscreen) {
+              document.exitFullscreen();
+            } else if (document.webkitExitFullscreen) {
+              document.webkitExitFullscreen();
+            }
+          }
         });
       }
     });
