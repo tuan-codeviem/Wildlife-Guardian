@@ -68,10 +68,6 @@ function addToastAnimations() {
     document.head.appendChild(style);
 }
 
-function addPanelStyles() {
-    // Không làm gì cả để tránh tạo thanh cuộn thứ 2 (double scrollbar)
-    // CSS đã được xử lý chuẩn ở .panel-scroll trong style1.css
-}
 
 function escapeHtml(str) {
     if (str === null || str === undefined) return "";
@@ -605,12 +601,6 @@ function setupCustomPopup() {
             popupDiv.innerHTML = htmlContent;
             popupDiv.style.display = 'block';
 
-            // Phóng to mượt mà vào marker
-            viewer.flyTo(activeEntity, {
-                duration: 1.5,
-                offset: new Cesium.HeadingPitchRange(0, Cesium.Math.toRadians(-45), 15000) // Cao độ 15km, góc nghiêng 45 độ
-            });
-
             const closeBtn = popupDiv.querySelector('.close-btn');
             if (closeBtn) closeBtn.onclick = () => { 
                 popupDiv.style.display = 'none'; 
@@ -1116,7 +1106,7 @@ window.setActiveTab = function (tabId) {
 
 document.addEventListener("DOMContentLoaded", () => {
     addToastAnimations();
-    addPanelStyles();
+    // Chặn lỗi sập JS nếu hàm updateNavbarAuth không tồn tại
     // Chặn lỗi sập JS nếu hàm updateNavbarAuth không tồn tại
     if (typeof updateNavbarAuth === 'function') updateNavbarAuth();
     setTimeout(() => { if (typeof Cesium !== "undefined") initRealMap(); }, 500);
@@ -1166,12 +1156,12 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-  const urlParams = new URLSearchParams(window.location.search);
-  if (urlParams.get('action') === 'report') {
-    setTimeout(() => {
-      if (typeof window.openCameraModal === 'function') {
-        window.openCameraModal(new Event('click'));
-      }
-    }, 800);
-  }
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('action') === 'report') {
+        setTimeout(() => {
+            if (typeof window.openCameraModal === 'function') {
+                window.openCameraModal(new Event('click'));
+            }
+        }, 800);
+    }
 });

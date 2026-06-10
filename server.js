@@ -820,6 +820,15 @@ app.post("/api/rescuemap", async (req, res) => {
   }
 });
 
+app.delete("/api/rescuemap/:id", async (req, res) => {
+  try {
+    await Rescue.findByIdAndDelete(req.params.id);
+    res.json({ success: true, message: "Đã xóa báo cáo thành công!" });
+  } catch (error) {
+    res.status(500).json({ success: false, error: "Không thể xóa báo cáo" });
+  }
+});
+
 // ==========================================
 // 9. BẬT MÁY CHỦ
 // ==========================================
