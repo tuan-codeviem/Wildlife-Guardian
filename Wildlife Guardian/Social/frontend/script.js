@@ -361,7 +361,7 @@ async function loadPosts(category = "all posts") {
 
       // Tạo HTML cho Huy hiệu bằng thẻ <img> thay vì SVG
       const badgeHTML = post.authorHasBadge
-        ? `<img src="badge.png" title="Guardian Badge" style="width: 18px; height: 18px; margin-left: 6px; object-fit: contain;">`
+        ? `<img src="https://res.cloudinary.com/dotlymsmk/image/upload/v1781063067/badge_zzm4qt.png?fbclid=IwY2xjawSVvQpleHRuA2FlbQIxMABicmlkETFKZWE3ZFBVdGg1cU9jVnR2c3J0YwZhcHBfaWQQMjIyMDM5MTc4ODIwMDg5MgABHmx6xEpePs4szFdZ3rKP0GD4Uh-0ZswY9Pc3YIQLN9ngrvrZW6jilgmS5-Ls_aem_cRNGyXghtQ90MEkG4JmMJg" title="Guardian Badge" style="width: 18px; height: 18px; margin-left: 6px; object-fit: contain;">`
         : "";
 
       let displayName = post.authorName || t.anonymous_user;
