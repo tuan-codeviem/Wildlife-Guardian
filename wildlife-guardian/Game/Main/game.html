@@ -128,6 +128,9 @@
         fetch(`${_base}/api/users/game-progress/${userId}`)
           .then(res => res.json())
           .then(data => {
+              // Lưu trữ lại danh sách động vật hiện có để đối chiếu sau này (đúng key unlockedSpecies từ API)
+              window.previousUnlocked = data.unlockedSpecies || [];
+              
               if (myUnityInstance) {
                   myUnityInstance.SendMessage('Save_Manager', 'OnReceiveDataFromWeb', JSON.stringify(data));
               } else {
@@ -139,6 +142,7 @@
 
       // Hàm nhận dữ liệu từ Unity và cập nhật lên Server
       window.ReceiveDataFromUnity = function(jsonDataString) {
+        console.log("Unity gửi dữ liệu lên Web:", jsonDataString);
         const userString = localStorage.getItem("currentUser");
         if (!userString) {
           console.warn("User is not logged in! Game progress cannot be saved.");
@@ -148,6 +152,24 @@
         const currentUser = JSON.parse(userString);
         const userId = currentUser._id || currentUser.userId;
         const data = JSON.parse(jsonDataString);
+
+        // --- BẮT SỰ KIỆN MỞ KHÓA ĐỘNG VẬT MỚI ---
+        const currentUnlocked = data.unlockedSpecies || [];
+        const previousUnlocked = window.previousUnlocked || [];
+        console.log("currentUnlocked:", currentUnlocked);
+        console.log("previousUnlocked:", previousUnlocked);
+        
+        // Lọc ra các con vật mới chưa từng có trước đó
+        const newlyUnlocked = currentUnlocked.filter(animal => !previousUnlocked.includes(animal));
+        console.log("newlyUnlocked:", newlyUnlocked);
+
+        if (newlyUnlocked.length > 0) {
+            console.log("Mở khóa thành công:", newlyUnlocked);
+            window.previousUnlocked = currentUnlocked; // Cập nhật lại list
+            // Gửi tin nhắn ra ngoài GameUnity.html để bật Popup chúc mừng
+            window.parent.postMessage({ type: "UNLOCK_ANIMALS", animals: newlyUnlocked }, "*");
+        }
+        // ------------------------------------------
 
         const _base2 = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:3000' : location.origin;
         fetch(`${_base2}/api/users/update-game-progress/${userId}`, {

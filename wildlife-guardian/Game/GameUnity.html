@@ -87,19 +87,89 @@
     .footer-bottom { border-top: 1px solid rgba(255,255,255,.06); padding: 20px 0; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;}
     .footer-bottom span { font-size: 13px; color: rgba(255,255,255,.2); }
     .ft-social { display: flex; gap: 10px; }
-    .ft-social a { color: rgba(255,255,255,.2); text-decoration: none; font-weight: 600; transition: .2s; }
-    .ft-social a:hover { color: #fff; }
+    .ft-social a { width: 32px; height: 32px; border: 1px solid rgba(255, 255, 255, .1); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: rgba(255, 255, 255, .32); text-decoration: none; transition: all .2s; }
+    .ft-social a:hover { background: #16a34a; border-color: #16a34a; color: #fff; }
 
-    @media (max-width: 768px) {
-      .footer-top { flex-direction: column; gap: 40px; text-align: center; }
-      .ft-brand { flex: 1; align-items: center; }
-      .ft-nav { flex-direction: column; gap: 30px; }
-      .footer-bottom { justify-content: center; gap: 15px; flex-direction: column; }
+    @media (max-width: 820px) {
+      .footer-top { flex-direction: column; }
+      .ft-brand { flex: none; }
+      .ft-nav { flex-direction: column; gap: 20px; }
+    }
+    @media (max-width: 640px) {
+      .footer-bottom { flex-direction: column; gap: 12px; text-align: center; justify-content: center;}
     }
 
     /* ==========================================
-       TỐI ƯU RESPONSIVE CHO ĐIỆN THOẠI
+       POPUP MỞ KHOÁ ĐỘNG VẬT
        ========================================== */
+    .unlock-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(5, 20, 10, 0.85);
+      backdrop-filter: blur(12px);
+      z-index: 10000;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.3s ease;
+    }
+    .unlock-box {
+      background: #020c05;
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      box-shadow: 0 10px 40px rgba(22, 163, 74, 0.4);
+      border-radius: 20px;
+      padding: 30px;
+      max-width: 400px;
+      text-align: center;
+      color: white;
+    }
+    .unlock-box h3 {
+      font-size: 24px;
+      color: #4ade80;
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
+    .unlocked-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin: 20px 0;
+    }
+    .unlocked-tag {
+      background: rgba(34, 197, 94, 0.2);
+      border: 1px solid #4ade80;
+      color: #4ade80;
+      padding: 8px 16px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 14px;
+    }
+    .unlock-actions {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      margin-top: 25px;
+    }
+    .unlock-actions button {
+      padding: 10px 20px;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: 0.2s;
+    }
+    .btn-continue {
+      background: linear-gradient(135deg, #16a34a, #15803d);
+      color: white;
+    }
+    .btn-library {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+    .unlock-actions button:hover {
+      transform: scale(1.05);
+    }
        
     /* ==========================================
        TỐI ƯU RESPONSIVE CHO ĐIỆN THOẠI (GIỮ NAVBAR - ẨN FOOTER)
@@ -258,6 +328,19 @@
   </nav>
 
   <main class="game-view" id="gameView">
+    <!-- Popup Mở Khoá -->
+    <div id="unlockPopup" class="unlock-overlay">
+      <div class="unlock-box">
+        <h3>🎉 Chúc mừng! 🎉</h3>
+        <p>Bạn đã giải cứu thành công và mở khoá Model 3D của:</p>
+        <div id="unlockedAnimalsList" class="unlocked-list"></div>
+        <div class="unlock-actions">
+          <button class="btn-continue" onclick="document.getElementById('unlockPopup').style.display='none'">Tiếp tục chơi</button>
+          <button class="btn-library" onclick="window.location.href='../SpeciesLibarary/SpeciesLibarary.html'">Xem Thư Viện</button>
+        </div>
+      </div>
+    </div>
+
     <!-- Overlay yêu cầu xoay ngang màn hình -->
     <div id="rotate-overlay" class="rotate-overlay">
       <svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -366,6 +449,26 @@
             }
           }
         });
+      }
+    });
+
+    // Lắng nghe sự kiện mở khóa động vật từ iframe Game
+    window.addEventListener("message", (event) => {
+      if (event.data && event.data.type === "UNLOCK_ANIMALS") {
+        const animals = event.data.animals;
+        if (animals && animals.length > 0) {
+          const listContainer = document.getElementById("unlockedAnimalsList");
+          if (listContainer) {
+            listContainer.innerHTML = "";
+            animals.forEach(animal => {
+              const span = document.createElement("span");
+              span.className = "unlocked-tag";
+              span.textContent = animal;
+              listContainer.appendChild(span);
+            });
+            document.getElementById("unlockPopup").style.display = "flex";
+          }
+        }
       }
     });
   </script>
