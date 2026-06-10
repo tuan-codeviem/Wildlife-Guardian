@@ -16,9 +16,16 @@ if (userString) {
     btn.style.padding = "0";
     btn.style.background = "transparent";
     btn.style.border = "none";
-    btn.style.minWidth = "auto";
+    btn.style.width = "38px";
+    btn.style.minWidth = "38px";
+    btn.style.height = "38px";
     btn.style.outline = "none";
     btn.style.cursor = "pointer";
+    btn.style.borderRadius = "50%";
+    btn.style.display = "flex";
+    btn.style.alignItems = "center";
+    btn.style.justifyContent = "center";
+    btn.style.alignSelf = "center";
 
     // 2. Cài đặt hành động: Bấm vào thì mở bảng Mini Profile Tài Khoản
     btn.onclick = (e) => {

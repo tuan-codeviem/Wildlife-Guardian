@@ -38,20 +38,6 @@
       <a href="../Game/GameUnity.html" data-i18n="nav_game">Game</a>
       <a href="../Contact/Contact.html" data-i18n="nav_contact">Contact Us</a>
       <div class="mobile-actions">
-        <div class="lang-switcher"
-          style="display: flex; align-items: center; justify-content: center; gap: 6px; color: white; font-weight: 600; margin-bottom: 10px;">
-          <span class="lang-text">EN</span>
-          <button class="lang-toggle-btn"
-            style="background: none; border: none; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 4px; transition: transform 0.3s;"
-            title="Switch language">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              stroke-linecap="round" stroke-linejoin="round">
-              <path
-                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
-              </path>
-            </svg>
-          </button>
-        </div>
         <button class="btn-report" data-i18n="btn_report">🚨 Report Now</button>
         <button class="btn-login" style="justify-content: center" data-i18n="btn_login">
           → Log in
@@ -376,9 +362,16 @@
         btn.innerHTML = `<img src="${userAvatar}" style="width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid #16a34a; background: white; display: block;">`;
         btn.style.padding = "0";
         btn.style.background = "transparent";
-        btn.style.border = "none";
-        btn.style.minWidth = "auto";
+        btn.style.width = "38px";
+        btn.style.minWidth = "38px";
+        btn.style.height = "38px";
         btn.style.outline = "none";
+        btn.style.cursor = "pointer";
+        btn.style.borderRadius = "50%";
+        btn.style.display = "flex";
+        btn.style.alignItems = "center";
+        btn.style.justifyContent = "center";
+        btn.style.alignSelf = "center";
         btn.style.cursor = "pointer";
 
         // 2. Cài đặt hành động: Bấm vào thì mở bảng Mini Profile Tài Khoản

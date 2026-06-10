@@ -144,7 +144,8 @@ body {
   color: rgba(255, 255, 255, .88);
   border: none;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .18);
-  padding: 10px 21px; /* 1px added to compensate for border removal */
+  padding: 10px 21px;
+  /* 1px added to compensate for border removal */
   border-radius: 10px;
   font-weight: 600;
   font-size: 13.5px;
@@ -377,17 +378,20 @@ body {
   border: 3px solid #22c55e;
   padding: 3px;
 }
+
 .dropdown-name-text {
   margin: 0 0 16px;
   color: #fff;
   font-size: 17px;
   font-weight: 700;
 }
+
 .dropdown-actions {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
+
 .dropdown-btn {
   width: 100%;
   padding: 10px 0;
@@ -402,22 +406,26 @@ body {
   font-family: inherit;
   transition: all 0.2s;
 }
+
 .dropdown-btn-settings {
   background: rgba(34, 197, 94, 0.08);
   color: #4ade80;
   border: 1px solid rgba(34, 197, 94, 0.2);
 }
+
 .dropdown-btn-settings:hover {
   background: rgba(34, 197, 94, 0.18);
   border-color: rgba(34, 197, 94, 0.38);
   transform: translateY(-2px);
   box-shadow: 0 4px 14px rgba(34, 197, 94, 0.3);
 }
+
 .dropdown-btn-logout {
   background: rgba(239, 68, 68, 0.08);
   color: #f87171;
   border: 1px solid rgba(239, 68, 68, 0.2);
 }
+
 .dropdown-btn-logout:hover {
   background: rgba(239, 68, 68, 0.18);
   border-color: rgba(239, 68, 68, 0.35);
@@ -436,10 +444,12 @@ body {
   width: 100%;
   transition: all 0.2s;
 }
+
 #saveProfileBtn:hover {
   box-shadow: 0 6px 22px rgba(34, 197, 94, 0.5) !important;
   transform: translateY(-2px);
 }
+
 #skipProfileBtn {
   background: rgba(255, 255, 255, 0.06) !important;
   color: rgba(255, 255, 255, 0.58) !important;
@@ -452,9 +462,11 @@ body {
   width: 100%;
   transition: all 0.2s;
 }
+
 #skipProfileBtn:hover {
   background: rgba(255, 255, 255, 0.12) !important;
 }
+
 #closeProfileModal {
   background: none !important;
   border: none !important;
@@ -466,13 +478,13 @@ body {
 /* ═══════════════════════════════════════════════════════════
    PROFILE SETUP MODAL OVERRIDES (Dark Theme)
 ════════════════════════════════════════════════════════════ */
-#profileSetupModal > div {
+#profileSetupModal>div {
   background: rgba(4, 14, 8, 0.92) !important;
   border: 1px solid rgba(255, 255, 255, 0.08) !important;
   box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5) !important;
 }
 
-#profileSetupModal h3, 
+#profileSetupModal h3,
 #profileSetupModal p {
   color: rgba(255, 255, 255, 0.92) !important;
 }
