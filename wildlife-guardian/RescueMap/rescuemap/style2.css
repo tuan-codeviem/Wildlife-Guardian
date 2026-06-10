@@ -887,7 +887,7 @@ body {
 }
 
 .rescue-header {
-  height: 120px;
+  height: 250px;
   background-size: cover;
   background-position: center;
   position: relative;
@@ -1031,8 +1031,8 @@ body {
   }
 
   .rescue-popup.dark-glass-theme .rescue-header {
-    height: auto !important;
-    /* Thu gọn header */
+    min-height: 250px !important;
+    /* Hiển thị đầy đủ ảnh động vật thay vì thu gọn */
     padding: 10px;
   }
 

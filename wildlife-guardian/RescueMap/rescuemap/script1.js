@@ -562,6 +562,8 @@ function initRealMap() {
     }
 
     viewer.scene.camera.frustum.far = 100000000;
+    // Giới hạn zoom xa (không cho zoom nhỏ trái đất đến mức biến mất)
+    viewer.scene.screenSpaceCameraController.maximumZoomDistance = 35000000;
     viewer.camera.flyTo({ destination: Cesium.Cartesian3.fromDegrees(108.2171, 16.0545, 25000000), duration: 2 });
 
     let resizeTimeout;
@@ -600,6 +602,13 @@ function setupCustomPopup() {
         const pickedObject = viewer.scene.pick(movement.position);
         if (Cesium.defined(pickedObject) && pickedObject.id && pickedObject.id.properties && pickedObject.id.properties.customHTML) {
             activeEntity = pickedObject.id;
+            
+            // Hiệu ứng lướt mượt zoom vào map
+            viewer.flyTo(activeEntity, {
+                duration: 1.5,
+                offset: new Cesium.HeadingPitchRange(viewer.camera.heading, -Math.PI / 2.5, 2000)
+            });
+
             const htmlContent = typeof activeEntity.properties.customHTML.getValue === 'function' ? activeEntity.properties.customHTML.getValue() : activeEntity.properties.customHTML;
             popupDiv.innerHTML = htmlContent;
             popupDiv.style.display = 'block';
