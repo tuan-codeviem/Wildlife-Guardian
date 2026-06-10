@@ -333,6 +333,18 @@
         });
       }
 
+      // Logic cho Navbar: Thêm hiệu ứng nền (scrolled) khi cuộn trang
+      const navbar = document.getElementById("navbar");
+      if (navbar) {
+        window.addEventListener("scroll", () => {
+          if (window.scrollY > 10) {
+            navbar.classList.add("scrolled");
+          } else {
+            navbar.classList.remove("scrolled");
+          }
+        });
+      }
+
       // Logic cho nút Fullscreen trên Mobile Landscape
       const fsBtn = document.getElementById('mobileFullscreenBtn');
       const gameView = document.getElementById('gameView');
