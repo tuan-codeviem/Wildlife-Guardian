@@ -154,14 +154,7 @@ function openSettingsModal() {
   }
 }
 
-// Xử lý khi nhấn vào các tab trên máy tính (đổi màu xanh)
-const navItems = document.querySelectorAll(".nav-item");
-navItems.forEach((item) => {
-  item.addEventListener("click", function () {
-    document.querySelector(".nav-item.active").classList.remove("active");
-    this.classList.add("active");
-  });
-});
+
 
 // ==========================================
 //              2. POST, BÀI ĐĂNG
