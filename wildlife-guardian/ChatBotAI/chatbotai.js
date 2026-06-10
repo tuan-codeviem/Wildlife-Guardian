@@ -2,8 +2,6 @@
 // Auto-detect API base URL: localhost:3000 for dev, origin for production
 const API_BASE_URL = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:3000' : location.origin;
 
-const ai = new GoogleGenAI({ apiKey: API_KEY });
-
 /* ════════════════════════════════════════════════════
    AUTO-DETECT: new UI (wg-chatbot) vs old UI (chat-bot-AI)
 ════════════════════════════════════════════════════ */

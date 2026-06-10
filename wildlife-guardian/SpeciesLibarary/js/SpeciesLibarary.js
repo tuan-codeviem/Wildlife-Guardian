@@ -101,7 +101,8 @@ document.addEventListener('DOMContentLoaded', () => {
   async function initLibrary() {
     try {
       // 1. Lấy toàn bộ động vật
-      const res = await fetch(`http://${window.location.hostname}:3000/api/species`);
+      const API_BASE_URL = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:3000' : location.origin;
+      const res = await fetch(`${API_BASE_URL}/api/species`);
       const data = await res.json();
       if (data.success) {
         speciesData = data.species;
@@ -113,7 +114,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const currentUser = JSON.parse(currentUserStr);
         const userId = currentUser._id || currentUser.userId || currentUser.id;
 
-        const unlockRes = await fetch(`http://${window.location.hostname}:3000/api/users/${userId}/unlocked`);
+        const API_BASE_URL = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:3000' : location.origin;
+        const unlockRes = await fetch(`${API_BASE_URL}/api/users/${userId}/unlocked`);
         const unlockData = await unlockRes.json();
         
         if (unlockData.success && unlockData.unlockedSpecies) {
