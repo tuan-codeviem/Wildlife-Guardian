@@ -5,6 +5,10 @@ const multer = require("multer");
 const path = require("path");
 require("dotenv").config();
 
+// ===== GOOGLE AUTH SETUP =====
+const { OAuth2Client } = require("google-auth-library");
+const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
 // ===== GOOGLE GEN AI SETUP =====
 const { GoogleGenAI } = require("@google/genai");
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
@@ -528,6 +532,59 @@ app.post("/api/login", async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ success: false, message: "Lỗi server" });
+  }
+});
+
+// Đăng nhập bằng Google
+app.post("/api/auth/google", async (req, res) => {
+  try {
+    const { credential } = req.body;
+    
+    // Verify token từ Google
+    const ticket = await googleClient.verifyIdToken({
+      idToken: credential,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+    
+    const payload = ticket.getPayload();
+    const { email, name, picture, sub: googleId } = payload;
+    
+    // Tìm user theo email hoặc googleId
+    let user = await User.findOne({ $or: [{ email }, { googleId }] });
+    
+    if (!user) {
+      // Nếu chưa có, tạo user mới
+      user = new User({
+        email: email,
+        username: email.split("@")[0],
+        password: Math.random().toString(36).slice(-10), // Random password
+        fullName: name,
+        avatar: picture,
+        googleId: googleId
+      });
+      await user.save();
+    } else if (!user.googleId) {
+      // Đã có user bằng email này nhưng chưa liên kết Google -> Cập nhật googleId
+      user.googleId = googleId;
+      if (user.avatar === "https://cdn-icons-png.flaticon.com/512/149/149071.png") {
+          user.avatar = picture; // Cập nhật avatar thật nếu đang dùng avatar mặc định
+      }
+      await user.save();
+    }
+    
+    res.json({
+      success: true,
+      message: "Đăng nhập bằng Google thành công!",
+      user: {
+        userId: user._id,
+        fullName: user.fullName,
+        avatar: user.avatar,
+        email: user.email,
+      },
+    });
+  } catch (error) {
+    console.error("Lỗi Google Auth:", error);
+    res.status(401).json({ success: false, message: "Xác thực Google thất bại!" });
   }
 });
 

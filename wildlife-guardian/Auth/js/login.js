@@ -7,8 +7,6 @@ const emailGroup = document.getElementById("emailGroup");
 const passwordGroup = document.getElementById("passwordGroup");
 const loginForm = document.getElementById("loginForm");
 const togglePasswordBtn = document.getElementById("togglePassword");
-const googleBtn = document.getElementById("googleBtn");
-const zaloBtn = document.getElementById("zaloBtn");
 const toast = document.getElementById("toast");
 
 function showToast(message, type = "success") {
@@ -111,11 +109,57 @@ togglePasswordBtn.addEventListener("click", () => {
 });
 
 loginForm.addEventListener("submit", handleLoginSubmit);
-googleBtn.addEventListener("click", () =>
-  window.open("https://accounts.google.com/signin", "_blank"),
-);
-zaloBtn.addEventListener("click", () =>
-  window.open("https://zalo.me/", "_blank"),
-);
 
 console.log('🦁 Login page ready - Connected to database "login"');
+
+// ==========================================
+// ĐĂNG NHẬP BẰNG GOOGLE (One-Tap)
+// ==========================================
+const GOOGLE_CLIENT_ID = "847394861176-clbl09pbi02oast2t1e5aucvf8plf0e4.apps.googleusercontent.com";
+
+window.onload = function () {
+  // Đảm bảo thư viện Google đã load xong
+  if (window.google && window.google.accounts) {
+    google.accounts.id.initialize({
+      client_id: GOOGLE_CLIENT_ID,
+      callback: handleGoogleCredentialResponse,
+    });
+    
+    const googleSignInDiv = document.getElementById("googleSignInDiv");
+    if (googleSignInDiv) {
+        google.accounts.id.renderButton(
+          googleSignInDiv,
+          { theme: "outline", size: "large", type: "standard", shape: "pill", width: 250 } 
+        );
+    }
+  }
+};
+
+async function handleGoogleCredentialResponse(response) {
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/auth/google`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ credential: response.credential }),
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      showToast("✅ Chào mừng " + data.user.fullName, "success");
+      localStorage.setItem("currentUser", JSON.stringify(data.user));
+
+      const redirectUrl = sessionStorage.getItem("redirectAfterLogin") || "../Home/Home.html";
+      
+      setTimeout(() => {
+        sessionStorage.removeItem("redirectAfterLogin");
+        window.location.href = redirectUrl;
+      }, 1500);
+
+    } else {
+      showToast("❌ " + data.message, "error");
+    }
+  } catch (error) {
+    showToast("❌ Lỗi kết nối Server!", "error");
+  }
+}

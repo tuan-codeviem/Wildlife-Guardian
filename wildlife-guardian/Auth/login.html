@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Wildlife Guardian | Sign In</title>
     <link rel="stylesheet" href="login.css" />
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
   </head>
   <body>
     <div class="container reveal">
@@ -15,14 +16,8 @@
         </div>
         <h1>Welcome Back</h1>
         <p class="subtitle">Sign in to continue protecting wildlife</p>
-
         <div class="social-login">
-          <button class="social-btn google-btn" id="googleBtn">
-            <span>🔵</span> Continue with Google
-          </button>
-          <button class="social-btn zalo-btn" id="zaloBtn">
-            <span class="zalo-icon">💚</span> Continue with Zalo
-          </button>
+          <div id="googleSignInDiv" style="width: 100%; display: flex; justify-content: center;"></div>
         </div>
 
         <div class="divider">
@@ -55,10 +50,6 @@
               </button>
             </div>
             <small class="error-message"></small>
-          </div>
-
-          <div class="forgot-password">
-            <a href="forgot-password.html">Forgot password?</a>
           </div>
 
           <button type="submit" class="login-btn" id="loginBtn">Sign In</button>
