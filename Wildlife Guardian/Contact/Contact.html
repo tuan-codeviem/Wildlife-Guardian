@@ -22,6 +22,7 @@
   -->
   <link rel="stylesheet" href="css/nav.css" />
   <link rel="stylesheet" href="css/Contact.css" />
+  <link rel="stylesheet" href="../ChatBotAI/chatbot.css">
 </head>
 
 <body>
@@ -707,6 +708,87 @@
         (Anonymous)</button>
     </div>
   </div>
+
+  <!-- ████ CHATBOT (DRAGGABLE) ████ -->
+  <div class="wg-chatbot" id="wgChatbot">
+    <button class="chatbot-btn" id="chatbotBtn" title="Drag me anywhere!">
+      <svg class="pixel-phoenix" viewBox="0 0 32 32" width="32" height="32">
+        <rect x="12" y="16" width="8" height="8" fill="#FF6B35" />
+        <rect x="14" y="12" width="4" height="4" fill="#FF6B35" />
+        <rect x="18" y="13" width="2" height="2" fill="#FFD93D" />
+        <rect x="15" y="13" width="2" height="2" fill="#1a1a1a" />
+        <rect x="8" y="16" width="4" height="6" fill="#FF8C42" />
+        <rect x="20" y="16" width="4" height="6" fill="#FF8C42" />
+        <rect x="10" y="24" width="2" height="4" fill="#FF6B35" />
+        <rect x="14" y="24" width="2" height="6" fill="#FFD93D" />
+        <rect x="18" y="24" width="2" height="4" fill="#FF6B35" />
+        <rect x="13" y="8" width="2" height="4" fill="#FFD93D" />
+        <rect x="15" y="6" width="2" height="6" fill="#FF6B35" />
+        <rect x="17" y="8" width="2" height="4" fill="#FFD93D" />
+      </svg>
+      <div class="cb-ring r1"></div>
+      <div class="cb-ring r2"></div>
+      <div class="cb-star">✦</div>
+    </button>
+
+    <div class="chatbot-window" id="chatbotWindow">
+      <div class="cw-header" id="cwHeader">
+        <div class="cwh-info">
+          <div class="cwh-avatar">
+            <svg viewBox="0 0 32 32" width="22" height="22">
+              <rect x="12" y="16" width="8" height="8" fill="#FF6B35" />
+              <rect x="14" y="12" width="4" height="4" fill="#FF6B35" />
+              <rect x="18" y="13" width="2" height="2" fill="#FFD93D" />
+              <rect x="15" y="13" width="2" height="2" fill="#1a1a1a" />
+              <rect x="8" y="16" width="4" height="6" fill="#FF8C42" />
+              <rect x="20" y="16" width="4" height="6" fill="#FF8C42" />
+            </svg>
+            <span class="cwh-online"></span>
+          </div>
+          <div>
+            <h4>Phoenix AI</h4>
+            <p>Wildlife Assistant · Online</p>
+          </div>
+        </div>
+        <button class="cw-close" id="cwClose">✕</button>
+      </div>
+      <div class="cw-msgs" id="cwMsgs">
+        <div class="msg bot">
+          <div class="msg-av"><svg viewBox="0 0 32 32" width="15" height="15">
+              <rect x="12" y="16" width="8" height="8" fill="#FF6B35" />
+              <rect x="14" y="12" width="4" height="4" fill="#FF6B35" />
+              <rect x="8" y="16" width="4" height="6" fill="#FF8C42" />
+              <rect x="20" y="16" width="4" height="6" fill="#FF8C42" />
+            </svg></div>
+          <div class="msg-bubble" data-i18n="chatbot_greeting">Hello! I'm Phoenix 🦅 Your wildlife guardian assistant! How can I help you today?
+          </div>
+        </div>
+      </div>
+      <div class="quick-replies-wrapper" id="qrWrapper">
+        <div class="quick-replies" id="quickReplies">
+          <button class="qr-btn" data-i18n="qr_1"><span>⚡</span> How can I report an emergency?</button>
+          <button class="qr-btn" data-i18n="qr_2"><span>💡</span> What is Wildlife Guardian?</button>
+          <button class="qr-btn" data-i18n="qr_3"><span>🐾</span> Can I donate to a specific animal?</button>
+          <button class="qr-btn" data-i18n="qr_4"><span>🌿</span> Tips for helping local birds?</button>
+        </div>
+        <div class="qr-scroll-hint">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
+        </div>
+      </div>
+      <div class="cw-input">
+        <input type="text" id="cwInput" placeholder="Ask Phoenix anything…" />
+        <button id="cwSend"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2">
+            <path
+              d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719" />
+          </svg></button>
+      </div>
+    </div>
+  </div>
+
+  <script type="importmap">{"imports":{"@google/genai":"https://esm.run/@google/genai"}}</script>
+  <script type="module" src="../ChatBotAI/chatbotai.js"></script>
+  <script src="../ChatBotAI/chatbot.js"></script>
 
   <!-- Script xử lý Avatar và Ngôn ngữ -->
   <script src="../Home/js/language_EN_VI.js"></script>
