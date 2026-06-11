@@ -23,25 +23,29 @@ if (userString) {
     "https://cdn-icons-png.flaticon.com/512/149/149071.png";
 
   loginBtns.forEach((btn) => {
+        if (btn.closest && (btn.closest('.mobile-nav') || btn.closest('.mobile-actions'))) {
+          btn.style.display = 'none';
+          return;
+        }
     // 1. Đổi nút "Log in" thành Avatar
-    btn.className = "avatar-btn"; // Xoá class btn-login để mất cái viền hộp đen của nút
-    btn.innerHTML = `<img src="${userAvatar}" style="width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid #16a34a; background: white;">`;
-    btn.style.padding = "0";
-    btn.style.background = "transparent";
-    btn.style.border = "none";
-    btn.style.width = "38px";
-    btn.style.minWidth = "38px";
-    btn.style.height = "38px";
-    btn.style.outline = "none";
-    btn.style.cursor = "pointer";
-    btn.style.borderRadius = "50%";
-    btn.style.display = "flex";
-    btn.style.alignItems = "center";
-    btn.style.justifyContent = "center";
-    btn.style.alignSelf = "center";
-
-    // 2. Cài đặt hành động: Bấm vào thì mở bảng Mini Profile Tài Khoản
-    btn.onclick = (e) => {
+    btn.className = "avatar-btn";
+        btn.innerHTML = `<img src="${userAvatar}" style="width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid #16a34a; background: white;">`;
+        btn.style.padding = "0";
+        btn.style.background = "transparent";
+        btn.style.border = "none";
+        btn.style.width = "38px";
+        btn.style.minWidth = "38px";
+        btn.style.height = "38px";
+        btn.style.flexShrink = "0";
+        btn.style.outline = "none";
+        btn.style.cursor = "pointer";
+        btn.style.borderRadius = "50%";
+        btn.style.display = "flex";
+        btn.style.alignItems = "center";
+        btn.style.justifyContent = "center";
+        btn.style.alignSelf = "center";
+        
+        btn.onclick = (e) => {
       e.preventDefault();
       e.stopPropagation();
       const popup = document.getElementById("userDropdownPopup");
