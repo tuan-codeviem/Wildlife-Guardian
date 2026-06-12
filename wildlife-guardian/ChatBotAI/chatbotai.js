@@ -85,39 +85,14 @@ if (!document.getElementById("wgChatbot") && !document.querySelector(".chat-bot-
     document.body.insertAdjacentHTML('beforeend', chatbotHTML);
 }
 
-/* ════════════════════════════════════════════════════
-   AUTO-DETECT: new UI (wg-chatbot) vs old UI (chat-bot-AI)
-════════════════════════════════════════════════════ */
-const isNewUI = !!document.getElementById("wgChatbot");
-
-// ── Shared references (resolved from whichever UI is present) ──
-const chatbotContainer = isNewUI
-    ? document.getElementById("wgChatbot")
-    : document.querySelector(".chat-bot-AI");
-
-const chatWindow = isNewUI
-    ? document.getElementById("chatbotWindow")
-    : document.querySelector(".chatwindow");
-
-const openBtn = isNewUI
-    ? document.getElementById("chatbotBtn")
-    : document.querySelector(".AIassit");
-
-const closeBtn = isNewUI
-    ? document.getElementById("cwClose")
-    : document.querySelector(".close");
-
-const chatBox = isNewUI
-    ? document.getElementById("cwMsgs")
-    : document.querySelector(".chatwindow .chat");
-
-const inputEl = isNewUI
-    ? document.getElementById("cwInput")
-    : document.querySelector(".inputarea input");
-
-const sendBtn = isNewUI
-    ? document.getElementById("cwSend")
-    : document.querySelector(".inputarea button");
+// ── UI References ──
+const chatbotContainer = document.getElementById("wgChatbot");
+const chatWindow = document.getElementById("chatbotWindow");
+const openBtn = document.getElementById("chatbotBtn");
+const closeBtn = document.getElementById("cwClose");
+const chatBox = document.getElementById("cwMsgs");
+const inputEl = document.getElementById("cwInput");
+const sendBtn = document.getElementById("cwSend");
 
 /* ════════════════════════════════════════════════════
    DRAGGABLE
@@ -127,7 +102,7 @@ let startX, startY, offsetX, offsetY;
 
 function onDragStart(e) {
     // Ignore clicks inside text input or message area
-    if (e.target.closest("input") || e.target.closest(isNewUI ? ".cw-msgs" : ".chat")) return;
+    if (e.target.closest("input") || e.target.closest(".cw-msgs")) return;
 
     const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
     const clientY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
@@ -140,7 +115,7 @@ function onDragStart(e) {
     isDragging = false;
 
     document.body.style.userSelect = "none";
-    if (isNewUI) chatbotContainer.classList.add("is-dragging");
+    if (chatbotContainer) chatbotContainer.classList.add("is-dragging");
 
     // Ngăn iframe/canvas Unity nuốt mất sự kiện chuột khi kéo
     document.querySelectorAll('iframe, canvas').forEach(el => el.style.pointerEvents = 'none');
@@ -173,7 +148,7 @@ function onDragMove(e) {
 
 function onDragEnd() {
     document.body.style.userSelect = "";
-    if (isNewUI) chatbotContainer.classList.remove("is-dragging");
+    if (chatbotContainer) chatbotContainer.classList.remove("is-dragging");
 
     // Khôi phục lại sự kiện chuột cho Game Unity
     document.querySelectorAll('iframe, canvas').forEach(el => el.style.pointerEvents = '');
@@ -222,10 +197,7 @@ if (openBtn && chatWindow) {
     openBtn.addEventListener("click", () => {
         if (!isDragging) {
             chatWindow.classList.add("active");
-            if (isNewUI) {
-                openBtn.style.opacity = "0";
-                openBtn.style.pointerEvents = "none";
-            } else {
+            if (openBtn) {
                 openBtn.style.opacity = "0";
                 openBtn.style.pointerEvents = "none";
             }
@@ -256,36 +228,25 @@ if (closeBtn && chatWindow) {
 ════════════════════════════════════════════════════ */
 function appendMessage(role, html) {
     if (!chatBox) return;
-    if (isNewUI) {
-        // New UI: .msg.user / .msg.bot structure
-        const wrap = document.createElement("div");
-        wrap.className = role === "user" ? "msg user" : "msg bot";
-        if (role === "bot") {
-            wrap.innerHTML = `
-                <div class="msg-av">
-                    <svg viewBox="0 0 32 32" width="15" height="15">
-                        <rect x="12" y="16" width="8" height="8" fill="#FF6B35"/>
-                        <rect x="14" y="12" width="4" height="4" fill="#FF6B35"/>
-                        <rect x="8" y="16" width="4" height="6" fill="#FF8C42"/>
-                        <rect x="20" y="16" width="4" height="6" fill="#FF8C42"/>
-                    </svg>
-                </div>
-                <div class="msg-bubble">${html}</div>`;
-        } else {
-            wrap.innerHTML = `<div class="msg-bubble">${html}</div>`;
-        }
-        chatBox.appendChild(wrap);
-        chatBox.scrollTop = chatBox.scrollHeight;
-        return wrap;
+    const wrap = document.createElement("div");
+    wrap.className = role === "user" ? "msg user" : "msg bot";
+    if (role === "bot") {
+        wrap.innerHTML = `
+            <div class="msg-av">
+                <svg viewBox="0 0 32 32" width="15" height="15">
+                    <rect x="12" y="16" width="8" height="8" fill="#FF6B35"/>
+                    <rect x="14" y="12" width="4" height="4" fill="#FF6B35"/>
+                    <rect x="8" y="16" width="4" height="6" fill="#FF8C42"/>
+                    <rect x="20" y="16" width="4" height="6" fill="#FF8C42"/>
+                </svg>
+            </div>
+            <div class="msg-bubble">${html}</div>`;
     } else {
-        // Old UI: .user / .model with <p> inside
-        const wrap = document.createElement("div");
-        wrap.className = role === "user" ? "user" : "model";
-        wrap.innerHTML = `<p>${html}</p>`;
-        chatBox.appendChild(wrap);
-        chatBox.scrollTop = chatBox.scrollHeight;
-        return wrap;
+        wrap.innerHTML = `<div class="msg-bubble">${html}</div>`;
     }
+    chatBox.appendChild(wrap);
+    chatBox.scrollTop = chatBox.scrollHeight;
+    return wrap;
 }
 
 async function sendMessage() {
@@ -298,9 +259,7 @@ async function sendMessage() {
     appendMessage("user", userMessage);
 
     // Show loading dots
-    const loadEl = appendMessage("bot", isNewUI
-        ? '<span class="typing"><span></span><span></span><span></span></span>'
-        : "⚫⚫⚫");
+    const loadEl = appendMessage("bot", '<span class="typing"><span></span><span></span><span></span></span>');
 
     const lang = window.currentLang || localStorage.getItem("lang") || "EN";
     const languageRule = lang === "VI"
@@ -317,13 +276,8 @@ async function sendMessage() {
         if (!response.success) throw new Error(response.error || 'Server error');
 
         // Replace loading with actual response
-        if (isNewUI) {
-            const bubble = loadEl.querySelector(".msg-bubble");
-            if (bubble) bubble.textContent = response.text;
-        } else {
-            const p = loadEl.querySelector("p");
-            if (p) p.textContent = response.text;
-        }
+        const bubble = loadEl.querySelector(".msg-bubble");
+        if (bubble) bubble.textContent = response.text;
         chatBox.scrollTop = chatBox.scrollHeight;
 
     } catch (error) {
@@ -334,16 +288,9 @@ async function sendMessage() {
             ? "Oops! Xin lỗi bạn, hiện tại máy chủ đang hơi quá tải hoặc mất kết nối. Bạn có thể vui lòng đặt lại câu hỏi sau một lát được không? 😓"
             : "Oops! Sorry, the server is currently experiencing high demand or disconnected. Could you please try asking your question again in a moment? 😓";
 
-        if (isNewUI) {
-            const bubble = loadEl.querySelector(".msg-bubble");
-            if (bubble) {
-                bubble.textContent = friendlyErrorMsg;
-            }
-        } else {
-            const p = loadEl.querySelector("p");
-            if (p) {
-                p.textContent = friendlyErrorMsg;
-            }
+        const bubble = loadEl.querySelector(".msg-bubble");
+        if (bubble) {
+            bubble.textContent = friendlyErrorMsg;
         }
         chatBox.scrollTop = chatBox.scrollHeight;
     }
