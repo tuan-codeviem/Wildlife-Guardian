@@ -772,10 +772,7 @@
     } else {
       // CHƯA ĐĂNG NHẬP
       loginBtns.forEach((btn) => {
-        if (btn.closest && (btn.closest('.mobile-nav') || btn.closest('.mobile-actions'))) {
-          btn.style.display = 'none';
-          return;
-        }
+
         btn.onclick = (e) => {
           e.preventDefault();
           sessionStorage.setItem("redirectAfterLogin", window.location.href);
