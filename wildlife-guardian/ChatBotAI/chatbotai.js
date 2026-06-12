@@ -5,7 +5,7 @@ const API_BASE_URL = (location.hostname === 'localhost' || location.hostname ===
 /* ════════════════════════════════════════════════════
    AUTO-INJECT: Chatbot HTML if not present
 ════════════════════════════════════════════════════ */
-if (!document.getElementById("wgChatbot") && !document.querySelector(".chat-bot-AI")) {
+if (!document.getElementById("wgChatbot")) {
     const chatbotHTML = `
   <div class="wg-chatbot" id="wgChatbot">
     <button class="chatbot-btn" id="chatbotBtn" title="Drag me anywhere!">
