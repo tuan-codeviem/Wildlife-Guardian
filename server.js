@@ -6,7 +6,6 @@ const path = require("path");
 const fs = require("fs");
 const zlib = require("zlib");
 require("dotenv").config();
-const mongoSanitize = require("express-mongo-sanitize");
 
 // ===== GOOGLE AUTH SETUP =====
 const { OAuth2Client } = require("google-auth-library");
@@ -36,9 +35,6 @@ const port = process.env.PORT || 3000;
 
 app.use(cors()); // Bắt buộc phải có để Frontend và Backend nói chuyện được với nhau
 app.use(express.json()); // Giúp server đọc được dữ liệu dạng chữ
-
-// Ngăn chặn NoSQL Injection bằng cách loại bỏ các key có chứa "$" hoặc "."
-app.use(mongoSanitize());
 
 // Xử lý file tĩnh bình thường
 app.use(express.static(".")); // Để chạy được file HTML/CSS/JS
@@ -601,8 +597,6 @@ app.get("/api/users/friends/:myId", async (req, res) => {
   try {
     const { myId } = req.params;
     const searchQuery = req.query.search || "";
-    // Xử lý escape ký tự đặc biệt để tránh ReDoS
-    const escapeSearch = searchQuery.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
     const me = await User.findById(myId);
     if (!me) return res.json({ success: true, users: [] }); // Tránh lỗi null
@@ -610,7 +604,7 @@ app.get("/api/users/friends/:myId", async (req, res) => {
     const myFriends = me.friends || []; // Tránh lỗi undefined array
     const friendsList = await User.find({
       _id: { $in: myFriends },
-      fullName: { $regex: escapeSearch, $options: "i" },
+      fullName: { $regex: searchQuery, $options: "i" },
     }).select("_id fullName avatar");
     res.json({ success: true, users: friendsList });
   } catch (error) {
@@ -690,15 +684,12 @@ app.get("/api/users/search-new/:myId", async (req, res) => {
   try {
     const { myId } = req.params;
     const search = req.query.q || "";
-    // Xử lý escape ký tự đặc biệt để tránh ReDoS
-    const escapeSearch = search.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-
     const me = await User.findById(myId);
 
     if (!me) return res.json({ success: true, users: [] });
 
     const users = await User.find({
-      fullName: { $regex: escapeSearch, $options: "i" },
+      fullName: { $regex: search, $options: "i" },
       _id: { $ne: myId }, // Không tự tìm chính mình
     }).limit(10); // Lấy tối đa 10 người cho nhẹ
 
