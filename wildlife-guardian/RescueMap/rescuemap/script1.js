@@ -232,7 +232,7 @@ async function fetchRescueReports() {
                     status: item.status || "emergency",
                     lat: latVal,
                     lng: lngVal,
-                    date: item.createdAt || item.date || new Date().toLocaleString("vi-VN"),
+                    date: (item.createdAt || item.date) ? new Date(item.createdAt || item.date).toLocaleString("vi-VN") : new Date().toLocaleString("vi-VN"),
                     description: item.description || item.note || "",
                     photo: rawPhoto,
                     _needGeocode: needGeocode,
