@@ -125,7 +125,8 @@ function getApiUrl(path) {
 // ═══════════════════════════════════════════════════════════════
 async function reverseGeocode(lat, lng) {
     try {
-        const url = getApiUrl(`/api/geocode?lat=${lat}&lng=${lng}&zoom=16`);
+        // Gọi trực tiếp API OpenStreetMap từ Front-end thay vì gọi qua Server
+        const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=16&addressdetails=1`;
         const res = await fetch(url);
         const data = await res.json();
         if (data && data.address) {
@@ -826,7 +827,8 @@ async function fetchLocationAndAddress() {
         currentLocation = { lat: pos.coords.latitude, lng: pos.coords.longitude };
 
         try {
-            const res = await fetch(getApiUrl(`/api/geocode?lat=${currentLocation.lat}&lng=${currentLocation.lng}&zoom=18`));
+            // Gọi trực tiếp API OpenStreetMap từ Front-end thay vì gọi qua Server
+            const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${currentLocation.lat}&lon=${currentLocation.lng}&zoom=18&addressdetails=1`);
             const data = await res.json();
             currentAddress = data.display_name ? data.display_name : `${currentLocation.lat.toFixed(5)}, ${currentLocation.lng.toFixed(5)}`;
         } catch (apiError) {
