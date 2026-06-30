@@ -1,0 +1,373 @@
+/* ============================================================
+   WILDLIFE GUARDIAN – RESCUE NOTIFICATION SYSTEM
+   Thông báo cứu hộ khẩn cấp xuất hiện góc trên bên phải
+   ============================================================ */
+
+/* ── Container chứa toàn bộ notification stack ── */
+#wg-rescue-notif-container {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  z-index: 99999;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  pointer-events: none;
+  width: 360px;
+  max-width: calc(100vw - 40px);
+}
+
+/* ── Mỗi toast notification ── */
+.wg-rescue-toast {
+  pointer-events: auto;
+  background: linear-gradient(135deg,
+    rgba(5, 25, 12, 0.97) 0%,
+    rgba(10, 40, 20, 0.95) 100%
+  );
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(74, 222, 128, 0.25);
+  border-left: 4px solid #ef4444;
+  border-radius: 16px;
+  padding: 0;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.45),
+    0 2px 8px rgba(239, 68, 68, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  overflow: hidden;
+  transform: translateX(110%);
+  opacity: 0;
+  transition:
+    transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.35s ease;
+  position: relative;
+}
+
+.wg-rescue-toast.wg-toast-enter {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.wg-rescue-toast.wg-toast-leave {
+  transform: translateX(110%);
+  opacity: 0;
+  transition:
+    transform 0.4s cubic-bezier(0.55, 0, 1, 0.45),
+    opacity 0.3s ease;
+}
+
+/* ── Status colors per type ── */
+.wg-rescue-toast.wg-toast-emergency {
+  border-left-color: #ef4444;
+}
+.wg-rescue-toast.wg-toast-progress {
+  border-left-color: #3b82f6;
+}
+.wg-rescue-toast.wg-toast-rescued {
+  border-left-color: #22c55e;
+}
+
+/* ── Thanh tiến trình tự đóng (auto-dismiss bar) ── */
+.wg-toast-progress-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  width: 100%;
+  background: rgba(74, 222, 128, 0.35);
+  transform-origin: left;
+  animation: wg-toast-shrink 8s linear forwards;
+}
+
+@keyframes wg-toast-shrink {
+  from { transform: scaleX(1); }
+  to   { transform: scaleX(0); }
+}
+
+/* ── Header – dải badge trên cùng ── */
+.wg-toast-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.wg-toast-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  border-radius: 99px;
+  padding: 3px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #fca5a5;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.wg-toast-badge.wg-badge-progress {
+  background: rgba(59, 130, 246, 0.15);
+  border-color: rgba(59, 130, 246, 0.35);
+  color: #93c5fd;
+}
+
+.wg-toast-badge.wg-badge-rescued {
+  background: rgba(34, 197, 94, 0.15);
+  border-color: rgba(34, 197, 94, 0.35);
+  color: #86efac;
+}
+
+/* Pulsing red dot */
+.wg-pulse-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ef4444;
+  position: relative;
+  flex-shrink: 0;
+}
+.wg-pulse-dot::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  background: rgba(239, 68, 68, 0.4);
+  animation: wg-pulse-ring 1.5s ease-out infinite;
+}
+@keyframes wg-pulse-ring {
+  0%   { transform: scale(0.7); opacity: 1; }
+  100% { transform: scale(2);   opacity: 0; }
+}
+
+.wg-pulse-dot.wg-dot-progress { background: #3b82f6; }
+.wg-pulse-dot.wg-dot-progress::before { background: rgba(59, 130, 246, 0.4); }
+.wg-pulse-dot.wg-dot-rescued { background: #22c55e; }
+.wg-pulse-dot.wg-dot-rescued::before { background: rgba(34, 197, 94, 0.4); animation: none; }
+
+.wg-toast-header-title {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.55);
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+/* ── Nút đóng ── */
+.wg-toast-close {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.35);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
+  line-height: 1;
+  font-size: 14px;
+  transition: color 0.2s, background 0.2s;
+  flex-shrink: 0;
+}
+.wg-toast-close:hover {
+  color: white;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* ── Body content ── */
+.wg-toast-body {
+  display: flex;
+  gap: 12px;
+  padding: 12px 14px;
+  align-items: flex-start;
+}
+
+.wg-toast-thumbnail {
+  width: 56px;
+  height: 56px;
+  border-radius: 10px;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.wg-toast-thumbnail-placeholder {
+  width: 56px;
+  height: 56px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(5, 46, 22, 0.8), rgba(20, 83, 45, 0.8));
+  border: 1px solid rgba(74, 222, 128, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  flex-shrink: 0;
+}
+
+.wg-toast-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.wg-toast-animal {
+  font-size: 15px;
+  font-weight: 700;
+  color: #f8fafc;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 4px;
+  font-family: 'Outfit', sans-serif;
+}
+
+.wg-toast-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.wg-toast-location {
+  font-size: 12px;
+  color: #86efac;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.wg-toast-reporter {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.4);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* ── Footer với nút xem bản đồ ── */
+.wg-toast-footer {
+  padding: 0 14px 12px;
+}
+
+.wg-toast-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  width: 100%;
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(185, 28, 28, 0.25));
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #fca5a5;
+  border-radius: 10px;
+  padding: 9px 14px;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s, border-color 0.2s, color 0.2s, transform 0.15s;
+  font-family: 'Outfit', sans-serif;
+}
+.wg-toast-btn:hover {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.35), rgba(185, 28, 28, 0.4));
+  border-color: rgba(239, 68, 68, 0.5);
+  color: #fff;
+  transform: translateY(-1px);
+}
+.wg-toast-btn:active {
+  transform: translateY(0);
+}
+
+/* ── Toggle notification trong Settings Modal ── */
+.wg-notif-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-bottom: 12px;
+  gap: 12px;
+}
+
+.wg-notif-toggle-label {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.wg-notif-toggle-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.wg-notif-toggle-desc {
+  font-size: 11.5px;
+  color: #64748b;
+}
+
+/* Toggle switch */
+.wg-toggle-switch {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.wg-toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+.wg-toggle-slider {
+  position: absolute;
+  inset: 0;
+  background: #cbd5e1;
+  border-radius: 99px;
+  cursor: pointer;
+  transition: background 0.25s;
+}
+
+.wg-toggle-slider::before {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  top: 3px;
+  left: 3px;
+  background: white;
+  border-radius: 50%;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+}
+
+.wg-toggle-switch input:checked + .wg-toggle-slider {
+  background: linear-gradient(135deg, #16a34a, #15803d);
+}
+
+.wg-toggle-switch input:checked + .wg-toggle-slider::before {
+  transform: translateX(20px);
+}
+
+/* ── Mobile ── */
+@media (max-width: 480px) {
+  #wg-rescue-notif-container {
+    top: 70px;
+    right: 10px;
+    width: calc(100vw - 20px);
+  }
+
+  .wg-toast-thumbnail,
+  .wg-toast-thumbnail-placeholder {
+    width: 44px;
+    height: 44px;
+  }
+}

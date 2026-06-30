@@ -348,8 +348,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 // Kích hoạt animation phản hồi
                 btn.classList.add("selected");
 
-                // Trực tiếp focus vào ô chat để user tiện nhấn Enter ngay
-                chatInput.focus();
+                // Tự động gửi tin nhắn luôn cho tiện
+                sendMessage();
 
                 // Gỡ animation sau khi hoàn thành
                 setTimeout(() => {

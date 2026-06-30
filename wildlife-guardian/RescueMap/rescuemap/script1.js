@@ -250,6 +250,29 @@ async function fetchRescueReports() {
         function tryAddMarkers(attempts) {
             if (viewer) {
                 renderMarkersToMap(filterReports());
+
+                // Tự động tìm và zoom nếu có reportId trên URL
+                const urlParams = new URLSearchParams(window.location.search);
+                const targetReportId = urlParams.get('reportId');
+                if (targetReportId) {
+                    // Xóa tham số khỏi URL để không bị chạy lại khi refresh
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                    
+                    // Chờ một chút để UI render xong
+                    setTimeout(() => {
+                        let btn = document.querySelector(`.rcard-locate[data-id="${targetReportId}"]`);
+                        if (btn) {
+                            btn.click();
+                        } else {
+                            // Nếu đang ở tab khác, chuyển về tab All để hiển thị đầy đủ
+                            window.setActiveTab('all');
+                            setTimeout(() => {
+                                btn = document.querySelector(`.rcard-locate[data-id="${targetReportId}"]`);
+                                if (btn) btn.click();
+                            }, 300);
+                        }
+                    }, 500);
+                }
             } else if (attempts > 0) {
                 setTimeout(() => tryAddMarkers(attempts - 1), 800);
             }
@@ -1041,8 +1064,9 @@ window.openCameraModal = async function (e) {
     document.getElementById("scanOverlay").style.display = "flex";
     document.getElementById("captureBtn").innerHTML = '<i class="fas fa-camera"></i> Chụp ảnh';
 
-    await initCamera(); await fetchLocationAndAddress();
     updateReporterInfo();
+    await initCamera(); 
+    await fetchLocationAndAddress();
 }
 
 window.closeCameraModal = function () {

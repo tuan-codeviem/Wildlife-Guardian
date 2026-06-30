@@ -872,7 +872,7 @@ app.get("/api/users/game-progress/:id", async (req, res) => {
 
 app.get("/api/rescuemap", async (req, res) => {
   try {
-    const rescues = await Rescue.find();
+    const rescues = await Rescue.find().sort({ createdAt: -1 });
     res.json(rescues);
   } catch (error) {
     res.status(500).json({ error: "Lỗi tải dữ liệu bản đồ" });
