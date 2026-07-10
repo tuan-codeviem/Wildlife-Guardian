@@ -949,8 +949,16 @@ app.delete("/api/rescuemap/:id", async (req, res) => {
       return res.status(404).json({ success: false, message: "Không tìm thấy báo cáo!" });
     }
 
-    // 🔐 BẢO MẬT: Chỉ người tạo báo cáo mới được xóa (nếu có lưu userId)
-    if (rescue.userId && rescue.userId !== userId) {
+    // 🔐 BẢO MẬT: Lấy ownerId từ đúng field theo schema (reportedBy.userId)
+    const ownerId = rescue.reportedBy?.userId || rescue.userId;
+
+    // Nếu báo cáo có lưu chủ sở hữu → bắt buộc phải đúng người
+    // Nếu báo cáo cũ không có chủ sở hữu → CHẶN (không cho xóa bừa)
+    if (!ownerId) {
+      return res.status(403).json({ success: false, message: "Không thể xác định chủ sở hữu báo cáo này!" });
+    }
+
+    if (ownerId !== userId) {
       return res.status(403).json({ success: false, message: "Bạn không có quyền xóa báo cáo này!" });
     }
 
