@@ -432,8 +432,8 @@ app.put("/api/posts/:id", uploadFile, async (req, res) => {
 // Xóa bài viết
 app.delete("/api/posts/:id", async (req, res) => {
   try {
-    // 🔐 BẢO MẬT: Bắt buộc phải có userId, server tự verify từ DB
-    const { userId } = req.body;
+    // 🔐 BẢO MẬT: Bắt buộc phải có userId (dùng optional chaining tránh crash nếu không có body)
+    const userId = req.body?.userId;
     if (!userId) {
       return res.status(401).json({ message: "Bạn cần đăng nhập để thực hiện thao tác này!" });
     }
@@ -451,6 +451,7 @@ app.delete("/api/posts/:id", async (req, res) => {
     await Post.findByIdAndDelete(req.params.id);
     res.json({ message: "Đã xóa bài viết thành công!" });
   } catch (error) {
+    console.error("Lỗi xóa bài:", error);
     res.status(500).json({ message: "Lỗi khi xóa bài!" });
   }
 });
@@ -937,8 +938,8 @@ app.post("/api/rescuemap", async (req, res) => {
 
 app.delete("/api/rescuemap/:id", async (req, res) => {
   try {
-    // 🔐 BẢO MẬT: Bắt buộc phải có userId mới được xóa báo cáo
-    const { userId } = req.body;
+    // 🔐 BẢO MẬT: Dùng optional chaining tránh crash khi không có body
+    const userId = req.body?.userId;
     if (!userId) {
       return res.status(401).json({ success: false, message: "Bạn cần đăng nhập để xóa báo cáo!" });
     }
@@ -956,6 +957,7 @@ app.delete("/api/rescuemap/:id", async (req, res) => {
     await Rescue.findByIdAndDelete(req.params.id);
     res.json({ success: true, message: "Đã xóa báo cáo thành công!" });
   } catch (error) {
+    console.error("Lỗi xóa rescue:", error);
     res.status(500).json({ success: false, error: "Không thể xóa báo cáo" });
   }
 });
