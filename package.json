@@ -21,6 +21,7 @@
   "homepage": "https://github.com/tuan-codeviem/Wildlife-Guardian#readme",
   "dependencies": {
     "@google/genai": "^2.8.0",
+    "bcrypt": "^6.0.0",
     "cloudinary": "^1.41.3",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",

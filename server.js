@@ -5,6 +5,7 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 const zlib = require("zlib");
+const bcrypt = require("bcrypt"); // 🔐 Dùng để mã hóa mật khẩu
 require("dotenv").config();
 
 // ===== GOOGLE AUTH SETUP =====
@@ -431,6 +432,22 @@ app.put("/api/posts/:id", uploadFile, async (req, res) => {
 // Xóa bài viết
 app.delete("/api/posts/:id", async (req, res) => {
   try {
+    // 🔐 BẢO MẬT: Bắt buộc phải có userId, server tự verify từ DB
+    const { userId } = req.body;
+    if (!userId) {
+      return res.status(401).json({ message: "Bạn cần đăng nhập để thực hiện thao tác này!" });
+    }
+
+    const post = await Post.findById(req.params.id);
+    if (!post) {
+      return res.status(404).json({ message: "Không tìm thấy bài viết!" });
+    }
+
+    // 🔐 BẢO MẬT: Server tự kiểm tra authorId từ DB, không tin client gửi lên
+    if (post.authorId && post.authorId !== userId) {
+      return res.status(403).json({ message: "Bạn không có quyền xóa bài viết này!" });
+    }
+
     await Post.findByIdAndDelete(req.params.id);
     res.json({ message: "Đã xóa bài viết thành công!" });
   } catch (error) {
@@ -479,6 +496,10 @@ app.post("/api/register", async (req, res) => {
   try {
     const { email, password, fullName, username } = req.body;
 
+    if (!password || password.length < 6) {
+      return res.status(400).json({ success: false, message: "Mật khẩu phải có ít nhất 6 ký tự!" });
+    }
+
     // Chỉ tìm kiếm bằng email hoặc username nếu chúng có giá trị
     const searchConditions = [];
     if (email) searchConditions.push({ email: email });
@@ -493,10 +514,13 @@ app.post("/api/register", async (req, res) => {
         });
     }
 
+    // 🔐 BẢO MẬT: Hash mật khẩu trước khi lưu vào Database
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     const newUser = new User({
       email: email || username, // Hỗ trợ cả form cũ và mới
       username: username || email,
-      password: password,
+      password: hashedPassword, // Lưu mật khẩu đã mã hóa, không bao giờ lưu plain text!
       fullName: fullName || (email ? email.split("@")[0] : username),
       avatar: "https://cdn-icons-png.flaticon.com/512/149/149071.png",
     });
@@ -513,12 +537,34 @@ app.post("/api/login", async (req, res) => {
     const { email, username, password } = req.body;
     // Tìm bằng email hoặc username đều được
     const loginIdentifier = email || username;
+    // 🔐 BẢO MẬT: Tìm user theo email/username TRƯỚC (không so sánh password thẳng trong query)
     const user = await User.findOne({
       $or: [{ email: loginIdentifier }, { username: loginIdentifier }],
-      password: password,
     });
 
     if (!user) {
+      return res
+        .status(401)
+        .json({ success: false, message: "Sai tài khoản hoặc mật khẩu!" });
+    }
+
+    // 🔐 BẢO MẬT: So sánh mật khẩu bằng bcrypt (hỗ trợ cả tài khoản cũ plain text lẫn tài khoản mới đã hash)
+    let isPasswordValid = false;
+    if (user.password && user.password.startsWith("$2b$")) {
+      // Tài khoản mới: mật khẩu đã được hash bằng bcrypt
+      isPasswordValid = await bcrypt.compare(password, user.password);
+    } else {
+      // Tài khoản cũ: mật khẩu còn là plain text (sẽ tự động upgrade khi đăng nhập)
+      isPasswordValid = (user.password === password);
+      if (isPasswordValid) {
+        // Tự động nâng cấp: hash mật khẩu cũ để bảo mật hơn
+        user.password = await bcrypt.hash(password, 10);
+        await user.save();
+        console.log(`✅ Đã tự động nâng cấp mật khẩu cho user: ${user.email}`);
+      }
+    }
+
+    if (!isPasswordValid) {
       return res
         .status(401)
         .json({ success: false, message: "Sai tài khoản hoặc mật khẩu!" });
@@ -891,6 +937,22 @@ app.post("/api/rescuemap", async (req, res) => {
 
 app.delete("/api/rescuemap/:id", async (req, res) => {
   try {
+    // 🔐 BẢO MẬT: Bắt buộc phải có userId mới được xóa báo cáo
+    const { userId } = req.body;
+    if (!userId) {
+      return res.status(401).json({ success: false, message: "Bạn cần đăng nhập để xóa báo cáo!" });
+    }
+
+    const rescue = await Rescue.findById(req.params.id);
+    if (!rescue) {
+      return res.status(404).json({ success: false, message: "Không tìm thấy báo cáo!" });
+    }
+
+    // 🔐 BẢO MẬT: Chỉ người tạo báo cáo mới được xóa (nếu có lưu userId)
+    if (rescue.userId && rescue.userId !== userId) {
+      return res.status(403).json({ success: false, message: "Bạn không có quyền xóa báo cáo này!" });
+    }
+
     await Rescue.findByIdAndDelete(req.params.id);
     res.json({ success: true, message: "Đã xóa báo cáo thành công!" });
   } catch (error) {
