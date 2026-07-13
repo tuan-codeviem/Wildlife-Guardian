@@ -173,14 +173,20 @@
     // Map URL
     const mapUrl = (() => {
       let baseHref = '../RescueMap/rescuemap/index.html';
-      // Tìm link trong navbar để lấy đường dẫn tuyệt đối chính xác nhất (bao gồm cả Live Server và file://)
       const navLink = document.querySelector('a[href*="RescueMap/rescuemap/index.html"]');
-      if (navLink) {
+      
+      if (window.location.pathname.toLowerCase().includes('/rescuemap/index.html')) {
+        // Nếu ĐANG Ở TRANG RESCUE MAP, lấy chính URL hiện tại (xóa param cũ)
+        baseHref = window.location.href.split('?')[0].split('#')[0];
+      } else if (navLink && navLink.href) {
         baseHref = navLink.href;
       } else {
-        // Fallback nếu không tìm thấy (ví dụ trang nào đó không có navbar)
         const path = window.location.pathname;
-        if (path.includes('/Social/frontend/')) baseHref = '../../RescueMap/rescuemap/index.html';
+        if (path.includes('/Social/frontend/')) {
+          baseHref = '../../RescueMap/rescuemap/index.html';
+        } else if (path.includes('/Contact/') || path.includes('/Game/') || path.includes('/SpeciesLibarary/') || path.includes('/Auth/')) {
+          baseHref = '../RescueMap/rescuemap/index.html';
+        }
       }
       
       // Thêm query parameter reportId để tự động zoom
@@ -341,10 +347,20 @@
       if (newestId !== lastId) {
         // Tìm tất cả báo cáo mới hơn lastId
         const lastIdx = sorted.findIndex(r => r._id.toString() === lastId);
-        const newReports = lastIdx === -1 ? [newest] : sorted.slice(0, lastIdx);
+        let newReports = lastIdx === -1 ? [newest] : sorted.slice(0, lastIdx);
 
-        // Cập nhật ID mới nhất
+        // Cập nhật ID mới nhất vào bộ nhớ
         localStorage.setItem(STORAGE_KEY_LAST_ID, newestId);
+
+        // Lọc bỏ những báo cáo đã quá cũ (hơn 24 giờ) để tránh hiện lại thông báo cũ
+        const TWENTY_FOUR_HOURS_MS = 24 * 60 * 60 * 1000;
+        const now = Date.now();
+        newReports = newReports.filter(report => {
+          const reportTime = new Date(report.createdAt || report.date || 0).getTime();
+          return (now - reportTime) <= TWENTY_FOUR_HOURS_MS;
+        });
+
+        if (newReports.length === 0) return;
 
         // Hiển thị toast cho từng báo cáo mới (tối đa MAX_TOASTS)
         const toShow = newReports.slice(0, MAX_TOASTS);
