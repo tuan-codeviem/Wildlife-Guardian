@@ -943,7 +943,7 @@ app.post("/api/rescuemap", async (req, res) => {
 app.delete("/api/rescuemap/:id", async (req, res) => {
   try {
     // 🔐 BẢO MẬT: Dùng optional chaining tránh crash khi không có body
-    const userId = req.body?.userId;
+    const userId = req.body?.userId || req.query?.userId;
     if (!userId) {
       return res.status(401).json({ success: false, message: "Bạn cần đăng nhập để xóa báo cáo!" });
     }
