@@ -202,6 +202,11 @@ const removeMediaBtn = document.getElementById("remove-media-btn");
 mediaInput.addEventListener("change", function () {
   const file = this.files[0];
   if (file) {
+    if (!file.type.startsWith("image/")) {
+      alert("Vui lòng chỉ tải lên định dạng hình ảnh!");
+      this.value = "";
+      return;
+    }
     mediaPreviewImg.src = URL.createObjectURL(file);
     mediaPreviewContainer.style.display = "block";
   }
@@ -478,6 +483,11 @@ async function loadPosts(category = "all posts") {
       input.addEventListener("change", function () {
         const file = this.files[0];
         if (file) {
+          if (!file.type.startsWith("image/")) {
+            alert("Vui lòng chỉ tải lên định dạng hình ảnh!");
+            this.value = "";
+            return;
+          }
           const postId = this.getAttribute("data-post-id");
           const commentMediaPreview = document.getElementById(
             `comment-media-preview-${postId}`,
@@ -525,6 +535,11 @@ if (editPostMediaInput) {
   editPostMediaInput.addEventListener("change", function () {
     const file = this.files[0];
     if (file) {
+      if (!file.type.startsWith("image/")) {
+        alert("Vui lòng chỉ tải lên định dạng hình ảnh!");
+        this.value = "";
+        return;
+      }
       document.getElementById("editMediaPreviewImg").src =
         URL.createObjectURL(file);
       document.getElementById("editMediaPreviewContainer").style.display =
