@@ -16,6 +16,10 @@ const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 const { GoogleGenAI } = require("@google/genai");
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
+// ===== GROQ AI SETUP (FALLBACK) =====
+const Groq = require("groq-sdk");
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY || "dummy_key_prevent_crash" });
+
 // ===== CLOUDINARY SETUP =====
 const cloudinary = require("cloudinary").v2;
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
@@ -976,22 +980,44 @@ app.delete("/api/rescuemap/:id", async (req, res) => {
 app.post("/api/chatbot", async (req, res) => {
   try {
     const { userMessage, languageRule } = req.body;
-    const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
-      contents: userMessage,
-      config: {
-        systemInstruction: `Bạn là Phoenix AI, trợ lý ảo của trang web Wildlife Guardian.
+    const systemPrompt = `Bạn là Phoenix AI, trợ lý ảo của trang web Wildlife Guardian.
 QUY TẮC BẮT BUỘC VỀ ĐỊNH DẠNG: Tuyệt đối không sử dụng bất kỳ định dạng Markdown nào trong câu trả lời. Không sử dụng dấu sao (*) để in đậm, in nghiêng hay làm gạch đầu dòng. Chỉ trả lời bằng văn bản thuần túy (Plain text). Nếu cần liệt kê, hãy dùng dấu gạch ngang (-). Trả lời ngắn gọn, súc tích và thân thiện.
         ${languageRule}
         2. Bạn chỉ được phép tư vấn, trả lời các câu hỏi liên quan đến bảo vệ động vật hoang dã, thiên nhiên, môi trường và các thông tin về trang web Wildlife Guardian.
         3. Nếu người dùng hỏi về các chủ đề khác (như toán học, lập trình, giải trí, chính trị...), hãy lịch sự từ chối và lái câu chuyện quay về chủ đề động vật hoang dã.
         4. Trả lời ngắn gọn, thân thiện và súc tích.
-        5. Bạn có thể trả lời về các vấn đề liên quan tới sơ cứu cơ bản cho động vật bị thương`
+        5. Bạn có thể trả lời về các vấn đề liên quan tới sơ cứu cơ bản cho động vật bị thương`;
+
+    try {
+      // THỬ DÙNG GEMINI TRƯỚC
+      const response = await ai.models.generateContent({
+        model: 'gemini-2.5-flash',
+        contents: userMessage,
+        config: { systemInstruction: systemPrompt }
+      });
+      return res.json({ success: true, text: response.text });
+    } catch (geminiError) {
+      console.warn("⚠️ Gemini bị lỗi hoặc quá tải, đang chuyển sang Groq Fallback...");
+      
+      if (!process.env.GROQ_API_KEY) {
+        throw new Error("Không có GROQ_API_KEY để dùng Fallback.");
       }
-    });
-    res.json({ success: true, text: response.text });
+
+      // NẾU GEMINI LỖI, DÙNG GROQ (FALLBACK)
+      const chatCompletion = await groq.chat.completions.create({
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: userMessage }
+        ],
+        model: "llama3-8b-8192", // Groq fast model
+        temperature: 0.7,
+        max_tokens: 1024,
+      });
+
+      return res.json({ success: true, text: chatCompletion.choices[0]?.message?.content || "Xin lỗi, không có phản hồi." });
+    }
   } catch (error) {
-    console.error("Lỗi Chatbot:", error);
+    console.error("Lỗi Chatbot (Cả Gemini và Groq đều thất bại):", error);
     res.status(500).json({ success: false, error: "Lỗi kết nối tới AI" });
   }
 });
