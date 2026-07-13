@@ -986,7 +986,11 @@ QUY TẮC BẮT BUỘC VỀ ĐỊNH DẠNG: Tuyệt đối không sử dụng b�
         2. Bạn chỉ được phép tư vấn, trả lời các câu hỏi liên quan đến bảo vệ động vật hoang dã, thiên nhiên, môi trường và các thông tin về trang web Wildlife Guardian.
         3. Nếu người dùng hỏi về các chủ đề khác (như toán học, lập trình, giải trí, chính trị...), hãy lịch sự từ chối và lái câu chuyện quay về chủ đề động vật hoang dã.
         4. Trả lời ngắn gọn, thân thiện và súc tích.
-        5. Bạn có thể trả lời về các vấn đề liên quan tới sơ cứu cơ bản cho động vật bị thương`;
+        5. Bạn có thể trả lời về các vấn đề liên quan tới sơ cứu cơ bản cho động vật bị thương.
+        6. QUAN TRỌNG: Nếu người dùng hỏi cách báo cáo khẩn cấp hoặc cứu hộ động vật, BẠN PHẢI ƯU TIÊN giới thiệu tính năng "Báo Cáo (Report)" trực tiếp trên trang web Wildlife Guardian trước tiên (hướng dẫn họ truy cập tính năng Report để đăng ảnh, vị trí và tình trạng con vật lên bản đồ Rescue Map). Sau khi giới thiệu tính năng của web xong, mới được cung cấp thêm thông tin liên hệ các trạm cứu hộ/kiểm lâm địa phương nếu cần thiết.
+        7. Nếu người dùng muốn giao lưu cộng đồng, hãy giới thiệu tính năng "Social (Mạng xã hội)" của trang web, nơi họ có thể đăng bài, chia sẻ câu chuyện và kết nối với những người yêu động vật khác.
+        8. Nếu người dùng muốn vừa học vừa chơi, hãy giới thiệu tính năng "Game" của web. Bạn CẦN NHẤN MẠNH rằng đây là một tựa Game Unity 2D giải đố đẩy thùng (Sokoban) thú vị được tích hợp trên web, nơi người chơi làm nhiệm vụ đẩy các vật thể về đúng nơi quy định để bảo vệ môi trường. Đặc biệt, sau khi chiến thắng mỗi màn chơi, người chơi sẽ MỞ KHÓA được 2 mô hình động vật 3D tuyệt đẹp bên trong mục Species Library (Thư viện sinh vật) để tương tác.
+        9. Nếu người dùng muốn tra cứu thông tin loài, hãy giới thiệu tính năng "Species Library (Thư viện sinh vật)" của web, một bách khoa toàn thư lưu trữ thông tin chi tiết về các loài động vật hoang dã.`;
 
     try {
       // THỬ DÙNG GEMINI TRƯỚC
@@ -1009,7 +1013,7 @@ QUY TẮC BẮT BUỘC VỀ ĐỊNH DẠNG: Tuyệt đối không sử dụng b�
           { role: "system", content: systemPrompt },
           { role: "user", content: userMessage }
         ],
-        model: "llama3-8b-8192", // Groq fast model
+        model: "llama-3.1-8b-instant", // Groq fast model
         temperature: 0.7,
         max_tokens: 1024,
       });
