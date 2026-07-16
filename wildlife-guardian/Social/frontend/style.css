@@ -1,0 +1,1875 @@
+/* ═══════════════════════════════════════════════════════════
+   WILDLIFE GUARDIAN – Social Page CSS
+   Theme  : Dark Green (đồng bộ với Home.css)
+   Style  : Glassmorphism + Star Parallax + Glow Hover
+   Updated: 2026-06
+════════════════════════════════════════════════════════════ */
+
+/* ── CSS VARIABLES (Design Tokens) ──────────────────────── */
+:root {
+  /* ─ Core Background ─ */
+  --bg-base: #020c05; /* Nền đen xanh chủ đạo (giống Home hero) */
+  --bg-deep: #020c05;
+  --bg-overlay-1: rgba(5, 78, 22, 0.18);
+  --bg-overlay-2: rgba(22, 163, 74, 0.1);
+
+  /* ─ Glassmorphism Cards ─ */
+  --glass-bg: rgba(10, 25, 15, 0.4); /* Nền xanh đen mờ – ra chất kính */
+  --glass-bg-hover: rgba(10, 25, 15, 0.52);
+  --glass-border: rgba(255, 255, 255, 0.08); /* Viền mỏng mảnh */
+  --glass-border-top: rgba(
+    255,
+    255,
+    255,
+    0.2
+  ); /* Viền trên sáng hơn – hiệu ứng 3D */
+  --glass-border-left: rgba(255, 255, 255, 0.13); /* Viền trái sáng nhẹ */
+  --glass-blur: 10px; /* Giảm từ 16px → 10px để giảm GPU fillrate */
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 2px 8px rgba(0, 0, 0, 0.2);
+
+  /* ─ Sidebar (slightly deeper) ─ */
+  --glass-sidebar-bg: rgba(5, 15, 8, 0.5);
+  --glass-sidebar-border: rgba(255, 255, 255, 0.06);
+
+  /* ─ Green Palette (mirror Home) ─ */
+  --green-400: #4ade80; /* Sáng nhất – text/glow */
+  --green-500: #22c55e;
+  --green-600: #16a34a;
+  --green-700: #15803d;
+  --green-glow: rgba(34, 197, 94, 0.3); /* Glow bóng đổ */
+  --green-glow-strong: rgba(34, 197, 94, 0.5);
+
+  /* ─ Accent ─ */
+  --orange: #f97316;
+  --orange-red: #dc2626;
+
+  /* ─ Text ─ */
+  --text-primary: rgba(255, 255, 255, 0.92);
+  --text-secondary: rgba(255, 255, 255, 0.58);
+  --text-muted: rgba(255, 255, 255, 0.35);
+
+  /* ─ Input ─ */
+  --input-bg: rgba(0, 0, 0, 0.28);
+  --input-border: rgba(255, 255, 255, 0.12);
+  --input-focus-border: var(--green-500);
+  --input-focus-shadow: 0 0 0 3px rgba(34, 197, 94, 0.18);
+
+  /* ─ Border / Divider ─ */
+  --divider: rgba(255, 255, 255, 0.08);
+
+  /* ─ Radius / Spacing ─ */
+  --radius-card: 20px; /* Bo góc lớn hơn cho post card */
+  --radius-btn: 22px;
+  --radius-input: 14px;
+
+  /* ─ Transition ─ */
+  --transition-fast: 0.2s ease;
+  --transition-mid: 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ── RESET & BASE ────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "Outfit", "Inter", system-ui, sans-serif;
+  background: var(--bg-base);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+  outline: none;
+}
+
+/* ── SCROLLBAR ───────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-base);
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(var(--green-500), var(--green-700));
+  border-radius: 99px;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   BACKGROUND LAYER – Star Canvas + Dark Green Gradient
+   (Hiệu ứng bầu trời sao di chuyển theo chuột được xử lý
+    bởi đoạn JS nhỏ ở cuối file này, nhúng qua <script> tag
+    hoặc trong script.js; canvas đã có sẵn trong HTML)
+════════════════════════════════════════════════════════════ */
+#social-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.75;
+}
+
+/* Static gradient overlay (luôn hiển thị phía dưới canvas) */
+.social-bg-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      ellipse 80% 60% at 20% 50%,
+      rgba(5, 78, 22, 0.22) 0%,
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 60% 80% at 80% 30%,
+      rgba(22, 163, 74, 0.12) 0%,
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse 50% 50% at 60% 80%,
+      rgba(249, 115, 22, 0.06) 0%,
+      transparent 60%
+    ),
+    linear-gradient(135deg, #020c05 0%, #041a0a 40%, #061505 100%);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   MAIN LAYOUT
+════════════════════════════════════════════════════════════ */
+.social-main {
+  display: flex;
+  max-width: 1100px;
+  margin: 92px auto 24px auto; /* 68px navbar + 24px original margin */
+  gap: 28px;
+  padding: 0 20px;
+}
+
+.feed-column {
+  flex: 2;
+  min-width: 0;
+}
+
+.sidebar-column {
+  flex: 1;
+  min-width: 290px;
+  max-width: 340px;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   CREATE POST (DESKTOP INLINE, MOBILE MODAL)
+════════════════════════════════════════════════════════════ */
+@media screen and (min-width: 769px) {
+  #createPostModalOverlay {
+    display: block !important;
+    position: static !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    width: 100% !important;
+    height: auto !important;
+    margin-bottom: 24px;
+    z-index: 1 !important;
+  }
+  #createPostModalOverlay .create-post-card {
+    width: 100% !important;
+    max-width: none !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+  #closeCreatePostModal {
+    display: none !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   GLASSMORPHISM CARD (Base mixin – dùng cho tất cả khối)
+════════════════════════════════════════════════════════════ */
+.create-post-card,
+.post-card,
+.friend-requests-card,
+.messages-card {
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  /* Nền vũ trụ tối sâu thẳm */
+  background: linear-gradient(
+    135deg,
+    rgba(8, 12, 24, 0.95),
+    rgba(2, 5, 12, 0.98)
+  ) !important;
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  /* Viền mỏng manh, 3D highlight: trên & trái sáng hơn */
+  border-top: 1px solid var(--glass-border-top);
+  border-left: 1px solid var(--glass-border-left);
+  border-right: 1px solid var(--glass-border);
+  border-bottom: 1px solid var(--glass-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--glass-shadow);
+  color: var(--text-primary);
+  /* ── Tăng tốc phần cứng (GPU composite layer) ── */
+  transform: translateZ(0); /* Ép lên GPU layer riêng */
+  will-change: transform; /* Báo trước browser chuẩn bị composite */
+  backface-visibility: hidden; /* Tắt tính toán mặt sau không cần thiết */
+  -webkit-backface-visibility: hidden;
+  contain: layout style; /* Giới hạn repaint trong khối, không lan ra ngoài */
+  transition:
+    transform var(--transition-mid),
+    box-shadow var(--transition-mid),
+    border-color var(--transition-mid);
+}
+
+/* ── HIỆU ỨNG SAO CHUYỂN ĐỘNG TRONG CARD (DARK UNIVERSE) ── */
+.create-post-card::before,
+.post-card::before,
+.friend-requests-card::before,
+.messages-card::before {
+  content: "";
+  position: absolute;
+  top: -150px;
+  left: -150px;
+  right: -400px;
+  bottom: -400px;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    radial-gradient(1px 1px at 25px 35px, #fff, transparent),
+    radial-gradient(1px 1px at 50px 85px, #fff, transparent),
+    radial-gradient(
+      1.5px 1.5px at 120px 45px,
+      rgba(255, 255, 255, 0.8),
+      transparent
+    ),
+    radial-gradient(
+      1.5px 1.5px at 180px 145px,
+      rgba(255, 255, 255, 0.9),
+      transparent
+    ),
+    radial-gradient(
+      2px 2px at 220px 65px,
+      rgba(160, 255, 180, 0.8),
+      transparent
+    ),
+    radial-gradient(1px 1px at 280px 185px, #fff, transparent);
+  background-size: 300px 300px;
+  animation: moveCardStars1 60s linear infinite;
+  opacity: 0.5;
+  will-change: transform;
+}
+
+.create-post-card::after,
+.post-card::after,
+.friend-requests-card::after,
+.messages-card::after {
+  content: "";
+  position: absolute;
+  top: -150px;
+  left: -150px;
+  right: -500px;
+  bottom: -500px;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    radial-gradient(2px 2px at 40px 60px, rgba(255, 255, 255, 1), transparent),
+    radial-gradient(
+      2.5px 2.5px at 150px 110px,
+      rgba(160, 255, 180, 1),
+      transparent
+    ),
+    radial-gradient(
+      2px 2px at 240px 190px,
+      rgba(255, 255, 255, 0.9),
+      transparent
+    );
+  background-size: 400px 400px;
+  animation: moveCardStars2 35s linear infinite;
+  opacity: 0.3;
+  will-change: transform;
+}
+
+@keyframes moveCardStars1 {
+  from {
+    transform: translate(0, 0);
+  }
+  to {
+    transform: translate(-300px, -300px);
+  }
+}
+
+@keyframes moveCardStars2 {
+  from {
+    transform: translate(0, 0);
+  }
+  to {
+    transform: translate(-400px, -400px);
+  }
+}
+
+/* ─ Sidebar cards: slightly deeper glass ─ */
+.friend-requests-card,
+.messages-card {
+  border-color: var(--glass-sidebar-border);
+}
+
+/* ─ Hover: float up + Green glow ─ */
+.create-post-card:hover,
+.post-card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 16px 48px rgba(0, 0, 0, 0.5),
+    0 0 28px var(--green-glow);
+  border-color: rgba(34, 197, 94, 0.28);
+}
+
+.friend-requests-card:hover,
+.messages-card:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 12px 36px rgba(0, 0, 0, 0.45),
+    0 0 20px rgba(34, 197, 94, 0.18);
+  border-color: rgba(34, 197, 94, 0.18);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   1. CREATE POST CARD
+════════════════════════════════════════════════════════════ */
+.create-post-card {
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.post-input-wrapper {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 14px;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(34, 197, 94, 0.35);
+}
+
+#post-content {
+  flex: 1;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: var(--radius-input);
+  padding: 12px 16px;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--text-primary);
+  resize: none;
+  outline: none;
+  height: 64px;
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast),
+    background var(--transition-fast);
+}
+
+#post-content:focus {
+  border-color: var(--green-500);
+  box-shadow: var(--input-focus-shadow);
+  background: rgba(0, 0, 0, 0.36);
+}
+
+#post-content::placeholder {
+  color: var(--text-muted);
+}
+
+.post-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--divider);
+  padding-top: 12px;
+}
+
+.action-left {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+.attach-btn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--text-secondary);
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 8px;
+  transition:
+    color var(--transition-fast),
+    background var(--transition-fast);
+}
+
+.attach-btn:hover {
+  color: var(--green-400);
+  background: rgba(34, 197, 94, 0.1);
+}
+
+.category-select {
+  padding: 8px 18px 8px 14px;
+  border: 1px solid var(--input-border);
+  border-radius: var(--radius-btn);
+  background: var(--input-bg);
+  color: var(--text-primary);
+  outline: none;
+  cursor: pointer;
+  font-size: 13.5px;
+  font-weight: 500;
+  font-family: inherit;
+  transition: border-color var(--transition-fast);
+}
+
+.category-select:focus {
+  border-color: var(--green-500);
+}
+
+.category-select option {
+  background: #041a0a;
+  color: #fff;
+}
+
+/* ─ Post Button ─ */
+.btn-post {
+  background: linear-gradient(135deg, var(--green-600), var(--green-700));
+  color: #fff;
+  border: none;
+  padding: 9px 26px;
+  border-radius: var(--radius-btn);
+  font-weight: 700;
+  font-size: 14px;
+  font-family: inherit;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(22, 163, 74, 0.35);
+  transition:
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.btn-post:hover {
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 8px 28px var(--green-glow-strong);
+}
+
+.btn-post:active {
+  transform: scale(0.96);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   2. FILTER BAR
+════════════════════════════════════════════════════════════ */
+.post-filters {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 8px 18px;
+  border-radius: var(--radius-btn);
+  color: var(--text-secondary);
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all var(--transition-fast);
+}
+
+.filter-btn:hover {
+  color: var(--green-400);
+  background: rgba(34, 197, 94, 0.1);
+  border-color: rgba(34, 197, 94, 0.3);
+  transform: translateY(-1px);
+}
+
+.filter-btn.active {
+  background: linear-gradient(135deg, var(--green-600), var(--green-700));
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 4px 16px rgba(22, 163, 74, 0.35);
+  font-weight: 700;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   3. POST CARD (Feed)
+════════════════════════════════════════════════════════════ */
+.post-card {
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+/* ─ Post Header ─ */
+.post-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.post-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 12px;
+  border: 2px solid rgba(34, 197, 94, 0.3);
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.post-card:hover .post-avatar {
+  border-color: var(--green-400);
+  box-shadow: 0 0 10px var(--green-glow);
+}
+
+.post-info {
+  flex: 1;
+}
+
+.post-info h4 {
+  margin: 0 0 2px 0;
+  font-size: 15px;
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+.post-time {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.post-header-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* ─ Category Tag ─ */
+.post-tag {
+  background: rgba(34, 197, 94, 0.15);
+  color: var(--green-400);
+  border: 1px solid rgba(34, 197, 94, 0.28);
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+}
+
+.post-options-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-weight: bold;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 0 4px;
+  border-radius: 6px;
+  transition:
+    color var(--transition-fast),
+    background var(--transition-fast);
+}
+
+.post-options-btn:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* ─ Post Body ─ */
+.post-body p {
+  font-size: 14.5px;
+  color: var(--text-secondary);
+  line-height: 1.65;
+  margin: 0 0 14px 0;
+}
+
+.post-media-file {
+  width: 100%;
+  border-radius: 14px;
+  object-fit: cover;
+  max-height: 500px;
+  border: 1px solid var(--glass-border);
+}
+
+/* ─ Post Stats ─ */
+.post-stats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0 10px;
+  border-bottom: 1px solid var(--divider);
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.stats-left,
+.stats-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.reaction-icons {
+  letter-spacing: -3px;
+}
+
+/* ─ Action Row (Like, Comment, Share) ─ */
+.post-actions-row {
+  display: flex;
+  align-items: center;
+  padding-top: 10px;
+  gap: 6px;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-family: inherit;
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.action-btn:hover {
+  background: rgba(34, 197, 94, 0.1);
+  color: var(--green-400);
+  transform: translateY(-1px);
+}
+
+/* Like button active state */
+.action-btn.liked {
+  color: var(--green-400);
+}
+
+/* Bookmark */
+.save-btn {
+  margin-left: auto;
+}
+
+/* ─ Comments Section ─ */
+.post-comments-section {
+  border-top: 1px solid var(--divider);
+  margin-top: 12px;
+  padding-top: 12px;
+}
+
+.comment-input {
+  background: var(--input-bg) !important;
+  border: 1px solid var(--input-border) !important;
+  border-radius: 12px;
+  color: var(--text-primary) !important;
+  font-family: inherit;
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.comment-input:focus {
+  border-color: var(--green-500) !important;
+  box-shadow: var(--input-focus-shadow) !important;
+  outline: none !important;
+}
+
+.comment-input::placeholder {
+  color: var(--text-muted) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   4. SIDEBAR – FRIENDS CARD
+════════════════════════════════════════════════════════════ */
+.friend-requests-card {
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.friend-requests-card h3,
+.friend-requests-card h4 {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+/* ─ Search Input ─ */
+#searchFriendInput {
+  width: 100%;
+  padding: 10px 16px;
+  border-radius: var(--radius-btn);
+  border: 1px solid var(--input-border);
+  background: var(--input-bg);
+  color: #333;
+  outline: none;
+  font-size: 13px;
+  font-family: inherit;
+  box-sizing: border-box;
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+#searchFriendInput:focus {
+  border-color: var(--green-500);
+  box-shadow: var(--input-focus-shadow);
+}
+
+#searchFriendInput::placeholder {
+  color: #888;
+}
+
+/* ─ Friend Search Results ─ */
+#friendSearchResults > div {
+  padding: 8px;
+  border-radius: 10px;
+  transition: background var(--transition-fast);
+}
+
+#friendSearchResults > div:hover {
+  background: rgba(34, 197, 94, 0.1);
+}
+
+/* ─ Friend Request Items ─ */
+.request-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+  padding: 6px;
+  border-radius: 10px;
+  transition: background var(--transition-fast);
+}
+
+.request-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.request-item img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid var(--glass-border);
+}
+
+.request-info {
+  flex: 1;
+}
+
+.request-info h4 {
+  margin: 0;
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+.request-info p {
+  margin: 2px 0 0;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.request-actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* ─ Accept / Decline ─ */
+.btn-accept {
+  background: linear-gradient(135deg, var(--green-600), var(--green-700));
+  border: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #fff;
+  font-size: 14px;
+  box-shadow: 0 2px 10px rgba(22, 163, 74, 0.35);
+  transition:
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.btn-accept:hover {
+  transform: scale(1.12);
+  box-shadow: 0 4px 18px var(--green-glow-strong);
+}
+
+.btn-decline {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid var(--glass-border);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-secondary);
+  font-size: 14px;
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.btn-decline:hover {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+/* ─ Bell / Notification ─ */
+#btnShowRequests {
+  width: 34px;
+  height: 34px;
+  background: var(--glass-bg) !important;
+  border: 1px solid var(--glass-border) !important;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    background var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+#btnShowRequests:hover {
+  background: rgba(34, 197, 94, 0.15) !important;
+  box-shadow: 0 0 12px var(--green-glow);
+}
+
+#btnShowRequests svg {
+  stroke: var(--text-secondary);
+}
+
+/* ─ Requests Wrapper ─ */
+#requestsWrapper {
+  border-top: 1px solid var(--divider) !important;
+}
+
+#requestsWrapper h5 {
+  color: var(--text-secondary) !important;
+  font-size: 13px;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   5. SIDEBAR – MESSAGES CARD
+════════════════════════════════════════════════════════════ */
+.messages-card {
+  border-radius: var(--radius-card);
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.messages-card h4 {
+  margin: 0 0 14px;
+  font-size: 16px;
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+/* ─ Search ─ */
+#searchUser {
+  width: 100%;
+  padding: 10px 16px 10px 36px;
+  border-radius: var(--radius-btn);
+  border: 1px solid var(--input-border);
+  background: var(--input-bg);
+  color: #333;
+  outline: none;
+  font-size: 13px;
+  font-family: inherit;
+  box-sizing: border-box;
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+#searchUser:focus {
+  border-color: var(--green-500);
+  box-shadow: var(--input-focus-shadow);
+}
+
+#searchUser::placeholder {
+  color: #888;
+}
+
+/* ─ Chat List Items ─ */
+.chat-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-x: hidden;
+}
+
+.chat-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition:
+    background var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.chat-item:hover {
+  background: rgba(34, 197, 94, 0.08);
+  transform: translateX(3px);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   6. CHAT BOX (Floating)
+════════════════════════════════════════════════════════════ */
+#chatBox {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 350px;
+  border-radius: 16px;
+  overflow: hidden;
+  z-index: 999;
+  background: rgba(4, 14, 8, 0.92) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(34, 197, 94, 0.18) !important;
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.55),
+    0 0 24px var(--green-glow) !important;
+}
+
+#chatBox > div:first-child {
+  background: linear-gradient(
+    135deg,
+    var(--green-600),
+    var(--green-700)
+  ) !important;
+  padding: 12px 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #fff;
+}
+
+/* Đổi chỗ Avatar và Nút Tắt/Back (Áp dụng cho cả PC và Mobile) */
+#closeChat {
+  order: 2;
+}
+#chatBox > div:first-child > div {
+  order: 1;
+}
+
+#chatMessages {
+  flex: 1;
+  padding: 15px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: transparent !important;
+}
+
+/* Chat bubbles */
+#chatMessages > div > div {
+  background: rgba(255, 255, 255, 0.07) !important;
+  border: 1px solid var(--glass-border) !important;
+  color: var(--text-primary) !important;
+  border-radius: 10px;
+  padding: 8px 12px;
+}
+
+/* Own message bubble */
+#chatMessages > div > div[style*="background: #31a24c"],
+#chatMessages > div > div[style*="background: rgb(49, 162, 76)"] {
+  background: linear-gradient(
+    135deg,
+    var(--green-600),
+    var(--green-700)
+  ) !important;
+  border: none !important;
+  color: #fff !important;
+  box-shadow: 0 4px 14px rgba(22, 163, 74, 0.3) !important;
+}
+
+/* ─ Chat Structure Classes ─ */
+.chat-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: grab;
+}
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-right: 5px;
+}
+
+.chat-footer {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid var(--divider);
+  display: flex;
+  gap: 8px;
+}
+
+.chat-input {
+  flex: 1;
+  padding: 10px 15px;
+  border: 1px solid var(--input-border);
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border-radius: 20px;
+  outline: none;
+}
+
+.chat-send-btn {
+  background: var(--green-600) !important;
+  border: none;
+  color: white !important;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    transform 0.2s,
+    background 0.2s;
+}
+
+.chat-send-btn:hover {
+  transform: scale(1.1);
+  background: var(--green-500) !important;
+}
+
+/* Chat input area */
+#chatBox > div:last-child {
+  background: rgba(2, 12, 5, 0.7) !important;
+  border-top: 1px solid var(--divider) !important;
+  padding: 10px;
+  display: flex;
+  gap: 8px;
+}
+
+#chatInput {
+  flex: 1;
+  padding: 8px 14px;
+  border: 1px solid var(--input-border) !important;
+  border-radius: 20px;
+  background: var(--input-bg) !important;
+  color: var(--text-primary) !important;
+  outline: none;
+  font-family: inherit;
+  transition: border-color var(--transition-fast);
+}
+
+#chatInput:focus {
+  border-color: var(--green-500) !important;
+}
+#chatInput::placeholder {
+  color: var(--text-muted) !important;
+}
+
+#sendChatBtn {
+  background: transparent !important;
+  border: none !important;
+  color: var(--green-400) !important;
+  cursor: pointer;
+  transition:
+    transform var(--transition-fast),
+    color var(--transition-fast);
+}
+
+#sendChatBtn:hover {
+  transform: scale(1.15) rotate(-10deg);
+  color: var(--green-500) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   7. POPUPS / MODALS
+════════════════════════════════════════════════════════════ */
+/* ─ Mini Profile ─ */
+#miniProfilePopup {
+  background: rgba(4, 14, 8, 0.95) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(34, 197, 94, 0.2) !important;
+  border-radius: 14px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.55) !important;
+  color: var(--text-primary) !important;
+}
+
+#popupAvatar {
+  border: 2px solid var(--green-500) !important;
+}
+#popupName {
+  color: var(--text-primary) !important;
+}
+
+#popupMessageBtn {
+  background: linear-gradient(
+    135deg,
+    var(--green-600),
+    var(--green-700)
+  ) !important;
+  color: #fff !important;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 0;
+  cursor: pointer;
+  font-weight: 700;
+  width: 100%;
+  transition:
+    box-shadow var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+#popupMessageBtn:hover {
+  box-shadow: 0 6px 20px var(--green-glow-strong);
+  transform: translateY(-1px);
+}
+
+#popupAddFriendBtn {
+  background: rgba(34, 197, 94, 0.12) !important;
+  color: var(--green-400) !important;
+  border: 1px solid rgba(34, 197, 94, 0.28) !important;
+  border-radius: 20px;
+  padding: 8px 0;
+  cursor: pointer;
+  font-weight: 700;
+  width: 100%;
+  transition:
+    background var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+#popupAddFriendBtn:hover {
+  background: rgba(34, 197, 94, 0.22) !important;
+  box-shadow: 0 4px 14px var(--green-glow);
+}
+
+/* ─ Delete Confirm Dialogs ─ */
+#customDeleteConfirm > div,
+#commentDeleteConfirm > div {
+  background: rgba(4, 14, 8, 0.97) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(34, 197, 94, 0.15) !important;
+  border-radius: 12px;
+  color: var(--text-primary) !important;
+}
+
+#customDeleteConfirm h3,
+#commentDeleteConfirm h3 {
+  color: var(--text-primary) !important;
+}
+#customDeleteConfirm p,
+#commentDeleteConfirm p {
+  color: var(--text-secondary) !important;
+}
+#customDeleteConfirm > div > div,
+#commentDeleteConfirm > div > div {
+  border-color: var(--divider) !important;
+}
+
+#confirmDeleteBtn,
+#confirmDeleteCommentBtn {
+  color: #f87171 !important;
+  background: transparent !important;
+  border: none;
+  border-bottom: 1px solid var(--divider) !important;
+  padding: 14px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 14px;
+  width: 100%;
+  transition: background var(--transition-fast);
+}
+
+#confirmDeleteBtn:hover,
+#confirmDeleteCommentBtn:hover {
+  background: rgba(239, 68, 68, 0.1) !important;
+}
+
+#cancelDeleteBtn,
+#cancelDeleteCommentBtn {
+  background: transparent !important;
+  border: none;
+  color: var(--text-secondary) !important;
+  padding: 14px;
+  cursor: pointer;
+  font-size: 14px;
+  width: 100%;
+  transition: background var(--transition-fast);
+}
+
+#cancelDeleteBtn:hover,
+#cancelDeleteCommentBtn:hover {
+  background: rgba(255, 255, 255, 0.05) !important;
+}
+
+/* ─ Edit Post Modal ─ */
+#editPostModal > div {
+  background: rgba(4, 14, 8, 0.97) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(34, 197, 94, 0.18) !important;
+  border-radius: 18px;
+  box-shadow: 0 16px 50px rgba(0, 0, 0, 0.6) !important;
+  color: var(--text-primary) !important;
+}
+
+#editPostModal h3 {
+  color: var(--text-primary) !important;
+}
+#editPostModal > div > div {
+  border-color: var(--divider) !important;
+}
+
+#editPostContent,
+#editPostCategory {
+  background: var(--input-bg) !important;
+  border: 1px solid var(--input-border) !important;
+  color: var(--text-primary) !important;
+  border-radius: 12px;
+  padding: 12px;
+  font-family: inherit;
+  font-size: 14px;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color var(--transition-fast);
+}
+
+#editPostContent:focus,
+#editPostCategory:focus {
+  border-color: var(--green-500) !important;
+}
+
+#editPostCategory option {
+  background: #041a0a;
+  color: #fff;
+}
+
+#saveEditPostBtn {
+  background: linear-gradient(
+    135deg,
+    var(--green-600),
+    var(--green-700)
+  ) !important;
+  color: #fff !important;
+  border: none;
+  padding: 10px 28px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  transition:
+    box-shadow var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+#saveEditPostBtn:hover {
+  box-shadow: 0 6px 20px var(--green-glow-strong) !important;
+  transform: translateY(-2px);
+}
+
+#closeEditModalBtn {
+  background: none !important;
+  border: none !important;
+  font-size: 20px;
+  cursor: pointer;
+  color: var(--text-muted) !important;
+  transition: color var(--transition-fast);
+}
+
+#closeEditModalBtn:hover {
+  color: #f87171 !important;
+}
+
+/* ─ Profile Setup Modal ─ */
+#profileSetupModal > div {
+  background: rgba(4, 14, 8, 0.97) !important;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(34, 197, 94, 0.18) !important;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.65) !important;
+  color: var(--text-primary) !important;
+}
+
+#profileModalTitle {
+  color: var(--text-primary) !important;
+}
+#profileModalDesc {
+  color: var(--text-secondary) !important;
+}
+#setupAvatarPreview {
+  border: 3px solid var(--green-500) !important;
+}
+
+#setupNameInput {
+  background: var(--input-bg) !important;
+  border: 1px solid var(--input-border) !important;
+  color: var(--text-primary) !important;
+  border-radius: 12px;
+  outline: none;
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+#setupNameInput:focus {
+  border-color: var(--green-500) !important;
+  box-shadow: var(--input-focus-shadow) !important;
+}
+
+#saveProfileBtn {
+  background: linear-gradient(
+    135deg,
+    var(--green-600),
+    var(--green-700)
+  ) !important;
+  color: #fff !important;
+  border: none;
+  border-radius: 12px;
+  padding: 12px;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  width: 100%;
+  transition:
+    box-shadow var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+#saveProfileBtn:hover {
+  box-shadow: 0 6px 22px var(--green-glow-strong) !important;
+  transform: translateY(-2px);
+}
+
+#skipProfileBtn {
+  background: rgba(255, 255, 255, 0.06) !important;
+  color: var(--text-secondary) !important;
+  border: 1px solid var(--glass-border) !important;
+  border-radius: 12px;
+  padding: 12px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  width: 100%;
+  transition: background var(--transition-fast);
+}
+
+#skipProfileBtn:hover {
+  background: rgba(255, 255, 255, 0.12) !important;
+}
+
+#closeProfileModal {
+  background: none !important;
+  border: none !important;
+  font-size: 20px;
+  cursor: pointer;
+  color: var(--text-muted) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   8. USER DROPDOWN POPUP (Avatar top-right)
+════════════════════════════════════════════════════════════ */
+.user-dropdown-popup {
+  position: fixed;
+  background: rgba(4, 14, 8, 0.96) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(34, 197, 94, 0.18) !important;
+  border-radius: 16px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5);
+  padding: 24px 20px;
+  width: 220px;
+  text-align: center;
+  z-index: 10002;
+  transition: all var(--transition-mid);
+}
+
+.user-dropdown-popup::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 0 8px 8px 8px;
+  border-style: solid;
+  border-color: transparent transparent rgba(34, 197, 94, 0.3) transparent;
+}
+
+.user-dropdown-popup::after {
+  content: "";
+  position: absolute;
+  top: -7px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 0 7px 7px 7px;
+  border-style: solid;
+  border-color: transparent transparent rgba(4, 14, 8, 0.98) transparent;
+}
+
+.dropdown-avatar-img {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto 12px;
+  display: block;
+  border: 3px solid var(--green-500);
+  padding: 3px;
+}
+
+.dropdown-name-text {
+  margin: 0 0 16px;
+  color: var(--text-primary);
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.dropdown-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dropdown-btn {
+  width: 100%;
+  padding: 10px 0;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: inherit;
+  transition: all var(--transition-fast);
+}
+
+.dropdown-btn-settings {
+  background: rgba(34, 197, 94, 0.08);
+  color: var(--green-400);
+  border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.dropdown-btn-settings:hover {
+  background: rgba(34, 197, 94, 0.18);
+  border-color: rgba(34, 197, 94, 0.38);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px var(--green-glow);
+}
+
+.dropdown-btn-logout {
+  background: rgba(239, 68, 68, 0.08);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.dropdown-btn-logout:hover {
+  background: rgba(239, 68, 68, 0.18);
+  border-color: rgba(239, 68, 68, 0.35);
+  transform: translateY(-2px);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   9. GLOBAL TEXT & MISC OVERRIDES
+════════════════════════════════════════════════════════════ */
+/* Bắt text đen do JS sinh ra */
+[style*="color: #000"],
+[style*="color: rgb(0, 0, 0)"],
+[style*="color: #333"],
+[style*="color: rgb(51, 51, 51)"] {
+  color: var(--text-primary) !important;
+}
+
+/* Bắt background trắng do JS sinh ra */
+[style*="background: white"],
+[style*="background-color: white"],
+[style*="background: rgb(255, 255, 255)"],
+[style*="background-color: rgb(255, 255, 255)"] {
+  background: rgba(4, 14, 8, 0.92) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Viền đường kẻ */
+.post-actions,
+.post-stats,
+.post-comments-section {
+  border-color: var(--divider) !important;
+}
+
+/* ─ Media preview in Create Post ─ */
+#media-preview-container img {
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   10. DESKTOP SCROLL LAYOUT
+════════════════════════════════════════════════════════════ */
+@media (min-width: 769px) {
+  body {
+    overflow: hidden;
+  }
+
+  .social-main {
+    height: calc(100vh - 96px);
+    margin-bottom: 0;
+    padding-bottom: 20px;
+  }
+
+  .feed-column {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .create-post-card,
+  .post-filters {
+    flex-shrink: 0;
+  }
+
+  #posts-feed {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 10px;
+    padding-bottom: 20px;
+  }
+
+  #posts-feed::-webkit-scrollbar {
+    width: 5px;
+  }
+  #posts-feed::-webkit-scrollbar-thumb {
+    background: linear-gradient(var(--green-500), var(--green-700));
+    border-radius: 99px;
+  }
+
+  .sidebar-column {
+    height: 100%;
+    overflow-y: auto;
+    padding-right: 5px;
+  }
+
+  .sidebar-column::-webkit-scrollbar {
+    width: 0;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   10.5 MOBILE SIDEBAR BUBBLE & TABS (Default hidden on PC)
+════════════════════════════════════════════════════════════ */
+.mobile-sidebar-bubble {
+  display: none;
+}
+.mobile-sidebar-header {
+  display: none;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   11. MOBILE RESPONSIVE
+════════════════════════════════════════════════════════════ */
+@media screen and (max-width: 768px) {
+  .social-main {
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 12px !important;
+    gap: 16px;
+  }
+
+  .sidebar-column {
+    display: none; /* Ẩn sidebar mặc định trên mobile */
+  }
+
+  .sidebar-column.show-mobile {
+    display: flex !important;
+    flex-direction: column;
+    position: fixed;
+    top: 15vh;
+    left: 5vw;
+    width: 90vw !important;
+    height: 70vh;
+    z-index: 10005;
+    background: rgba(4, 14, 8, 0.98) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    border-radius: 20px;
+    padding: 20px 15px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+    animation: fadeInMobilePanel 0.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  }
+
+  @keyframes fadeInMobilePanel {
+    from {
+      opacity: 0;
+      margin-top: 10px;
+    }
+    to {
+      opacity: 1;
+      margin-top: 0;
+    }
+  }
+
+  .mobile-sidebar-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+  }
+
+  .mobile-bubbles-container {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    z-index: 9999;
+  }
+
+  .mobile-sidebar-bubble {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(135deg, var(--green-500), var(--green-700));
+    color: white;
+    border-radius: 50%;
+    border: none;
+    box-shadow: 0 4px 20px rgba(22, 163, 74, 0.5);
+    cursor: pointer;
+    transition:
+      transform 0.2s,
+      box-shadow 0.2s;
+    position: relative;
+  }
+
+  .mobile-sidebar-bubble:hover,
+  .mobile-sidebar-bubble:active {
+    transform: scale(1.05);
+  }
+
+  .bubble-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #e91e63;
+    color: white;
+    font-size: 11px;
+    font-weight: bold;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #041a0a;
+  }
+
+  .friend-requests-card,
+  .messages-card {
+    flex: 1;
+    overflow-y: auto;
+    margin: 0 !important;
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 0 5px !important;
+    display: none;
+  }
+
+  .friend-requests-card.active-tab,
+  .messages-card.active-tab {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .friend-requests-card::before,
+  .friend-requests-card::after,
+  .messages-card::before,
+  .messages-card::after {
+    display: none !important;
+  }
+
+  .feed-column,
+  .main-content {
+    width: 100% !important;
+    order: 1;
+  }
+
+  .post-card,
+  .create-post {
+    width: 100% !important;
+    box-sizing: border-box;
+  }
+
+  .post-filters {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   12. STAR CANVAS – Parallax animation (JS init below)
+   Keyframe cho các ngôi sao tự nhấp nháy (fallback khi
+   chưa có chuột, hoặc cho các "star" được add class)
+════════════════════════════════════════════════════════════ */
+@keyframes starTwinkle {
+  0%,
+  100% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 0.25;
+  }
+}
+
+/* ─ Inline star elements (nếu có) ─ */
+.star-particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 50%;
+  animation: starTwinkle 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   13. DESKTOP & MOBILE CHATBOX OVERRIDES
+════════════════════════════════════════════════════════════ */
+
+/* Mặc định trên PC: hiện nút X, ẩn nút <- */
+#closeChat .icon-back {
+  display: none;
+}
+#closeChat .icon-close {
+  display: block;
+}
+
+@media screen and (min-width: 769px) {
+  /* Luôn hiện danh sách bạn bè trên Desktop dù JS có ẩn */
+  /* Luôn hiện danh sách bạn bè trên Desktop dù JS có ẩn */
+  #messagesListScreen {
+    display: flex !important;
+  }
+
+  /* Cố định chiều cao chatBox trên Desktop */
+  #chatBox {
+    height: 500px !important;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  #closeChat .icon-back {
+    display: block;
+  }
+  #closeChat .icon-close {
+    display: none;
+  }
+
+  /* Đảo chiều mũi tên back thành -> trên Mobile */
+  #closeChat .icon-back svg {
+    transform: rotate(180deg);
+  }
+
+  /* Trên mobile, khung chat được đưa hẳn VÀO TRONG messages-card bằng JS */
+  /* Do đó nó chỉ cần chiếm trọn không gian, tắt hết fixed/border/shadow đi */
+  #chatBox {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    width: 100% !important;
+    height: 100% !important;
+    flex: 1;
+    margin: 0 !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    z-index: auto !important;
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+  }
+
+  #chatBox > div:first-child {
+    /* Loại bỏ khối xanh cồng kềnh, làm header trong suốt và mượt mà */
+    background: transparent !important;
+    margin: 0 !important;
+    padding: 0 0 15px 0 !important;
+    border-radius: 0 !important;
+    border-bottom: 1px solid var(--divider) !important;
+  }
+
+  #chatBox > div:last-child {
+    /* Làm trong suốt footer chứa input để hòa quyện với khung */
+    background: transparent !important;
+    margin: 0 !important;
+    padding: 15px 0 0 0 !important;
+    border-top: 1px solid var(--divider) !important;
+  }
+}

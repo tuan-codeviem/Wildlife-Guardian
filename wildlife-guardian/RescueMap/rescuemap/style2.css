@@ -1,0 +1,1346 @@
+/* ═══════════════════════════════════════════════════════
+   style2.css – Popup Card Styles (Bao branch)
+   ⚠️  MERGE FIX: All layout/navbar/body overrides from
+   Bao's branch are NEUTRALIZED below so they don't break
+   Tuan's full-screen 3D map layout from style1.css.
+   Only the popup card styles (.rescue-popup.light-theme
+   and its children) from this file are kept intact.
+═══════════════════════════════════════════════════════ */
+
+/* ── LAYER Z-INDEX SYSTEM ────────────────────────────
+   Layer 0 (Base)   : #interactiveMap      → z-index: 0
+   Layer 1 (Float)  : .floating-panel      → z-index: 100
+   Layer 2 (Nav)    : .navbar              → z-index: 1000
+   Layer 3 (Modal)  : .rm-modal-overlay    → z-index: 9000
+   Layer 4 (Chatbot): #chatbot-container   → z-index: 9500
+   Layer 5 (Toast)  : #customToastContainer→ z-index: 10000
+──────────────────────────────────────────────────── */
+
+/* NEUTRALIZE: Bao's :root variables (keep only what we need for popups) */
+:root {
+  --bao-primary-green: #10b981;
+  --bao-dark-green: #047857;
+  --bao-forest-green: #064e3b;
+  --bao-orange: #f59e0b;
+}
+
+/* NEUTRALIZE: Bao's body override – must NOT change background or font */
+body {
+  background: transparent !important;
+  /* style1.css controls the background */
+  font-family: "Outfit", "Segoe UI", system-ui, sans-serif !important;
+  overflow: hidden !important;
+  /* Tuan: full-screen map, no page scroll */
+}
+
+/* NEUTRALIZE: Bao's navbar – must stay fixed (not sticky) to sit above map */
+.navbar {
+  position: fixed !important;
+  top: 0 !important;
+  background: transparent !important;
+  /* style1.css / nav.css handles this */
+  border-bottom: none !important;
+  height: 68px !important;
+  z-index: 1000 !important;
+}
+
+/* NEUTRALIZE: Bao's .rescue-container, .header, .main-content, .left-sidebar,
+   .map-panel – these containers DON'T EXIST in Tuan's HTML. Setting them to
+   display:none avoids them accidentally creating layout space if injected. */
+.rescue-container,
+.header,
+.main-content,
+.left-sidebar,
+.map-panel {}
+
+/* NEUTRALIZE: Bao's .tabs – Tuan uses .panel-tabs instead */
+.tabs {}
+
+/* NEUTRALIZE: Bao's .map-legend – Tuan uses .panel-legend */
+.map-legend {}
+
+/* NEUTRALIZE: Bao's .reports-panel – Tuan uses .reports-list inside panel-scroll */
+.reports-panel {
+  display: block !important;
+  /* revert – this ID is used by script1.js */
+  background: transparent !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* NEUTRALIZE: Bao's .nearby-helpers / .nearest-clinic-section */
+.nearby-helpers,
+.nearest-clinic-section {}
+
+/* NEUTRALIZE: Bao's .view-home-btn positioning (style1.css owns this) */
+.view-home-btn {
+  /* Let style1.css control the position – do not override */
+}
+
+/* CHATBOT CONTAINER – always on top of everything */
+#chatbot-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9500;
+  /* Above modal (9000), below toast (10000) */
+  pointer-events: auto;
+}
+
+/* Ensure existing .wg-chatbot also gets correct z-index */
+.wg-chatbot,
+.chat-bot-AI {
+  z-index: 9500 !important;
+  pointer-events: auto !important;
+}
+
+/* Chatbot window should never be blocked by Cesium canvas */
+.chatbot-window,
+.cw-msgs,
+.chatwindow {
+  z-index: 9501 !important;
+  pointer-events: auto !important;
+}
+
+/* ── NEUTRALIZE Bao's old tab-btn (Tuan already styles this in style1.css) ── */
+/* Leave .tab-btn rules below to be handled by style1.css only */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+/* ═══════════════════════════════════════════════════════
+   ⚠️  MERGE FIX – BLOCK 2: Bao's old body + container styles
+   These MUST be neutralized. Tuan's style1.css controls
+   the full-screen layout. The body below would paint a
+   green-white gradient OVER the 3D map.
+═══════════════════════════════════════════════════════ */
+body {
+  /* Neutralized: original was background: linear-gradient(135deg, #f0fdf4, #d1fae5)
+     which paints a white/light-green background over the 3D globe */
+  background: #020c05 !important;
+  overflow: hidden !important;
+}
+
+
+.rescue-container {
+  max-width: 96%;
+  /* Mở rộng toàn bộ khung trang web ra sát 2 bên mép màn hình */
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.header {
+  background: url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&q=80&w=1200') center/cover no-repeat;
+  position: relative;
+  border-radius: 28px;
+  padding: 30px 28px;
+  color: white;
+  margin-bottom: 24px;
+  box-shadow: 0 15px 35px rgba(4, 120, 87, 0.2);
+  overflow: hidden;
+}
+
+.header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(6, 78, 59, 0.9), rgba(16, 185, 129, 0.8));
+  z-index: 1;
+}
+
+.header>* {
+  position: relative;
+  z-index: 2;
+}
+
+.header h1 {
+  font-size: 1.8rem;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header p {
+  opacity: 0.95;
+  margin-top: 8px;
+  font-size: 1.05rem;
+  font-weight: 500;
+}
+
+.nav-report-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-top: 18px;
+}
+
+.search-bar {
+  background-color: white;
+  border-radius: 60px;
+  display: flex;
+  align-items: center;
+  padding: 4px 4px 4px 18px;
+  flex: 2;
+  min-width: 200px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.search-bar i {
+  color: #1e5a4a;
+}
+
+.search-bar input {
+  flex: 1;
+  border: none;
+  padding: 12px 10px;
+  font-size: 14px;
+  outline: none;
+  background: transparent;
+}
+
+.search-bar button {
+  background: var(--dark-green);
+  border: none;
+  color: white;
+  padding: 8px 18px;
+  border-radius: 40px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: 0.2s;
+}
+
+.search-bar button:hover {
+  background: var(--forest-green);
+}
+
+/* ========== MAP CONTROLS MỚI ========== */
+.map-controls {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  background: white;
+  padding: 5px 15px;
+  border-radius: 50px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.control-btn {
+  padding: 8px 16px;
+  border-radius: 40px;
+  border: none;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s;
+}
+
+.delete-btn {
+  background: #ef4444;
+  color: white;
+}
+
+.delete-btn:hover {
+  background: #dc2626;
+  transform: scale(0.97);
+}
+
+.delete-btn.active {
+  background: #d32f2f;
+  box-shadow: 0 0 0 2px #ff6b35;
+}
+
+.update-btn {
+  background: #2196f3;
+  color: white;
+}
+
+.update-btn:hover {
+  background: #1976d2;
+  transform: scale(0.97);
+}
+
+.locate-btn {
+  background: var(--dark-green);
+  color: white;
+}
+
+.locate-btn:hover {
+  background: var(--forest-green);
+  transform: scale(0.97);
+}
+
+/* ========== TABS ========== */
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 0px;
+  background: white;
+  padding: 12px 20px;
+  border-radius: 60px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+}
+
+.tab-btn {
+  background: transparent;
+  border: none;
+  padding: 10px 22px;
+  border-radius: 40px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+  color: #475569;
+}
+
+.tab-btn.active {
+  background: var(--primary-green);
+  color: white;
+  box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
+}
+
+/* ========== MAIN CONTENT ========== */
+.main-content {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  align-items: stretch;
+}
+
+.left-sidebar {
+  flex: 1.5;
+  /* Tăng tỷ lệ chia không gian cho cột trái */
+  min-width: 440px;
+  /* Kéo to chiều rộng tối thiểu của danh sách báo cáo */
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-height: 86vh;
+  /* Kéo dài chiều cao để hiển thị thêm nhiều thông tin */
+  overflow-y: auto;
+  padding-right: 5px;
+}
+
+.left-sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.left-sidebar::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
+}
+
+.reports-panel {
+  background: white;
+  border-radius: 24px;
+  padding: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
+  border: 1px solid #f1f5f9;
+}
+
+.map-panel {
+  flex: 2.5;
+  /* Điều chỉnh lại tỷ lệ của bản đồ cho cân đối */
+  min-width: 480px;
+  background: #e9ecef;
+  border-radius: 24px;
+  padding: 0;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+  position: relative;
+  overflow: hidden;
+  min-height: 86vh;
+  /* Kéo dài chiều cao của bản đồ bằng với cột trái */
+  border: 4px solid white;
+}
+
+.map-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+/* ========== VIEW HOME BUTTON ========== */
+.view-home-btn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #ccc;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  color: var(--dark-green);
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.view-home-btn:hover {
+  background: var(--dark-green);
+  color: white;
+  transform: scale(1.05);
+}
+
+/* ========== ẨN LOGO & TEXT CESIUM ========== */
+.cesium-widget-credits {
+  display: none !important;
+}
+
+/* ========== REPORT CARD (GIAO DIỆN MỚI) ========== */
+.report-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ffffff;
+  border-radius: 20px;
+  padding: 12px;
+  margin-bottom: 12px;
+  border-left: 5px solid #ccc;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: box-shadow 0.2s;
+}
+
+.report-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.report-card.report-emergency {
+  border-left-color: #d62828;
+}
+
+.report-card.report-progress {
+  border-left-color: #3b82f6;
+}
+
+.report-card.report-rescued {
+  border-left-color: #2a9d8f;
+}
+
+.report-card-main {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+  /* Cho phép phần này co lại và text hiển thị dấu ... */
+}
+
+.report-card-thumb {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  object-fit: cover;
+  flex-shrink: 0;
+  /* Ngăn ảnh bị co lại */
+  background-color: #f0f0f0;
+  /* Màu nền chờ */
+}
+
+.report-card-info {
+  min-width: 0;
+  /* Để text ellipsis hoạt động */
+}
+
+.report-card-info h4 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.report-card-info .location {
+  font-size: 12px;
+  color: #555;
+  margin: 2px 0 5px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.status-tag {
+  font-size: 12px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.report-card.report-emergency .status-tag {
+  background-color: rgba(239, 68, 68, 0.15);
+  color: #ff6b6b;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.report-card.report-progress .status-tag {
+  background-color: rgba(59, 130, 246, 0.15);
+  color: #60a5fa;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.report-card.report-rescued .status-tag {
+  background-color: rgba(34, 197, 94, 0.15);
+  color: #4ade80;
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.report-card-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-end;
+  flex-shrink: 0;
+  /* Ngăn các nút bị co lại */
+}
+
+.small-btn {
+  background: #eef2ff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 30px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  justify-content: center;
+  width: 90px;
+  /* Cho các nút có chiều rộng cố định */
+}
+
+.small-btn:hover {
+  transform: scale(0.97);
+}
+
+.small-btn.locate-btn {
+  background-color: #e0f2f1;
+  color: #00796b;
+}
+
+.small-btn.delete-btn {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+/* ========== CÁC MỤC Ở CỘT TRÁI ========== */
+.map-legend {
+  display: flex;
+  justify-content: center;
+  font-size: 12px;
+  padding: 12px;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.legend-items {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.status-badge {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 14px;
+  margin-right: 6px;
+}
+
+.status-badge.injured {
+  background: #ef4444;
+}
+
+.status-badge.rescued {
+  background: #10b981;
+}
+
+.status-badge.active {
+  background: #0ea5e9;
+}
+
+.nearby-helpers,
+.nearest-clinic-section {
+  background: white;
+  border-radius: 20px;
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  margin-bottom: 5px;
+}
+
+.helpers-header {
+  font-weight: 800;
+  margin-bottom: 12px;
+  color: var(--forest-green);
+  font-size: 15px;
+}
+
+.helpers-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.helper-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f8f9fa;
+  padding: 12px;
+  border-radius: 16px;
+  border-left: 4px solid var(--orange);
+}
+
+.contact-btn {
+  background: var(--orange);
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 30px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* ========== MODAL CAMERA ========== */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(3px);
+}
+
+.modal-content {
+  background: white;
+  margin: 20px auto;
+  width: 90%;
+  max-width: 550px;
+  border-radius: 28px;
+  animation: slideDown 0.3s ease;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.camera-modal {
+  max-width: 600px;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 18px 22px;
+  background: linear-gradient(135deg, var(--forest-green), var(--dark-green));
+  color: white;
+  border-radius: 28px 28px 0 0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.close-modal {
+  font-size: 28px;
+  cursor: pointer;
+}
+
+.modal-body {
+  padding: 0;
+}
+
+.camera-container {
+  position: relative;
+}
+
+#video {
+  width: 100%;
+  height: auto;
+  background: #000;
+  border-radius: 0;
+}
+
+.camera-controls {
+  padding: 15px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  background: #f5f5f5;
+}
+
+.capture-btn,
+.retake-btn {
+  background: var(--primary-green);
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 40px;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: 0.2s;
+}
+
+.retake-btn {
+  background: #6c757d;
+}
+
+.capture-btn:hover,
+.retake-btn:hover {
+  transform: scale(0.98);
+}
+
+.preview-img {
+  width: 100%;
+  max-height: 300px;
+  object-fit: cover;
+}
+
+.animal-info-form {
+  padding: 20px;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: var(--forest-green);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 16px;
+  font-size: 14px;
+}
+
+.location-loading {
+  text-align: center;
+  padding: 15px;
+  background: #e3f2fd;
+  border-radius: 16px;
+  margin-bottom: 15px;
+  color: #1976d2;
+}
+
+.location-info {
+  padding: 12px;
+  background: #e8f5e9;
+  border-radius: 16px;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: #2e7d32;
+}
+
+.submit-report-btn {
+  width: 100%;
+  background: linear-gradient(135deg, var(--primary-green), var(--dark-green));
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 40px;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: 0.2s;
+  box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
+}
+
+.submit-report-btn:hover {
+  background: var(--forest-green);
+  transform: translateY(-2px);
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 800px) {
+  .main-content {
+    flex-direction: column;
+  }
+
+  .left-sidebar,
+  .map-panel {
+    min-width: auto;
+  }
+
+  .nav-menu {
+    display: none;
+  }
+
+  .hamburger {
+    display: flex;
+  }
+
+  .map-controls span {
+    display: none;
+  }
+
+  .control-btn {
+    padding: 8px 12px;
+  }
+}
+
+@media (max-width: 600px) {
+  .nav-report-row {
+    flex-direction: column;
+  }
+
+  .search-bar {
+    width: 100%;
+  }
+
+  .map-controls {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .legend-items {
+    gap: 10px;
+  }
+}
+
+/* ========== GIAO DIỆN BẢN ĐỒ CHI TIẾT (DARK GLASSMORPHISM) ========== */
+.rescue-popup.dark-glass-theme {
+  background: rgba(2, 12, 5, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  width: 320px;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(34, 197, 94, 0.1) inset;
+  color: #f8fafc;
+  font-family: "Inter", sans-serif;
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.rescue-popup.dark-glass-theme .close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: white;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: 0.2s;
+}
+
+.rescue-popup.dark-glass-theme .close-btn:hover {
+  background: #ef4444;
+}
+
+.rescue-header {
+  height: 250px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 12px;
+}
+
+.rescue-header::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(2, 12, 5, 0.98), rgba(2, 12, 5, 0));
+  z-index: 1;
+}
+
+.rescue-badge {
+  position: relative;
+  z-index: 2;
+  align-self: flex-start;
+  padding: 5px 12px;
+  font-size: 11px;
+  font-weight: 800;
+  border-radius: 20px;
+  backdrop-filter: blur(4px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.rescue-title-container {
+  position: relative;
+  z-index: 2;
+}
+
+.rescue-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.rescue-details {
+  padding: 15px;
+  max-height: none;
+  overflow-y: visible;
+}
+
+.rescue-details::-webkit-scrollbar {
+  width: 4px;
+}
+
+.rescue-details::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
+.detail-section {
+  margin-bottom: 12px;
+}
+
+.detail-title {
+  font-size: 12px;
+  color: #94a3b8;
+  font-weight: 700;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.detail-box {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+  font-size: 12px;
+}
+
+.detail-item:last-child {
+  margin-bottom: 0;
+}
+
+.detail-item-title {
+  color: #94a3b8;
+}
+
+.detail-item-value {
+  color: #f8fafc;
+  font-weight: 600;
+  text-align: right;
+  max-width: 60%;
+}
+
+/* ========================================================
+   BẢN VÁ LỖI GIAO DIỆN (UI/UX FIXES)
+   ======================================================== */
+
+/* Lỗi 2: Sửa màu chữ Dropdown (Trạng thái) để không bị chìm vào nền trắng */
+#animalStatus option {
+  color: #0f172a !important;
+  background-color: #ffffff !important;
+  font-weight: 500;
+}
+
+/* --- FIX UI/UX: RESPONSIVE CHO POPUP BẢN ĐỒ --- */
+.cesium-popup-overlay {
+  position: absolute !important;
+  top: 80px;
+  right: 20px;
+  z-index: 1050;
+  pointer-events: auto;
+}
+
+@media (max-width: 768px) {
+  .cesium-popup-overlay {
+    top: auto !important;
+    bottom: 10px !important;
+    /* Neo sát mép dưới của #interactiveMap (ngay trên bảng rescue) */
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%);
+    width: 95%;
+    max-height: 90%; /* Giới hạn chiều cao overlay tối đa 90% của map */
+    display: flex;
+    justify-content: center;
+  }
+
+  .rescue-popup.dark-glass-theme {
+    width: 100% !important;
+    max-height: 100% !important;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .rescue-popup.dark-glass-theme .rescue-header {
+    min-height: 150px !important;
+    flex-shrink: 0;
+    padding: 10px;
+  }
+
+  .rescue-popup.dark-glass-theme .rescue-title {
+    font-size: 16px;
+    margin-bottom: 5px;
+  }
+
+  .rescue-popup.dark-glass-theme .rescue-details {
+    flex: 1;
+    overflow-y: auto !important; /* Bật cuộn cho phần chi tiết */
+    max-height: none !important;
+    padding: 10px;
+  }
+
+  .detail-title {
+    font-size: 12px;
+  }
+
+  .detail-box {
+    padding: 8px;
+  }
+
+  .detail-item {
+    font-size: 13px;
+    margin-bottom: 5px;
+  }
+}
+
+/* ========================================================
+   CẢI THIỆN UI/UX: BẢNG ĐIỀU KHIỂN BÊN TRÁI (DARK GLASSMORPHISM)
+   Giữ nguyên kích thước/vị trí cũ, chỉ làm đẹp màu sắc, viền, hiệu ứng
+   ======================================================== */
+.floating-panel {
+  background: rgba(6, 30, 18, 0.75) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4) !important;
+  color: #f8fafc !important;
+  padding: 88px 20px 20px !important;
+}
+
+/* Tiêu đề bảng điều khiển */
+.panel-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+  margin-bottom: 15px !important;
+  padding-bottom: 12px !important;
+}
+
+.panel-title {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+}
+
+.panel-title h2 {
+  color: #ffffff !important;
+  font-weight: 800 !important;
+  font-size: 22px !important;
+  margin: 0 0 2px 0 !important;
+  letter-spacing: 0.5px !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+}
+
+.panel-title p {
+  color: #94a3b8 !important;
+  font-size: 13px !important;
+  margin: 0 !important;
+}
+
+.panel-title-icon {
+  background: rgba(16, 185, 129, 0.15) !important;
+  color: #4ade80 !important;
+  border: 1px solid rgba(16, 185, 129, 0.3) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 45px !important;
+  height: 45px !important;
+  font-size: 20px !important;
+}
+
+/* Thanh tìm kiếm */
+.panel-search {
+  margin-bottom: 15px !important;
+}
+
+.search-glass {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 12px !important;
+  padding: 10px 14px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+
+.search-glass input {
+  color: #ffffff !important;
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  flex: 1 !important;
+  font-size: 13px !important;
+  font-family: inherit !important;
+}
+
+.search-glass input::placeholder {
+  color: #64748b !important;
+}
+
+.search-glass i,
+.search-glass button {
+  color: #10b981 !important;
+  background: transparent !important;
+  border: none !important;
+  cursor: pointer !important;
+}
+
+/* Tab phân loại */
+.panel-tabs {
+  background: rgba(0, 0, 0, 0.2) !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  border-radius: 12px !important;
+  padding: 4px !important;
+  display: flex !important;
+  gap: 4px !important;
+  margin-bottom: 15px !important;
+}
+
+.panel-tabs .tab-btn {
+  color: #94a3b8 !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  font-size: 12px !important;
+  background: transparent !important;
+  border: none !important;
+  padding: 8px 10px !important;
+  flex: 1 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.panel-tabs .tab-btn:hover {
+  color: #f8fafc !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+}
+
+.panel-tabs .tab-btn.active {
+  background: #10b981 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3) !important;
+}
+
+/* Chú thích bản đồ */
+.panel-legend {
+  background: rgba(255, 255, 255, 0.03) !important;
+  border: 1px dashed rgba(255, 255, 255, 0.1) !important;
+  color: #cbd5e1 !important;
+  border-radius: 10px !important;
+  padding: 10px !important;
+  display: flex !important;
+  justify-content: space-around !important;
+  font-size: 12px !important;
+  margin-bottom: 15px !important;
+}
+
+.legend-dot {
+  display: inline-block !important;
+  width: 8px !important;
+  height: 8px !important;
+  border-radius: 50% !important;
+  margin-right: 4px !important;
+}
+
+.emergency-dot {
+  background: #ef4444 !important;
+  box-shadow: 0 0 8px #ef4444 !important;
+}
+
+.progress-dot {
+  background: #3b82f6 !important;
+  box-shadow: 0 0 8px #3b82f6 !important;
+}
+
+.rescued-dot {
+  background: #22c55e !important;
+  box-shadow: 0 0 8px #22c55e !important;
+}
+
+/* Nút cẩm nang sơ cứu & Tìm hiểu thêm */
+.first-aid-section .section-header {
+  color: #4ade80 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+  padding-bottom: 8px !important;
+  margin-bottom: 10px !important;
+  font-weight: 600 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.first-aid-list>div {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.05) !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.05) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+.first-aid-list>div:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+}
+
+.first-aid-list h4 {
+  color: #f8fafc !important;
+}
+
+.first-aid-list p {
+  color: #cbd5e1 !important;
+}
+
+.panel-support-btn {
+  background: linear-gradient(135deg, #10b981, #059669) !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 12px !important;
+  padding: 12px !important;
+  width: 100% !important;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3) !important;
+  font-weight: bold !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+  margin-top: 15px !important;
+}
+
+.panel-support-btn:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4) !important;
+}
+
+/* Thanh cuộn (Scrollbar) cho cột trái */
+.panel-scroll::-webkit-scrollbar {
+  width: 5px !important;
+}
+
+.panel-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2) !important;
+  border-radius: 10px !important;
+}
+
+.panel-scroll::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+/* ========================================================
+   RESPONSIVE MOBILE: PHÓNG TO BỐ CỤC CHỮ CHO VỪA KHUNG HÌNH
+   ======================================================== */
+@media (max-width: 768px) {
+  /* Tiêu đề & Header */
+  .floating-panel { padding-top: 15px !important; }
+  .panel-title h2 { font-size: 20px !important; font-weight: 700 !important; margin-bottom: 5px !important; }
+  .panel-title p { font-size: 14px !important; }
+  .panel-title-icon { width: 44px !important; height: 44px !important; font-size: 20px !important; }
+  
+  /* Thanh tìm kiếm */
+  .search-glass { padding: 12px 16px !important; }
+  .search-glass input { font-size: 14px !important; }
+  .search-glass i, .search-glass button { font-size: 16px !important; width: 36px !important; height: 36px !important; }
+
+  /* Tabs */
+  .panel-tabs { padding: 6px !important; border-radius: 12px !important; }
+  .panel-tabs .tab-btn { font-size: 14px !important; padding: 10px 12px !important; }
+
+  /* Legend */
+  .panel-legend { font-size: 14px !important; padding: 12px !important; }
+
+  /* Thẻ báo cáo (Report Card) */
+  .report-card { padding: 15px !important; margin-bottom: 15px !important; border-radius: 16px !important; }
+  .report-card-info h4 { font-size: 16px !important; margin-bottom: 5px !important; font-weight: 700 !important; }
+  .report-card-info .location { font-size: 14px !important; margin-top: 5px !important; margin-bottom: 5px !important; line-height: 1.4 !important; }
+  .status-tag { font-size: 13px !important; padding: 6px 12px !important; border-radius: 16px !important; }
+  
+  /* Ghi đè inline style của script1.js */
+  .report-card-info div[style*="font-size:12px"],
+  .report-card-info div[style*="font-size: 12px"] { font-size: 14px !important; margin-top: 8px !important; line-height: 1.4 !important; padding: 8px !important; }
+  .report-card-info span[style*="font-size:11px"],
+  .report-card-info span[style*="font-size: 11px"] { font-size: 13px !important; }
+
+  /* Nút thao tác thẻ */
+  .small-btn { font-size: 14px !important; padding: 10px 15px !important; width: auto !important; min-width: 90px !important; border-radius: 10px !important; font-weight: 600 !important; }
+
+  /* Cẩm nang sơ cứu */
+  .first-aid-section .section-header { font-size: 16px !important; padding-bottom: 10px !important; margin-bottom: 10px !important; }
+  .first-aid-list > div { padding: 12px 15px !important; border-radius: 10px !important; }
+  .first-aid-list h4 { font-size: 16px !important; margin-bottom: 5px !important; line-height: 1.4 !important; font-weight: 700 !important; }
+  .first-aid-list p { font-size: 14px !important; line-height: 1.5 !important; }
+
+  /* Nút hỗ trợ dưới cùng */
+  .panel-support-btn { font-size: 15px !important; padding: 15px !important; border-radius: 15px !important; }
+}
+
+/* ── NEUTRALIZE style2.css mobile overrides ──────────────────
+   Tất cả quy tắc mobile đã được hợp nhất vào style1.css
+   (media query @media max-width: 768px) với đầy đủ !important.
+   Không ghi lại ở đây để tránh xung đột cascade.
+────────────────────────────────────────────────────────────── */

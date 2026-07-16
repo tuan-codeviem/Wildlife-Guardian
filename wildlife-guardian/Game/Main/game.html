@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Unity Web Player | EcoGuardian-Unity</title>
+    <link rel="shortcut icon" href="TemplateData/favicon.ico">
+    <link rel="stylesheet" href="TemplateData/style.css">
+    <style>
+      body { margin: 0; padding: 0; overflow: hidden; background-color: transparent; }
+      #unity-container { width: 100vw !important; height: 100vh !important; position: absolute; top: 0; left: 0; }
+      #unity-canvas { width: 100% !important; height: 100% !important; }
+    </style>
+  </head>
+  <body>
+    <div id="unity-container" class="unity-desktop">
+      <canvas id="unity-canvas" width=960 height=600 tabindex="-1"></canvas>
+      <div id="unity-loading-bar">
+        <div id="unity-logo"></div>
+        <div id="unity-progress-bar-empty">
+          <div id="unity-progress-bar-full"></div>
+        </div>
+      </div>
+
+    </div>
+    <script>
+      var canvas = document.querySelector("#unity-canvas");
+
+      // Shows a temporary message banner/ribbon for a few seconds, or
+      // a permanent error message on top of the canvas if type=='error'.
+      // If type=='warning', a yellow highlight color is used.
+      // Modify or remove this function to customize the visually presented
+      // way that non-critical warnings and error messages are presented to the
+      // user.
+      function unityShowBanner(msg, type) {
+        var warningBanner = document.querySelector("#unity-warning");
+        function updateBannerVisibility() {
+          warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
+        }
+        var div = document.createElement('div');
+        div.innerHTML = msg;
+        warningBanner.appendChild(div);
+        if (type == 'error') div.style = 'background: red; padding: 10px;';
+        else {
+          if (type == 'warning') div.style = 'background: yellow; padding: 10px;';
+          setTimeout(function() {
+            warningBanner.removeChild(div);
+            updateBannerVisibility();
+          }, 5000);
+        }
+        updateBannerVisibility();
+      }
+
+      var buildUrl = "Build";
+      var loaderUrl = buildUrl + "/New.loader.js";
+      var config = {
+        arguments: [],
+        dataUrl: buildUrl + "/New.data",
+        frameworkUrl: buildUrl + "/New.framework.js",
+        codeUrl: buildUrl + "/New.wasm",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "DefaultCompany",
+        productName: "EcoGuardian-Unity",
+        productVersion: "1.0",
+        showBanner: unityShowBanner,
+        // errorHandler: function(err, url, line) {
+        //    alert("error " + err + " occurred at line " + line);
+        //    // Return 'true' if you handled this error and don't want Unity
+        //    // to process it further, 'false' otherwise.
+        //    return true;
+        // },
+      };
+
+      // By default, Unity keeps WebGL canvas render target size matched with
+      // the DOM size of the canvas element (scaled by window.devicePixelRatio)
+      // Set this to false if you want to decouple this synchronization from
+      // happening inside the engine, and you would instead like to size up
+      // the canvas DOM size and WebGL render target sizes yourself.
+      // config.matchWebGLToCanvasSize = false;
+
+      // If you would like all file writes inside Unity Application.persistentDataPath
+      // directory to automatically persist so that the contents are remembered when
+      // the user revisits the site the next time, uncomment the following line:
+      // config.autoSyncPersistentDataPath = true;
+      // This autosyncing is currently not the default behavior to avoid regressing
+      // existing user projects that might rely on the earlier manual
+      // JS_FileSystem_Sync() behavior, but in future Unity version, this will be
+      // expected to change.
+
+      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+        // Mobile device style: fill the whole browser client area with the game canvas:
+
+        var meta = document.createElement('meta');
+        meta.name = 'viewport';
+        meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+        document.getElementsByTagName('head')[0].appendChild(meta);
+        document.querySelector("#unity-container").className = "unity-mobile";
+        canvas.className = "unity-mobile";
+
+        // To lower canvas resolution on mobile devices to gain some
+        // performance, uncomment the following line:
+        // config.devicePixelRatio = 1;
+
+
+      } else {
+        // Desktop style: Render the game canvas full screen in iframe
+        canvas.style.width = "100%";
+        canvas.style.height = "100%";
+      }
+
+      document.querySelector("#unity-loading-bar").style.display = "block";
+
+      var myUnityInstance = null;
+
+      // Hàm gửi dữ liệu màn chơi cho Unity gọi
+      window.RequestDataFromWeb = function() {
+        const userString = localStorage.getItem("currentUser");
+        if (!userString) {
+          console.warn("User is not logged in! Game progress cannot be loaded.");
+          return;
+        }
+        
+        const currentUser = JSON.parse(userString);
+        const userId = currentUser._id || currentUser.userId;
+        
+        // Đổi localhost thành window.location.hostname để chạy mượt trên mạng LAN hoặc server ngoài
+        const _base = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:3000' : location.origin;
+        fetch(`${_base}/api/users/game-progress/${userId}`)
+          .then(res => res.json())
+          .then(data => {
+              // Lưu trữ lại danh sách động vật hiện có để đối chiếu sau này (đúng key unlockedSpecies từ API)
+              window.previousUnlocked = data.unlockedSpecies || [];
+              
+              if (myUnityInstance) {
+                  myUnityInstance.SendMessage('Save_Manager', 'OnReceiveDataFromWeb', JSON.stringify(data));
+              } else {
+                  console.error("Unity Instance not ready yet.");
+              }
+          })
+          .catch(err => console.error("Error fetching game progress:", err));
+      };
+
+      // Hàm nhận dữ liệu từ Unity và cập nhật lên Server
+      window.ReceiveDataFromUnity = function(jsonDataString) {
+        console.log("Unity gửi dữ liệu lên Web:", jsonDataString);
+        const userString = localStorage.getItem("currentUser");
+        if (!userString) {
+          console.warn("User is not logged in! Game progress cannot be saved.");
+          return;
+        }
+
+        const currentUser = JSON.parse(userString);
+        const userId = currentUser._id || currentUser.userId;
+        const data = JSON.parse(jsonDataString);
+
+        // --- BẮT SỰ KIỆN MỞ KHÓA ĐỘNG VẬT MỚI ---
+        const currentUnlocked = data.unlockedSpecies || [];
+        const previousUnlocked = window.previousUnlocked || [];
+        console.log("currentUnlocked:", currentUnlocked);
+        console.log("previousUnlocked:", previousUnlocked);
+        
+        // Lọc ra các con vật mới chưa từng có trước đó
+        const newlyUnlocked = currentUnlocked.filter(animal => !previousUnlocked.includes(animal));
+        console.log("newlyUnlocked:", newlyUnlocked);
+
+        if (newlyUnlocked.length > 0) {
+            console.log("Mở khóa thành công:", newlyUnlocked);
+            window.previousUnlocked = currentUnlocked; // Cập nhật lại list
+            // Gửi tin nhắn ra ngoài GameUnity.html để bật Popup chúc mừng
+            window.parent.postMessage({ type: "UNLOCK_ANIMALS", animals: newlyUnlocked }, "*");
+        }
+        // ------------------------------------------
+
+        const _base2 = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:3000' : location.origin;
+        fetch(`${_base2}/api/users/update-game-progress/${userId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        })
+        .then(res => res.json())
+        .then(response => {
+          if (response.success) {
+            console.log("Progress saved successfully!");
+          } else {
+            console.error("Failed to save progress:", response.message);
+          }
+        })
+        .catch(err => console.error("Error saving game progress:", err));
+      };
+
+      var script = document.createElement("script");
+      script.src = loaderUrl;
+      script.onload = () => {
+        createUnityInstance(canvas, config, (progress) => {
+          document.querySelector("#unity-progress-bar-full").style.width = 100 * progress + "%";
+              }).then((unityInstance) => {
+                myUnityInstance = unityInstance; // Lưu lại Unity Instance
+                document.querySelector("#unity-loading-bar").style.display = "none";
+
+
+              }).catch((message) => {
+                alert(message);
+              });
+            };
+
+      document.body.appendChild(script);
+
+    </script>
+  </body>
+</html>

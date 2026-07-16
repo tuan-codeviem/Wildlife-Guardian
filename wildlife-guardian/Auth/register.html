@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wildlife Guardian | Sign Up</title>
+  <link rel="stylesheet" href="register.css" />
+</head>
+
+<body>
+  <div class="container reveal">
+    <div class="login-section reveal from-left">
+      <div class="logo">
+        <span class="logo-icon">🦁</span>
+        <h2>Wildlife Guardian</h2>
+      </div>
+      <h1>Create Account</h1>
+      <p class="subtitle">Join the movement to protect wildlife</p>
+
+
+      <form id="registerForm">
+        <div class="input-group" id="fullnameGroup">
+          <label for="fullname">Full Name</label>
+          <input type="text" id="fullname" name="fullname" placeholder="Nguyen Van A" />
+          <small class="error-message"></small>
+        </div>
+
+        <div class="input-group" id="regEmailGroup">
+          <label for="regEmail">Email</label>
+          <input type="email" id="regEmail" name="regEmail" placeholder="you@example.com" />
+          <small class="error-message"></small>
+        </div>
+
+        <div class="input-group" id="regPasswordGroup">
+          <label for="regPassword">Password</label>
+          <div class="password-wrapper">
+            <input type="password" id="regPassword" name="regPassword" placeholder="Create a password" />
+            <button type="button" class="toggle-password" id="toggleRegPassword">
+              👁️
+            </button>
+          </div>
+          <small class="error-message"></small>
+        </div>
+
+        <div class="input-group" id="confirmPasswordGroup">
+          <label for="confirmPassword">Confirm Password</label>
+          <div class="password-wrapper">
+            <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password" />
+            <button type="button" class="toggle-password" id="toggleConfirmPassword">
+              👁️
+            </button>
+          </div>
+          <small class="error-message"></small>
+        </div>
+
+        <div class="terms">
+          <input type="checkbox" id="termsCheckbox" />
+          <label for="termsCheckbox">I agree to the <a href="#">Terms of Service</a> and
+            <a href="#">Privacy Policy</a></label>
+        </div>
+
+        <button type="submit" class="login-btn" id="registerBtn">
+          Create Account
+        </button>
+      </form>
+
+      <p class="switch-page">
+        Already have an account? <a href="login.html">Sign In</a>
+      </p>
+    </div>
+
+    <div class="info-section reveal">
+      <div class="info-content reveal from-right">
+        <h2>Become a Guardian</h2>
+        <p>Join thousands of wildlife protectors around the world.</p>
+        <div class="stats">
+          <div class="stat-item">
+            <div class="stat-number">35K+</div>
+            <div class="stat-label">Guardians</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">2.1K+</div>
+            <div class="stat-label">Rescues</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">100+</div>
+            <div class="stat-label">Communities</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+  <script src="js/scroll.js"></script>
+  <script src="js/register.js"></script>
+</body>
+
+</html>
