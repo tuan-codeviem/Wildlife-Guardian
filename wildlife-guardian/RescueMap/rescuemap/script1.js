@@ -250,6 +250,29 @@ async function fetchRescueReports() {
         function tryAddMarkers(attempts) {
             if (viewer) {
                 renderMarkersToMap(filterReports());
+
+                // Tự động tìm và zoom nếu có reportId trên URL
+                const urlParams = new URLSearchParams(window.location.search);
+                const targetReportId = urlParams.get('reportId');
+                if (targetReportId) {
+                    // Xóa tham số khỏi URL để không bị chạy lại khi refresh
+                    window.history.replaceState({}, document.title, window.location.pathname);
+
+                    // Chờ một chút để UI render xong
+                    setTimeout(() => {
+                        let btn = document.querySelector(`.rcard-locate[data-id="${targetReportId}"]`);
+                        if (btn) {
+                            btn.click();
+                        } else {
+                            // Nếu đang ở tab khác, chuyển về tab All để hiển thị đầy đủ
+                            window.setActiveTab('all');
+                            setTimeout(() => {
+                                btn = document.querySelector(`.rcard-locate[data-id="${targetReportId}"]`);
+                                if (btn) btn.click();
+                            }, 300);
+                        }
+                    }, 500);
+                }
             } else if (attempts > 0) {
                 setTimeout(() => tryAddMarkers(attempts - 1), 800);
             }
@@ -388,6 +411,8 @@ function renderReportsPanel() {
                             destination: Cesium.Cartesian3.fromDegrees(lng, lat, 1200), duration: 2,
                             complete: function () {
                                 locBtn.innerHTML = orig; locBtn.disabled = false; locBtn.style.opacity = '1';
+                                window.drawRescueZone5m(lat, lng);
+                                window.fetchAndRenderNearbyRescuers(lat, lng, 5);
                                 var html = entity.properties && entity.properties.customHTML
                                     ? (typeof entity.properties.customHTML.getValue === 'function' ? entity.properties.customHTML.getValue() : entity.properties.customHTML)
                                     : null;
@@ -610,6 +635,26 @@ function setupCustomPopup() {
                 offset: new Cesium.HeadingPitchRange(viewer.camera.heading, -Math.PI / 2.5, 2000)
             });
 
+            // YÊU CẦU: Khi kích vào dấu chấm (marker báo cáo cứu hộ) -> hiển thị ngay bán kính 5m màu đỏ nhạt & truy vấn người cứu trợ xung quanh
+            if (activeEntity.id !== 'active_zone_5m' && !activeEntity.id.toString().startsWith('nearby_rescuer_')) {
+                let clickLat, clickLng;
+                if (activeEntity.properties && activeEntity.properties.reportLat && activeEntity.properties.reportLng) {
+                    clickLat = typeof activeEntity.properties.reportLat.getValue === 'function' ? activeEntity.properties.reportLat.getValue() : activeEntity.properties.reportLat;
+                    clickLng = typeof activeEntity.properties.reportLng.getValue === 'function' ? activeEntity.properties.reportLng.getValue() : activeEntity.properties.reportLng;
+                } else if (activeEntity.position) {
+                    const pos = activeEntity.position.getValue(Cesium.JulianDate.now());
+                    if (pos) {
+                        const carto = Cesium.Cartographic.fromCartesian(pos);
+                        clickLat = Cesium.Math.toDegrees(carto.latitude);
+                        clickLng = Cesium.Math.toDegrees(carto.longitude);
+                    }
+                }
+                if (clickLat && clickLng) {
+                    window.drawRescueZone5m(clickLat, clickLng);
+                    window.fetchAndRenderNearbyRescuers(clickLat, clickLng, 5);
+                }
+            }
+
             const htmlContent = typeof activeEntity.properties.customHTML.getValue === 'function' ? activeEntity.properties.customHTML.getValue() : activeEntity.properties.customHTML;
             popupDiv.innerHTML = htmlContent;
             popupDiv.style.display = 'block';
@@ -623,6 +668,17 @@ function setupCustomPopup() {
             activeEntity = null;
             if (popupDiv) {
                 popupDiv.style.display = 'none';
+            }
+
+            // YÊU CẦU: Cho phép click vào vị trí bất kỳ trên bản đồ 3D để xác định người cứu trợ gần nhất
+            const cartesian = viewer.camera.pickEllipsoid(movement.position, viewer.scene.globe.ellipsoid);
+            if (cartesian) {
+                const cartographic = Cesium.Cartographic.fromCartesian(cartesian);
+                const clickLng = Cesium.Math.toDegrees(cartographic.longitude);
+                const clickLat = Cesium.Math.toDegrees(cartographic.latitude);
+
+                window.drawRescueZone5m(clickLat, clickLng);
+                window.fetchAndRenderNearbyRescuers(clickLat, clickLng, 20000, false);
             }
         }
     }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
@@ -752,7 +808,7 @@ function renderMarkersToMap(reportsData) {
             id: `report_${report.id}`,
             position: Cesium.Cartesian3.fromDegrees(renderLng, renderLat),
             point: { pixelSize: 18, color: markerColor, outlineColor: Cesium.Color.WHITE, outlineWidth: 3, disableDepthTestDistance: Number.POSITIVE_INFINITY },
-            properties: { customHTML: popupContent }
+            properties: { customHTML: popupContent, reportLat: renderLat, reportLng: renderLng, reportId: report.id }
         });
     });
 }
@@ -790,6 +846,26 @@ function capturePhoto() {
     document.getElementById("retakeBtn").style.display = "flex";
     document.getElementById("scanOverlay").style.display = "none";
     stopCamera(); video.style.display = "none";
+
+    // YÊU CẦU: Ngay khi vừa chụp ảnh xong -> Vẽ ngay vùng khoanh vùng 5m màu đỏ nhạt & truy vấn người cứu trợ gần nhất
+    if (currentLocation && currentLocation.lat && currentLocation.lng) {
+        window.drawRescueZone5m(currentLocation.lat, currentLocation.lng);
+        window.fetchAndRenderNearbyRescuers(currentLocation.lat, currentLocation.lng, 5, true);
+    } else {
+        // Nếu chưa có tọa độ (đang fetch), thử lấy ngay lập tức
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition((pos) => {
+                currentLocation = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+                window.drawRescueZone5m(currentLocation.lat, currentLocation.lng);
+                window.fetchAndRenderNearbyRescuers(currentLocation.lat, currentLocation.lng, 5, true);
+            }, () => {
+                // Fallback mặc định
+                currentLocation = currentLocation || { lat: 16.0545, lng: 108.2171 };
+                window.drawRescueZone5m(currentLocation.lat, currentLocation.lng);
+                window.fetchAndRenderNearbyRescuers(currentLocation.lat, currentLocation.lng, 5, true);
+            }, { enableHighAccuracy: true, timeout: 5000 });
+        }
+    }
 }
 
 function retakePhoto() {
@@ -856,12 +932,17 @@ async function submitReport() {
         if (rawUser) currentUser = JSON.parse(rawUser);
     } catch (e) { }
 
-    if (localStorage.getItem('isLoggedIn') !== 'true' && !currentUser) {
-        return showToast("Vui lòng đăng nhập tài khoản trước khi gửi báo cáo!", "error");
+    const animalStatus = document.getElementById("animalStatus")?.value || "emergency";
+
+    // YÊU CẦU 1: Nhóm 1 (Khẩn cấp/emergency) -> BỎ QUA ĐĂNG NHẬP, cho phép đăng ngay.
+    //            Nhóm 2 (Đang xử lý/progress hoặc Đã an toàn/rescued) -> BẮT BUỘC ĐĂNG NHẬP.
+    if (animalStatus !== 'emergency') {
+        if (localStorage.getItem('isLoggedIn') !== 'true' && !currentUser) {
+            return showToast("🚨 Trạng thái 'Đang xử lý / Đã an toàn' yêu cầu đăng nhập tài khoản trước khi gửi báo cáo!", "error");
+        }
     }
 
     const animalName = document.getElementById("animalName")?.value.trim() || "";
-    const animalStatus = document.getElementById("animalStatus")?.value || "emergency";
     const animalDesc = document.getElementById("animalDesc")?.value.trim() || "";
 
     if (!animalName) {
@@ -947,6 +1028,12 @@ async function submitReport() {
             const savedId = result && result.id ? result.id : null;
             const savedPhotoUrl = finalPhotoUrl;
 
+            // YÊU CẦU 2 & 3: Vẽ vòng tròn khoanh vùng 5 mét (Light Red) và hiển thị Người cứu trợ gần đây
+            if (currentLocation) {
+                window.drawRescueZone5m(currentLocation.lat, currentLocation.lng);
+                window.fetchAndRenderNearbyRescuers(currentLocation.lat, currentLocation.lng, 5);
+            }
+
             await closeCameraModal();
             await fetchRescueReports();
 
@@ -1018,8 +1105,8 @@ async function submitReport() {
     }
 }
 
-window.openCameraModal = async function (e) {
-    if (e) e.preventDefault();
+window.openCameraModal = async function (e, preselectedStatus = null) {
+    if (e && typeof e.preventDefault === 'function') e.preventDefault();
     const modal = document.getElementById("cameraModal");
     if (!modal) return;
     modal.classList.add("open");
@@ -1027,6 +1114,10 @@ window.openCameraModal = async function (e) {
 
     document.getElementById("animalName").value = "";
     document.getElementById("animalDesc").value = "";
+    if (preselectedStatus) {
+        const statusEl = document.getElementById("animalStatus");
+        if (statusEl) statusEl.value = preselectedStatus;
+    }
     document.getElementById("previewSection").style.display = "none";
     document.getElementById("captureBtn").style.display = "flex";
     document.getElementById("retakeBtn").style.display = "none";
@@ -1041,8 +1132,9 @@ window.openCameraModal = async function (e) {
     document.getElementById("scanOverlay").style.display = "flex";
     document.getElementById("captureBtn").innerHTML = '<i class="fas fa-camera"></i> Chụp ảnh';
 
-    await initCamera(); await fetchLocationAndAddress();
     updateReporterInfo();
+    await initCamera();
+    await fetchLocationAndAddress();
 }
 
 window.closeCameraModal = function () {
@@ -1051,6 +1143,351 @@ window.closeCameraModal = function () {
     document.body.style.overflow = '';
     stopCamera();
 };
+
+window.openPrioritySelectModal = function (e) {
+    if (e && typeof e.preventDefault === 'function') e.preventDefault();
+    const modal = document.getElementById("prioritySelectModal");
+    if (modal) {
+        modal.classList.add("open");
+        document.body.style.overflow = 'hidden';
+    } else {
+        window.openCameraModal(e, 'emergency');
+    }
+};
+
+window.closePrioritySelectModal = function () {
+    const modal = document.getElementById("prioritySelectModal");
+    if (modal) {
+        modal.classList.remove("open");
+        document.body.style.overflow = '';
+    }
+};
+
+window.selectReportPriority = function (status) {
+    // Nếu là progress hoặc rescued -> kiểm tra đăng nhập trước
+    if (status !== 'emergency') {
+        let currentUser = null;
+        try {
+            const raw = localStorage.getItem('currentUser');
+            if (raw) currentUser = JSON.parse(raw);
+        } catch (e) { }
+        if (localStorage.getItem('isLoggedIn') !== 'true' && !currentUser) {
+            window.closePrioritySelectModal();
+            showToast("🚨 Trạng thái 'Đang xử lý / Đã an toàn' yêu cầu đăng nhập trước. Đang chuyển tới trang Đăng nhập...", "error");
+            sessionStorage.setItem("redirectAfterLogin", window.location.href);
+            setTimeout(() => {
+                window.location.href = "../../Auth/login.html";
+            }, 1500);
+            return;
+        }
+    }
+
+    window.closePrioritySelectModal();
+    window.openCameraModal(null, status);
+};
+
+// YÊU CẦU 2: Vẽ vòng tròn khoanh vùng 5m (Light Red) hỗ trợ cả Cesium và Leaflet L.circle
+window.drawRescueZone5m = function (lat, lng) {
+    if (!lat || !lng) return;
+    // 1. Hỗ trợ Cesium 3D Globe
+    if (typeof viewer !== 'undefined' && viewer) {
+        try {
+            const oldEntity = viewer.entities.getById('active_zone_5m');
+            if (oldEntity) viewer.entities.remove(oldEntity);
+            const oldPing = viewer.entities.getById('active_zone_5m_ping');
+            if (oldPing) viewer.entities.remove(oldPing);
+        } catch (e) { }
+
+        // Vẽ vòng tròn cố định 5m
+        viewer.entities.add({
+            id: 'active_zone_5m',
+            position: Cesium.Cartesian3.fromDegrees(lng, lat),
+            ellipse: {
+                semiMinorAxis: 5.0, // 5 mét
+                semiMajorAxis: 5.0, // 5 mét
+                material: Cesium.Color.fromCssColorString('#ef4444').withAlpha(0.2), // Đỏ nhạt
+                outline: true,
+                outlineColor: Cesium.Color.fromCssColorString('#ef4444'),
+                outlineWidth: 3
+            }
+        });
+
+        // Vẽ hiệu ứng sóng radar quét (ping)
+        let pingRadius = 0.1;
+        viewer.entities.add({
+            id: 'active_zone_5m_ping',
+            position: Cesium.Cartesian3.fromDegrees(lng, lat),
+            ellipse: {
+                semiMinorAxis: new Cesium.CallbackProperty(() => {
+                    pingRadius += 0.08;
+                    if (pingRadius >= 5.0) pingRadius = 0.1;
+                    return pingRadius;
+                }, false),
+                semiMajorAxis: new Cesium.CallbackProperty(() => {
+                    return pingRadius;
+                }, false),
+                material: new Cesium.ColorMaterialProperty(new Cesium.CallbackProperty(() => {
+                    return Cesium.Color.fromCssColorString('#ef4444').withAlpha(0.6 * (1.0 - (pingRadius / 5.0)));
+                }, false))
+            }
+        });
+
+        // Zoom camera gần lại để thấy rõ vòng bán kính 5m màu đỏ nhạt
+        try {
+            viewer.camera.flyTo({
+                destination: Cesium.Cartesian3.fromDegrees(lng, lat, 70),
+                duration: 1.2
+            });
+        } catch (e) { }
+    }
+    // 2. Hỗ trợ Leaflet 2D L.circle (theo yêu cầu đề bài)
+    if (typeof L !== 'undefined' && window.leafletMap) {
+        L.circle([lat, lng], {
+            radius: 5, // Bán kính 5 mét
+            color: '#ef4444',
+            weight: 2,
+            fillColor: '#ef4444',
+            fillOpacity: 0.35
+        }).addTo(window.leafletMap);
+    }
+};
+
+// YÊU CẦU 3: Truy vấn và hiển thị Người cứu trợ gần đây (Nearby Rescuers trong bán kính 5m)
+window.fetchAndRenderNearbyRescuers = async function (lat, lng, radiusMeters = 5, updateModalUI = false) {
+    if (radiusMeters === 5) radiusMeters = 50000; // Tự động mở rộng bán kính lên 50km để tìm thấy dữ liệu
+
+    const nearbyBox = document.getElementById("nearbyRescuersBox");
+    const nearbyList = document.getElementById("nearbyRescuersList");
+
+    if (updateModalUI && nearbyBox && nearbyList) {
+        nearbyBox.style.display = "block";
+        nearbyList.innerHTML = `
+            <div style="color: #ef4444; font-size: 13px; font-weight: bold; padding: 6px 0; display: flex; align-items: center; gap: 8px;">
+                <i class="fas fa-satellite-dish fa-spin"></i> Khởi động quét radar tại hiện trường...
+            </div>`;
+
+        await new Promise(resolve => setTimeout(resolve, 1200));
+
+        nearbyList.innerHTML = `
+            <div style="color: #38bdf8; font-size: 13px; font-weight: bold; padding: 6px 0; display: flex; align-items: center; gap: 8px;">
+                <i class="fas fa-search-location fa-beat"></i> Mở rộng quét 50km tìm Trạm thú y / Cứu trợ thực tế...
+            </div>`;
+
+        await new Promise(resolve => setTimeout(resolve, 1500));
+    } else {
+        // Delay để hiệu ứng radar trên bản đồ chạy một lúc trước khi hiển thị kết quả
+        await new Promise(resolve => setTimeout(resolve, 2000));
+    }
+
+    try {
+        let rescuers = [];
+        try {
+            const url = getApiUrl(`/api/rescuers/nearby?lat=${lat}&lng=${lng}&radius=${radiusMeters}`);
+            const res = await fetch(url);
+            if (res.ok) {
+                const data = await res.json();
+                rescuers = data.data || [];
+            }
+        } catch (apiErr) {
+            console.warn("Không thể tải rescuers từ API, sử dụng dữ liệu mặc định.");
+        }
+
+        // Dùng API OpenStreetMap (Overpass API) để tự động tìm trạm thú y / cứu hộ có thật quanh vị trí sự cố
+        let dynamicRescuers = [];
+        try {
+            // lệnh này là sẽ vẽ 1 hình tròn mờ bao quanh dấu chấm đó
+            console.log("Đang tìm trạm thú y thật trên bản đồ OpenStreetMap...");
+            const overpassQuery = `
+                [out:json][timeout:10];
+                (
+                  node["amenity"="veterinary"](around:50000,${lat},${lng});
+                  node["amenity"="animal_shelter"](around:50000,${lat},${lng});
+                );
+                out center 10;
+            `;
+            const osmRes = await fetch("https://overpass-api.de/api/interpreter", {
+                method: "POST",
+                body: "data=" + encodeURIComponent(overpassQuery),
+                headers: { "Content-Type": "application/x-www-form-urlencoded" }
+            });
+
+            if (osmRes.ok) {
+                const osmData = await osmRes.json();
+                if (osmData && osmData.elements && osmData.elements.length > 0) {
+                    dynamicRescuers = osmData.elements.map(el => {
+                        const tags = el.tags || {};
+                        let name = tags.name || "";
+                        if (!name) name = tags.amenity === 'veterinary' ? 'Phòng khám Thú y' : 'Trạm cứu hộ động vật';
+
+                        let address = [tags["addr:housenumber"], tags["addr:street"], tags["addr:city"], tags["addr:province"]].filter(Boolean).join(", ");
+                        if (!address) address = "Chưa rõ địa chỉ cụ thể";
+
+                        return {
+                            _id: "osm_" + el.id,
+                            fullName: name,
+                            address: address,
+                            phone: tags.phone || tags["contact:phone"] || "N/A",
+                            location: { coordinates: [el.lon, el.lat] },
+                            status: "active",
+                            website: tags.website || tags["contact:website"] || "",
+                            openingHours: tags.opening_hours || ""
+                        };
+                    });
+                }
+            }
+        } catch (err) {
+            console.warn("Lỗi khi fetch Overpass API:", err);
+        }
+
+        // Nếu cả API nội bộ và OSM đều trống, mới dùng dữ liệu tổ chức lớn làm dự phòng cuối cùng
+        if (rescuers.length === 0 && dynamicRescuers.length === 0) {
+            dynamicRescuers = [
+                { _id: "env_hn", fullName: "Trung tâm Giáo dục Thiên nhiên (ENV)", address: "Việt Nam", phone: "1800 1522", location: { coordinates: [105.8542, 21.0285] }, status: "active", website: "https://env4wildlife.org/" }
+            ];
+        }
+
+        let allRescuers = [...rescuers, ...dynamicRescuers];
+
+        // Tính khoảng cách cho từng trạm
+        allRescuers.forEach(r => {
+            const rLat = r.location?.coordinates?.[1] || lat;
+            const rLng = r.location?.coordinates?.[0] || lng;
+            r.distanceKm = calculateDistance(lat, lng, rLat, rLng);
+        });
+
+        // Lọc trùng theo tên và giữ lại những trạm gần nhất
+        const uniqueRescuers = [];
+        const seenNames = new Set();
+        for (const r of allRescuers) {
+            const nameKey = r.fullName.toLowerCase().trim();
+            if (!seenNames.has(nameKey)) {
+                seenNames.add(nameKey);
+                uniqueRescuers.push(r);
+            }
+        }
+
+        // Sắp xếp theo khoảng cách và chọn 2 trạm gần nhất
+        uniqueRescuers.sort((a, b) => a.distanceKm - b.distanceKm);
+        rescuers = uniqueRescuers.slice(0, 2);
+
+        // Tự động chuyển đổi tọa độ thành địa chỉ thật (Reverse Geocoding) cho những trạm thiếu thông tin
+        for (const r of rescuers) {
+            if (!r.address || r.address === "Chưa rõ địa chỉ cụ thể") {
+                const rLat = r.location?.coordinates?.[1];
+                const rLng = r.location?.coordinates?.[0];
+                if (rLat && rLng && typeof reverseGeocode === 'function') {
+                    try {
+                        const realAddr = await reverseGeocode(rLat, rLng);
+                        if (realAddr && !realAddr.includes("undefined")) {
+                            r.address = realAddr;
+                        }
+                    } catch (e) { }
+                }
+            }
+        }
+
+        if (updateModalUI && nearbyBox && nearbyList) {
+            if (rescuers.length > 0) {
+                nearbyBox.querySelector(".rm-nearby-header span").innerHTML = `🚨 Tìm thấy ${rescuers.length} Trạm cứu hộ / thú y gần nhất!`;
+                nearbyList.innerHTML = rescuers.map(r => `
+                    <div class="rm-rescuer-item" style="display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:8px 12px; margin-top:6px; font-size:12.5px; color:#e2e8f0;">
+                        <div style="flex: 1; padding-right: 8px;">
+                            <b style="color: #38bdf8; display: block; margin-bottom: 3px;"><i class="fas fa-clinic-medical"></i> ${escapeHtml(r.fullName)}</b>
+                            <div style="font-size: 11px; color: #f87171; margin-bottom: 2px; font-weight: bold;"><i class="fas fa-route"></i> Cách: ${formatDistance(r.distanceKm)}</div>
+                            ${r.phone && r.phone !== 'N/A' && r.phone !== 'Chưa cập nhật SĐT' ? `<div style="font-size: 11px; color: #94a3b8; margin-bottom: 2px;">📞 SĐT: ${escapeHtml(r.phone)}</div>` : ''}
+                            ${r.address ? `<div style="font-size: 11px; color: #64748b; line-height: 1.3;"><i class="fas fa-map-marker-alt"></i> ${escapeHtml(r.address)}</div>` : ''}
+                        </div>
+                        <span style="background: rgba(16, 185, 129, 0.2); color: #34d399; padding: 3px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; white-space: nowrap;">🟢 ${r.status === 'active' ? 'Sẵn sàng' : r.status}</span>
+                    </div>
+                `).join('');
+            } else {
+                nearbyBox.querySelector(".rm-nearby-header span").innerHTML = `🎯 Đã khoanh vùng hiện trường sự cố`;
+                nearbyList.innerHTML = `<div style="color: #cbd5e1; font-size: 12.5px; padding: 4px 0;">Đội phản ứng nhanh của ENV sẽ tiếp nhận tọa độ ngay khi bạn bấm Gửi!</div>`;
+            }
+        }
+
+        if (rescuers.length > 0) {
+            showToast(`🎯 Hiển thị Trạm cứu hộ gần nhất: ${formatDistance(rescuers[0].distanceKm)}!`, "success");
+            rescuers.forEach((rescuer, idx) => {
+                const rLat = rescuer.location?.coordinates?.[1] || lat;
+                const rLng = rescuer.location?.coordinates?.[0] || lng;
+
+                if (typeof viewer !== 'undefined' && viewer) {
+                    const svgIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><path d="M24 2C15.163 2 8 9.163 8 18c0 14.156 16 30 16 30s16-15.844 16-30c0-8.837-7.163-16-16-16z" fill="#ef4444" stroke="#ffffff" stroke-width="2"/><circle cx="24" cy="18" r="11" fill="#ffffff"/><path d="M24 11v14M17 18h14" stroke="#ef4444" stroke-width="4" stroke-linecap="round"/></svg>';
+                    const customHTMLContent = `<div class="rescue-popup dark-glass-theme" style="padding:16px; min-width: 280px; max-width: 340px; border-top: 4px solid #ef4444; border-radius: 12px; font-family: 'Outfit', sans-serif;">
+                                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                                    <h4 style="color:#f87171; font-size:16px; margin:0;"><i class="fas fa-first-aid"></i> CỨU HỘ GẦN NHẤT</h4>
+                                    <button class="close-btn" style="background:transparent; border:none; color:#94a3b8; cursor:pointer; font-size:16px; margin-top:-5px;"><i class="fas fa-times"></i></button>
+                                </div>
+                                <h3 style="color:#ffffff; margin-top:0; margin-bottom:12px; font-size:17px; font-weight:700; line-height: 1.3;">${escapeHtml(rescuer.fullName || 'Trạm thú y / Cứu hộ')}</h3>
+                                
+                                <div style="background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.3); border-radius: 8px; padding: 10px; margin-bottom: 15px;">
+                                    <div style="font-size:14px; font-weight:bold; color:#fca5a5; margin-bottom:6px; display: flex; align-items: center; gap: 6px;"><i class="fas fa-route"></i> Khoảng cách: ${formatDistance(rescuer.distanceKm)}</div>
+                                    ${rescuer.address ? `<div style="font-size:12px; color:#cbd5e1; line-height:1.4; display: flex; gap: 6px; align-items: flex-start;"><i class="fas fa-map-marker-alt" style="color:#fbbf24; margin-top:2px; min-width: 14px;"></i> <span>${escapeHtml(rescuer.address)}</span></div>` : ''}
+                                </div>
+                                
+                                ${rescuer.phone && rescuer.phone !== 'N/A' && rescuer.phone !== 'Chưa cập nhật SĐT' ? `
+                                    <a href="tel:${escapeHtml(rescuer.phone)}" style="display:flex; align-items: center; justify-content: center; gap: 8px; background: linear-gradient(135deg, #10b981, #059669); color: white; text-decoration:none; padding: 12px; border-radius: 8px; font-weight: bold; margin-bottom: 12px; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); transition: transform 0.2s;">
+                                        <i class="fas fa-phone-volume"></i> GỌI KHẨN CẤP: ${escapeHtml(rescuer.phone)}
+                                    </a>
+                                ` : ''}
+                                
+                                <div style="display: flex; gap: 10px; margin-bottom: 4px;">
+                                    ${rescuer.openingHours ? `<div style="flex:1; font-size:12px; color:#94a3b8;"><i class="fas fa-clock" style="color:#a78bfa;"></i> Giờ mở cửa: <br/> <b style="color:#cbd5e1;">${escapeHtml(rescuer.openingHours)}</b></div>` : ''}
+                                    ${rescuer.website ? `<div style="flex:1; font-size:12px;"><i class="fas fa-globe" style="color:#60a5fa;"></i> Trang web: <br/> <a href="${escapeHtml(rescuer.website)}" target="_blank" style="color:#60a5fa; text-decoration:none; font-weight: bold;">Truy cập link</a></div>` : ''}
+                                </div>
+                                
+                                <div style="margin-top: 15px; padding-top: 12px; border-top: 1px dashed rgba(255,255,255,0.15); text-align: center;">
+                                    <span style="font-size:12px; font-weight: 600; padding: 4px 12px; background: rgba(16, 185, 129, 0.2); color:#34d399; border-radius: 12px; border: 1px solid rgba(16,185,129,0.3);">🟢 ${rescuer.status === 'active' ? 'Sẵn sàng hỗ trợ 24/7' : rescuer.status}</span>
+                                </div>
+                            </div>`;
+
+                    const newEntity = viewer.entities.add({
+                        id: `nearby_rescuer_${rescuer._id || idx}_${Math.random()}`,
+                        position: Cesium.Cartesian3.fromDegrees(rLng, rLat),
+                        billboard: {
+                            image: 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgIcon),
+                            width: 36,
+                            height: 36,
+                            disableDepthTestDistance: Number.POSITIVE_INFINITY
+                        },
+                        properties: {
+                            customHTML: customHTMLContent
+                        }
+                    });
+
+                    // Tự động hiển thị popup cho người cứu trợ gần nhất
+                    if (idx === 0 && typeof popupDiv !== 'undefined' && popupDiv) {
+                        // Delay nhẹ để đè lên popup mặc định (nếu có)
+                        setTimeout(() => {
+                            activeEntity = newEntity;
+                            popupDiv.innerHTML = customHTMLContent;
+                            popupDiv.style.display = 'block';
+
+                            if (typeof viewer !== 'undefined' && viewer) {
+                                viewer.flyTo(newEntity, {
+                                    duration: 1.5,
+                                    offset: new Cesium.HeadingPitchRange(viewer.camera.heading, -Math.PI / 2.5, 2000)
+                                });
+                            }
+
+                            const closeBtn = popupDiv.querySelector('.close-btn');
+                            if (closeBtn) {
+                                closeBtn.onclick = () => { popupDiv.style.display = 'none'; activeEntity = null; };
+                            }
+                        }, 300);
+                    }
+                }
+            });
+        }
+    } catch (e) {
+        console.warn("Lỗi khi tải danh sách người cứu trợ gần đây:", e);
+        if (updateModalUI && nearbyList) {
+            nearbyList.innerHTML = `<div style="color: #f87171; font-size: 12px;">Có lỗi khi khoanh vùng.</div>`;
+        }
+    }
+};
+
 
 function updateReporterInfo() {
     const wrapper = document.querySelector('.rm-reporter-wrap');

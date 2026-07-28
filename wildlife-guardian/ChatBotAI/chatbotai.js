@@ -63,10 +63,10 @@ if (!document.getElementById("wgChatbot")) {
       </div>
       <div class="quick-replies-wrapper" id="qrWrapper">
         <div class="quick-replies" id="quickReplies">
-          <button class="qr-btn" data-i18n="qr_1"><span>⚡</span> How can I report an emergency?</button>
-          <button class="qr-btn" data-i18n="qr_2"><span>💡</span> What is Wildlife Guardian?</button>
-          <button class="qr-btn" data-i18n="qr_3"><span>🐾</span> Can I donate to a specific animal?</button>
-          <button class="qr-btn" data-i18n="qr_4"><span>🌿</span> Tips for helping local birds?</button>
+          <button class="qr-btn" data-i18n="qr_1"><span>⚡</span> Làm sao để báo cáo động vật khẩn cấp?</button>
+          <button class="qr-btn" data-i18n="qr_2"><span>🌍</span> Tôi muốn giao lưu với cộng đồng!</button>
+          <button class="qr-btn" data-i18n="qr_3"><span>🎮</span> Tôi muốn vừa học vừa chơi!</button>
+          <button class="qr-btn" data-i18n="qr_4"><span>📚</span> Nơi tra cứu thông tin các loài?</button>
         </div>
         <div class="qr-scroll-hint">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
@@ -339,8 +339,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const qrButtons = quickRepliesBox.querySelectorAll(".qr-btn");
         qrButtons.forEach(btn => {
             btn.addEventListener("click", () => {
-                // Lấy nội dung chữ, loại bỏ các icon emoji (⚡💡🐾🌿)
-                let text = btn.textContent.replace(/[⚡💡🐾🌿]/g, "").trim();
+                // Lấy nội dung chữ, loại bỏ các icon emoji (⚡🌍🎮📚)
+                let text = btn.textContent.replace(/[⚡🌍🎮📚]/g, "").trim();
 
                 // Điền vào ô input
                 chatInput.value = text;
@@ -348,8 +348,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 // Kích hoạt animation phản hồi
                 btn.classList.add("selected");
 
-                // Trực tiếp focus vào ô chat để user tiện nhấn Enter ngay
-                chatInput.focus();
+                // Tự động gửi tin nhắn luôn cho tiện
+                sendMessage();
 
                 // Gỡ animation sau khi hoàn thành
                 setTimeout(() => {

@@ -242,8 +242,6 @@
      5. STAT ITEMS — STRICTLY ONE-WAY
   ══════════════════════════════════════════════════ */
   function initCounters() {
-    const REVEAL_MS = 700;
-
     const io = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         const el = entry.target;
@@ -252,15 +250,13 @@
           const delay = parseInt(el.dataset.delay || 0);
           setTimeout(() => {
             el.classList.add('visible');
-            setTimeout(() => {
-              const numEl = el.querySelector('.stat-num');
-              const target = parseInt(numEl?.dataset.count || 0);
-              if (numEl && !el.dataset.counted) {
-                el.dataset.counted = 'y';
-                countUp(numEl, target, 1400);
-              }
-              el.dataset.done = 'y';
-            }, REVEAL_MS + 60);
+            const numEl = el.querySelector('.stat-num');
+            const target = parseInt(numEl?.dataset.count || 0);
+            if (numEl && !el.dataset.counted) {
+              el.dataset.counted = 'y';
+              countUp(numEl, target, 1400);
+            }
+            el.dataset.done = 'y';
           }, delay);
           io.unobserve(el);
         }

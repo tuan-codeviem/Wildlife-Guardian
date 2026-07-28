@@ -202,6 +202,11 @@ const removeMediaBtn = document.getElementById("remove-media-btn");
 mediaInput.addEventListener("change", function () {
   const file = this.files[0];
   if (file) {
+    if (!file.type.startsWith("image/")) {
+      alert("Vui lòng chỉ tải lên định dạng hình ảnh!");
+      this.value = "";
+      return;
+    }
     mediaPreviewImg.src = URL.createObjectURL(file);
     mediaPreviewContainer.style.display = "block";
   }
@@ -478,6 +483,11 @@ async function loadPosts(category = "all posts") {
       input.addEventListener("change", function () {
         const file = this.files[0];
         if (file) {
+          if (!file.type.startsWith("image/")) {
+            alert("Vui lòng chỉ tải lên định dạng hình ảnh!");
+            this.value = "";
+            return;
+          }
           const postId = this.getAttribute("data-post-id");
           const commentMediaPreview = document.getElementById(
             `comment-media-preview-${postId}`,
@@ -525,6 +535,11 @@ if (editPostMediaInput) {
   editPostMediaInput.addEventListener("change", function () {
     const file = this.files[0];
     if (file) {
+      if (!file.type.startsWith("image/")) {
+        alert("Vui lòng chỉ tải lên định dạng hình ảnh!");
+        this.value = "";
+        return;
+      }
       document.getElementById("editMediaPreviewImg").src =
         URL.createObjectURL(file);
       document.getElementById("editMediaPreviewContainer").style.display =
@@ -1872,11 +1887,25 @@ document.addEventListener("click", async function (e) {
 
     // Chạy lệnh gọi Server xóa bài
     try {
+      // 🔐 BẢO MẬT: Kiểm tra đăng nhập trước khi xóa
+      const meString = localStorage.getItem("currentUser");
+      if (!meString) {
+        alert("Để xóa bài, bạn cần đăng nhập trước!");
+        return;
+      }
+      const me = JSON.parse(meString);
+      const myUserId = me._id || me.userId;
+
       const response = await fetch(`${API_URL}/${postId}`, {
         method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId: myUserId }), // 🔐 Gửi userId để server xác minh quyền
       });
       if (response.ok) {
         loadPosts(); // Xóa xong thì tải lại danh sách bài viết
+      } else {
+        const data = await response.json();
+        alert(data.message || "Không thể xóa bài viết này!");
       }
     } catch (error) {
       console.error("Lỗi xóa bài:", error);

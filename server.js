@@ -5,6 +5,7 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 const zlib = require("zlib");
+const bcrypt = require("bcrypt"); // 🔐 Dùng để mã hóa mật khẩu
 require("dotenv").config();
 
 // ===== GOOGLE AUTH SETUP =====
@@ -14,6 +15,10 @@ const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 // ===== GOOGLE GEN AI SETUP =====
 const { GoogleGenAI } = require("@google/genai");
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+
+// ===== GROQ AI SETUP (FALLBACK) =====
+const Groq = require("groq-sdk");
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY || "dummy_key_prevent_crash" });
 
 // ===== CLOUDINARY SETUP =====
 const cloudinary = require("cloudinary").v2;
@@ -431,9 +436,26 @@ app.put("/api/posts/:id", uploadFile, async (req, res) => {
 // Xóa bài viết
 app.delete("/api/posts/:id", async (req, res) => {
   try {
+    // 🔐 BẢO MẬT: Bắt buộc phải có userId (dùng optional chaining tránh crash nếu không có body)
+    const userId = req.body?.userId;
+    if (!userId) {
+      return res.status(401).json({ message: "Bạn cần đăng nhập để thực hiện thao tác này!" });
+    }
+
+    const post = await Post.findById(req.params.id);
+    if (!post) {
+      return res.status(404).json({ message: "Không tìm thấy bài viết!" });
+    }
+
+    // 🔐 BẢO MẬT: Server tự kiểm tra authorId từ DB, không tin client gửi lên
+    if (post.authorId && post.authorId !== userId) {
+      return res.status(403).json({ message: "Bạn không có quyền xóa bài viết này!" });
+    }
+
     await Post.findByIdAndDelete(req.params.id);
     res.json({ message: "Đã xóa bài viết thành công!" });
   } catch (error) {
+    console.error("Lỗi xóa bài:", error);
     res.status(500).json({ message: "Lỗi khi xóa bài!" });
   }
 });
@@ -479,6 +501,10 @@ app.post("/api/register", async (req, res) => {
   try {
     const { email, password, fullName, username } = req.body;
 
+    if (!password || password.length < 6) {
+      return res.status(400).json({ success: false, message: "Mật khẩu phải có ít nhất 6 ký tự!" });
+    }
+
     // Chỉ tìm kiếm bằng email hoặc username nếu chúng có giá trị
     const searchConditions = [];
     if (email) searchConditions.push({ email: email });
@@ -493,10 +519,13 @@ app.post("/api/register", async (req, res) => {
         });
     }
 
+    // 🔐 BẢO MẬT: Hash mật khẩu trước khi lưu vào Database
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     const newUser = new User({
       email: email || username, // Hỗ trợ cả form cũ và mới
       username: username || email,
-      password: password,
+      password: hashedPassword, // Lưu mật khẩu đã mã hóa, không bao giờ lưu plain text!
       fullName: fullName || (email ? email.split("@")[0] : username),
       avatar: "https://cdn-icons-png.flaticon.com/512/149/149071.png",
     });
@@ -513,12 +542,34 @@ app.post("/api/login", async (req, res) => {
     const { email, username, password } = req.body;
     // Tìm bằng email hoặc username đều được
     const loginIdentifier = email || username;
+    // 🔐 BẢO MẬT: Tìm user theo email/username TRƯỚC (không so sánh password thẳng trong query)
     const user = await User.findOne({
       $or: [{ email: loginIdentifier }, { username: loginIdentifier }],
-      password: password,
     });
 
     if (!user) {
+      return res
+        .status(401)
+        .json({ success: false, message: "Sai tài khoản hoặc mật khẩu!" });
+    }
+
+    // 🔐 BẢO MẬT: So sánh mật khẩu bằng bcrypt (hỗ trợ cả tài khoản cũ plain text lẫn tài khoản mới đã hash)
+    let isPasswordValid = false;
+    if (user.password && user.password.startsWith("$2b$")) {
+      // Tài khoản mới: mật khẩu đã được hash bằng bcrypt
+      isPasswordValid = await bcrypt.compare(password, user.password);
+    } else {
+      // Tài khoản cũ: mật khẩu còn là plain text (sẽ tự động upgrade khi đăng nhập)
+      isPasswordValid = (user.password === password);
+      if (isPasswordValid) {
+        // Tự động nâng cấp: hash mật khẩu cũ để bảo mật hơn
+        user.password = await bcrypt.hash(password, 10);
+        await user.save();
+        console.log(`✅ Đã tự động nâng cấp mật khẩu cho user: ${user.email}`);
+      }
+    }
+
+    if (!isPasswordValid) {
       return res
         .status(401)
         .json({ success: false, message: "Sai tài khoản hoặc mật khẩu!" });
@@ -872,7 +923,7 @@ app.get("/api/users/game-progress/:id", async (req, res) => {
 
 app.get("/api/rescuemap", async (req, res) => {
   try {
-    const rescues = await Rescue.find();
+    const rescues = await Rescue.find().sort({ createdAt: -1 });
     res.json(rescues);
   } catch (error) {
     res.status(500).json({ error: "Lỗi tải dữ liệu bản đồ" });
@@ -891,9 +942,34 @@ app.post("/api/rescuemap", async (req, res) => {
 
 app.delete("/api/rescuemap/:id", async (req, res) => {
   try {
+    // 🔐 BẢO MẬT: Dùng optional chaining tránh crash khi không có body
+    const userId = req.body?.userId || req.query?.userId;
+    if (!userId) {
+      return res.status(401).json({ success: false, message: "Bạn cần đăng nhập để xóa báo cáo!" });
+    }
+
+    const rescue = await Rescue.findById(req.params.id);
+    if (!rescue) {
+      return res.status(404).json({ success: false, message: "Không tìm thấy báo cáo!" });
+    }
+
+    // 🔐 BẢO MẬT: Lấy ownerId từ đúng field theo schema (reportedBy.userId)
+    const ownerId = rescue.reportedBy?.userId || rescue.userId;
+
+    // Nếu báo cáo có lưu chủ sở hữu → bắt buộc phải đúng người
+    // Nếu báo cáo cũ không có chủ sở hữu → CHẶN (không cho xóa bừa)
+    if (!ownerId) {
+      return res.status(403).json({ success: false, message: "Không thể xác định chủ sở hữu báo cáo này!" });
+    }
+
+    if (ownerId !== userId) {
+      return res.status(403).json({ success: false, message: "Bạn không có quyền xóa báo cáo này!" });
+    }
+
     await Rescue.findByIdAndDelete(req.params.id);
     res.json({ success: true, message: "Đã xóa báo cáo thành công!" });
   } catch (error) {
+    console.error("Lỗi xóa rescue:", error);
     res.status(500).json({ success: false, error: "Không thể xóa báo cáo" });
   }
 });
@@ -904,22 +980,48 @@ app.delete("/api/rescuemap/:id", async (req, res) => {
 app.post("/api/chatbot", async (req, res) => {
   try {
     const { userMessage, languageRule } = req.body;
-    const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
-      contents: userMessage,
-      config: {
-        systemInstruction: `Bạn là Phoenix AI, trợ lý ảo của trang web Wildlife Guardian.
+    const systemPrompt = `Bạn là Phoenix AI, trợ lý ảo của trang web Wildlife Guardian.
 QUY TẮC BẮT BUỘC VỀ ĐỊNH DẠNG: Tuyệt đối không sử dụng bất kỳ định dạng Markdown nào trong câu trả lời. Không sử dụng dấu sao (*) để in đậm, in nghiêng hay làm gạch đầu dòng. Chỉ trả lời bằng văn bản thuần túy (Plain text). Nếu cần liệt kê, hãy dùng dấu gạch ngang (-). Trả lời ngắn gọn, súc tích và thân thiện.
         ${languageRule}
         2. Bạn chỉ được phép tư vấn, trả lời các câu hỏi liên quan đến bảo vệ động vật hoang dã, thiên nhiên, môi trường và các thông tin về trang web Wildlife Guardian.
         3. Nếu người dùng hỏi về các chủ đề khác (như toán học, lập trình, giải trí, chính trị...), hãy lịch sự từ chối và lái câu chuyện quay về chủ đề động vật hoang dã.
         4. Trả lời ngắn gọn, thân thiện và súc tích.
-        5. Bạn có thể trả lời về các vấn đề liên quan tới sơ cứu cơ bản cho động vật bị thương`
+        5. Bạn có thể trả lời về các vấn đề liên quan tới sơ cứu cơ bản cho động vật bị thương.
+        6. QUAN TRỌNG: Nếu người dùng hỏi cách báo cáo khẩn cấp hoặc cứu hộ động vật, BẠN PHẢI ƯU TIÊN giới thiệu tính năng "Báo Cáo (Report)" trực tiếp trên trang web Wildlife Guardian trước tiên (hướng dẫn họ truy cập tính năng Report để đăng ảnh, vị trí và tình trạng con vật lên bản đồ Rescue Map). Sau khi giới thiệu tính năng của web xong, mới được cung cấp thêm thông tin liên hệ các trạm cứu hộ/kiểm lâm địa phương nếu cần thiết.
+        7. Nếu người dùng muốn giao lưu cộng đồng, hãy giới thiệu tính năng "Social (Mạng xã hội)" của trang web, nơi họ có thể đăng bài, chia sẻ câu chuyện và kết nối với những người yêu động vật khác.
+        8. Nếu người dùng muốn vừa học vừa chơi, hãy giới thiệu tính năng "Game" của web. Bạn CẦN NHẤN MẠNH rằng đây là một tựa Game Unity 2D giải đố đẩy thùng (Sokoban) thú vị được tích hợp trên web, nơi người chơi làm nhiệm vụ đẩy các vật thể về đúng nơi quy định để bảo vệ môi trường. Đặc biệt, sau khi chiến thắng mỗi màn chơi, người chơi sẽ MỞ KHÓA được 2 mô hình động vật 3D tuyệt đẹp bên trong mục Species Library (Thư viện sinh vật) để tương tác.
+        9. Nếu người dùng muốn tra cứu thông tin loài, hãy giới thiệu tính năng "Species Library (Thư viện sinh vật)" của web, một bách khoa toàn thư lưu trữ thông tin chi tiết về các loài động vật hoang dã.`;
+
+    try {
+      // THỬ DÙNG GEMINI TRƯỚC
+      const response = await ai.models.generateContent({
+        model: 'gemini-2.5-flash',
+        contents: userMessage,
+        config: { systemInstruction: systemPrompt }
+      });
+      return res.json({ success: true, text: response.text });
+    } catch (geminiError) {
+      console.warn("⚠️ Gemini bị lỗi hoặc quá tải, đang chuyển sang Groq Fallback...");
+      
+      if (!process.env.GROQ_API_KEY) {
+        throw new Error("Không có GROQ_API_KEY để dùng Fallback.");
       }
-    });
-    res.json({ success: true, text: response.text });
+
+      // NẾU GEMINI LỖI, DÙNG GROQ (FALLBACK)
+      const chatCompletion = await groq.chat.completions.create({
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: userMessage }
+        ],
+        model: "llama-3.1-8b-instant", // Groq fast model
+        temperature: 0.7,
+        max_tokens: 1024,
+      });
+
+      return res.json({ success: true, text: chatCompletion.choices[0]?.message?.content || "Xin lỗi, không có phản hồi." });
+    }
   } catch (error) {
-    console.error("Lỗi Chatbot:", error);
+    console.error("Lỗi Chatbot (Cả Gemini và Groq đều thất bại):", error);
     res.status(500).json({ success: false, error: "Lỗi kết nối tới AI" });
   }
 });

@@ -5,12 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <title>Rescue Map – Bản đồ Cứu hộ Động vật | Wildlife Guardian</title>
-  <script>
-    if (!localStorage.getItem("currentUser")) {
-      sessionStorage.setItem("redirectAfterLogin", window.location.href);
-      window.location.replace("../../Auth/login.html");
-    }
-  </script>
+
 
   <!-- FontAwesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
@@ -31,6 +26,8 @@
   <link rel="stylesheet" href="style1.css?v=4">
   <link rel="stylesheet" href="style2.css?v=4">
   <link rel="stylesheet" href="../../ChatBotAI/chatbot.css">
+  <!-- Hệ thống thông báo cứu hộ khẩn cấp -->
+  <link rel="stylesheet" href="../../scripts/rescue-notif.css">
 
   <!-- Navbar CSS (shared from Home) -->
   <link rel="stylesheet" href="../../Home/css/nav.css">
@@ -54,7 +51,7 @@
       <a href="../../Game/GameUnity.html" data-i18n="nav_game">Game</a>
       <a href="../../Contact/Contact.html" data-i18n="nav_contact">Contact Us</a>
       <div class="mobile-actions">
-        <button class="btn-report" data-i18n="btn_report" onclick="openCameraModal(event)">🚨 Report Now</button>
+        <button class="btn-report" data-i18n="btn_report" onclick="openPrioritySelectModal(event)">🚨 Report Now</button>
         <button class="btn-login" data-i18n="btn_login">→ Log in</button>
       </div>
     </div>
@@ -94,7 +91,7 @@
             </svg>
           </button>
         </div>
-        <button class="btn-report" data-i18n="btn_report" onclick="openCameraModal(event)">🚨 Report Now</button>
+        <button class="btn-report" data-i18n="btn_report" onclick="openPrioritySelectModal(event)">🚨 Report Now</button>
         <button class="btn-login" data-i18n="btn_login">→ Log in</button>
         <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
       </div>
@@ -203,6 +200,58 @@
     </div><!-- /floating-panel -->
 
   </div><!-- /map-wrapper -->
+
+  <!-- ==========================================
+       MODAL CHỌN MỨC ĐỘ ƯU TIÊN BÁO CÁO (PRIORITY SELECT)
+  ========================================== -->
+  <div id="prioritySelectModal" class="rm-modal-overlay priority-modal-overlay">
+    <div class="rm-modal priority-modal-box">
+      <div class="rm-modal-header">
+        <div class="rm-modal-title">
+          <i class="fas fa-exclamation-circle" style="color: #ef4444;"></i>
+          <span>Chọn mức độ ưu tiên cứu hộ</span>
+        </div>
+        <button class="rm-modal-close" onclick="closePrioritySelectModal()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="priority-modal-body">
+        <p class="priority-desc">Vui lòng chọn tình trạng hiện tại của động vật để hệ thống sắp xếp quy trình cứu trợ nhanh nhất:</p>
+        
+        <div class="priority-cards">
+          <!-- Nhóm 1: Khẩn cấp (Không cần đăng nhập) -->
+          <div class="priority-card emergency-card" onclick="selectReportPriority('emergency')">
+            <div class="priority-icon">🚨</div>
+            <div class="priority-info">
+              <h4>Nhóm 1: Khẩn Cấp (Emergency)</h4>
+              <p>Động vật bị thương nặng, nguy hiểm tính mạng. <b>Không yêu cầu đăng nhập</b> để ghim tọa độ & thông tin ngay lập tức.</p>
+            </div>
+            <div class="priority-action"><i class="fas fa-chevron-right"></i></div>
+          </div>
+
+          <!-- Nhóm 2: Đang xử lý (Yêu cầu đăng nhập) -->
+          <div class="priority-card progress-card" onclick="selectReportPriority('progress')">
+            <div class="priority-icon">⏳</div>
+            <div class="priority-info">
+              <h4>Nhóm 2: Đang Xử Lý (In Progress)</h4>
+              <p>Đã có người hỗ trợ sơ cứu hoặc đang đợi đội cứu hộ di chuyển. <b>Yêu cầu đăng nhập</b> để cập nhật tiến độ.</p>
+            </div>
+            <div class="priority-action"><i class="fas fa-chevron-right"></i></div>
+          </div>
+
+          <!-- Nhóm 2: Đã an toàn (Yêu cầu đăng nhập) -->
+          <div class="priority-card safe-card" onclick="selectReportPriority('rescued')">
+            <div class="priority-icon">✅</div>
+            <div class="priority-info">
+              <h4>Nhóm 2: Đã An Toàn (Safe / Rescued)</h4>
+              <p>Động vật đã thoát hiểm an toàn hoặc đã được tiếp nhận. <b>Yêu cầu đăng nhập</b> để lưu hồ sơ hoàn tất.</p>
+            </div>
+            <div class="priority-action"><i class="fas fa-chevron-right"></i></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- ==========================================
        CAMERA / REPORT MODAL (Premium Redesign)
@@ -321,6 +370,15 @@
           <span id="addressText" data-i18n="rm_loc_fetching">Đang lấy địa chỉ...</span>
         </div>
 
+        <!-- Nearby Rescuers Box (Auto-appears right when photo is taken) -->
+        <div id="nearbyRescuersBox" class="rm-nearby-rescuers" style="display:none;">
+          <div class="rm-nearby-header">
+            <i class="fas fa-satellite-dish fa-spin" style="color: #ef4444;"></i>
+            <span>Đang quét bán kính 5m màu đỏ nhạt tìm Người cứu trợ...</span>
+          </div>
+          <div id="nearbyRescuersList" class="rm-nearby-list"></div>
+        </div>
+
         <!-- Submit Button -->
         <button id="submitReportBtn" class="rm-btn-submit">
           <i class="fas fa-paper-plane"></i>
@@ -343,6 +401,8 @@
   <script src="../../Home/js/language_EN_VI.js"></script>
   <script src="../../Home/js/nav.js"></script>
   <script src="./script1.js?v=3"></script>
+  <!-- Hệ thống thông báo cứu hộ khẩn cấp -->
+  <script src="../../scripts/rescue-notif.js"></script>
 
   <!-- BẢNG DROPDOWN TÀI KHOẢN (AVATAR GÓC TRÊN PHẢI) -->
   <div id="userDropdownPopup" class="user-dropdown-popup" style="display: none;">
@@ -609,7 +669,29 @@
               me.fullName = data.user.fullName;
               me.avatar = data.user.avatar;
               localStorage.setItem("currentUser", JSON.stringify(me));
-              window.location.reload();
+              
+              saveProfileBtn.innerText = t.saved_successfully || "Cập nhật thành công!";
+              saveProfileBtn.style.backgroundColor = "#10b981";
+              
+              setTimeout(() => {
+                document.getElementById("profileSetupModal").style.display = "none";
+                saveProfileBtn.innerText = t.btn_save_profile;
+                saveProfileBtn.style.backgroundColor = "#16a34a";
+                saveProfileBtn.disabled = false;
+                
+                // Update avatar in navbar dropdown
+                const dropdownAvatar = document.getElementById("dropdownAvatar");
+                if (dropdownAvatar) dropdownAvatar.src = me.avatar || "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+                
+                const dropdownName = document.getElementById("dropdownName");
+                if (dropdownName) dropdownName.innerText = me.fullName || "User";
+                
+                // Update all avatar buttons in header
+                const avatarBtnImgs = document.querySelectorAll(".avatar-btn img");
+                avatarBtnImgs.forEach(img => {
+                  img.src = me.avatar || "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+                });
+              }, 1500);
             } else {
               saveProfileBtn.innerText = t.error_try_again + " " + (data.message || "");
               saveProfileBtn.disabled = false;
