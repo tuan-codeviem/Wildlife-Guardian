@@ -26,10 +26,37 @@ document.addEventListener('DOMContentLoaded', () => {
   function renderCards(dataArray) {
     grid.innerHTML = "";
 
+    // Update hero count
+    const countEl = document.getElementById('speciesCountNum');
+    const totalEl = document.getElementById('totalSpeciesCount');
+    if (countEl) countEl.textContent = dataArray.length;
+    if (totalEl) totalEl.textContent = dataArray.length + ' species found';
+
+    if (dataArray.length === 0) {
+      grid.innerHTML = `
+        <div class="sl-empty-state">
+          <span class="sl-empty-icon">🦕</span>
+          <h3>No species found</h3>
+          <p>Try a different search term or category</p>
+        </div>`;
+      return;
+    }
+
     // Sort: Unlocked (premium) first
     const sorted = [...dataArray].sort((a, b) =>
       a.isUnlocked === b.isUnlocked ? 0 : a.isUnlocked ? -1 : 1
     );
+
+    // Placeholder images by category
+    const catPlaceholders = {
+      mammal:    'https://images.unsplash.com/photo-1474511320723-9a56873867b5?w=400&h=300&fit=crop',
+      bird:      'https://images.unsplash.com/photo-1444464666168-49d633b86797?w=400&h=300&fit=crop',
+      reptile:   'https://images.unsplash.com/photo-1497752531616-c3afd9760a11?w=400&h=300&fit=crop',
+      amphibian: 'https://images.unsplash.com/photo-1566076137-f51a57c7e0b5?w=400&h=300&fit=crop',
+      fish:      'https://images.unsplash.com/photo-1534082753625-78c1f2abb7d7?w=400&h=300&fit=crop',
+      insect:    'https://images.unsplash.com/photo-1508193638397-1c4234db14d8?w=400&h=300&fit=crop',
+    };
+    const defaultPlaceholder = 'https://images.unsplash.com/photo-1446329813274-7c9036bd9a1f?w=400&h=300&fit=crop';
 
     sorted.forEach((animal, idx) => {
       const card = document.createElement("div");
@@ -37,6 +64,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const lang = (localStorage.getItem("appLang") || "EN").toLowerCase();
       const name = animal.animalName[lang];
       const category = animal.category[lang];
+
+      const catKey = (animal.category.en || '').toLowerCase().replace(/s$/, '');
+      const thumbUrl = animal.thumbnailUrl || catPlaceholders[catKey] || defaultPlaceholder;
       
       let statusText = category;
       let statusClass = "en";
@@ -55,20 +85,23 @@ document.addEventListener('DOMContentLoaded', () => {
         card.className = "sl-card premium-card wg-reveal";
         card.dataset.index = idx;
         card.innerHTML = `
+          <div class="card-img-wrap">
+            <img src="${thumbUrl}" alt="${name}" loading="lazy" onerror="this.src='${defaultPlaceholder}'" />
+          </div>
+          <div class="card-overlay"></div>
+          <div class="card-top">
+            <span class="status-tag ${statusClass}">${statusText}</span>
+            <div class="premium-badge">✨ 3D</div>
+          </div>
           <div class="card-inner">
-            <div class="card-img-wrap">
-              <span class="status-tag ${statusClass}">${statusText}</span>
-              <div class="premium-badge">🌟 3D Unlocked</div>
-              <img src="${animal.thumbnailUrl}" alt="${name}" loading="lazy" />
-            </div>
             <div class="card-body">
               <span class="card-cat">${category}</span>
               <h3 class="card-title">${name}</h3>
               <p class="card-sci">${animal.scientificName}</p>
+              <div class="card-cta"><i class="fa-solid fa-cube"></i> View 3D Model →</div>
             </div>
           </div>
         `;
-        // Attach 3D Tilt
         attach3DTilt(card);
 
       } else {
@@ -76,16 +109,19 @@ document.addEventListener('DOMContentLoaded', () => {
         card.className = "sl-card standard-card wg-reveal";
         card.innerHTML = `
           <div class="card-img-wrap">
-            <span class="status-tag ${statusClass}">${statusText}</span>
-            <div class="locked-overlay"><i class="fa-solid fa-lock"></i></div>
-            <img src="${animal.thumbnailUrl}" alt="${name}" loading="lazy" />
+            <img src="${thumbUrl}" alt="${name}" loading="lazy" onerror="this.src='${defaultPlaceholder}'" />
           </div>
-          <div class="card-body">
-            <span class="card-cat">${category}</span>
-            <h3 class="card-title">${name}</h3>
-            <p class="card-sci">${animal.scientificName}</p>
-            <div class="locked-text">
-              🎮 Play game to unlock 3D Hologram
+          <div class="card-overlay"></div>
+          <div class="card-top">
+            <span class="status-tag ${statusClass}">${statusText}</span>
+          </div>
+          <div class="locked-overlay"><i class="fa-solid fa-lock"></i></div>
+          <div class="card-inner">
+            <div class="card-body">
+              <span class="card-cat">${category}</span>
+              <h3 class="card-title">${name}</h3>
+              <p class="card-sci">${animal.scientificName}</p>
+              <div class="card-cta"><i class="fa-solid fa-gamepad"></i> Play to unlock →</div>
             </div>
           </div>
         `;
@@ -100,13 +136,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function initLibrary() {
     try {
-      // 1. Lấy toàn bộ động vật
-      const API_BASE_URL = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:3000' : location.origin;
-      const res = await fetch(`${API_BASE_URL}/api/species`);
-      const data = await res.json();
-      if (data.success) {
-        speciesData = data.species;
-      }
+      // Load from local animals.json (local preview mode)
+      const res = await fetch(`../scripts/animals.json`);
+      speciesData = await res.json();
 
       // 2. Lấy trạng thái mở khóa của User (nếu có đăng nhập)
       const currentUserStr = localStorage.getItem("currentUser");

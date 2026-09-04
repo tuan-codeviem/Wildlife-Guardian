@@ -120,18 +120,36 @@
   </nav>
 
   <main>
-    <!-- Header Section -->
-    <section class="sl-header">
-      <div class="sl-header-bg"></div>
-      <div class="container">
-        <div class="sl-header-content wg-reveal">
-          <div class="sec-chip" data-i18n="lib_chip">📚 Holographic Database</div>
-          <h1 class="sl-title"><span data-i18n="lib_title_1">Species</span> <span class="text-green"
-              data-i18n="lib_title_2">Library</span></h1>
-          <p class="sl-desc" data-i18n="lib_desc">Discover our world's magnificent creatures. Play the rescue game to
-            unlock exclusive 3D
-            holographic views and comprehensive data!</p>
+    <!-- Hero Section -->
+    <section class="sl-hero">
+      <div class="sl-hero-bg">
+        <div class="hero-blob hero-blob-1"></div>
+        <div class="hero-blob hero-blob-2"></div>
+        <div class="hero-blob hero-blob-3"></div>
+        <div class="hero-grid"></div>
+        <div class="hero-deco"></div>
+        <div class="hero-particles">
+          <span></span><span></span><span></span><span></span><span></span>
         </div>
+      </div>
+      <div class="container">
+        <div class="sl-hero-content">
+          <div class="hero-badge" data-i18n="lib_chip">HOLOGRAPHIC DATABASE</div>
+          <h1 class="hero-title">
+            <span data-i18n="lib_title_1">Species</span><br>
+            <span class="line2" data-i18n="lib_title_2">Library of Vietnam</span>
+          </h1>
+          <p class="hero-subtitle" data-i18n="lib_desc">Discover our world's magnificent creatures. Play the rescue game to unlock exclusive 3D holographic views and comprehensive data!</p>
+          <div class="hero-stats">
+            <div class="hero-stat-badge"><span class="stat-num" id="speciesCountNum">0</span>&nbsp;<span data-i18n="lib_stat_species">Species</span></div>
+            <div class="hero-stat-badge">📗 <span data-i18n="lib_stat_redbook">Sách Đỏ Việt Nam</span></div>
+            <div class="hero-stat-badge">🎮 <span data-i18n="lib_stat_play">Play to unlock 3D</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="sl-scroll-hint">
+        <span>Scroll</span>
+        <div class="scroll-arrow"></div>
       </div>
     </section>
 
@@ -163,12 +181,15 @@
     <!-- Main Gallery -->
     <section class="sl-gallery-section">
       <div class="container">
+        <div class="gallery-header">
+          <h2 class="gallery-title">
+            <span class="title-icon">🌿</span>
+            All Species
+          </h2>
+          <span class="gallery-count" id="totalSpeciesCount">0 species found</span>
+        </div>
         <div class="sl-grid" id="speciesGrid">
           <!-- Cards will be dynamically injected here by JS -->
-          <!-- Example Structure injected by JS:
-               <div class="sl-card premium-card wg-reveal">...</div>
-               <div class="sl-card standard-card wg-reveal">...</div>
-          -->
         </div>
       </div>
     </section>
