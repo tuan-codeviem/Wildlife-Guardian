@@ -4,34 +4,34 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Species Library – Wildlife Guardian</title>
+  <title>Species Library – Global Biodiversity Atlas · Wildlife Guardian</title>
+  <meta name="description" content="Discover Vietnam's extraordinary wildlife. Explore interactive 3D holographic models, IUCN Red List conservation data, and unlock rare species via the Wildlife Guardian rescue game." />
 
-  <!-- Fonts (Sync with Home) -->
+  <!-- Fonts: Plus Jakarta Sans & Space Grotesk & Outfit -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
-    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
 
-  <!-- FontAwesome for icons -->
+  <!-- FontAwesome 6 for modern icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
   <!-- 3D Model Viewer -->
   <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
 
-  <!-- CSS -->
+  <!-- Project CSS -->
   <link rel="stylesheet" href="../Home/css/nav.css" />
   <link rel="stylesheet" href="css/SpeciesLibarary.css" />
-  <link rel="stylesheet" href="../ChatBotAI/chatbot.css">
-  <!-- Hệ thống thông báo cứu hộ khẩn cấp -->
-  <link rel="stylesheet" href="../scripts/rescue-notif.css">
+  <link rel="stylesheet" href="../ChatBotAI/chatbot.css" />
+  <!-- Emergency Rescue Notification System -->
+  <link rel="stylesheet" href="../scripts/rescue-notif.css" />
 </head>
 
 <body>
 
-  <!-- SCROLL PROGRESS (Same as Home) -->
+  <!-- SCROLL PROGRESS BAR -->
   <div class="wg-progress" id="wgProgress"></div>
 
-  <!-- NAVBAR (Copied from Home) -->
+  <!-- NAVBAR -->
   <nav class="navbar" id="navbar">
     <div class="mobile-nav" id="mobileNav">
       <a href="../Home/Home.html" data-i18n="nav_home">Home</a>
@@ -72,27 +72,37 @@
         <a href="../Contact/Contact.html" class="nav-item" data-i18n="nav_contact">Contact Us</a>
 
         <div class="mobile-only-buttons">
-          <div class="lang-switcher"
-            style="display: flex; align-items: center; justify-content: center; gap: 6px; color: white; font-weight: 600; margin-bottom: 10px;">
-            <span class="lang-text">EN</span>
-            <button class="lang-toggle-btn"
-              style="background: none; border: none; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 4px; transition: transform 0.3s;"
-              title="Switch language">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round">
-                <path
-                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
-                </path>
-              </svg>
+          <div style="display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 10px;">
+            <button id="mobileThemeToggleBtn" class="theme-toggle-btn" title="Chuyển chế độ Sáng / Tối" aria-label="Toggle theme">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
             </button>
+            <div class="lang-switcher"
+              style="display: flex; align-items: center; justify-content: center; gap: 6px; color: white; font-weight: 600;">
+              <span class="lang-text">EN</span>
+              <button class="lang-toggle-btn"
+                style="background: none; border: none; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 4px; transition: transform 0.3s;"
+                title="Switch language">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path
+                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
+                  </path>
+                </svg>
+              </button>
+            </div>
           </div>
           <button class="btn-report" data-i18n="btn_report" onclick="window.location.href='../RescueMap/rescuemap/index.html?action=report'">🚨 Report Now</button>
           <button class="btn-login" data-i18n="btn_login">→ Log in</button>
         </div>
       </div>
 
-      <!-- Cụm nút bên phải -->
+      <!-- Right Actions Area -->
       <div class="nav-actions">
+        <!-- Theme Toggle Button (Light / Dark Mode) -->
+        <button id="themeToggleBtn" class="theme-toggle-btn" title="Chuyển chế độ Sáng / Tối" aria-label="Toggle theme">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+
         <div class="lang-switcher"
           style="display: flex; align-items: center; gap: 6px; color: white; font-weight: 600; margin-right: 10px;">
           <span class="lang-text">EN</span>
@@ -109,8 +119,7 @@
         </div>
         <button class="btn-report" data-i18n="btn_report" onclick="window.location.href='../RescueMap/rescuemap/index.html?action=report'">🚨 Report Now</button>
         <button class="btn-login" data-i18n="btn_login">→ Log in</button>
-        <!-- Nút 3 gạch -->
-        <button class="hamburger" id="hamburger">
+        <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu">
           <span></span>
           <span></span>
           <span></span>
@@ -120,82 +129,193 @@
   </nav>
 
   <main>
-    <!-- Hero Section -->
+    <!-- ═══════════════════════════════════════════════════════════════════
+         HERO SECTION: Live Biodiversity Radar & Spotlight Deck
+         ═══════════════════════════════════════════════════════════════════ -->
     <section class="sl-hero">
-      <div class="sl-hero-bg">
-        <div class="hero-blob hero-blob-1"></div>
-        <div class="hero-blob hero-blob-2"></div>
-        <div class="hero-blob hero-blob-3"></div>
-        <div class="hero-grid"></div>
-        <div class="hero-deco"></div>
-        <div class="hero-particles">
+      <div class="sl-hero-ambient">
+        <div class="ambient-blob ambient-blob-1"></div>
+        <div class="ambient-blob ambient-blob-2"></div>
+        <div class="ambient-blob ambient-blob-3"></div>
+        <div class="ambient-grid"></div>
+        <div class="ambient-particles">
           <span></span><span></span><span></span><span></span><span></span>
         </div>
       </div>
+
       <div class="container">
-        <div class="sl-hero-content">
-          <div class="hero-badge" data-i18n="lib_chip">HOLOGRAPHIC DATABASE</div>
-          <h1 class="hero-title">
-            <span data-i18n="lib_title_1">Species</span><br>
-            <span class="line2" data-i18n="lib_title_2">Library of Vietnam</span>
-          </h1>
-          <p class="hero-subtitle" data-i18n="lib_desc">Discover our world's magnificent creatures. Play the rescue game to unlock exclusive 3D holographic views and comprehensive data!</p>
-          <div class="hero-stats">
-            <div class="hero-stat-badge"><span class="stat-num" id="speciesCountNum">0</span>&nbsp;<span data-i18n="lib_stat_species">Species</span></div>
-            <div class="hero-stat-badge">📗 <span data-i18n="lib_stat_redbook">Sách Đỏ Việt Nam</span></div>
-            <div class="hero-stat-badge">🎮 <span data-i18n="lib_stat_play">Play to unlock 3D</span></div>
+        <div class="sl-hero-grid">
+          <!-- Left Column: Title, Subtitle, Live Stats HUD -->
+          <div class="sl-hero-text">
+            <div class="sl-hero-chip">
+              <span class="sl-chip-sparkle">✦</span>
+              <span data-i18n="lib_chip">HOLOGRAPHIC BIODIVERSITY DATABASE</span>
+            </div>
+
+            <h1 class="sl-hero-title">
+              <span data-i18n="lib_title_1">Species Library</span><br />
+              <span class="title-accent" data-i18n="lib_title_2">of Vietnam & Beyond</span>
+            </h1>
+
+            <p class="sl-hero-desc" data-i18n="lib_desc">
+              Discover our planet's magnificent creatures. Play the Wildlife Guardian rescue game to unlock high-fidelity 3D holographic specimens and detailed ecological dossiers!
+            </p>
+
+            <!-- Dynamic Stats HUD -->
+            <div class="sl-hero-stats">
+              <div class="sl-stat-card">
+                <span class="sl-stat-num">
+                  <span id="speciesCountNum">0</span><span class="stat-plus">+</span>
+                </span>
+                <span class="sl-stat-label" data-i18n="lib_stat_species">Species Documented</span>
+              </div>
+              <div class="sl-stat-card">
+                <span class="sl-stat-num">
+                  <span id="threatenedCountNum">0</span><span class="stat-plus" style="color:var(--sl-orange);">⚠</span>
+                </span>
+                <span class="sl-stat-label" data-i18n="lib_stat_threatened">Red List Threatened</span>
+              </div>
+              <div class="sl-stat-card">
+                <span class="sl-stat-num">
+                  <span id="unlockedCountNum">0</span><span class="stat-plus" style="color:var(--sl-gold);">✨</span>
+                </span>
+                <span class="sl-stat-label" data-i18n="lib_stat_unlocked">3D Specimens</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Retro Pixel Guardian Mascot Card -->
+          <div class="sl-pixel-card">
+            <div class="pixel-card-inner">
+              <div class="pixel-header">
+                <span class="pixel-badge" data-i18n="pixel_card_badge">🎮 8-BIT GUARDIAN QUEST</span>
+                <div class="pixel-lives" title="Guardian Health">
+                  <span>❤️</span><span>❤️</span><span>❤️</span>
+                </div>
+              </div>
+
+              <div class="pixel-img-frame">
+                <img src="images/pixel-guardian-mascot.png" alt="Wildlife Guardian Mascot" class="pixel-mascot-img" />
+                <div class="pixel-scanlines"></div>
+                <div class="pixel-level-tag">LVL 99 DEFENDER</div>
+              </div>
+
+              <div class="pixel-speech-box">
+                <h4 class="pixel-name" data-i18n="pixel_card_name">Captain Sparky · Guardian Mascot</h4>
+                <p class="pixel-quote" data-i18n="pixel_card_quote">
+                  Nature calls, Guardian! Rescue endangered species in our game to decrypt full 3D holographic dossiers!
+                </p>
+                <button class="pixel-btn-play" onclick="window.location.href='../Game/GameUnity.html'">
+                  <span data-i18n="pixel_card_btn">🎮 Play Rescue Game</span>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      <div class="sl-scroll-hint">
-        <span>Scroll</span>
-        <div class="scroll-arrow"></div>
-      </div>
     </section>
 
-    <!-- Toolbar Section (Search & Filter) -->
-    <section class="sl-toolbar-section">
+    <!-- ═══════════════════════════════════════════════════════════════════
+         CONTROL HUB: Smart Search, Quick Filters & IUCN Status Filter
+         ═══════════════════════════════════════════════════════════════════ -->
+    <section class="sl-control-section" id="controlSection">
       <div class="container">
-        <div class="sl-toolbar">
-          <!-- Search -->
-          <div class="sl-search">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" id="searchInput" data-i18n="lib_search_placeholder"
-              placeholder="Search species by name..." autocomplete="off" />
+        <div class="sl-control-deck">
+          <!-- Row 1: Search Input & Sort Options -->
+          <div class="sl-control-top">
+            <div class="sl-search-box">
+              <i class="fa-solid fa-magnifying-glass sl-search-icon"></i>
+              <input type="text" id="searchInput" class="sl-search-input" data-i18n="lib_search_placeholder"
+                placeholder="Search species by name, category or scientific name..." autocomplete="off" />
+              <button id="searchClearBtn" class="sl-search-clear" title="Clear search">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+
+            <div class="sl-control-actions">
+              <div class="sl-sort-wrapper">
+                <span class="sl-sort-label" data-i18n="lib_sort_label">Sort:</span>
+                <select id="sortSelect" class="sl-sort-select">
+                  <option value="featured" data-i18n="lib_sort_default">Recommended</option>
+                  <option value="name_asc" data-i18n="lib_sort_name_asc">Name (A - Z)</option>
+                  <option value="threat" data-i18n="lib_sort_threat">Threat Level (IUCN)</option>
+                  <option value="unlocked" data-i18n="lib_sort_unlocked">3D Available</option>
+                </select>
+              </div>
+            </div>
           </div>
 
-          <!-- Filters -->
-          <div class="sl-filters" id="categoryFilters">
-            <button class="filter-btn active" data-cat="All" data-i18n="lib_cat_all">All Categories</button>
-            <button class="filter-btn" data-cat="Mammals" data-i18n="lib_cat_mammals">Mammals</button>
-            <button class="filter-btn" data-cat="Birds" data-i18n="lib_cat_birds">Birds</button>
-            <button class="filter-btn" data-cat="Reptiles" data-i18n="lib_cat_reptiles">Reptiles</button>
-            <button class="filter-btn" data-cat="Amphibians" data-i18n="lib_cat_amphibians">Amphibians</button>
-            <button class="filter-btn" data-cat="Fish" data-i18n="lib_cat_fish">Fish</button>
-            <button class="filter-btn" data-cat="Insects" data-i18n="lib_cat_insects">Insects</button>
+          <!-- Row 2: Category Filter Pills -->
+          <div class="sl-filter-row" id="categoryFilters">
+            <button class="sl-filter-pill active" data-cat="All">
+              <span class="pill-icon">🌿</span> <span data-i18n="lib_cat_all">All Categories</span>
+            </button>
+            <button class="sl-filter-pill" data-cat="Mammal">
+              <span class="pill-icon">🐾</span> <span data-i18n="lib_cat_mammals">Mammals</span>
+            </button>
+            <button class="sl-filter-pill" data-cat="Bird">
+              <span class="pill-icon">🪶</span> <span data-i18n="lib_cat_birds">Birds</span>
+            </button>
+            <button class="sl-filter-pill" data-cat="Reptile">
+              <span class="pill-icon">🦎</span> <span data-i18n="lib_cat_reptiles">Reptiles</span>
+            </button>
+            <button class="sl-filter-pill" data-cat="Amphibian">
+              <span class="pill-icon">🐸</span> <span data-i18n="lib_cat_amphibians">Amphibians</span>
+            </button>
+            <button class="sl-filter-pill" data-cat="Fish">
+              <span class="pill-icon">🐠</span> <span data-i18n="lib_cat_fish">Fish</span>
+            </button>
+            <button class="sl-filter-pill" data-cat="Insect">
+              <span class="pill-icon">🦗</span> <span data-i18n="lib_cat_insects">Insects</span>
+            </button>
+          </div>
+
+          <!-- Row 3: IUCN Red List Threat Filter -->
+          <div class="sl-iucn-row" id="iucnFilters">
+            <button class="sl-iucn-chip active" data-status="all">
+              <span data-i18n="lib_status_all">All Statuses</span>
+            </button>
+            <button class="sl-iucn-chip" data-status="cr">
+              <span class="iucn-dot" style="background:#ef4444;"></span> CR · <span data-i18n="lib_status_cr">Critically Endangered</span>
+            </button>
+            <button class="sl-iucn-chip" data-status="en">
+              <span class="iucn-dot" style="background:#f97316;"></span> EN · <span data-i18n="lib_status_en">Endangered</span>
+            </button>
+            <button class="sl-iucn-chip" data-status="vu">
+              <span class="iucn-dot" style="background:#f59e0b;"></span> VU · <span data-i18n="lib_status_vu">Vulnerable</span>
+            </button>
+            <button class="sl-iucn-chip" data-status="nt">
+              <span class="iucn-dot" style="background:#38bdf8;"></span> NT · <span data-i18n="lib_status_nt">Near Threatened</span>
+            </button>
+            <button class="sl-iucn-chip" data-status="lc">
+              <span class="iucn-dot" style="background:#34d399;"></span> LC · <span data-i18n="lib_status_lc">Least Concern</span>
+            </button>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Main Gallery -->
+    <!-- ═══════════════════════════════════════════════════════════════════
+         SPECIES GALLERY SECTION
+         ═══════════════════════════════════════════════════════════════════ -->
     <section class="sl-gallery-section">
       <div class="container">
-        <div class="gallery-header">
-          <h2 class="gallery-title">
-            <span class="title-icon">🌿</span>
-            All Species
+        <div class="sl-gallery-meta">
+          <h2 class="sl-gallery-title">
+            <span>🌿</span> <span data-i18n="lib_taxonomy_title">Catalogued Species</span>
           </h2>
-          <span class="gallery-count" id="totalSpeciesCount">0 species found</span>
+          <span class="sl-gallery-count" id="totalSpeciesCount">Loading specimens...</span>
         </div>
-        <div class="sl-grid" id="speciesGrid">
-          <!-- Cards will be dynamically injected here by JS -->
-        </div>
+
+        <!-- Grid Container: JS Injects Cards Here -->
+        <div class="sl-grid" id="speciesGrid"></div>
       </div>
     </section>
   </main>
 
-  <!-- ████ FOOTER (Copied from Home) ████ -->
+  <!-- ═══════════════════════════════════════════════════════════════════
+       FOOTER
+       ═══════════════════════════════════════════════════════════════════ -->
   <footer class="site-footer">
     <div class="container">
       <div class="footer-top">
@@ -214,60 +334,72 @@
         </div>
         <div class="ft-nav">
           <div class="ft-col">
-            <h4 data-i18n="ft_platform">Platform</h4><a href="../RescueMap/rescuemap/index.html"
-              data-i18n="nav_rescue">Rescue Map</a><a href="../Social/frontend/index.html"
-              data-i18n="nav_social">Community</a><a href="SpeciesLibarary.html" data-i18n="nav_species">Species
-              Library</a><a href="../Game/GameUnity.html" data-i18n="nav_game">Game</a>
+            <h4 data-i18n="ft_platform">Platform</h4>
+            <a href="../RescueMap/rescuemap/index.html" data-i18n="nav_rescue">Rescue Map</a>
+            <a href="../Social/frontend/index.html" data-i18n="nav_social">Community</a>
+            <a href="SpeciesLibarary.html" data-i18n="nav_species">Species Library</a>
+            <a href="../Game/GameUnity.html" data-i18n="nav_game">Game</a>
           </div>
           <div class="ft-col">
-            <h4 data-i18n="ft_support">Support</h4><a href="../Contact/Contact.html" data-i18n="nav_contact">Contact
-              Us</a><a href="#">FAQ</a><a href="#">Report a
-              Bug</a>
+            <h4 data-i18n="ft_support">Support</h4>
+            <a href="../Contact/Contact.html" data-i18n="nav_contact">Contact Us</a>
+            <a href="#">FAQ</a>
+            <a href="#">Report a Bug</a>
           </div>
           <div class="ft-col">
-            <h4 data-i18n="ft_legal">Legal</h4><a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a
-              href="#">Cookie Policy</a>
+            <h4 data-i18n="ft_legal">Legal</h4>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+            <a href="#">Cookie Policy</a>
           </div>
         </div>
       </div>
       <div class="footer-bottom">
         <span data-i18n="ft_rights">© 2026 Wildlife Guardian. All rights reserved.</span>
-        <div class="ft-social"><a href="#">𝕏</a><a href="#">IG</a><a href="#">FB</a></div>
+        <div class="ft-social">
+          <a href="#" aria-label="Twitter">𝕏</a>
+          <a href="#" aria-label="Instagram">IG</a>
+          <a href="#" aria-label="Facebook">FB</a>
+        </div>
       </div>
     </div>
   </footer>
 
-  <!-- ==========================================
-       UNIFIED BENTO BOX MODAL
-  ========================================== -->
-  <div class="bento-overlay" id="bentoModalOverlay">
+  <!-- ═══════════════════════════════════════════════════════════════════
+       BENTO BOX MODAL 2.0 (Holographic Specimen Dossier)
+       ═══════════════════════════════════════════════════════════════════ -->
+  <div class="bento-overlay" id="bentoModalOverlay" role="dialog" aria-modal="true">
     <div class="bento-modal">
-      <button class="bento-close" id="closeBentoModal"><i class="fa-solid fa-xmark"></i></button>
+      <button class="bento-close" id="closeBentoModal" aria-label="Close modal">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
 
       <div class="bento-layout">
-        <!-- Dynamic Center Hero Area -->
+        <!-- 3D Specimen Stage -->
         <div class="bento-hero" id="modalHero">
-          <!-- JS will inject EITHER the 3D <model-viewer> OR the 2D <img> + Glass CTA here -->
+          <!-- Injected dynamically via JS: 3D <model-viewer> OR Locked 2D + CTA -->
         </div>
 
-        <!-- Bento Grid Sidebar -->
+        <!-- Bento Biological Dossier -->
         <div class="bento-info-grid">
-          <!-- Header Info inside Bento Grid -->
+          <!-- Header Info Box -->
           <div class="bento-header-box">
-            <span id="bmStatus" class="status-badge">Status</span>
+            <div>
+              <span id="bmStatus" class="iucn-pill cr">Status</span>
+            </div>
             <h2 id="bmName">Animal Name</h2>
             <p id="bmScientific">Scientific Name</p>
           </div>
 
-          <!-- Info Boxes -->
+          <!-- Ecological Attributes -->
           <div class="bento-box">
-            <div class="bento-icon"><i class="fa-solid fa-location-dot"></i></div>
+            <div class="bento-icon"><i class="fa-solid fa-mountain-sun"></i></div>
             <h4 data-i18n="sp_habitat">Habitat</h4>
             <p id="bmHabitat">Loading...</p>
           </div>
 
           <div class="bento-box">
-            <div class="bento-icon"><i class="fa-solid fa-earth-americas"></i></div>
+            <div class="bento-icon"><i class="fa-solid fa-earth-asia"></i></div>
             <h4 data-i18n="sp_foundin">Found In</h4>
             <p id="bmFoundIn">Loading...</p>
           </div>
@@ -279,23 +411,22 @@
           </div>
 
           <div class="bento-box">
-            <div class="bento-icon"><i class="fa-regular fa-clock"></i></div>
+            <div class="bento-icon"><i class="fa-solid fa-clock"></i></div>
             <h4 data-i18n="sp_behavior">Behavior</h4>
             <p id="bmBehavior">Loading...</p>
           </div>
 
           <div class="bento-box bento-wide">
-            <div class="bento-icon text-orange"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+            <div class="bento-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
             <h4 data-i18n="sp_funfact">Fun Fact</h4>
             <p id="bmFunFact">Loading...</p>
           </div>
         </div>
       </div>
-
     </div>
   </div>
 
-  <!-- BẢNG DROPDOWN TÀI KHOẢN (AVATAR GÓC TRÊN PHẢI) -->
+  <!-- DROPDOWN TÀI KHOẢN (AVATAR GÓC TRÊN PHẢI) -->
   <div id="userDropdownPopup" class="user-dropdown-popup" style="display: none;">
     <img id="dropdownAvatar" src="" alt="Avatar" class="dropdown-avatar-img" />
     <h4 id="dropdownName" class="dropdown-name-text">User Name</h4>
@@ -351,22 +482,21 @@
     </div>
   </div>
 
-  
-
+  <!-- Chatbot AI -->
   <script type="importmap">{"imports":{"@google/genai":"https://esm.run/@google/genai"}}</script>
   <script type="module" src="../ChatBotAI/chatbotai.js"></script>
 
-
-  <!-- JS -->
+  <!-- Project Scripts -->
   <script src="../Home/js/language_EN_VI.js"></script>
   <script src="../Home/js/nav.js"></script>
   <script src="js/SpeciesLibarary.js"></script>
-  <!-- Hệ thống thông báo cứu hộ khẩn cấp -->
   <script src="../scripts/rescue-notif.js"></script>
+
   <script>
-    // Scroll Progress Bar & Navbar logic
+    // Scroll Progress & Navbar Scrolled Class
     const progressBar = document.getElementById('wgProgress');
     const navbar = document.getElementById('navbar');
+    const controlSection = document.getElementById('controlSection');
 
     window.addEventListener('scroll', () => {
       const scrollTop = window.scrollY;
@@ -374,17 +504,15 @@
       const progress = docHeight > 0 ? scrollTop / docHeight : 0;
       if (progressBar) progressBar.style.transform = `scaleX(${progress})`;
 
-      if (navbar) navbar.classList.toggle('scrolled', window.scrollY > 60);
+      if (navbar) navbar.classList.toggle('scrolled', scrollTop > 40);
+      if (controlSection) controlSection.classList.toggle('is-scrolled', scrollTop > 100);
     }, { passive: true });
 
-    // ==========================================
-    // 0. QUẢN LÝ TRẠNG THÁI LOGIN / LOGOUT THÔNG MINH
-    // ==========================================
+    // Login/Logout & User Account Management
     const userString = localStorage.getItem("currentUser");
     const loginBtns = document.querySelectorAll(".btn-login");
 
     if (userString) {
-      // TRƯỜNG HỢP 1: ĐÃ ĐĂNG NHẬP
       const currentUser = JSON.parse(userString);
       const userAvatar = currentUser.avatar || "https://cdn-icons-png.flaticon.com/512/149/149071.png";
 
@@ -393,9 +521,8 @@
           btn.style.display = 'none';
           return;
         }
-        // 1. Đổi nút "Log in" thành Avatar
         btn.className = "avatar-btn";
-        btn.innerHTML = `<img src="${userAvatar}" style="width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid #16a34a; background: white;">`;
+        btn.innerHTML = `<img src="${userAvatar}" style="width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid #10b981; background: white;">`;
         btn.style.padding = "0";
         btn.style.background = "transparent";
         btn.style.border = "none";
@@ -417,13 +544,11 @@
           const popup = document.getElementById("userDropdownPopup");
           if (popup) {
             document.getElementById("dropdownAvatar").src = userAvatar;
-            document.getElementById("dropdownName").innerText =
-              currentUser.fullName || "User";
+            document.getElementById("dropdownName").innerText = currentUser.fullName || "User";
 
             if (popup.style.display === "block") {
               popup.style.display = "none";
               popup.style.opacity = "0";
-              popup.style.transform = "translateY(10px) translateX(-50%)";
             } else {
               const rect = btn.getBoundingClientRect();
               popup.style.top = (rect.bottom + 10) + "px";
@@ -436,7 +561,6 @@
               popup.style.transform = "translateY(10px) translateX(-50%)";
               popup.style.display = "block";
 
-              // Anim
               setTimeout(() => {
                 popup.style.opacity = "1";
                 popup.style.transform = "translateY(0) translateX(-50%)";
@@ -446,10 +570,7 @@
         };
       });
     } else {
-      // TRƯỜNG HỢP 2: CHƯA ĐĂNG NHẬP
-      // Gắn sự kiện chuyển hướng sang trang Login khi bấm nút "Log in"
       loginBtns.forEach((btn) => {
-
         btn.onclick = (e) => {
           e.preventDefault();
           sessionStorage.setItem("redirectAfterLogin", window.location.href);
@@ -458,7 +579,7 @@
       });
     }
 
-    // Cài đặt sự kiện cho bảng Dropdown Tài khoản
+    // Dropdown Events
     const dropdownSettingsBtn = document.getElementById("dropdownSettingsBtn");
     const dropdownLogoutBtn = document.getElementById("dropdownLogoutBtn");
 
@@ -475,7 +596,6 @@
       });
     }
 
-    // Hàm mở bảng Cài đặt hồ sơ
     function openSettingsModal() {
       const meString = localStorage.getItem("currentUser");
       if (!meString) return;
@@ -491,24 +611,19 @@
 
       if (profileModal) {
         const t = window.translations ? window.translations[window.currentLang || "EN"] : {};
-        if (profileModalTitle && t.profile_settings_title)
-          profileModalTitle.innerText = t.profile_settings_title;
+        if (profileModalTitle && t.profile_settings_title) profileModalTitle.innerText = t.profile_settings_title;
         if (profileModalDesc && t.profile_settings_desc) profileModalDesc.innerText = t.profile_settings_desc;
         if (setupNameInput) setupNameInput.value = me.fullName || "";
-        if (setupAvatarPreview)
-          setupAvatarPreview.src =
-            me.avatar || "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+        if (setupAvatarPreview) setupAvatarPreview.src = me.avatar || "https://cdn-icons-png.flaticon.com/512/149/149071.png";
 
-        if (skipProfileBtn) skipProfileBtn.style.display = "none"; // Ẩn nút bỏ qua
-        if (closeProfileModal) closeProfileModal.style.display = "block"; // Hiện nút X để đóng
+        if (skipProfileBtn) skipProfileBtn.style.display = "none";
+        if (closeProfileModal) closeProfileModal.style.display = "block";
 
         profileModal.style.display = "flex";
       }
     }
 
-    // Lắng nghe sự kiện cho các nút trong Modal Cài Đặt Hồ Sơ
     document.addEventListener("DOMContentLoaded", () => {
-      // 1. Hiển thị ảnh xem trước khi chọn
       const setupAvatarInput = document.getElementById("setupAvatarInput");
       const setupAvatarPreview = document.getElementById("setupAvatarPreview");
       if (setupAvatarInput) {
@@ -518,7 +633,6 @@
         });
       }
 
-      // 2. Bấm nút Lưu Hồ Sơ
       const saveProfileBtn = document.getElementById("saveProfileBtn");
       if (saveProfileBtn) {
         saveProfileBtn.addEventListener("click", async () => {
@@ -566,7 +680,6 @@
         });
       }
 
-      // 3. Bấm nút X để đóng Cài đặt
       const closeProfileModalBtn = document.getElementById("closeProfileModal");
       if (closeProfileModalBtn) {
         closeProfileModalBtn.addEventListener("click", () => {
@@ -574,7 +687,6 @@
         });
       }
 
-      // 4. Bấm nút Bỏ qua
       const skipProfileBtn = document.getElementById("skipProfileBtn");
       if (skipProfileBtn) {
         skipProfileBtn.addEventListener("click", () => {
@@ -582,18 +694,6 @@
         });
       }
     });
-
-
-    // Xử lý khi nhấn vào các tab trên máy tính (đổi màu xanh)
-    const navItems = document.querySelectorAll(".nav-item");
-    navItems.forEach((item) => {
-      item.addEventListener("click", function () {
-        document.querySelector(".nav-item.active").classList.remove("active");
-        this.classList.add("active");
-      });
-    });
-
-    // ==========================================
   </script>
 </body>
 
