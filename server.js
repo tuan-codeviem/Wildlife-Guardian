@@ -633,6 +633,10 @@ app.put("/api/posts/admin/approve/:id", async (req, res) => {
     post.reportedBy = [];
     post.isAdminApproved = true; // Bật khiên bảo vệ bài viết
     await post.save();
+    
+    // Gửi tín hiệu để các màn hình khác tự load lại bài (đặc biệt là bảng tin của user)
+    if (req.io) req.io.emit("update_post");
+    
     res.json({ success: true, message: "Đã duyệt bài viết an toàn." });
   } catch (error) {
     res.status(500).json({ message: "Lỗi duyệt bài!" });

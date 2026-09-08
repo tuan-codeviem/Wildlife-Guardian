@@ -277,7 +277,7 @@ window.deleteAdminPost = async function(id) {
 // ==========================================
 //              SOCKET.IO REAL-TIME
 // ==========================================
-const socket = io();
+const socket = io(API_BASE_URL);
 
 socket.on("new_post", (post) => {
   loadPosts();
