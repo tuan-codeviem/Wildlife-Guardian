@@ -59,9 +59,36 @@ app.use((req, res, next) => {
   }
   next();
 });
+// Xử lý file nén Gzip (.unityweb)
+app.get(/\.unityweb$/, (req, res, next) => {
+    res.set('Content-Encoding', 'gzip');
+    
+    if (req.url.endsWith('.js.unityweb')) {
+        res.set('Content-Type', 'application/javascript');
+    } else if (req.url.endsWith('.wasm.unityweb')) {
+        res.set('Content-Type', 'application/wasm');
+    } else if (req.url.endsWith('.data.unityweb')) {
+        res.set('Content-Type', 'application/octet-stream');
+    }
+    next();
+});
 
+// Xử lý file nén Brotli (.br) nếu sau này bạn dùng Brotli
+app.get(/\.br$/, (req, res, next) => {
+    res.set('Content-Encoding', 'br');
+    
+    if (req.url.endsWith('.js.br')) {
+        res.set('Content-Type', 'application/javascript');
+    } else if (req.url.endsWith('.wasm.br')) {
+        res.set('Content-Type', 'application/wasm');
+    } else if (req.url.endsWith('.data.br')) {
+        res.set('Content-Type', 'application/octet-stream');
+    }
+    next();
+});
 // Xử lý file tĩnh bình thường
 app.use(express.static(".")); // Để chạy được file HTML/CSS/JS
+
 // Sửa dòng này
 app.use("/uploads", express.static(path.join(__dirname, "wildlife-guardian/Social/uploads")));
 
