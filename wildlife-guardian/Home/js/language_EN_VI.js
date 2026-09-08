@@ -276,7 +276,14 @@ const translations = {
     rm_card_btn_call: "Call Expert",
     rm_status_text_emergency: "EMERGENCY",
     rm_status_text_progress: "IN PROGRESS",
-    rm_status_text_rescued: "RESCUED"
+    rm_status_text_rescued: "RESCUED",
+    admin_queue: "Moderation Queue",
+    admin_approve: "Approve",
+    admin_delete: "Delete",
+    admin_ai_flagged: "AI Flagged",
+    admin_reports: "Reports",
+    admin_no_flagged: "No flagged posts.",
+    admin_loading: "Loading..."
   },
   VI: {
     nav_home: "Trang chủ",
@@ -554,7 +561,14 @@ const translations = {
     rm_card_btn_call: "Gọi chuyên gia",
     rm_status_text_emergency: "KHẨN CẤP",
     rm_status_text_progress: "ĐANG XỬ LÝ",
-    rm_status_text_rescued: "ĐÃ CỨU"
+    rm_status_text_rescued: "ĐÃ CỨU",
+    admin_queue: "Hàng chờ kiểm duyệt",
+    admin_approve: "Duyệt",
+    admin_delete: "Xóa",
+    admin_ai_flagged: "AI Gắn Cờ",
+    admin_reports: "Báo cáo",
+    admin_no_flagged: "Không có bài viết vi phạm.",
+    admin_loading: "Đang tải..."
   },
 };
 window.translations = translations;

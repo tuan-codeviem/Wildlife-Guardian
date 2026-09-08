@@ -21,6 +21,10 @@ const postSchema = new mongoose.Schema({
       createdAt: { type: Date, default: Date.now },
     },
   ],
+  isSensitive: { type: Boolean, default: false }, // Cho chức năng làm mờ ảnh (nội dung máu me)
+  isAdminApproved: { type: Boolean, default: false }, // Cờ đánh dấu bài viết đã được Admin duyệt
+  reportsCount: { type: Number, default: 0 }, // Đếm số lượt báo cáo
+  reportedBy: { type: [String], default: [] }, // Lưu ID người báo cáo để tránh trùng lặp
   createdAt: { type: Date, default: Date.now },
 });
 

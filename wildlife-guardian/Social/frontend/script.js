@@ -161,6 +161,139 @@ function openSettingsModal() {
   }
 }
 
+// HIDE NON-ADMIN ELEMENTS & INJECT MODERATION PANEL
+document.addEventListener("DOMContentLoaded", () => {
+  const meStr = localStorage.getItem("currentUser");
+  const meObj = meStr ? JSON.parse(meStr) : null;
+  const isAdmin = meObj && meObj.role === "admin";
+
+  if (isAdmin) {
+    // 1. Hide Create Post completely
+    const createPostModalOverlay = document.getElementById("createPostModalOverlay");
+    if (createPostModalOverlay) {
+        createPostModalOverlay.style.setProperty("display", "none", "important");
+    }
+    // Mobile bubble
+    const mobileCreatePostBubble = document.getElementById("mobileCreatePostBubble");
+    if (mobileCreatePostBubble) {
+        mobileCreatePostBubble.style.setProperty("display", "none", "important");
+    }
+
+    // 2. Hide Friends and Messages Cards
+    const friendRequestsCard = document.getElementById("friendRequestsCard");
+    const messagesCard = document.getElementById("messagesCard");
+    const mobileMessagesBubble = document.getElementById("mobileMessagesBubble");
+    const mobileFriendsBubble = document.getElementById("mobileFriendsBubble");
+    
+    if (friendRequestsCard) friendRequestsCard.style.display = "none";
+    if (messagesCard) messagesCard.style.display = "none";
+    if (mobileMessagesBubble) mobileMessagesBubble.style.display = "none";
+    if (mobileFriendsBubble) mobileFriendsBubble.style.display = "none";
+
+    // 3. Inject Admin Moderation Queue in the sidebar
+    const sidebarColumn = document.getElementById("sidebarColumn");
+    if (sidebarColumn) {
+       const modPanel = document.createElement("div");
+       modPanel.className = "friend-requests-card"; // Reuse glassmorphism style
+       modPanel.style.marginTop = "20px";
+       modPanel.innerHTML = `
+          <h4 style="margin: 0 0 15px 0; font-size: 16px; color: var(--text-primary); display: flex; align-items: center; gap: 8px;">
+             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ed4956" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+             <span data-i18n="admin_queue">Moderation Queue</span>
+          </h4>
+          <div id="adminModerationQueue" style="display: flex; flex-direction: column; gap: 15px; max-height: 600px; overflow-y: auto; padding-right: 5px;">
+             <p style="font-size: 13px; color: #888; text-align: center;" data-i18n="admin_loading">Loading...</p>
+          </div>
+       `;
+       sidebarColumn.appendChild(modPanel);
+       window.loadModerationQueue();
+    }
+  }
+});
+
+// Admin Queue Logic
+window.loadModerationQueue = async function() {
+  const queueContainer = document.getElementById("adminModerationQueue");
+  if (!queueContainer) return;
+  try {
+     const response = await fetch(`${API_BASE_URL}/api/posts/admin/reported`);
+     const posts = await response.json();
+     if (posts.length === 0) {
+        queueContainer.innerHTML = `<p style="font-size: 13px; color: #888; text-align: center;" data-i18n="admin_no_flagged">No flagged posts.</p>`;
+        if (typeof applyLanguage === "function") applyLanguage();
+        return;
+     }
+     let html = "";
+     posts.forEach(post => {
+        const isAI = post.isSensitive;
+        const reports = post.reportsCount;
+        html += `
+           <div style="background: rgba(255,255,255,0.05); padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
+              <div style="font-size: 13px; font-weight: bold; color: #fff; margin-bottom: 5px;">${post.authorName || "User"}</div>
+              <p style="font-size: 12px; color: #bbb; margin: 0 0 10px 0; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">${post.content || "No text content"}</p>
+              ${post.media_url ? `<img src="${post.media_url}" style="width: 100%; height: 100px; object-fit: cover; border-radius: 6px; margin-bottom: 10px;">` : ''}
+              <div style="font-size: 12px; margin-bottom: 12px; display: flex; gap: 5px;">
+                 ${isAI ? `<span style="background: rgba(237, 73, 86, 0.2); color: #ed4956; padding: 4px 8px; border-radius: 6px; font-weight: bold;" data-i18n="admin_ai_flagged">AI Flagged</span>` : ''}
+                 ${reports > 0 ? `<span style="background: rgba(245, 158, 11, 0.2); color: #f59e0b; padding: 4px 8px; border-radius: 6px; font-weight: bold;">${reports} <span data-i18n="admin_reports">Reports</span></span>` : ''}
+              </div>
+              <div style="display: flex; gap: 8px;">
+                 <button onclick="approveAdminPost('${post._id}')" style="flex: 1; background: #16a34a; color: white; border: none; padding: 8px; border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: bold; transition: 0.2s;" onmouseover="this.style.background='#15803d'" onmouseout="this.style.background='#16a34a'" data-i18n="admin_approve">Approve</button>
+                 <button onclick="deleteAdminPost('${post._id}')" style="flex: 1; background: transparent; border: 1px solid #ed4956; color: #ed4956; padding: 8px; border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: bold; transition: 0.2s;" onmouseover="this.style.background='rgba(237,73,86,0.1)'" onmouseout="this.style.background='transparent'" data-i18n="admin_delete">Delete</button>
+              </div>
+           </div>
+        `;
+     });
+     queueContainer.innerHTML = html;
+     // Apply translations to the newly generated queue items
+     if (typeof applyLanguage === "function") applyLanguage();
+  } catch (err) {
+     console.error(err);
+  }
+};
+
+window.approveAdminPost = async function(id) {
+   try {
+      await fetch(`${API_BASE_URL}/api/posts/admin/approve/${id}`, { method: 'PUT' });
+      window.loadModerationQueue();
+      loadPosts();
+   } catch(e) {}
+};
+
+window.deleteAdminPost = async function(id) {
+   if (!confirm("Are you sure you want to delete this post?")) return;
+   try {
+      const meStr = localStorage.getItem("currentUser");
+      const myUserId = meStr ? JSON.parse(meStr)._id || JSON.parse(meStr).userId : null;
+      await fetch(`${API_BASE_URL}/api/posts/${id}`, { 
+          method: 'DELETE',
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userId: myUserId })
+      });
+      window.loadModerationQueue();
+      loadPosts();
+   } catch(e) {}
+};
+
+// ==========================================
+//              SOCKET.IO REAL-TIME
+// ==========================================
+const socket = io();
+
+socket.on("new_post", (post) => {
+  loadPosts();
+  if (window.loadModerationQueue) window.loadModerationQueue();
+});
+
+socket.on("update_post", () => {
+  loadPosts();
+  if (window.loadModerationQueue) window.loadModerationQueue();
+});
+
+socket.on("delete_post", () => {
+  loadPosts();
+  if (window.loadModerationQueue) window.loadModerationQueue();
+});
+
 // ==========================================
 //              2. POST, BÀI ĐĂNG
 // ==========================================
@@ -223,6 +356,7 @@ window.renderCommentsHTML = function (
   postId,
   myId,
   isMyPost = false,
+  isAdmin = false
 ) {
   if (!comments || comments.length === 0) return "";
   const topLevel = comments.filter((c) => !c.replyTo);
@@ -258,8 +392,8 @@ window.renderCommentsHTML = function (
       }
     `;
 
-    // Cho phép xóa nếu: 1. Mình viết comment, HOẶC 2. Mình là chủ bài viết
-    const canDelete = (c.userId && c.userId === myId) || isMyPost;
+    // Cho phép xóa nếu: 1. Mình viết comment, HOẶC 2. Mình là chủ bài viết, HOẶC 3. Admin
+    const canDelete = (c.userId && c.userId === myId) || isMyPost || isAdmin;
     const deleteBtn = canDelete
       ? `<button class="comment-delete-btn" data-post-id="${postId}" data-comment-id="${c._id}" style="background: none; border: none; color: #8e8e8e; cursor: pointer; padding: 0; display: flex; align-items: center; margin-left: auto; transition: color 0.2s;" title="${t.tooltip_delete_comment}" onmouseover="this.style.color='#ed4956'" onmouseout="this.style.color='#8e8e8e'">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -348,24 +482,46 @@ async function loadPosts(category = "all posts") {
       // Xử lý hiển thị Ảnh hoặc Video thông minh
       let mediaHTML = "";
       if (post.media_url) {
+        let mediaTag = "";
         if (post.media_url.includes("/video/")) {
-          mediaHTML = `<video src="${post.media_url}" controls style="width: 100%; max-height: 400px; border-radius: 10px; background: #000;"></video>`;
+          mediaTag = `<video src="${post.media_url}" controls class="${post.isSensitive ? 'sensitive-media' : ''}" style="width: 100%; max-height: 400px; border-radius: 10px; background: #000; ${post.isSensitive ? 'filter: blur(20px); pointer-events: none;' : ''}"></video>`;
         } else {
-          mediaHTML = `<img src="${post.media_url}" alt="Bài đăng" style="width: 100%; max-height: 400px; object-fit: cover; border-radius: 10px;">`;
+          mediaTag = `<img src="${post.media_url}" alt="Bài đăng" class="${post.isSensitive ? 'sensitive-media' : ''}" style="width: 100%; max-height: 400px; object-fit: cover; border-radius: 10px; ${post.isSensitive ? 'filter: blur(20px);' : ''}">`;
+        }
+
+        if (post.isSensitive) {
+          mediaHTML = `
+          <div class="sensitive-container" style="position: relative; border-radius: 10px; overflow: hidden; cursor: pointer; max-height: 400px; background: #000;" onclick="this.querySelector('.sensitive-media').style.filter = 'none'; this.querySelector('.sensitive-media').style.pointerEvents = 'auto'; this.querySelector('.sensitive-overlay').style.display = 'none';">
+            ${mediaTag}
+            <div class="sensitive-overlay" style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; background: rgba(0,0,0,0.5);">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 10px;"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+              <span style="font-weight: bold; font-size: 14px;">Hình ảnh nhạy cảm</span>
+              <span style="font-size: 12px; opacity: 0.8;">Bấm để xem</span>
+            </div>
+          </div>`;
+        } else {
+          mediaHTML = mediaTag;
         }
       }
 
+      // Kiểm tra quyền Admin
+      const isAdmin = me ? me.role === 'admin' : false;
+
       // Kiểm tra xem bài này có phải của tài khoản hiện tại không (So sánh bằng ID)
-      const isMyPost = me
+      const isActualAuthor = me
         ? (post.authorId && post.authorId === myId) ||
           (!post.authorId && post.authorName === me.fullName)
         : false;
-      const postOptionsHTML = isMyPost
+      
+      const canDeletePost = isActualAuthor || isAdmin;
+      
+      const postOptionsHTML = canDeletePost
         ? `
         <div style="display: flex; gap: 12px; align-items: center;">
+            ${isActualAuthor ? `
             <button class="btn-edit-post" data-id="${post._id}" data-content="${post.content ? post.content.replace(/"/g, "&quot;") : ""}" data-category="${post.category}" data-media="${post.media_url || ""}" style="background: none; border: none; color: #888; cursor: pointer; padding: 0; display: flex; align-items: center; transition: 0.2s;" title="${t.tooltip_edit_post}" onmouseover="this.style.color='#0084ff'" onmouseout="this.style.color='#888'">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-            </button>
+            </button>` : ""}
             <button class="btn-menu" data-id="${post._id}" style="background: none; border: none; color: #888; cursor: pointer; padding: 0; display: flex; align-items: center; transition: 0.2s;" title="${t.tooltip_delete_post}" onmouseover="this.style.color='#dc3545'" onmouseout="this.style.color='#888'">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
             </button>
@@ -408,6 +564,9 @@ async function loadPosts(category = "all posts") {
 </div>
                         <div style="display: flex; align-items: center; gap: 15px;">
                             <span style="background: #e6f4ea; color: #1e8e3e; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; text-transform: lowercase;">${displayCategory}</span>
+                            <button class="btn-report-post" data-id="${post._id}" style="background: none; border: none; color: #888; cursor: pointer; padding: 0; display: flex; align-items: center; transition: 0.2s;" title="Report this post" onmouseover="this.style.color='#f59e0b'" onmouseout="this.style.color='#888'">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg>
+                            </button>
                             ${postOptionsHTML}
                         </div>
                     </div>
@@ -443,7 +602,7 @@ async function loadPosts(category = "all posts") {
                     <div class="post-comments-section" id="comments-${post._id}" style="display: none; border-top: 1px solid #eee; padding-top: 15px; margin-top: 15px;">
                         
                         <div class="comments-list" style="max-height: 350px; overflow-y: auto; margin-bottom: 15px; font-size: 14px;">
-                            ${window.renderCommentsHTML(post.comments, post._id, myId, isMyPost)}
+                            ${window.renderCommentsHTML(post.comments, post._id, myId, isActualAuthor, isAdmin)}
                         </div>
                         
                         <div style="display: flex; gap: 10px; align-items: flex-end;">
@@ -648,6 +807,10 @@ postBtn.addEventListener("click", async function () {
   }
 
   try {
+    const t = window.translations[getLang()];
+    postBtn.innerText = "Đang xử lý (AI Đang quét)...";
+    postBtn.disabled = true;
+    
     console.log("🔥 GỬI BÀI VIẾT - URL:", API_URL);
     console.log("📦 FormData gửi:", {
       content: content,
@@ -679,10 +842,15 @@ postBtn.addEventListener("click", async function () {
       if (createModal) createModal.style.display = "none";
     } else {
       console.error("❌ Lỗi: " + data.message);
+      alert("Không thể đăng bài:\n" + data.message);
     }
   } catch (error) {
     console.error("❌ Lỗi khi đăng bài:", error);
     console.error("❌ Lỗi hệ thống: " + error.message);
+  } finally {
+    const t = window.translations[getLang()];
+    postBtn.innerText = t.btn_post || "Post";
+    postBtn.disabled = false;
   }
 });
 
@@ -710,6 +878,50 @@ postsFeedContainer.addEventListener("keypress", function (e) {
 });
 
 postsFeedContainer.addEventListener("click", async function (e) {
+  // 0.5. XỬ LÝ BÁO CÁO (REPORT)
+  const reportBtn = e.target.closest(".btn-report-post");
+  if (reportBtn) {
+    const postId = reportBtn.getAttribute("data-id");
+    let myUserId = "ẩn_danh";
+    const meString = localStorage.getItem("currentUser");
+    if (meString) {
+      const me = JSON.parse(meString);
+      myUserId = me._id || me.userId || me.username || "user_macdinh";
+    } else {
+      let anonId = localStorage.getItem("anonymousId");
+      if (!anonId) {
+        anonId = "anon_" + Math.random().toString(36).substr(2, 9);
+        localStorage.setItem("anonymousId", anonId);
+      }
+      myUserId = anonId;
+    }
+
+    if (confirm("Bạn có chắc chắn muốn báo cáo bài viết này vì vi phạm tiêu chuẩn cộng đồng?")) {
+      try {
+        const response = await fetch(`${API_URL}/${postId}/report`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userId: myUserId }),
+        });
+        const data = await response.json();
+        if (response.ok) {
+          alert(data.message);
+          if (data.message.includes("bị xóa")) {
+            loadPosts(); // Tải lại Feed nếu bài viết bị xoá tự động
+          }
+        } else {
+          alert("Lỗi: " + data.message);
+        }
+      } catch (err) {
+        console.error("Lỗi khi báo cáo:", err);
+        alert("Có lỗi xảy ra khi báo cáo.");
+      }
+    }
+    return;
+  }
+
   // 1. XỬ LÝ LIKE
   const likeBtn = e.target.closest(".btn-like");
   if (likeBtn) {
