@@ -106,6 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
     amphibian: 'https://images.unsplash.com/photo-1566076137-f51a57c7e0b5?w=600&h=750&fit=crop',
     fish:      'https://images.unsplash.com/photo-1534082753625-78c1f2abb7d7?w=600&h=750&fit=crop',
     insect:    'https://images.unsplash.com/photo-1508193638397-1c4234db14d8?w=600&h=750&fit=crop',
+    crustacean:'https://images.unsplash.com/photo-1559827291-72ee739d0d9a?w=600&h=750&fit=crop',
   };
   const defaultPlaceholder = 'https://images.unsplash.com/photo-1446329813274-7c9036bd9a1f?w=600&h=750&fit=crop';
 
@@ -135,14 +136,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
 
-      // If RedPanda is present with 3D model, ensure it's available for demo
+      // Fallback Cloudinary demo 3D model (thay thế cho đường dẫn local model-viewer/ đã xóa)
+      const CLOUDINARY_FALLBACK_MODEL = "https://res.cloudinary.com/dotlymsmk/raw/upload/v1781032539/wildlife-guardian/models/RedPanda.glb";
       speciesData.forEach(animal => {
-        if (animal.speciesId === "RedPanda" && !animal.model3dUrl) {
-          animal.model3dUrl = "model-viewer/ngon-redpanda.glb";
+        if (animal.speciesId === "RedPanda" && (!animal.model3dUrl || animal.model3dUrl.includes("example.com"))) {
+          animal.model3dUrl = CLOUDINARY_FALLBACK_MODEL;
         }
         if (animal.model3dUrl && animal.model3dUrl.includes("example.com")) {
-          // Fallback demo 3D model
-          animal.model3dUrl = "model-viewer/ngon-redpanda.glb";
+          animal.model3dUrl = CLOUDINARY_FALLBACK_MODEL;
         }
       });
 
@@ -490,11 +491,12 @@ document.addEventListener('DOMContentLoaded', () => {
             alt="${animal.animalName?.[lang] || '3D Animal'}"
             auto-rotate
             camera-controls
-            rotation-per-second="18deg"
-            shadow-intensity="1.5"
-            shadow-softness="0.8"
+            rotation-per-second="16deg"
+            shadow-intensity="0.8"
+            shadow-softness="1"
             environment-image="neutral"
-            exposure="1">
+            exposure="1.18"
+            tone-mapping="aces">
           </model-viewer>
 
           <div class="bento-3d-toolbar">
@@ -521,14 +523,34 @@ document.addEventListener('DOMContentLoaded', () => {
               viewer.cameraOrbit = "0deg 75deg 105%";
             };
           }
-          if (btnFull && viewer) {
+          if (btnFull && modalHero) {
             btnFull.onclick = () => {
               if (!document.fullscreenElement) {
-                viewer.requestFullscreen?.().catch(console.warn);
+                if (modalHero.requestFullscreen) {
+                  modalHero.requestFullscreen().catch(console.warn);
+                } else if (modalHero.webkitRequestFullscreen) {
+                  modalHero.webkitRequestFullscreen();
+                }
               } else {
-                document.exitFullscreen?.().catch(console.warn);
+                if (document.exitFullscreen) {
+                  document.exitFullscreen().catch(console.warn);
+                } else if (document.webkitExitFullscreen) {
+                  document.webkitExitFullscreen();
+                }
               }
             };
+
+            const handleFullscreenChange = () => {
+              const isFull = !!document.fullscreenElement;
+              if (btnFull) {
+                btnFull.innerHTML = isFull
+                  ? `<i class="fa-solid fa-compress"></i> <span>${lang === "vi" ? "Thu Nhỏ" : "Exit"}</span>`
+                  : `<i class="fa-solid fa-expand"></i> <span>${lang === "vi" ? "Toàn Màn Hình" : "Fullscreen"}</span>`;
+              }
+            };
+
+            document.removeEventListener("fullscreenchange", handleFullscreenChange);
+            document.addEventListener("fullscreenchange", handleFullscreenChange);
           }
         }, 50);
 

@@ -492,5 +492,195 @@
     },
     "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1780997901/wildlife-guardian/images/armadillo.jpg",
     "model3dUrl": "https://res.cloudinary.com/dotlymsmk/raw/upload/v1780997995/wildlife-guardian/models/armadillo.glb"
+  },
+  {
+    "speciesId": "polar-bear",
+    "animalName": {
+      "en": "Polar Bear",
+      "vi": "Gấu Bắc Cực"
+    },
+    "scientificName": "Ursus maritimus",
+    "status": {
+      "en": "Vulnerable",
+      "vi": "Sắp nguy cấp"
+    },
+    "category": {
+      "en": "Mammal",
+      "vi": "Động vật có vú"
+    },
+    "distribution": {
+      "en": "Circumpolar Arctic region: Canada, Alaska (United States), Russia, Greenland (Denmark), and Svalbard (Norway)",
+      "vi": "Vùng quanh vòng Bắc Cực: Canada, Alaska (Hoa Kỳ), Nga, Greenland (Đan Mạch) và quần đảo Svalbard (Na Uy)"
+    },
+    "habitat": {
+      "en": "Arctic sea ice, pack ice floes, open coastal waters, and tundra coastal plains",
+      "vi": "Băng biển Bắc Cực, các thềm băng trôi, vùng duyên hải đóng băng và đồng bằng lãnh nguyên tundra"
+    },
+    "diet": {
+      "en": "Carnivore (hypercarnivorous: primarily ringed and bearded seals; occasionally harp seals, beluga whales, and walruses)",
+      "vi": "Động vật ăn thịt chuyên biệt (chủ yếu săn hải cẩu có vòng và hải cẩu râu; thỉnh thoảng ăn cá voi trắng, hải mã hoặc xác cá voi)"
+    },
+    "behavior": {
+      "en": "Apex solitary hunter and extraordinary marathon swimmer capable of crossing tens of kilometers of open frigid water. Uses sea ice platforms to still-hunt seals at breathing holes and relies on an exceptional sense of smell to detect prey beneath meters of compacted snow.",
+      "vi": "Kẻ săn mồi đỉnh tháp sống đơn độc, có khả năng bơi lội đường trường phi thường hàng chục kilomet qua biển băng giá. Phụ thuộc vào thềm băng biển để rình phục hải cẩu tại các lỗ thở và sở hữu khứu giác siêu nhạy có thể phát hiện con mồi dưới lớp tuyết dày hàng mét."
+    },
+    "funFact": {
+      "en": "Polar bear skin is pitch black to absorb heat from sunlight, while their fur is actually pigment-free and translucent—it only appears bright white because the hollow structure scatters and reflects ambient visible light.",
+      "vi": "Làn da bên dưới lớp lông của gấu Bắc Cực thực chất có màu đen tuyền để hấp thu tối đa nhiệt lượng mặt trời, trong khi từng sợi lông của chúng rỗng ruột và trong suốt không hề có sắc tố trắng—lông chỉ phản chiếu ánh sáng nên mắt ta nhìn thấy màu trắng."
+    },
+    "thumbnailUrl": "https://example.com/placeholder.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "reindeer",
+    "animalName": {
+      "en": "Reindeer",
+      "vi": "Tuần Lộc"
+    },
+    "scientificName": "Rangifer tarandus",
+    "status": {
+      "en": "Vulnerable",
+      "vi": "Sắp nguy cấp"
+    },
+    "category": {
+      "en": "Mammal",
+      "vi": "Động vật có vú"
+    },
+    "distribution": {
+      "en": "Boreal forests and arctic tundra across Scandinavia, Siberia (Russia), Alaska (USA), and Northern Canada (known as Caribou in North America)",
+      "vi": "Rừng taiga và lãnh nguyên Bắc Cực khắp vùng Scandinavia, Siberia (Nga), Alaska (Hoa Kỳ) và miền bắc Canada (ở Bắc Mỹ thường gọi là Caribou)"
+    },
+    "habitat": {
+      "en": "Arctic and subarctic tundra, open taiga forests, alpine meadows, and windswept polar plateaus",
+      "vi": "Lãnh nguyên hàn đới và cận hàn đới, rừng thưa lá kim taiga, đồng cỏ vùng núi cao và các cao nguyên lộng gió Bắc Cực"
+    },
+    "diet": {
+      "en": "Herbivore (specializes in reindeer lichen/moss during winter; consumes willow shoots, sedges, grasses, herbs, and wild mushrooms during summer)",
+      "vi": "Động vật ăn cỏ (chuyên ăn địa y tuần lộc và rêu vào mùa đông; mùa hè ăn chồi non liễu, cỏ cói, cỏ tươi, thảo mộc và nấm rừng)"
+    },
+    "behavior": {
+      "en": "Highly gregarious social animal that forms vast herds undertaking epic annual migrations of up to 5,000 km. Their cloven hooves dynamically adapt to seasons: spongy footpads expand to walk on soggy summer wetlands, then shrink and tighten in winter to expose sharp hoof rims that cut into ice and dig through snow.",
+      "vi": "Động vật sống theo bầy đàn đông đúc với những chuyến thiên di vĩ đại lên tới 5.000 km mỗi năm. Móng guốc thích nghi tài tình theo mùa: đệm thịt mở rộng êm ái để đi trên đầm lầy mùa hè, sau đó co rút lại vào mùa đông để lộ viền móng sắc bén giúp bám băng và cào tuyết bới thức ăn."
+    },
+    "funFact": {
+      "en": "Reindeer are the only deer species where both males and females grow antlers, and their eyes uniquely change color from golden-amber in summer to deep cobalt blue in winter, increasing sensitivity to ultraviolet light during the dark polar night.",
+      "vi": "Tuần lộc là loài duy nhất thuộc họ hươu nai mà cả con đực và con cái đều mọc gạc sừng; đặc biệt mắt của chúng đổi màu từ vàng hổ phách mùa hè sang xanh coban thẫm mùa đông giúp tăng độ nhạy với tia cực tím trong bóng đêm trường kỳ Bắc Cực."
+    },
+    "thumbnailUrl": "https://example.com/placeholder.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "tank-crab",
+    "animalName": {
+      "en": "Tank Crab (Brown Land Crab)",
+      "vi": "Cua Xe Tăng"
+    },
+    "scientificName": "Cardisoma carnifex",
+    "status": {
+      "en": "Least Concern",
+      "vi": "Ít lo ngại"
+    },
+    "category": {
+      "en": "Crustacean",
+      "vi": "Động vật giáp xác"
+    },
+    "distribution": {
+      "en": "Tropical Indo-Pacific coastal zones; in Vietnam, exclusively and strictly conserved within Con Dao National Park (Ba Ria - Vung Tau Province)",
+      "vi": "Các dải ven biển nhiệt đới Ấn Độ Dương - Thái Bình Dương; tại Việt Nam được bảo tồn nghiêm ngặt và phân bố tiêu biểu tại Vườn quốc gia Côn Đảo (tỉnh Bà Rịa - Vũng Tàu)"
+    },
+    "habitat": {
+      "en": "Coastal mangrove forests, supralittoral zones, damp lowland forests, and deep subterranean burrows dug above high tide lines",
+      "vi": "Rừng ngập mặn ven biển, dải đất ẩm chân rừng ven biển sau bãi triều và các hang ngầm sâu đào dưới nền đất cát pha bùn"
+    },
+    "diet": {
+      "en": "Omnivore / Detritivore (primarily feeds on fallen mangrove leaves, rotting organic matter, seeds, fruits, roots, and occasionally dead fish or small invertebrates)",
+      "vi": "Động vật ăn tạp / mùn bã hữu cơ (thức ăn chủ yếu là lá cây mục rụng trong rừng ngập mặn, chất hữu cơ thối rữa, quả rụng, hạt, rễ cây và đôi khi là xác động vật nhỏ)"
+    },
+    "behavior": {
+      "en": "Nocturnal burrower that digs deep helical tunnels up to 2 meters into the ground to access moist groundwater. Extremely timid despite its imposing look; emerges after sunset to feed. Females undertake mass spawning migrations to the sea margin during full moons to release millions of larvae into ocean currents.",
+      "vi": "Hoạt động mạnh về đêm, đào những hang ngầm hình xoắn ốc sâu tới 2 mét để chạm mạch nước ngầm duy trì độ ẩm mang. Bản tính rất nhút nhát dù ngoại hình đồ sộ; chỉ bò ra kiếm ăn khi trời chập tối. Vào mùa sinh sản, cua cái ôm bụng trứng di cư ra mép biển vào ban đêm để thả ấu trùng vào đại dương."
+    },
+    "funFact": {
+      "en": "Known as the largest land crab species in Vietnam and Indochina, an adult can weigh up to 1.3 kg with a leg span over 30 cm; its clumsy, powerful gait and heavy heart-shaped carapace inspired locals to nickname it the 'Tank Crab'.",
+      "vi": "Được mệnh danh là loài cua cạn lớn nhất Việt Nam và Đông Dương với trọng lượng tới 1,3 kg và sải càng dài hơn 30 cm; dáng bò lù đù, nặng trịch cùng chiếc mai gồ ghề cứng như bọc thép khiến người dân Côn Đảo ví von chúng như những chiếc 'xe tăng' lừng lững trong đêm."
+    },
+    "thumbnailUrl": "https://example.com/placeholder.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "rusty-patched-bumblebee",
+    "animalName": {
+      "en": "Rusty Patched Bumblebee",
+      "vi": "Ong Bầu Vằn Rỉ Sắt"
+    },
+    "scientificName": "Bombus affinis",
+    "status": {
+      "en": "Critically Endangered",
+      "vi": "Cực kỳ nguy cấp"
+    },
+    "category": {
+      "en": "Insect",
+      "vi": "Côn trùng"
+    },
+    "distribution": {
+      "en": "Historically across 28 eastern and midwestern US states and 2 Canadian provinces; now restricted to small, isolated pockets in Minnesota, Wisconsin, Iowa, and southern Ontario",
+      "vi": "Từng hiện diện tại 28 tiểu bang miền Đông và Trung Tây Hoa Kỳ cùng 2 tỉnh của Canada; nay chỉ còn các quần thể nhỏ lẻ cô lập tại Minnesota, Wisconsin, Iowa và nam Ontario"
+    },
+    "habitat": {
+      "en": "Tallgrass prairies, oak savannas, native wildflower meadows, deciduous woodland margins, and pesticide-free suburban gardens",
+      "vi": "Đồng cỏ cao tự nhiên, xavan gỗ sồi, cánh đồng hoa dại bản địa, bìa rừng rụng lá và các khu vườn sinh thái đô thị không dùng thuốc bảo vệ thực vật"
+    },
+    "diet": {
+      "en": "Herbivore / Nectarivore (forages on nectar for carbohydrates and collects protein-rich pollen from diverse native flowering plants, shrubs, and fruit trees)",
+      "vi": "Động vật ăn thực vật / hút mật (hút mật hoa lấy năng lượng và thu thập phấn hoa giàu protein từ nhiều loài thực vật có hoa bản địa, cây bụi và cây ăn quả)"
+    },
+    "behavior": {
+      "en": "Eusocial pollinator nesting underground in abandoned rodent cavities. The solitary queen emerges in early spring to found a colony of workers. Highly prized for 'buzz pollination' (sonication)—vibrating flight muscles at precise frequencies to release trapped pollen from tightly closed blossoms.",
+      "vi": "Loài thụ phấn có tập tính bầy đàn xã hội, xây tổ ngầm trong hang động vật gặm nhấm bỏ hoang. Ong chúa đơn độc thức dậy vào đầu xuân để xây dựng tổ và sinh ra lứa thợ đầu tiên. Nổi tiếng với kỹ thuật 'buzz pollination'—rung cơ bay ở tần số đặc biệt để rũ hạt phấn hoa từ các bao phấn khép kín."
+    },
+    "funFact": {
+      "en": "In 2017, the rusty patched bumblebee made tragic history as the very first bumblebee species in the continental United States to be listed under the Endangered Species Act, after losing nearly 90% of its historical population in just 20 years.",
+      "vi": "Năm 2017, loài ong này đi vào lịch sử khi trở thành loài ong đầu tiên tại lục địa Hoa Kỳ được đưa vào danh sách Động vật cực kỳ nguy cấp cần bảo vệ khẩn cấp, sau khi số lượng cá thể sụt giảm kinh hoàng tới gần 90% chỉ trong vòng hai thập kỷ do mất sinh cảnh và nhiễm thuốc trừ sâu."
+    },
+    "thumbnailUrl": "https://example.com/placeholder.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "european-hedgehog",
+    "animalName": {
+      "en": "European Hedgehog",
+      "vi": "Nhím Gai Châu Âu"
+    },
+    "scientificName": "Erinaceus europaeus",
+    "status": {
+      "en": "Near Threatened",
+      "vi": "Sắp bị đe dọa"
+    },
+    "category": {
+      "en": "Mammal",
+      "vi": "Động vật có vú"
+    },
+    "distribution": {
+      "en": "Native across Western, Central, and Northern Europe (from the Iberian Peninsula through the British Isles, France, Germany, to Scandinavia and northwest Russia); introduced into New Zealand",
+      "vi": "Bản địa khắp Tây, Trung và Bắc Âu (từ bán đảo Iberia qua quần đảo Anh, Pháp, Đức, đến vùng Scandinavia và tây bắc nước Nga); cũng được du nhập vào New Zealand"
+    },
+    "habitat": {
+      "en": "Deciduous woodlands, traditional hedgerows, pastoral edges, grasslands, suburban orchards, and lush domestic gardens",
+      "vi": "Rừng rụng lá lá rộng, các hàng rào bụi cây rậm truyền thống, rìa đồng cỏ chăn thả, vườn cây ăn trái và các khu vườn ngoại ô xanh tốt"
+    },
+    "diet": {
+      "en": "Omnivore / Insectivore (primarily beetles, earthworms, caterpillars, earwigs, slugs, and snails; supplemented by windfall fruit, mushrooms, and occasionally bird eggs)",
+      "vi": "Động vật ăn tạp / ăn sâu bọ (chủ yếu là bọ cánh cứng, giun đất, sâu bướm, bọ đuôi kìm, ốc sên; bổ sung thêm trái cây chín rụng, nấm và thỉnh thoảng là trứng chim)"
+    },
+    "behavior": {
+      "en": "Strictly nocturnal, solitary forager traveling 1 to 2 kilometers each night using keen olfaction and hearing. Undergoes profound hibernation from late autumn to spring inside leaf-lined nests (hibernacula). Rolls into a completely enclosed sphere of erect spines when alarmed.",
+      "vi": "Động vật kiếm ăn đơn độc chuyên hoạt động về đêm, có thể cuốc bộ 1 đến 2 km mỗi đêm nhờ khứu giác và thính giác cực nhạy. Trải qua kỳ ngủ đông sâu từ cuối thu đến mùa xuân trong những tổ lá khô kín đáo (hibernaculum). Khi gặp nguy hiểm, nó tự cuộn tròn cơ thể thành một quả cầu gai nhọn kín mít để tự vệ."
+    },
+    "funFact": {
+      "en": "A single adult European hedgehog carries an armor of 5,000 to 7,000 specialized hollow spines made of keratin; when confronted with strong unfamiliar odors, it exhibits 'self-anointing'—foaming saliva in its mouth and spreading it over its spines.",
+      "vi": "Một con nhím gai châu Âu trưởng thành khoác trên mình lớp áo giáp gồm 5.000 đến 7.000 chiếc gai rỗng cấu tạo từ chất sừng keratin; đặc biệt khi ngửi thấy mùi lạ kích thích, chúng có hành vi 'tự xức nước bọt' (self-anointing)—tạo bọt trắng trong miệng rồi dùng lưỡi bôi đều lên khắp các gai nhọn."
+    },
+    "thumbnailUrl": "https://example.com/placeholder.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
   }
 ]
