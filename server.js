@@ -41,6 +41,25 @@ const port = process.env.PORT || 3000;
 app.use(cors()); // Bắt buộc phải có để Frontend và Backend nói chuyện được với nhau
 app.use(express.json()); // Giúp server đọc được dữ liệu dạng chữ
 
+// Unity WebGL .br assets cần header đúng để browser giải nén Brotli trên HTTP/localhost
+app.use((req, res, next) => {
+  const url = req.originalUrl || req.url || "";
+  if (url.endsWith(".br")) {
+    res.setHeader("Content-Encoding", "br");
+
+    if (url.endsWith(".js.br")) {
+      res.setHeader("Content-Type", "application/javascript; charset=utf-8");
+    } else if (url.endsWith(".wasm.br")) {
+      res.setHeader("Content-Type", "application/wasm");
+    } else if (url.endsWith(".data.br")) {
+      res.setHeader("Content-Type", "application/octet-stream");
+    } else {
+      res.setHeader("Content-Type", "application/octet-stream");
+    }
+  }
+  next();
+});
+
 // Xử lý file tĩnh bình thường
 app.use(express.static(".")); // Để chạy được file HTML/CSS/JS
 // Sửa dòng này
