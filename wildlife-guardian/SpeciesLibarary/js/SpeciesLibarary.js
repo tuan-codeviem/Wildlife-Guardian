@@ -54,9 +54,22 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function setTheme(theme) {
+    // 1. Temporarily freeze transitions to eliminate frame drops across 100+ cards
+    document.documentElement.classList.add("theme-switching");
+
     document.documentElement.setAttribute("data-theme", theme);
     localStorage.setItem("wg_species_theme", theme);
     updateThemeIcon(theme);
+
+    // 2. Force browser reflow to apply new colors instantly in 1 frame (16ms)
+    void document.documentElement.offsetHeight;
+
+    // 3. Smoothly restore transitions on next animation frame
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        document.documentElement.classList.remove("theme-switching");
+      });
+    });
   }
 
   function updateThemeIcon(theme) {
@@ -194,10 +207,163 @@ document.addEventListener('DOMContentLoaded', () => {
     if (unlockedCountEl) unlockedCountEl.textContent = unlockedCount;
   }
 
-  // ─── 3. CARD RENDERING ───
+  // ─── 3. CARD ELEMENT FACTORY (100% 3D BADGES & ASYNC DECODING) ───
+  function createCardElement(animal) {
+    const lang = (localStorage.getItem("appLang") || "EN").toLowerCase();
+    const card = document.createElement("div");
+    const name = animal.animalName?.[lang] || animal.animalName?.en || "Specimen";
+    const category = animal.category?.[lang] || animal.category?.en || "Wildlife";
+
+    const catKey = (animal.category?.en || "").toLowerCase().replace(/s$/, '');
+    const thumbUrl = animal.thumbnailUrl || catPlaceholders[catKey] || defaultPlaceholder;
+
+    // Status Tag Info
+    let statusText = category;
+    let statusClass = "en";
+    if (animal.status) {
+      statusText = animal.status[lang] || animal.status.en;
+      const enStatus = (animal.status.en || "").toLowerCase();
+      if (enStatus.includes("critically")) statusClass = "cr";
+      else if (enStatus.includes("endangered")) statusClass = "en";
+      else if (enStatus.includes("vulnerable")) statusClass = "vu";
+      else if (enStatus.includes("near") || enStatus.includes("threatened")) statusClass = "nt";
+      else statusClass = "lc";
+    }
+
+    const hasReal3D = !!(animal.model3dUrl && !animal.model3dUrl.includes("example.com"));
+
+    if (animal.isUnlocked) {
+      /* ─── UNLOCKED CARD (HOLOGRAPHIC 3D) ─── */
+      card.className = "sl-card is-unlocked";
+      card.dataset.id = animal.speciesId;
+      card.innerHTML = `
+        <div class="sl-card-img-wrap">
+          <img class="sl-card-img" src="${thumbUrl}" alt="${name}" loading="lazy" decoding="async" onerror="this.src='${defaultPlaceholder}'" />
+        </div>
+        <div class="sl-card-scrim"></div>
+        <div class="sl-card-top">
+          <span class="iucn-pill ${statusClass}">${statusText}</span>
+          <div class="holo-3d-badge"><i class="fa-solid fa-cube"></i> 3D</div>
+        </div>
+        <div class="sl-card-content">
+          <span class="sl-card-cat">${category}</span>
+          <h3 class="sl-card-name">${name}</h3>
+          <p class="sl-card-sci">${animal.scientificName || ""}</p>
+          <div class="sl-card-cta unlocked">
+            <i class="fa-solid fa-sparkles"></i> 
+            <span>${hasReal3D ? (lang === "vi" ? "Xem Mẫu 3D →" : "Inspect 3D →") : (lang === "vi" ? "Xem Chi Tiết →" : "View Details →")}</span>
+          </div>
+        </div>
+      `;
+
+      if (!isTouchDevice()) {
+        attachDesktopTilt(card);
+      }
+
+      if (hasReal3D) {
+        card.addEventListener("mouseenter", () => {
+          if (!window._prefetched3DUrls) window._prefetched3DUrls = new Set();
+          if (!window._prefetched3DUrls.has(animal.model3dUrl)) {
+            window._prefetched3DUrls.add(animal.model3dUrl);
+            const link = document.createElement("link");
+            link.rel = "prefetch";
+            link.as = "fetch";
+            link.href = animal.model3dUrl;
+            link.crossOrigin = "anonymous";
+            document.head.appendChild(link);
+          }
+        }, { once: true });
+      }
+
+    } else {
+      /* ─── LOCKED CARD (100% 3D SPECIMEN ILLUSION) ─── */
+      card.className = "sl-card is-locked";
+      card.dataset.id = animal.speciesId;
+      card.innerHTML = `
+        <div class="sl-card-img-wrap">
+          <img class="sl-card-img" src="${thumbUrl}" alt="${name}" loading="lazy" decoding="async" onerror="this.src='${defaultPlaceholder}'" />
+        </div>
+        <div class="sl-card-scrim"></div>
+        <div class="sl-card-top">
+          <span class="iucn-pill ${statusClass}">${statusText}</span>
+        </div>
+        <div class="sl-lock-orb">
+          <i class="fa-solid fa-lock"></i>
+        </div>
+        <div class="sl-card-content">
+          <span class="sl-card-cat">${category}</span>
+          <h3 class="sl-card-name">${name}</h3>
+          <p class="sl-card-sci">${animal.scientificName || ""}</p>
+          <div class="sl-card-cta locked">
+            <i class="fa-solid fa-gamepad"></i> 
+            <span>${lang === "vi" ? "Cứu hộ để mở 3D →" : "Rescue to unlock 3D →"}</span>
+          </div>
+        </div>
+      `;
+    }
+
+    card.addEventListener("click", () => openBentoModal(animal));
+    return card;
+  }
+
+  // ─── 4. PROGRESSIVE CHUNK RENDERING (60FPS SEAMLESS SCROLL) ───
+  const PAGE_SIZE = 24;
+  let currentRenderIndex = 0;
+  let currentListToRender = [];
+  let sentinelObserver = null;
+
+  function renderNextBatch() {
+    if (!grid || currentRenderIndex >= currentListToRender.length) {
+      if (sentinelObserver) sentinelObserver.disconnect();
+      const s = document.getElementById("slGridSentinel");
+      if (s) s.remove();
+      return;
+    }
+
+    const nextBatch = currentListToRender.slice(currentRenderIndex, currentRenderIndex + PAGE_SIZE);
+    const fragment = document.createDocumentFragment();
+
+    nextBatch.forEach(animal => {
+      fragment.appendChild(createCardElement(animal));
+    });
+
+    currentRenderIndex += nextBatch.length;
+    grid.appendChild(fragment);
+
+    if (currentRenderIndex < currentListToRender.length) {
+      setupSentinel();
+    } else {
+      if (sentinelObserver) sentinelObserver.disconnect();
+      const s = document.getElementById("slGridSentinel");
+      if (s) s.remove();
+    }
+  }
+
+  function setupSentinel() {
+    let sentinel = document.getElementById("slGridSentinel");
+    if (!sentinel) {
+      sentinel = document.createElement("div");
+      sentinel.id = "slGridSentinel";
+      sentinel.style.width = "100%";
+      sentinel.style.height = "60px";
+      sentinel.style.gridColumn = "1 / -1";
+      sentinel.style.pointerEvents = "none";
+    }
+    grid.appendChild(sentinel);
+
+    if (sentinelObserver) sentinelObserver.disconnect();
+    sentinelObserver = new IntersectionObserver((entries) => {
+      if (entries[0] && entries[0].isIntersecting) {
+        renderNextBatch();
+      }
+    }, { rootMargin: "400px" });
+    sentinelObserver.observe(sentinel);
+  }
+
   function renderCards(dataArray) {
     if (!grid) return;
     grid.innerHTML = "";
+    if (sentinelObserver) sentinelObserver.disconnect();
 
     const lang = (localStorage.getItem("appLang") || "EN").toLowerCase();
     const countText = `${dataArray.length} ${lang === "vi" ? "loài được tìm thấy" : "species catalogued"}`;
@@ -214,135 +380,41 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    const fragment = document.createDocumentFragment();
-
-    dataArray.forEach((animal, idx) => {
-      const card = document.createElement("div");
-      const name = animal.animalName?.[lang] || animal.animalName?.en || "Specimen";
-      const category = animal.category?.[lang] || animal.category?.en || "Wildlife";
-
-      // Category key for fallback image
-      const catKey = (animal.category?.en || "").toLowerCase().replace(/s$/, '');
-      const thumbUrl = animal.thumbnailUrl || catPlaceholders[catKey] || defaultPlaceholder;
-
-      // Status Tag Info
-      let statusText = category;
-      let statusClass = "en";
-      if (animal.status) {
-        statusText = animal.status[lang] || animal.status.en;
-        const enStatus = (animal.status.en || "").toLowerCase();
-        if (enStatus.includes("critically")) statusClass = "cr";
-        else if (enStatus.includes("endangered")) statusClass = "en";
-        else if (enStatus.includes("vulnerable")) statusClass = "vu";
-        else if (enStatus.includes("near") || enStatus.includes("threatened")) statusClass = "nt";
-        else statusClass = "lc";
-      }
-
-      const has3D = !!(animal.model3dUrl && !animal.model3dUrl.includes("example.com"));
-
-      if (animal.isUnlocked) {
-        /* ─── UNLOCKED CARD (HOLOGRAPHIC) ─── */
-        card.className = "sl-card is-unlocked";
-        card.dataset.id = animal.speciesId;
-        card.innerHTML = `
-          <div class="sl-card-img-wrap">
-            <img class="sl-card-img" src="${thumbUrl}" alt="${name}" loading="lazy" onerror="this.src='${defaultPlaceholder}'" />
-          </div>
-          <div class="sl-card-scrim"></div>
-          <div class="sl-card-top">
-            <span class="iucn-pill ${statusClass}">${statusText}</span>
-            ${has3D ? '<div class="holo-3d-badge"><i class="fa-solid fa-cube"></i> 3D</div>' : ''}
-          </div>
-          <div class="sl-card-content">
-            <span class="sl-card-cat">${category}</span>
-            <h3 class="sl-card-name">${name}</h3>
-            <p class="sl-card-sci">${animal.scientificName || ""}</p>
-            <div class="sl-card-cta unlocked">
-              <i class="fa-solid fa-sparkles"></i> 
-              <span>${has3D ? (lang === "vi" ? "Xem Mẫu 3D →" : "Inspect 3D →") : (lang === "vi" ? "Xem Chi Tiết →" : "View Details →")}</span>
-            </div>
-          </div>
-        `;
-
-        if (!isTouchDevice()) {
-          attachDesktopTilt(card);
-        }
-
-        // Prefetch 3D model into browser cache on hover to eliminate click delay
-        if (animal.model3dUrl && !animal.model3dUrl.includes("example.com")) {
-          card.addEventListener("mouseenter", () => {
-            if (!window._prefetched3DUrls) window._prefetched3DUrls = new Set();
-            if (!window._prefetched3DUrls.has(animal.model3dUrl)) {
-              window._prefetched3DUrls.add(animal.model3dUrl);
-              const link = document.createElement("link");
-              link.rel = "prefetch";
-              link.as = "fetch";
-              link.href = animal.model3dUrl;
-              link.crossOrigin = "anonymous";
-              document.head.appendChild(link);
-            }
-          }, { once: true });
-        }
-
-      } else {
-        /* ─── LOCKED CARD ─── */
-        card.className = "sl-card is-locked";
-        card.dataset.id = animal.speciesId;
-        card.innerHTML = `
-          <div class="sl-card-img-wrap">
-            <img class="sl-card-img" src="${thumbUrl}" alt="${name}" loading="lazy" onerror="this.src='${defaultPlaceholder}'" />
-          </div>
-          <div class="sl-card-scrim"></div>
-          <div class="sl-card-top">
-            <span class="iucn-pill ${statusClass}">${statusText}</span>
-          </div>
-          <div class="sl-lock-orb">
-            <i class="fa-solid fa-lock"></i>
-          </div>
-          <div class="sl-card-content">
-            <span class="sl-card-cat">${category}</span>
-            <h3 class="sl-card-name">${name}</h3>
-            <p class="sl-card-sci">${animal.scientificName || ""}</p>
-            <div class="sl-card-cta locked">
-              <i class="fa-solid fa-gamepad"></i> 
-              <span>${has3D ? (lang === "vi" ? "Cứu hộ để mở 3D →" : "Rescue to unlock 3D →") : (lang === "vi" ? "Cứu hộ để mở khóa →" : "Rescue to unlock →")}</span>
-            </div>
-          </div>
-        `;
-      }
-
-      card.addEventListener("click", () => openBentoModal(animal));
-      fragment.appendChild(card);
-    });
-
-    grid.appendChild(fragment);
+    currentListToRender = dataArray;
+    currentRenderIndex = 0;
+    renderNextBatch();
   }
 
-  // ─── 5. SMOOTH 60FPS 3D TILT (Desktop only) ───
+  // ─── 5. OPTIMIZED 60FPS 3D TILT (Desktop only, rAF-throttled) ───
   function attachDesktopTilt(card) {
-    const TILT_STRENGTH = 10;
     let rAF = null;
+    let isTilted = false;
 
     card.addEventListener("mousemove", (e) => {
-      if (rAF) cancelAnimationFrame(rAF);
+      if (rAF) return; // throttle via requestAnimationFrame to avoid main-thread event floods
 
       rAF = requestAnimationFrame(() => {
         const rect = card.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
-        const cx = rect.width / 2;
-        const cy = rect.height / 2;
+        const rotX = -((y - rect.height / 2) / (rect.height / 2)) * 8;
+        const rotY = ((x - rect.width / 2) / (rect.width / 2)) * 8;
 
-        const rotX = -((y - cy) / cy) * TILT_STRENGTH;
-        const rotY = ((x - cx) / cx) * TILT_STRENGTH;
-
-        card.style.transform = `perspective(1000px) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg) translateY(-6px)`;
+        card.style.transform = `perspective(1000px) rotateX(${rotX.toFixed(1)}deg) rotateY(${rotY.toFixed(1)}deg) translateY(-6px)`;
+        isTilted = true;
+        rAF = null;
       });
     });
 
     card.addEventListener("mouseleave", () => {
-      if (rAF) cancelAnimationFrame(rAF);
-      card.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0)";
+      if (rAF) {
+        cancelAnimationFrame(rAF);
+        rAF = null;
+      }
+      if (isTilted) {
+        card.style.transform = "";
+        isTilted = false;
+      }
     });
   }
 
@@ -588,24 +660,24 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="locked-cta-overlay">
               <div class="locked-badge-pill" style="background: rgba(16, 185, 129, 0.25); border: 1px solid rgba(16, 185, 129, 0.6); color: #10b981;">
                 <i class="fa-solid fa-circle-check"></i>
-                <span>${lang === "vi" ? "Đã Khám Phá (Mẫu Tiêu Bản)" : "Specimen Discovered"}</span>
+                <span>${lang === "vi" ? "Bản Thể 3D Đã Mở Khóa" : "3D Specimen Unlocked"}</span>
               </div>
             </div>
           </div>
         `;
       } else {
-        // Locked Preview Mode
+        // Locked Preview Mode (Always indicates 3D model to be unlocked via rescue game)
         modalHero.innerHTML = `
           <div class="locked-hero-wrap">
             <img class="locked-hero-img" src="${animal.thumbnailUrl || defaultPlaceholder}" alt="${animal.animalName?.[lang] || 'Specimen'}" />
             <div class="locked-cta-overlay">
               <div class="locked-badge-pill">
                 <i class="fa-solid fa-lock"></i>
-                <span>${has3D ? (lang === "vi" ? "Bản thể 3D Đang Khóa" : "3D Specimen Encrypted") : (lang === "vi" ? "Hồ Sơ Đang Khóa" : "Profile Encrypted")}</span>
+                <span>${lang === "vi" ? "Bản thể 3D Đang Khóa" : "3D Specimen Encrypted"}</span>
               </div>
               <button class="locked-btn-play" onclick="window.location.href='../Game/GameUnity.html'">
                 <i class="fa-solid fa-gamepad"></i>
-                <span>${has3D ? (lang === "vi" ? "Chơi Game Để Mở Khóa 3D" : "Play Rescue Game to Unlock 3D") : (lang === "vi" ? "Chơi Game Để Mở Khóa" : "Play Game to Rescue")}</span>
+                <span>${lang === "vi" ? "Chơi Game Để Mở Khóa 3D" : "Play Rescue Game to Unlock 3D"}</span>
               </button>
             </div>
           </div>

@@ -177,6 +177,18 @@ body {
   background: #064e3b !important;
 }
 
+/* ─── INSTANT THEME SWITCHING (ZERO-LAG 60FPS) ─── */
+.theme-switching,
+.theme-switching *,
+.theme-switching *::before,
+.theme-switching *::after {
+  -webkit-transition: none !important;
+  -moz-transition: none !important;
+  -o-transition: none !important;
+  -ms-transition: none !important;
+  transition: none !important;
+}
+
 /* ─── THEME TOGGLE BUTTON & HIGH-PERFORMANCE 60FPS TRANSITIONS ─── */
 body,
 .sl-stat-card,
@@ -898,6 +910,8 @@ body,
   box-shadow: var(--sl-shadow-md);
   transition: transform 0.35s var(--sl-ease), border-color 0.2s ease, background-color 0.2s ease;
   will-change: transform;
+  content-visibility: auto;
+  contain-intrinsic-size: 280px 400px;
 }
 
 @media (hover: hover) and (pointer: fine) {
