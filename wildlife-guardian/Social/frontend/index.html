@@ -452,6 +452,35 @@
     </div>
   </div>
 
+  <!-- BÁO CÁO BÀI ĐĂNG  -->
+  <div id="customReportConfirm" style="
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.65);
+        z-index: 10000;
+        justify-content: center;
+        align-items: center;
+        backdrop-filter: blur(2px);
+      ">
+    <div
+      style="background: white; border-radius: 12px; width: 260px; display: flex; flex-direction: column; overflow: hidden; text-align: center; font-size: 14px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+      <div style="padding: 24px 20px; border-bottom: 1px solid #dbdbdb;">
+        <h3 style="margin: 0 0 8px 0; font-size: 18px; font-weight: 600; color: #000;" data-i18n="report_post_title">Report post?</h3>
+        <p style="margin: 0; color: #737373; font-size: 14px; line-height: 1.4;" data-i18n="report_post_desc">Are you sure you want to report this post?</p>
+      </div>
+      <button id="confirmReportBtn" data-i18n="btn_report"
+        style="background: transparent; border: none; border-bottom: 1px solid #dbdbdb; color: #f59e0b; font-weight: 700; padding: 14px; cursor: pointer; font-size: 14px; transition: 0.2s;"
+        onmouseover="this.style.background='#f8f9fa'" onmouseout="this.style.background='transparent'">Report</button>
+      <button id="cancelReportBtn" data-i18n="btn_cancel"
+        style="background: transparent; border: none; color: #000; padding: 14px; cursor: pointer; font-size: 14px; transition: 0.2s;"
+        onmouseover="this.style.background='#f8f9fa'" onmouseout="this.style.background='transparent'">Cancel</button>
+    </div>
+  </div>
+
   <!-- HỘP THOẠI XÓA BÌNH LUẬN (STYLE INSTAGRAM) -->
   <div id="commentDeleteConfirm"
     style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.65); z-index: 10005; justify-content: center; align-items: center; backdrop-filter: blur(2px);">

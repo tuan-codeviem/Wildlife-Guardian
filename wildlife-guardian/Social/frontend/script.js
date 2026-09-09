@@ -899,43 +899,15 @@ postsFeedContainer.addEventListener("click", async function (e) {
   const reportBtn = e.target.closest(".btn-report-post");
   if (reportBtn) {
     const postId = reportBtn.getAttribute("data-id");
-    let myUserId = "ẩn_danh";
-    const meString = localStorage.getItem("currentUser");
-    if (meString) {
-      const me = JSON.parse(meString);
-      myUserId = me._id || me.userId || me.username || "user_macdinh";
-    } else {
-      let anonId = localStorage.getItem("anonymousId");
-      if (!anonId) {
-        anonId = "anon_" + Math.random().toString(36).substr(2, 9);
-        localStorage.setItem("anonymousId", anonId);
-      }
-      myUserId = anonId;
-    }
+    
+    // 1. Hiện cái hộp xác nhận xịn xò lên
+    const customReportConfirm = document.getElementById("customReportConfirm");
+    if (customReportConfirm) customReportConfirm.style.display = "flex";
 
-    if (confirm("Bạn có chắc chắn muốn báo cáo bài viết này vì vi phạm tiêu chuẩn cộng đồng?")) {
-      try {
-        const response = await fetch(`${API_URL}/${postId}/report`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ userId: myUserId }),
-        });
-        const data = await response.json();
-        if (response.ok) {
-          alert(data.message);
-          if (data.message.includes("bị xóa")) {
-            loadPosts(); // Tải lại Feed nếu bài viết bị xoá tự động
-          }
-        } else {
-          alert("Lỗi: " + data.message);
-        }
-      } catch (err) {
-        console.error("Lỗi khi báo cáo:", err);
-        alert("Có lỗi xảy ra khi báo cáo.");
-      }
-    }
+    // 2. Lén nhét cái ID của bài viết vào nút Tick (để lát nữa bấm Tick thì biết bài nào mà report)
+    const confirmReportBtn = document.getElementById("confirmReportBtn");
+    if (confirmReportBtn) confirmReportBtn.setAttribute("data-id", postId);
+
     return;
   }
 
@@ -2138,6 +2110,64 @@ document.addEventListener("click", async function (e) {
       }
     } catch (error) {
       console.error("Lỗi xóa bài:", error);
+    }
+  }
+
+  // --- XỬ LÝ HỘP THOẠI BÁO CÁO BÀI CUSTOM ---
+  
+  if (
+    e.target.id === "cancelReportBtn" ||
+    e.target.closest("#cancelReportBtn")
+  ) {
+    document.getElementById("customReportConfirm").style.display = "none";
+  }
+
+  if (
+    e.target.id === "confirmReportBtn" ||
+    e.target.closest("#confirmReportBtn")
+  ) {
+    const btn =
+      e.target.id === "confirmReportBtn"
+        ? e.target
+        : e.target.closest("#confirmReportBtn");
+    const postId = btn.getAttribute("data-id");
+
+    document.getElementById("customReportConfirm").style.display = "none";
+
+    let myUserId = "ẩn_danh";
+    const meString = localStorage.getItem("currentUser");
+    if (meString) {
+      const me = JSON.parse(meString);
+      myUserId = me._id || me.userId || me.username || "user_macdinh";
+    } else {
+      let anonId = localStorage.getItem("anonymousId");
+      if (!anonId) {
+        anonId = "anon_" + Math.random().toString(36).substr(2, 9);
+        localStorage.setItem("anonymousId", anonId);
+      }
+      myUserId = anonId;
+    }
+
+    try {
+      const response = await fetch(`${API_URL}/${postId}/report`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId: myUserId }),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        alert(data.message);
+        if (data.message.includes("bị xóa")) {
+          loadPosts();
+        }
+      } else {
+        alert("Lỗi: " + data.message);
+      }
+    } catch (err) {
+      console.error("Lỗi khi báo cáo:", err);
+      alert("Có lỗi xảy ra khi báo cáo.");
     }
   }
 
