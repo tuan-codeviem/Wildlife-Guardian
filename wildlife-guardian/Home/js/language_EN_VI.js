@@ -41,6 +41,9 @@ const translations = {
     del_post_desc: "Are you sure you want to delete this post?",
     btn_delete: "Delete",
     btn_cancel: "Cancel",
+    report_post_title: "Report post?",
+    report_post_desc: "Are you sure you want to report this post?",
+    btn_report: "Report",
     del_comment_title: "Delete comment?",
     del_comment_desc: "Are you sure you want to delete this comment?",
     edit_post_title: "Edit post",
@@ -304,7 +307,14 @@ const translations = {
     rm_card_btn_call: "Call Expert",
     rm_status_text_emergency: "EMERGENCY",
     rm_status_text_progress: "IN PROGRESS",
-    rm_status_text_rescued: "RESCUED"
+    rm_status_text_rescued: "RESCUED",
+    admin_queue: "Moderation Queue",
+    admin_approve: "Approve",
+    admin_delete: "Delete",
+    admin_ai_flagged: "AI Flagged",
+    admin_reports: "Reports",
+    admin_no_flagged: "No flagged posts.",
+    admin_loading: "Loading..."
   },
   VI: {
     nav_home: "Trang chủ",
@@ -346,6 +356,9 @@ const translations = {
     del_post_desc: "Bạn có chắc chắn muốn xóa bài viết này không?",
     btn_delete: "Xóa",
     btn_cancel: "Hủy",
+    report_post_title: "Báo cáo bài viết?",
+    report_post_desc: "Bạn có chắc chắn muốn báo cáo bài viết này vì vi phạm tiêu chuẩn cộng đồng?",
+    btn_report: "Báo cáo",
     del_comment_title: "Xóa bình luận?",
     del_comment_desc: "Bạn có chắc chắn muốn xóa bình luận này không?",
     edit_post_title: "Chỉnh sửa bài viết",
@@ -610,7 +623,14 @@ const translations = {
     rm_card_btn_call: "Gọi chuyên gia",
     rm_status_text_emergency: "KHẨN CẤP",
     rm_status_text_progress: "ĐANG XỬ LÝ",
-    rm_status_text_rescued: "ĐÃ CỨU"
+    rm_status_text_rescued: "ĐÃ CỨU",
+    admin_queue: "Hàng chờ kiểm duyệt",
+    admin_approve: "Duyệt",
+    admin_delete: "Xóa",
+    admin_ai_flagged: "AI Gắn Cờ",
+    admin_reports: "Báo cáo",
+    admin_no_flagged: "Không có bài viết vi phạm.",
+    admin_loading: "Đang tải..."
   },
 };
 window.translations = translations;

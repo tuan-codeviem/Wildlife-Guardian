@@ -35,14 +35,73 @@ console.log("🌥️  Cloudinary đã sẵn sàng!");
 // ==========================================
 // 1. KHỞI TẠO APP & CẤU HÌNH MIDDLEWARE
 // ==========================================
+const http = require("http");
+const { Server } = require("socket.io");
 const app = express();
 const port = process.env.PORT || 3000;
+const server = http.createServer(app);
+const io = new Server(server, { cors: { origin: "*" } });
+
+// Đính kèm io vào req để dùng ở các API
+app.use((req, res, next) => {
+  req.io = io;
+  next();
+});
 
 app.use(cors()); // Bắt buộc phải có để Frontend và Backend nói chuyện được với nhau
 app.use(express.json()); // Giúp server đọc được dữ liệu dạng chữ
 
+// Unity WebGL .br assets cần header đúng để browser giải nén Brotli trên HTTP/localhost
+app.use((req, res, next) => {
+  const url = req.originalUrl || req.url || "";
+  if (url.endsWith(".br")) {
+    res.setHeader("Content-Encoding", "br");
+
+    if (url.endsWith(".js.br")) {
+      res.setHeader("Content-Type", "application/javascript; charset=utf-8");
+    } else if (url.endsWith(".wasm.br")) {
+      res.setHeader("Content-Type", "application/wasm");
+    } else if (url.endsWith(".data.br")) {
+      res.setHeader("Content-Type", "application/octet-stream");
+    } else {
+      res.setHeader("Content-Type", "application/octet-stream");
+    }
+  }
+  next();
+});
+// Xử lý file nén Brotli (.unityweb)
+app.use((req, res, next) => {
+  if (!req.path.endsWith('.unityweb')) return next();
+
+  // Thêm Content-Encoding: br vì các file Unity đang được nén bằng Brotli
+  res.set('Content-Encoding', 'br');
+  res.set('Cache-Control', 'no-store');
+
+  if (req.path.endsWith('.js.unityweb')) {
+    res.set('Content-Type', 'application/javascript');
+  } else if (req.path.endsWith('.wasm.unityweb')) {
+    res.set('Content-Type', 'application/wasm');
+  } else if (req.path.endsWith('.data.unityweb')) {
+    res.set('Content-Type', 'application/octet-stream');
+  }
+
+  next();
+});
+
 // Xử lý file tĩnh bình thường
-app.use(express.static(".")); // Để chạy được file HTML/CSS/JS
+app.use(express.static(".", {
+  cacheControl: false,
+  setHeaders: (res, filePath) => {
+    if (filePath.endsWith('.unityweb')) {
+      res.set('Content-Encoding', 'br');
+      res.set('Cache-Control', 'no-store');
+    } else if (filePath.endsWith('.br')) {
+      res.set('Content-Encoding', 'br');
+      res.set('Cache-Control', 'no-store');
+    }
+  },
+})); // Để chạy được file HTML/CSS/JS
+
 // Sửa dòng này
 app.use("/uploads", express.static(path.join(__dirname, "wildlife-guardian/Social/uploads")));
 
@@ -165,18 +224,29 @@ app.post("/api/users/:id/unlock", async (req, res) => {
 });
 
 // ==========================================
-// 5. CÁC API BÀI VIẾT (POSTS)
+// 5. CÁC API BÀI VIẾT (POSTS) & KIỂM DUYỆT TỰ ĐỘNG
 // ==========================================
+
+// Đã loại bỏ các danh sách từ khóa cứng cứng nhắc, chuyển toàn bộ quyền kiểm duyệt cho Gemini 2.5 Flash.
 
 // Tải bài viết
 app.get("/api/posts", async (req, res) => {
   try {
     const { category } = req.query;
-    let filter = {};
+    
+    // Chỉ hiển thị các bài viết An toàn HOẶC đã được Admin duyệt
+    let filter = {
+      $or: [
+        { isSensitive: false },
+        { isSensitive: { $exists: false } },
+        { isAdminApproved: true }
+      ]
+    };
+
     if (category && category.toLowerCase() !== "all posts") {
       // Xử lý escape ký tự đặc biệt để tránh lỗi sập server do Regex
       const escapeRegex = category.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-      filter = { category: new RegExp(escapeRegex, "i") };
+      filter.category = new RegExp(escapeRegex, "i");
     }
 
     // Dùng .lean() để có thể chỉnh sửa object kết quả trả về từ Mongoose
@@ -216,10 +286,84 @@ app.post("/api/posts", uploadFile, async (req, res) => {
   try {
     console.log("📝 POST /api/posts - req.file:", req.file);
 
-    // 🛠 Bắt link ảnh trả về từ Cloudinary (Bao phủ mọi trường hợp path, secure_url, url)
+    const postContent = req.body.content || "";
+    let isSensitive = false;
     let imageUrl = null;
+    
     if (req.file) {
       imageUrl = req.file.path;
+    }
+
+    console.log("🔍 Đang gửi nội dung và ảnh cho Gemini 2.5 Flash phân tích...");
+    try {
+      const prompt = `You are a content moderator for a wildlife social network.
+Analyze the post content and image (if provided).
+Flag the content if it contains:
+- Extreme blood, gore, violence, horror, dead bodies, or severe injuries. This INCLUDES fake gore, theatrical blood, movie props, makeup, and mannequins.
+- Hate speech, harassment, severe toxicity, cursing, profanity, or illegal wildlife trade.
+- Sexually explicit content.
+- Spam or commercial advertisements.
+
+IMPORTANT RULES:
+- Do NOT flag pictures of humans with animals (e.g. a woman hugging a puppy) as sensitive. Human presence is safe.
+- Do NOT flag normal non-gory animals as sensitive (e.g. monkeys, dogs, cats).
+
+CRITICAL MODERATION RULES FOR IMAGES (NEW):
+1. ANIMAL BLOOD IS ALLOWED: Since this is a wildlife rescue platform, pictures of injured animals, animal blood, or veterinary procedures are NORMAL and MUST BE ALLOWED (isSafe: true). Do NOT flag injured animals or animal blood.
+2. HUMAN BLOOD IS STRICTLY FORBIDDEN: Flag the content (isSafe: false) if it contains HUMAN blood, human gore, human injuries, horror, zombies, or dead human bodies. This INCLUDES fake human blood, Halloween makeup, theatrical gore, movie props, and mannequins resembling human gore.
+
+Return ONLY a valid JSON object with the exact following structure:
+{
+  "isSafe": boolean, // true if content is safe and appropriate, false if it violates any rules
+  "violationType": "none" | "violence" | "hate_speech" | "sexual" | "spam" | "illegal_trade" | "other",
+  "reason": "short explanation in Vietnamese of why it was flagged or why it is safe"
+}`;
+
+      const parts = [
+        { text: prompt },
+        { text: `Post text content: "${postContent}"` }
+      ];
+
+      if (imageUrl) {
+        // Tải ảnh từ Cloudinary về buffer để gửi cho Gemini
+        const resp = await fetch(imageUrl);
+        if (!resp.ok) {
+          throw new Error("Không thể tải ảnh từ Cloudinary (HTTP " + resp.status + "). Mạng có thể bị trễ.");
+        }
+        const buffer = await resp.arrayBuffer();
+        const base64 = Buffer.from(buffer).toString('base64');
+        parts.push({ inlineData: { mimeType: req.file.mimetype || 'image/jpeg', data: base64 } });
+      }
+
+      const aiResponse = await ai.models.generateContent({
+        model: 'gemini-2.5-flash',
+        contents: [{ role: 'user', parts: parts }],
+        config: {
+          responseMimeType: "application/json",
+          safetySettings: [
+            { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_NONE' },
+            { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_NONE' },
+            { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_LOW_AND_ABOVE' },
+            { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_NONE' }
+          ]
+        }
+      });
+      
+      const responseText = aiResponse.text || "{}";
+      console.log("🤖 Gemini AI trả lời:", responseText);
+      
+      const result = JSON.parse(responseText);
+      // Nếu kết quả trả về false, HOẶC nếu trả về rỗng (do bị chặn bởi Google Safety) thì cắm cờ ngay
+      if (result.isSafe === false || responseText === "{}") {
+        isSensitive = true;
+        console.log(`🚩 Đã cắm cờ bài viết! Lý do: ${result.reason} [${result.violationType}]`);
+      }
+    } catch (aiError) {
+      console.error("⚠️ Lỗi khi gọi Gemini AI:", aiError.message);
+      
+      // Bất kỳ lỗi gì từ AI (bị chặn do Google Safety ngầm, lỗi mạng, lỗi API) đều an toàn cắm cờ để Admin duyệt tay
+      isSensitive = true;
+      console.log("🚩 Đã cắm cờ do Gemini xảy ra lỗi hoặc từ chối phản hồi (có thể ảnh quá kinh dị bị Google chặn)!");
     }
     console.log("🔗 Link ảnh chuẩn bị lưu vào Database:", imageUrl);
 
@@ -230,15 +374,61 @@ app.post("/api/posts", uploadFile, async (req, res) => {
       authorAvatar: req.body.authorAvatar || "https://i.pravatar.cc/150?img=11",
       authorId: req.body.authorId,
       media_url: imageUrl,
+      isSensitive: isSensitive
     });
     await newPost.save();
     console.log("✅ Bài viết đã lưu thành công:", newPost);
+    if (req.io) req.io.emit("new_post", newPost);
     res.status(201).json(newPost);
   } catch (error) {
     console.error("❌ Lỗi đăng bài:", error);
     res
       .status(500)
       .json({ message: "Lỗi không lưu được bài: " + error.message });
+  }
+});
+
+// Báo cáo bài viết (Report)
+app.post("/api/posts/:id/report", async (req, res) => {
+  try {
+    const postId = req.params.id;
+    const { userId } = req.body;
+
+    if (!userId) {
+      return res.status(400).json({ message: "Thiếu thông tin người dùng!" });
+    }
+
+    const post = await Post.findById(postId);
+    if (!post) {
+      return res.status(404).json({ message: "Không tìm thấy bài viết!" });
+    }
+
+    // Nếu bài viết đã được Admin duyệt thì cấm Report tiếp
+    if (post.isAdminApproved) {
+      return res.status(400).json({ message: "Bài viết này đã được Ban quản trị trực tiếp kiểm duyệt và xác nhận an toàn!" });
+    }
+
+    // Nếu người dùng chưa báo cáo thì thêm vào
+    if (!post.reportedBy.includes(userId)) {
+      post.reportedBy.push(userId);
+      post.reportsCount = (post.reportsCount || 0) + 1;
+      
+      // Nếu số lượng báo cáo >= 3, tự động xóa
+      if (post.reportsCount >= 3) {
+        await Post.findByIdAndDelete(postId);
+        if (req.io) req.io.emit("delete_post", postId);
+        return res.json({ success: true, message: "Bài viết đã bị xóa do nhận được nhiều báo cáo từ cộng đồng." });
+      }
+
+      await post.save();
+      if (req.io) req.io.emit("update_post");
+      return res.json({ success: true, message: "Đã báo cáo bài viết." });
+    } else {
+      return res.status(400).json({ message: "Bạn đã báo cáo bài viết này rồi!" });
+    }
+  } catch (error) {
+    console.error("❌ Lỗi báo cáo bài viết:", error);
+    res.status(500).json({ message: "Lỗi server!" });
   }
 });
 
@@ -270,6 +460,7 @@ app.put("/api/posts/:id/like", async (req, res) => {
     }
 
     await post.save();
+    if (req.io) req.io.emit("update_post");
 
     // Trả kết quả về cho giao diện chớp chớp
     res.json({ likesCount: post.likes.length, isLiked: !hasLiked });
@@ -309,6 +500,7 @@ app.put("/api/posts/:postId/comment/:commentId/like", async (req, res) => {
 
     post.markModified("comments");
     await post.save();
+    if (req.io) req.io.emit("update_post");
     res.json({ likesCount: comment.likes.length, isLiked: !hasLiked });
   } catch (error) {
     console.error("Lỗi tim comment:", error);
@@ -354,6 +546,7 @@ app.post("/api/posts/:id/comment", uploadFile, async (req, res) => {
     await post.save();
 
     console.log("✅ Đã lưu comment");
+    if (req.io) req.io.emit("update_post");
     res.json(post.comments);
   } catch (error) {
     console.error("❌ Lỗi comment:", error);
@@ -377,11 +570,14 @@ app.delete("/api/posts/:postId/comment/:commentId", async (req, res) => {
     if (!comment)
       return res.status(404).json({ message: "Không tìm thấy bình luận!" });
 
-    // Kiểm tra quyền: Người viết comment HOẶC Chủ bài viết được phép xóa
+    // Kiểm tra quyền: Người viết comment HOẶC Chủ bài viết được phép xóa HOẶC Admin
     const isCommentOwner = comment.userId && comment.userId === userId;
     const isPostOwner = post.authorId && post.authorId === userId;
+    
+    const userCheck = await User.findById(userId);
+    const isAdmin = userCheck && userCheck.role === 'admin';
 
-    if (!isCommentOwner && !isPostOwner) {
+    if (!isCommentOwner && !isPostOwner && !isAdmin) {
       return res
         .status(403)
         .json({ message: "Bạn không có quyền xóa bình luận này!" });
@@ -393,6 +589,7 @@ app.delete("/api/posts/:postId/comment/:commentId", async (req, res) => {
     );
     post.markModified("comments");
     await post.save();
+    if (req.io) req.io.emit("update_post");
     res.json(post.comments);
   } catch (error) {
     res.status(500).json({ message: "Lỗi hệ thống khi xóa bình luận!" });
@@ -426,6 +623,7 @@ app.put("/api/posts/:id", uploadFile, async (req, res) => {
     }
 
     await post.save();
+    if (req.io) req.io.emit("update_post");
     res.json(post);
   } catch (error) {
     console.error("Lỗi sửa bài:", error);
@@ -448,15 +646,54 @@ app.delete("/api/posts/:id", async (req, res) => {
     }
 
     // 🔐 BẢO MẬT: Server tự kiểm tra authorId từ DB, không tin client gửi lên
-    if (post.authorId && post.authorId !== userId) {
+    const userCheck = await User.findById(userId);
+    const isAdmin = userCheck && userCheck.role === 'admin';
+    
+    if (post.authorId && post.authorId !== userId && !isAdmin) {
       return res.status(403).json({ message: "Bạn không có quyền xóa bài viết này!" });
     }
 
     await Post.findByIdAndDelete(req.params.id);
+    if (req.io) req.io.emit("delete_post", req.params.id);
     res.json({ message: "Đã xóa bài viết thành công!" });
   } catch (error) {
     console.error("Lỗi xóa bài:", error);
     res.status(500).json({ message: "Lỗi khi xóa bài!" });
+  }
+});
+
+// ==========================================
+// 5.5 CÁC API ADMIN DUYỆT BÀI
+// ==========================================
+// Lấy danh sách bài viết bị Report hoặc AI lọc (Dành cho Admin)
+app.get("/api/posts/admin/reported", async (req, res) => {
+  try {
+    const posts = await Post.find({
+      $or: [{ isSensitive: true }, { reportsCount: { $gt: 0 } }]
+    }).sort({ createdAt: -1 });
+    res.json(posts);
+  } catch (error) {
+    res.status(500).json({ message: "Lỗi tải bài viết chờ duyệt!" });
+  }
+});
+
+// Duyệt bài viết (Admin bỏ cờ vi phạm)
+app.put("/api/posts/admin/approve/:id", async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    if (!post) return res.status(404).json({ message: "Không tìm thấy bài viết!" });
+    post.isSensitive = false;
+    post.reportsCount = 0;
+    post.reportedBy = [];
+    post.isAdminApproved = true; // Bật khiên bảo vệ bài viết
+    await post.save();
+    
+    // Gửi tín hiệu để các màn hình khác tự load lại bài (đặc biệt là bảng tin của user)
+    if (req.io) req.io.emit("update_post");
+    
+    res.json({ success: true, message: "Đã duyệt bài viết an toàn." });
+  } catch (error) {
+    res.status(500).json({ message: "Lỗi duyệt bài!" });
   }
 });
 
@@ -583,6 +820,7 @@ app.post("/api/login", async (req, res) => {
         fullName: user.fullName,
         avatar: user.avatar,
         email: user.email,
+        role: user.role,
       },
     });
   } catch (error) {
@@ -1029,6 +1267,6 @@ QUY TẮC BẮT BUỘC VỀ ĐỊNH DẠNG: Tuyệt đối không sử dụng b�
 // ==========================================
 // 9. BẬT MÁY CHỦ
 // ==========================================
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`🚀 Server đang chạy tại http://localhost:${port}`);
 });
