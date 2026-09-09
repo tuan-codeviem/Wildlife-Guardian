@@ -63,7 +63,8 @@ app.use((req, res, next) => {
 app.use((req, res, next) => {
   if (!req.path.endsWith('.unityweb')) return next();
 
-  res.set('Content-Encoding', 'gzip');
+  // Bỏ set Content-Encoding vì bản Build mới dùng Decompression Fallback (có header UnityWeb Compressed Content)
+  // res.set('Content-Encoding', 'gzip');
   res.set('Cache-Control', 'no-store');
 
   if (req.path.endsWith('.js.unityweb')) {
