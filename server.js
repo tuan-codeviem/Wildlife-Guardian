@@ -59,12 +59,12 @@ app.use((req, res, next) => {
   }
   next();
 });
-// Xử lý file nén Gzip (.unityweb)
+// Xử lý file nén Brotli (.unityweb)
 app.use((req, res, next) => {
   if (!req.path.endsWith('.unityweb')) return next();
 
-  // Bỏ set Content-Encoding vì bản Build mới dùng Decompression Fallback (có header UnityWeb Compressed Content)
-  // res.set('Content-Encoding', 'gzip');
+  // Thêm Content-Encoding: br vì các file Unity đang được nén bằng Brotli
+  res.set('Content-Encoding', 'br');
   res.set('Cache-Control', 'no-store');
 
   if (req.path.endsWith('.js.unityweb')) {
@@ -83,7 +83,7 @@ app.use(express.static(".", {
   cacheControl: false,
   setHeaders: (res, filePath) => {
     if (filePath.endsWith('.unityweb')) {
-      res.set('Content-Encoding', 'gzip');
+      res.set('Content-Encoding', 'br');
       res.set('Cache-Control', 'no-store');
     } else if (filePath.endsWith('.br')) {
       res.set('Content-Encoding', 'br');
