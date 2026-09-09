@@ -9,8 +9,8 @@ const sampleSpecies = require("./animals.json");
 const seedDatabase = async () => {
   try {
     console.log("⏳ Đang kết nối tới MongoDB...");
-    // Sửa lại đường dẫn file .env do thư mục scripts đã chuyển vào trong Wildlife Guardian
-    require("dotenv").config({ path: "../../.env" });
+    const path = require("path");
+    require("dotenv").config({ path: path.join(__dirname, "../../.env") });
     await mongoose.connect(process.env.MONGO_URI);
     console.log("✅ Kết nối MongoDB thành công!");
 

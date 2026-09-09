@@ -112,17 +112,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ─── 1. INITIALIZE DATA ───
   async function initLibrary() {
+    const API_BASE_URL = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:3000' : location.origin;
     try {
+      // 1. Tải tức thì dữ liệu loài (nạp ngay trong 0.001s, không để màn hình bị chớp hay chờ đợi)
       const res = await fetch(`../scripts/animals.json`);
       speciesData = await res.json();
 
-      // Check User Unlock Progress
+      // Render ngay lập tức dữ liệu ban đầu
+      updateStatsHUD();
+      applyFiltersAndSort();
+
+      // 2. Đồng bộ ngầm trạng thái mở khóa từ Database (nếu người dùng đã đăng nhập)
       const currentUserStr = localStorage.getItem("currentUser");
       if (currentUserStr) {
         try {
           const currentUser = JSON.parse(currentUserStr);
           const userId = currentUser._id || currentUser.userId || currentUser.id;
-          const API_BASE_URL = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:3000' : location.origin;
           const unlockRes = await fetch(`${API_BASE_URL}/api/users/${userId}/unlocked`);
           const unlockData = await unlockRes.json();
 
@@ -130,28 +135,29 @@ document.addEventListener('DOMContentLoaded', () => {
             speciesData.forEach(animal => {
               animal.isUnlocked = unlockData.unlockedSpecies.includes(animal.speciesId);
             });
+            updateStatsHUD();
+            applyFiltersAndSort();
           }
         } catch (err) {
           console.warn("Could not fetch user unlocked list:", err);
         }
       }
 
-      // Fallback Cloudinary demo 3D model (thay thế cho đường dẫn local model-viewer/ đã xóa)
-      const CLOUDINARY_FALLBACK_MODEL = "https://res.cloudinary.com/dotlymsmk/raw/upload/v1781032539/wildlife-guardian/models/RedPanda.glb";
-      speciesData.forEach(animal => {
-        if (animal.speciesId === "RedPanda" && (!animal.model3dUrl || animal.model3dUrl.includes("example.com"))) {
-          animal.model3dUrl = CLOUDINARY_FALLBACK_MODEL;
-        }
-        if (animal.model3dUrl && animal.model3dUrl.includes("example.com")) {
-          animal.model3dUrl = CLOUDINARY_FALLBACK_MODEL;
-        }
-      });
-
-      // Update HUD Stats
-      updateStatsHUD();
-
-      // Render Initial View
-      applyFiltersAndSort();
+      // 3. Đồng bộ ngầm với Database MongoDB (cập nhật nếu có loài mới trên server)
+      fetch(`${API_BASE_URL}/api/species`)
+        .then(r => r.json())
+        .then(data => {
+          if (data.success && Array.isArray(data.species) && data.species.length > 0) {
+            const unlockMap = new Map(speciesData.map(s => [s.speciesId, s.isUnlocked]));
+            data.species.forEach(s => {
+              s.isUnlocked = unlockMap.get(s.speciesId) || false;
+            });
+            speciesData = data.species;
+            updateStatsHUD();
+            applyFiltersAndSort();
+          }
+        })
+        .catch(() => {});
 
     } catch (e) {
       console.error("Failed to load species data:", e);
@@ -232,6 +238,8 @@ document.addEventListener('DOMContentLoaded', () => {
         else statusClass = "lc";
       }
 
+      const has3D = !!(animal.model3dUrl && !animal.model3dUrl.includes("example.com"));
+
       if (animal.isUnlocked) {
         /* ─── UNLOCKED CARD (HOLOGRAPHIC) ─── */
         card.className = "sl-card is-unlocked";
@@ -243,7 +251,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="sl-card-scrim"></div>
           <div class="sl-card-top">
             <span class="iucn-pill ${statusClass}">${statusText}</span>
-            <div class="holo-3d-badge"><i class="fa-solid fa-cube"></i> 3D</div>
+            ${has3D ? '<div class="holo-3d-badge"><i class="fa-solid fa-cube"></i> 3D</div>' : ''}
           </div>
           <div class="sl-card-content">
             <span class="sl-card-cat">${category}</span>
@@ -251,13 +259,29 @@ document.addEventListener('DOMContentLoaded', () => {
             <p class="sl-card-sci">${animal.scientificName || ""}</p>
             <div class="sl-card-cta unlocked">
               <i class="fa-solid fa-sparkles"></i> 
-              <span>${lang === "vi" ? "Xem Mẫu 3D →" : "Inspect 3D →"}</span>
+              <span>${has3D ? (lang === "vi" ? "Xem Mẫu 3D →" : "Inspect 3D →") : (lang === "vi" ? "Xem Chi Tiết →" : "View Details →")}</span>
             </div>
           </div>
         `;
 
         if (!isTouchDevice()) {
           attachDesktopTilt(card);
+        }
+
+        // Prefetch 3D model into browser cache on hover to eliminate click delay
+        if (animal.model3dUrl && !animal.model3dUrl.includes("example.com")) {
+          card.addEventListener("mouseenter", () => {
+            if (!window._prefetched3DUrls) window._prefetched3DUrls = new Set();
+            if (!window._prefetched3DUrls.has(animal.model3dUrl)) {
+              window._prefetched3DUrls.add(animal.model3dUrl);
+              const link = document.createElement("link");
+              link.rel = "prefetch";
+              link.as = "fetch";
+              link.href = animal.model3dUrl;
+              link.crossOrigin = "anonymous";
+              document.head.appendChild(link);
+            }
+          }, { once: true });
         }
 
       } else {
@@ -281,7 +305,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <p class="sl-card-sci">${animal.scientificName || ""}</p>
             <div class="sl-card-cta locked">
               <i class="fa-solid fa-gamepad"></i> 
-              <span>${lang === "vi" ? "Cứu hộ để mở 3D →" : "Rescue to unlock →"}</span>
+              <span>${has3D ? (lang === "vi" ? "Cứu hộ để mở 3D →" : "Rescue to unlock 3D →") : (lang === "vi" ? "Cứu hộ để mở khóa →" : "Rescue to unlock →")}</span>
             </div>
           </div>
         `;
@@ -483,7 +507,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (modalHero) {
       modalHero.innerHTML = "";
 
-      if (animal.isUnlocked && animal.model3dUrl) {
+      const has3D = !!(animal.model3dUrl && !animal.model3dUrl.includes("example.com"));
+
+      if (animal.isUnlocked && has3D) {
         modalHero.innerHTML = `
           <model-viewer
             id="activeModelViewer"
@@ -554,6 +580,19 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         }, 50);
 
+      } else if (animal.isUnlocked && !has3D) {
+        // Unlocked 2D Specimen View (For species without 3D model)
+        modalHero.innerHTML = `
+          <div class="locked-hero-wrap">
+            <img class="locked-hero-img" src="${animal.thumbnailUrl || defaultPlaceholder}" alt="${animal.animalName?.[lang] || 'Specimen'}" />
+            <div class="locked-cta-overlay">
+              <div class="locked-badge-pill" style="background: rgba(16, 185, 129, 0.25); border: 1px solid rgba(16, 185, 129, 0.6); color: #10b981;">
+                <i class="fa-solid fa-circle-check"></i>
+                <span>${lang === "vi" ? "Đã Khám Phá (Mẫu Tiêu Bản)" : "Specimen Discovered"}</span>
+              </div>
+            </div>
+          </div>
+        `;
       } else {
         // Locked Preview Mode
         modalHero.innerHTML = `
@@ -562,11 +601,11 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="locked-cta-overlay">
               <div class="locked-badge-pill">
                 <i class="fa-solid fa-lock"></i>
-                <span>${lang === "vi" ? "Bản thể 3D Đang Khóa" : "3D Specimen Encrypted"}</span>
+                <span>${has3D ? (lang === "vi" ? "Bản thể 3D Đang Khóa" : "3D Specimen Encrypted") : (lang === "vi" ? "Hồ Sơ Đang Khóa" : "Profile Encrypted")}</span>
               </div>
               <button class="locked-btn-play" onclick="window.location.href='../Game/GameUnity.html'">
                 <i class="fa-solid fa-gamepad"></i>
-                <span>${lang === "vi" ? "Chơi Game Để Mở Khóa 3D" : "Play Rescue Game to Unlock"}</span>
+                <span>${has3D ? (lang === "vi" ? "Chơi Game Để Mở Khóa 3D" : "Play Rescue Game to Unlock 3D") : (lang === "vi" ? "Chơi Game Để Mở Khóa" : "Play Game to Rescue")}</span>
               </button>
             </div>
           </div>

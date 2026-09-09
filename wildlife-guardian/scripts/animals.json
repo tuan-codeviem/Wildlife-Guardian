@@ -34,7 +34,7 @@
       "en": "They can communicate using seismic vibrations.",
       "vi": "Chúng có thể giao tiếp bằng các rung động địa chấn truyền qua đất."
     },
-    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1780994801/wildlife-guardian/images/asian-elephant.jpg",
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788965835/wildlife-guardian/images/asian-elephant.jpg",
     "model3dUrl": "https://example.com/placeholder.glb"
   },
   {
@@ -72,8 +72,8 @@
       "en": "They use their bushy tails as wraparound blankets in the cold.",
       "vi": "Chúng dùng chiếc đuôi xù xì như một chiếc chăn quấn quanh người khi trời lạnh."
     },
-    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1781032506/wildlife-guardian/images/RedPanda.avif",
-    "model3dUrl": "https://res.cloudinary.com/dotlymsmk/raw/upload/v1781032539/wildlife-guardian/models/RedPanda.glb"
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788965847/wildlife-guardian/images/RedPanda.avif",
+    "model3dUrl": "https://res.cloudinary.com/dotlymsmk/raw/upload/v1788965856/wildlife-guardian/models/RedPanda.glb"
   },
   {
     "speciesId": "indochinese-tiger",
@@ -110,7 +110,7 @@
       "en": "A tiger's roar can be heard as far as 3 kilometers away.",
       "vi": "Tiếng gầm của hổ có thể vang xa tới 3 km."
     },
-    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1780990885/wildlife-guardian/images/indochinese-tiger.jpg",
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788965842/wildlife-guardian/images/indochinese-tiger.jpg",
     "model3dUrl": "https://example.com/placeholder.glb"
   },
   {
@@ -148,7 +148,7 @@
       "en": "They are named after the green color of their fat, not their shell.",
       "vi": "Chúng được đặt tên theo màu mỡ của chúng chứ không phải màu mai."
     },
-    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1780994805/wildlife-guardian/images/green-sea-turtle.jpg",
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788965840/wildlife-guardian/images/green-sea-turtle.jpg",
     "model3dUrl": "https://example.com/placeholder.glb"
   },
   {
@@ -186,7 +186,7 @@
       "en": "It is a symbol of luck and longevity in East Asian culture.",
       "vi": "Nó là biểu tượng của sự may mắn và trường thọ trong văn hóa Á Đông."
     },
-    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1780994810/wildlife-guardian/images/red-crowned-crane.jpg",
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788965846/wildlife-guardian/images/red-crowned-crane.jpg",
     "model3dUrl": "https://example.com/placeholder.glb"
   },
   {
@@ -224,7 +224,7 @@
       "en": "They can detect a single drop of blood in 100 liters of water.",
       "vi": "Chúng có thể phát hiện một giọt máu trong 100 lít nước."
     },
-    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1780995821/wildlife-guardian/images/great-white-shark.jpg",
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788965839/wildlife-guardian/images/great-white-shark.jpg",
     "model3dUrl": "https://example.com/placeholder.glb"
   },
   {
@@ -262,7 +262,7 @@
       "en": "Their scales are made of keratin, the same material as human fingernails.",
       "vi": "Vảy của chúng làm từ keratin, cùng chất liệu với móng tay người."
     },
-    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1780994812/wildlife-guardian/images/sunda-pangolin.jpg",
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788965849/wildlife-guardian/images/sunda-pangolin.jpg",
     "model3dUrl": "https://example.com/placeholder.glb"
   },
   {
@@ -300,7 +300,7 @@
       "en": "Females can reproduce without mating (parthenogenesis).",
       "vi": "Con cái có thể sinh sản mà không cần giao phối (trinh sản)."
     },
-    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1780994808/wildlife-guardian/images/komodo-dragon.jpg",
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788965843/wildlife-guardian/images/komodo-dragon.jpg",
     "model3dUrl": "https://example.com/placeholder.glb"
   },
   {
@@ -338,7 +338,7 @@
       "en": "They get their toxicity from the bugs they eat.",
       "vi": "Chúng có được độc tính từ những loài bọ mà chúng ăn."
     },
-    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1780994809/wildlife-guardian/images/poison-dart-frog.avif",
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788965844/wildlife-guardian/images/poison-dart-frog.avif",
     "model3dUrl": "https://example.com/placeholder.glb"
   },
   {
@@ -376,7 +376,7 @@
       "en": "Their talons are larger than the claws of a grizzly bear.",
       "vi": "Móng vuốt của chúng còn lớn hơn móng vuốt của một con gấu xám."
     },
-    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1780994806/wildlife-guardian/images/harpy-eagle.jpg",
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788965841/wildlife-guardian/images/harpy-eagle.jpg",
     "model3dUrl": "https://example.com/placeholder.glb"
   },
   {
@@ -414,8 +414,8 @@
       "en": "They can use the Earth's magnetic field to calculate the distance and direction of their prey.",
       "vi": "Chúng có thể cảm nhận từ trường Trái đất để tính toán khoảng cách và hướng đi của con mồi."
     },
-    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1781032489/wildlife-guardian/images/FireFox.jpg",
-    "model3dUrl": "https://res.cloudinary.com/dotlymsmk/raw/upload/v1781032529/wildlife-guardian/models/FireFox.glb"
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788965838/wildlife-guardian/images/FireFox.jpg",
+    "model3dUrl": "https://res.cloudinary.com/dotlymsmk/raw/upload/v1788965854/wildlife-guardian/models/FireFox.glb"
   },
   {
     "speciesId": "Ferret",
@@ -452,8 +452,8 @@
       "en": "They were once thought to be extinct until a small population was discovered in 1981.",
       "vi": "Người ta từng cho rằng chúng đã tuyệt chủng cho đến khi phát hiện ra một quần thể nhỏ vào năm 1981."
     },
-    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1780997903/wildlife-guardian/images/ferret.jpg",
-    "model3dUrl": "https://res.cloudinary.com/dotlymsmk/raw/upload/v1780997914/wildlife-guardian/models/ferret.glb"
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788965837/wildlife-guardian/images/Ferret.jpg",
+    "model3dUrl": "https://res.cloudinary.com/dotlymsmk/raw/upload/v1788965853/wildlife-guardian/models/Ferret.glb"
   },
   {
     "speciesId": "Armadillo",
@@ -490,8 +490,8 @@
       "en": "Its shell is made of real bone covered by a layer of tough horn.",
       "vi": "Lớp vỏ của nó được làm từ xương thật và được bao phủ bởi một lớp sừng cứng cáp."
     },
-    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1780997901/wildlife-guardian/images/armadillo.jpg",
-    "model3dUrl": "https://res.cloudinary.com/dotlymsmk/raw/upload/v1780997995/wildlife-guardian/models/armadillo.glb"
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788965834/wildlife-guardian/images/Armadillo.jpg",
+    "model3dUrl": "https://res.cloudinary.com/dotlymsmk/raw/upload/v1788965851/wildlife-guardian/models/Armadillo.glb"
   },
   {
     "speciesId": "polar-bear",
@@ -528,8 +528,8 @@
       "en": "Polar bear skin is pitch black to absorb heat from sunlight, while their fur is actually pigment-free and translucent—it only appears bright white because the hollow structure scatters and reflects ambient visible light.",
       "vi": "Làn da bên dưới lớp lông của gấu Bắc Cực thực chất có màu đen tuyền để hấp thu tối đa nhiệt lượng mặt trời, trong khi từng sợi lông của chúng rỗng ruột và trong suốt không hề có sắc tố trắng—lông chỉ phản chiếu ánh sáng nên mắt ta nhìn thấy màu trắng."
     },
-    "thumbnailUrl": "https://example.com/placeholder.jpg",
-    "model3dUrl": "https://example.com/placeholder.glb"
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788965845/wildlife-guardian/images/polar-bear.jpg",
+    "model3dUrl": "https://res.cloudinary.com/dotlymsmk/raw/upload/v1788965855/wildlife-guardian/models/polar-bear.glb"
   },
   {
     "speciesId": "reindeer",
@@ -566,8 +566,8 @@
       "en": "Reindeer are the only deer species where both males and females grow antlers, and their eyes uniquely change color from golden-amber in summer to deep cobalt blue in winter, increasing sensitivity to ultraviolet light during the dark polar night.",
       "vi": "Tuần lộc là loài duy nhất thuộc họ hươu nai mà cả con đực và con cái đều mọc gạc sừng; đặc biệt mắt của chúng đổi màu từ vàng hổ phách mùa hè sang xanh coban thẫm mùa đông giúp tăng độ nhạy với tia cực tím trong bóng đêm trường kỳ Bắc Cực."
     },
-    "thumbnailUrl": "https://example.com/placeholder.jpg",
-    "model3dUrl": "https://example.com/placeholder.glb"
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788965847/wildlife-guardian/images/reindeer.jpg",
+    "model3dUrl": "https://res.cloudinary.com/dotlymsmk/raw/upload/v1788965857/wildlife-guardian/models/reindeer.glb"
   },
   {
     "speciesId": "tank-crab",
@@ -604,8 +604,8 @@
       "en": "Known as the largest land crab species in Vietnam and Indochina, an adult can weigh up to 1.3 kg with a leg span over 30 cm; its clumsy, powerful gait and heavy heart-shaped carapace inspired locals to nickname it the 'Tank Crab'.",
       "vi": "Được mệnh danh là loài cua cạn lớn nhất Việt Nam và Đông Dương với trọng lượng tới 1,3 kg và sải càng dài hơn 30 cm; dáng bò lù đù, nặng trịch cùng chiếc mai gồ ghề cứng như bọc thép khiến người dân Côn Đảo ví von chúng như những chiếc 'xe tăng' lừng lững trong đêm."
     },
-    "thumbnailUrl": "https://example.com/placeholder.jpg",
-    "model3dUrl": "https://example.com/placeholder.glb"
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788965850/wildlife-guardian/images/tank-crab.jpg",
+    "model3dUrl": "https://res.cloudinary.com/dotlymsmk/raw/upload/v1788965858/wildlife-guardian/models/tank-crab.glb"
   },
   {
     "speciesId": "rusty-patched-bumblebee",
@@ -642,8 +642,8 @@
       "en": "In 2017, the rusty patched bumblebee made tragic history as the very first bumblebee species in the continental United States to be listed under the Endangered Species Act, after losing nearly 90% of its historical population in just 20 years.",
       "vi": "Năm 2017, loài ong này đi vào lịch sử khi trở thành loài ong đầu tiên tại lục địa Hoa Kỳ được đưa vào danh sách Động vật cực kỳ nguy cấp cần bảo vệ khẩn cấp, sau khi số lượng cá thể sụt giảm kinh hoàng tới gần 90% chỉ trong vòng hai thập kỷ do mất sinh cảnh và nhiễm thuốc trừ sâu."
     },
-    "thumbnailUrl": "https://example.com/placeholder.jpg",
-    "model3dUrl": "https://example.com/placeholder.glb"
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788965848/wildlife-guardian/images/rusty-patched-bumblebee.jpg",
+    "model3dUrl": "https://res.cloudinary.com/dotlymsmk/raw/upload/v1788965857/wildlife-guardian/models/rusty-patched-bumblebee.glb"
   },
   {
     "speciesId": "european-hedgehog",
@@ -680,7 +680,3123 @@
       "en": "A single adult European hedgehog carries an armor of 5,000 to 7,000 specialized hollow spines made of keratin; when confronted with strong unfamiliar odors, it exhibits 'self-anointing'—foaming saliva in its mouth and spreading it over its spines.",
       "vi": "Một con nhím gai châu Âu trưởng thành khoác trên mình lớp áo giáp gồm 5.000 đến 7.000 chiếc gai rỗng cấu tạo từ chất sừng keratin; đặc biệt khi ngửi thấy mùi lạ kích thích, chúng có hành vi 'tự xức nước bọt' (self-anointing)—tạo bọt trắng trong miệng rồi dùng lưỡi bôi đều lên khắp các gai nhọn."
     },
-    "thumbnailUrl": "https://example.com/placeholder.jpg",
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788965836/wildlife-guardian/images/european-hedgehog.jpg",
+    "model3dUrl": "https://res.cloudinary.com/dotlymsmk/raw/upload/v1788965852/wildlife-guardian/models/european-hedgehog.glb"
+  },
+  {
+    "speciesId": "saola",
+    "animalName": {
+      "en": "Saola (Asian Unicorn)",
+      "vi": "Sao La (Kỳ Lân Châu Á)"
+    },
+    "scientificName": "Pseudoryx nghetinhensis",
+    "status": {
+      "en": "Critically Endangered",
+      "vi": "Cực kỳ nguy cấp"
+    },
+    "category": {
+      "en": "Mammal",
+      "vi": "Động vật có vú"
+    },
+    "distribution": {
+      "en": "Annamite Range of Vietnam and Laos",
+      "vi": "Dãy Trường Sơn, Việt Nam và Lào"
+    },
+    "habitat": {
+      "en": "Wet evergreen montane forests with high humidity",
+      "vi": "Rừng mưa nhiệt đới thường xanh ẩm ướt vùng núi cao"
+    },
+    "diet": {
+      "en": "Herbivore (leaves, fig bushes, and riverbank shrubs)",
+      "vi": "Động vật ăn cỏ (lá sung, cây bụi và thảo mộc ven suối)"
+    },
+    "behavior": {
+      "en": "Extremely elusive, solitary, active during twilight hours",
+      "vi": "Cực kỳ bí ẩn, sống đơn độc, hoạt động vào hoàng hôn và rạng đông"
+    },
+    "funFact": {
+      "en": "Discovered in Vu Quang National Park in 1992, it was the first large mammal new to science in over 50 years.",
+      "vi": "Được phát hiện tại Vườn Quốc Gia Vũ Quang năm 1992, là loài thú lớn đầu tiên được khám phá sau hơn 50 năm trên toàn cầu."
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968438/wildlife-guardian/images/saola.png",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "javan-rhino",
+    "animalName": {
+      "en": "Javan Rhinoceros",
+      "vi": "Tê Giác Java"
+    },
+    "scientificName": "Rhinoceros sondaicus",
+    "status": {
+      "en": "Critically Endangered",
+      "vi": "Cực kỳ nguy cấp"
+    },
+    "category": {
+      "en": "Mammal",
+      "vi": "Động vật có vú"
+    },
+    "distribution": {
+      "en": "Ujung Kulon National Park, Java, Indonesia",
+      "vi": "Vườn quốc gia Ujung Kulon, đảo Java, Indonesia"
+    },
+    "habitat": {
+      "en": "Dense lowland rainforests, muddy reed beds, and floodplains",
+      "vi": "Rừng mưa nhiệt đới đất thấp nhiệt đới và các đầm lầy bùn nước"
+    },
+    "diet": {
+      "en": "Herbivore (diverse foliage, young shoots, twigs, and fallen fruits)",
+      "vi": "Động vật ăn cỏ (chồi non, cành cây, lá rụng và quả dại)"
+    },
+    "behavior": {
+      "en": "Solitary wallowers that rely on dense vegetation for concealment",
+      "vi": "Sống đơn độc, thích dầm mình trong bùn khoáng để làm mát và chống côn trùng"
+    },
+    "funFact": {
+      "en": "With fewer than 80 individuals left on Earth, it is one of the rarest large mammals on the planet.",
+      "vi": "Chỉ còn chưa đầy 80 cá thể trên toàn Trái Đất, là một trong những loài thú quý hiếm nhất hành tinh."
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968439/wildlife-guardian/images/javan-rhino.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "snow-leopard",
+    "animalName": {
+      "en": "Snow Leopard",
+      "vi": "Báo Tuyết"
+    },
+    "scientificName": "Panthera uncia",
+    "status": {
+      "en": "Vulnerable",
+      "vi": "Sắp nguy cấp"
+    },
+    "category": {
+      "en": "Mammal",
+      "vi": "Động vật có vú"
+    },
+    "distribution": {
+      "en": "High mountain ranges of Central and South Asia",
+      "vi": "Dãy núi cao Trung và Nam Á (Himalaya, Tây Tạng)"
+    },
+    "habitat": {
+      "en": "Alpine ridges, steep rocky cliffs, and snowfields above tree lines",
+      "vi": "Vách đá hiểm trở vùng núi cao, đài nguyên băng giá và vách tuyết"
+    },
+    "diet": {
+      "en": "Carnivore (blue sheep, ibex, marmots, and mountain hares)",
+      "vi": "Động vật ăn thịt (cừu xanh Himalaya, dê núi ibex, marmot)"
+    },
+    "behavior": {
+      "en": "Solitary master of camouflage known as the 'Ghost of the Mountains'",
+      "vi": "Bậc thầy ngụy trang đơn độc được mệnh danh là 'Bóng ma trên đỉnh núi'"
+    },
+    "funFact": {
+      "en": "Their thick smoky-gray tail can wrap completely around their face to shield against freezing blizzard winds.",
+      "vi": "Chiếc đuôi dày xù của chúng có thể quấn trọn quanh mặt như một chiếc khăn ấm chống bão tuyết."
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968441/wildlife-guardian/images/snow-leopard.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "giant-panda",
+    "animalName": {
+      "en": "Giant Panda",
+      "vi": "Gấu Trúc Lớn"
+    },
+    "scientificName": "Ailuropoda melanoleuca",
+    "status": {
+      "en": "Vulnerable",
+      "vi": "Sắp nguy cấp"
+    },
+    "category": {
+      "en": "Mammal",
+      "vi": "Động vật có vú"
+    },
+    "distribution": {
+      "en": "Sichuan, Shaanxi, and Gansu mountains in Southwestern China",
+      "vi": "Miền núi Tứ Xuyên, Thiểm Tây và Cam Túc, Trung Quốc"
+    },
+    "habitat": {
+      "en": "Dense montane bamboo forests wrapped in misty clouds",
+      "vi": "Rừng trúc núi cao sương mù ẩm ướt"
+    },
+    "diet": {
+      "en": "Herbivore (99% bamboo shoots and leaves; up to 38 kg daily)",
+      "vi": "Động vật ăn cỏ (99% là tre nứa; ăn tới 38 kg tre mỗi ngày)"
+    },
+    "behavior": {
+      "en": "Docile, solitary forager spending 12 hours a day feeding",
+      "vi": "Hiền lành, dành tới 12 tiếng mỗi ngày chỉ để nhai tre và nghỉ ngơi"
+    },
+    "funFact": {
+      "en": "They have a pseudo-thumb—an enlarged wrist bone that allows them to grasp bamboo stalks with human-like dexterity.",
+      "vi": "Chúng có một 'ngón tay cái giả' phát triển từ xương cổ tay giúp cầm nắm cây tre điêu luyện như người."
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968443/wildlife-guardian/images/giant-panda.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "bengal-tiger",
+    "animalName": {
+      "en": "Bengal Tiger",
+      "vi": "Hổ Bengal"
+    },
+    "scientificName": "Panthera tigris tigris",
+    "status": {
+      "en": "Endangered",
+      "vi": "Nguy cấp"
+    },
+    "category": {
+      "en": "Mammal",
+      "vi": "Động vật có vú"
+    },
+    "distribution": {
+      "en": "India, Bangladesh, Nepal, and Bhutan",
+      "vi": "Ấn Độ, Bangladesh, Nepal và Bhutan"
+    },
+    "habitat": {
+      "en": "Tropical and subtropical rainforests, mangrove swamps (Sundarbans), and savannas",
+      "vi": "Rừng ngập mặn Sundarbans, rừng ẩm nhiệt đới và savan cỏ cao"
+    },
+    "diet": {
+      "en": "Carnivore (chital deer, sambar, wild boar, and gaur)",
+      "vi": "Động vật ăn thịt (hươu chital, nai sambar, lợn rừng, bò tót)"
+    },
+    "behavior": {
+      "en": "Supreme apex predator; unlike most cats, they love swimming across wide rivers",
+      "vi": "Chúa tể săn mồi đỉnh cao; khác với đa số loài mèo, chúng bơi lội cừ khôi qua những con sông lớn"
+    },
+    "funFact": {
+      "en": "No two tigers have the exact same stripe pattern; their stripes are as unique as human fingerprints.",
+      "vi": "Không có hai con hổ nào có vằn sọc giống hệt nhau; hoa văn vằn độc nhất vô nhị như vân tay con người."
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968446/wildlife-guardian/images/bengal-tiger.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "mountain-gorilla",
+    "animalName": {
+      "en": "Mountain Gorilla",
+      "vi": "Khỉ Đột Núi"
+    },
+    "scientificName": "Gorilla beringei beringei",
+    "status": {
+      "en": "Endangered",
+      "vi": "Nguy cấp"
+    },
+    "category": {
+      "en": "Mammal",
+      "vi": "Động vật có vú"
+    },
+    "distribution": {
+      "en": "Virunga volcanic mountains of Rwanda, Uganda, and DR Congo",
+      "vi": "Vùng núi lửa Virunga thuộc Rwanda, Uganda và CHDC Congo"
+    },
+    "habitat": {
+      "en": "Lush cloud forests on misty volcanic mountain slopes",
+      "vi": "Rừng sương mù trên các triền núi lửa rậm rạp"
+    },
+    "diet": {
+      "en": "Herbivore (celery, wild nettles, bamboo shoots, and giant thistles)",
+      "vi": "Động vật ăn cỏ (cần tây dại, tầm ma, măng tre, vỏ cây)"
+    },
+    "behavior": {
+      "en": "Gentle giants led by a dominant, protective silverback patriarch",
+      "vi": "Những người khổng lồ hiền từ sống theo gia đình dưới sự bảo vệ của con đực đầu đàn lưng bạc"
+    },
+    "funFact": {
+      "en": "Mountain gorillas share approximately 98% of their genetic DNA code with humans.",
+      "vi": "Khỉ đột núi chia sẻ khoảng 98% bộ mã di truyền DNA tương đồng với con người."
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968447/wildlife-guardian/images/mountain-gorilla.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "delacours-langur",
+    "animalName": {
+      "en": "Delacour's Langur",
+      "vi": "Voọc Mông Trắng"
+    },
+    "scientificName": "Trachypithecus delacouri",
+    "status": {
+      "en": "Critically Endangered",
+      "vi": "Cực kỳ nguy cấp"
+    },
+    "category": {
+      "en": "Mammal",
+      "vi": "Động vật có vú"
+    },
+    "distribution": {
+      "en": "Endemic to northern Vietnam (Van Long Nature Reserve, Ninh Binh)",
+      "vi": "Đặc hữu miền Bắc Việt Nam (Khu BTTN Vân Long, Ninh Bình)"
+    },
+    "habitat": {
+      "en": "Karst limestone mountains with steep cliff overhangs",
+      "vi": "Các dãy núi đá vôi karst dựng đứng ngập nước"
+    },
+    "diet": {
+      "en": "Folivore (primarily young leaves, tree shoots, and mineral buds)",
+      "vi": "Động vật ăn lá (chủ yếu là đọt lá non, hoa quả và chồi cây đá vôi)"
+    },
+    "behavior": {
+      "en": "Incredible cliff acrobats sleeping on narrow karst ledge caves",
+      "vi": "Di chuyển thoăn thoắt trên vách đá tai mèo dựng đứng, ngủ trong các hốc đá hiểm trở"
+    },
+    "funFact": {
+      "en": "Locals fondly call them 'Vooc quan dui' (Shorts-wearing Langur) because of their striking white rump resembling white shorts.",
+      "vi": "Dân gian gọi vui là 'Voọc quần đùi' vì vùng mông và đùi sau của chúng có mảng lông trắng toát như mặc quần đùi."
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968449/wildlife-guardian/images/delacours-langur.png",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "red-shanked-douc",
+    "animalName": {
+      "en": "Red-shanked Douc",
+      "vi": "Voọc Chà Vá Chân Đỏ"
+    },
+    "scientificName": "Pygathrix nemaeus",
+    "status": {
+      "en": "Critically Endangered",
+      "vi": "Cực kỳ nguy cấp"
+    },
+    "category": {
+      "en": "Mammal",
+      "vi": "Động vật có vú"
+    },
+    "distribution": {
+      "en": "Central Vietnam (Son Tra Peninsula, Da Nang), Laos, and Cambodia",
+      "vi": "Miền Trung Việt Nam (Bán đảo Sơn Trà, Đà Nẵng), Lào và Campuchia"
+    },
+    "habitat": {
+      "en": "Primary and secondary tropical evergreen rainforest canopy",
+      "vi": "Tầng tán trên của rừng mưa nhiệt đới thường xanh nguyên sinh"
+    },
+    "diet": {
+      "en": "Folivore / Frugivore (selective canopy leaves, tender buds, and unripened fruit)",
+      "vi": "Ăn lá non, chồi hoa và quả rừng chưa chín"
+    },
+    "behavior": {
+      "en": "Arboreal canopy glider traveling in vocal social troops",
+      "vi": "Sống hoàn toàn trên tán cây cao, di chuyển bằng cách chuyền cành bay lượn đẹp mắt"
+    },
+    "funFact": {
+      "en": "Revered internationally as the 'Queen of Primates' due to its spectacular, colorful five-color coat.",
+      "vi": "Được các nhà khoa học thế giới vinh danh là 'Nữ hoàng linh trưởng' nhờ bộ lông năm màu rực rỡ tuyệt mỹ."
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968460/wildlife-guardian/images/red-shanked-douc.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "cat-ba-langur",
+    "animalName": {
+      "en": "Cat Ba Langur (Golden-headed Langur)",
+      "vi": "Voọc Cát Bà (Voọc Đầu Vàng)"
+    },
+    "scientificName": "Trachypithecus poliocephalus",
+    "status": {
+      "en": "Critically Endangered",
+      "vi": "Cực kỳ nguy cấp"
+    },
+    "category": {
+      "en": "Mammal",
+      "vi": "Động vật có vú"
+    },
+    "distribution": {
+      "en": "Exclusively endemic to Cat Ba Archipelago, Hai Phong, Vietnam",
+      "vi": "Đặc hữu duy nhất tại quần đảo Cát Bà, Hải Phòng, Việt Nam"
+    },
+    "habitat": {
+      "en": "Tropical karst island forests and coastal sea cliffs",
+      "vi": "Rừng đá vôi nhiệt đới ven biển trên các hòn đảo karst"
+    },
+    "diet": {
+      "en": "Folivore (karst leaves, wild figs, bark, and coastal plant shoots)",
+      "vi": "Động vật ăn lá (lá cây đá vôi, sung dại, vỏ cây chứa khoáng)"
+    },
+    "behavior": {
+      "en": "Diurnal karst specialist living in isolated territorial groups",
+      "vi": "Hoạt động ban ngày, thích nghi bậc thầy với địa hình đá tai mèo sắc nhọn"
+    },
+    "funFact": {
+      "en": "One of the top 25 most endangered primates in the world, surviving on a single island sanctuary with under 90 individuals.",
+      "vi": "Một trong 25 loài linh trưởng nguy cấp nhất thế giới, chỉ còn dưới 90 cá thể sống sót trên quần đảo Cát Bà."
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968464/wildlife-guardian/images/cat-ba-langur.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "tonkin-snub-nosed-monkey",
+    "animalName": {
+      "en": "Tonkin Snub-nosed Monkey",
+      "vi": "Voọc Mũi Hếch"
+    },
+    "scientificName": "Rhinopithecus avunculus",
+    "status": {
+      "en": "Critically Endangered",
+      "vi": "Cực kỳ nguy cấp"
+    },
+    "category": {
+      "en": "Mammal",
+      "vi": "Động vật có vú"
+    },
+    "distribution": {
+      "en": "Endemic to northern Vietnam (Ha Giang and Tuyen Quang provinces)",
+      "vi": "Đặc hữu vùng núi phía Bắc Việt Nam (Hà Giang, Tuyên Quang)"
+    },
+    "habitat": {
+      "en": "Subtropical broadleaf forests on sheer limestone massifs",
+      "vi": "Rừng lá rộng á nhiệt đới trên các khối núi đá vôi hiểm trở"
+    },
+    "diet": {
+      "en": "Folivore / Frugivore (seasonal leaves, mast seeds, and wild flowers)",
+      "vi": "Ăn lá cây non theo mùa, hạt rừng giàu dầu và hoa dại"
+    },
+    "behavior": {
+      "en": "High-altitude canopy dweller with expressive vocalizations",
+      "vi": "Sống ở độ cao lớn trên tán rừng, giao tiếp bằng những âm thanh đặc biệt vang vọng vách núi"
+    },
+    "funFact": {
+      "en": "Possesses an upturned, nostril-free nose and distinctive comic-like pink lips that prevent frostbite in freezing winter winds.",
+      "vi": "Chiếc mũi hếch ngược cùng đôi môi hồng phớt ngộ nghĩnh giúp chúng không bị cóng buốt khi đón gió mùa đông bắc."
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968467/wildlife-guardian/images/tonkin-snub-nosed-monkey.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "clouded-leopard",
+    "animalName": {
+      "en": "Clouded Leopard",
+      "vi": "Báo Gấm"
+    },
+    "scientificName": "Neofelis nebulosa",
+    "status": {
+      "en": "Vulnerable",
+      "vi": "Sắp nguy cấp"
+    },
+    "category": {
+      "en": "Mammal",
+      "vi": "Động vật có vú"
+    },
+    "distribution": {
+      "en": "Southeast Asia, southern China, and Himalayan foothills",
+      "vi": "Đông Nam Á (bao gồm rừng già Việt Nam), Nam Trung Quốc và dãy Himalaya"
+    },
+    "habitat": {
+      "en": "Dense tropical primary rainforests and high-canopy jungle",
+      "vi": "Rừng mưa nhiệt đới nguyên sinh rậm rạp và vùng đồi núi cao"
+    },
+    "diet": {
+      "en": "Carnivore (gibbons, macaques, barking deer, and wild pigs)",
+      "vi": "Động vật ăn thịt (vượn, khỉ, hoẵng, lợn rừng, chim)"
+    },
+    "behavior": {
+      "en": "Supreme tree climber that can hang upside down from branches and climb down trunks headfirst",
+      "vi": "Khả năng leo trèo tuyệt đỉnh: có thể treo ngược mình trên cành cây và leo chúc đầu xuống đất như sóc"
+    },
+    "funFact": {
+      "en": "Relative to its body size, it has the longest canine teeth of any living feline, resembling a miniature modern saber-toothed cat.",
+      "vi": "So với kích thước cơ thể, nó sở hữu cặp răng nanh dài nhất trong các loài mèo, tựa như một chú hổ răng kiếm thu nhỏ."
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968470/wildlife-guardian/images/clouded-leopard.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "asian-black-bear",
+    "animalName": {
+      "en": "Asian Black Bear (Moon Bear)",
+      "vi": "Gấu Ngựa"
+    },
+    "scientificName": "Ursus thibetanus",
+    "status": {
+      "en": "Vulnerable",
+      "vi": "Sắp nguy cấp"
+    },
+    "category": {
+      "en": "Mammal",
+      "vi": "Động vật có vú"
+    },
+    "distribution": {
+      "en": "East and Southeast Asia, Himalayas, and Russian Far East",
+      "vi": "Đông Á, Đông Nam Á (núi rừng Tây Bắc - Tây Nguyên Việt Nam) và Viễn Đông Nga"
+    },
+    "habitat": {
+      "en": "Moist temperate broadleaf and montane evergreen forests",
+      "vi": "Rừng lá rộng ẩm ôn đới và rừng thường xanh đồi núi cao"
+    },
+    "diet": {
+      "en": "Omnivore (acorns, beeches, wild berries, honeycombs, and insects)",
+      "vi": "Động vật ăn tạp (quả sồi, hạt dẻ, quả mọng rừng, tổ ong và côn trùng)"
+    },
+    "behavior": {
+      "en": "Crepuscular arboreal nester that builds bowl-shaped twig nests in tall trees",
+      "vi": "Leo cây cực giỏi, thường bẻ cành cây trên ngọn cao làm thành những chiếc 'tổ gấu' để nằm nghỉ"
+    },
+    "funFact": {
+      "en": "Known as the 'Moon Bear' for the prominent creamy-white crescent moon patch blazing across its dark black chest.",
+      "vi": "Được gọi là 'Gấu mặt trăng' nhờ vệt lông hình chữ V trắng ngà sáng rực như vầng trăng khuyết trước ngực."
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968472/wildlife-guardian/images/asian-black-bear.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "sun-bear",
+    "animalName": {
+      "en": "Sun Bear",
+      "vi": "Gấu Chó"
+    },
+    "scientificName": "Helarctos malayanus",
+    "status": {
+      "en": "Vulnerable",
+      "vi": "Sắp nguy cấp"
+    },
+    "category": {
+      "en": "Mammal",
+      "vi": "Động vật có vú"
+    },
+    "distribution": {
+      "en": "Tropical rainforests of Southeast Asia (Vietnam, Malaysia, Indonesia)",
+      "vi": "Rừng mưa nhiệt đới Đông Nam Á (Việt Nam, Malaysia, Indonesia)"
+    },
+    "habitat": {
+      "en": "Lowland tropical dipterocarp and evergreen rainforests",
+      "vi": "Rừng rụng lá ẩm đất thấp và rừng nhiệt đới thường xanh"
+    },
+    "diet": {
+      "en": "Omnivore (wild bee honey, stingless bees, termites, beetles, and juicy figs)",
+      "vi": "Ăn mật ong rừng, mối, bọ cánh cứng, trái cây rừng và chồi dừa"
+    },
+    "behavior": {
+      "en": "Nocturnal tree-sleeper with powerful inward-curved claws for clawing bark",
+      "vi": "Hoạt động về đêm, có móng vuốt khoằm sắc bén giúp xé toang thân gỗ tìm tổ mối"
+    },
+    "funFact": {
+      "en": "The smallest bear on Earth, it boasts an astonishing 25-centimeter tongue specialized for extracting honey from deep tree hollows.",
+      "vi": "Loài gấu nhỏ nhất hành tinh nhưng sở hữu chiếc lưỡi dài tới 25 cm chuyên thọc sâu vào hốc cây vét mật ong."
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968473/wildlife-guardian/images/sun-bear.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "blue-whale",
+    "animalName": {
+      "en": "Blue Whale",
+      "vi": "Cá Voi Xanh"
+    },
+    "scientificName": "Balaenoptera musculus",
+    "status": {
+      "en": "Endangered",
+      "vi": "Nguy cấp"
+    },
+    "category": {
+      "en": "Mammal",
+      "vi": "Động vật có vú"
+    },
+    "distribution": {
+      "en": "All world oceans except enclosed polar seas",
+      "vi": "Tất cả các đại dương trên thế giới (kể cả vùng biển khơi Nam Trung Bộ Việt Nam)"
+    },
+    "habitat": {
+      "en": "Pelagic open ocean, coastal upwelling zones, and continental shelves",
+      "vi": "Biển khơi đại dương và các thềm lục địa sâu"
+    },
+    "diet": {
+      "en": "Carnivore (microscopic krill and euphausiids; up to 4 tons daily)",
+      "vi": "Ăn nhuyễn thể (hút hàng tấn giáp xác nhỏ/krill mỗi ngày qua phiến sừng hàm)"
+    },
+    "behavior": {
+      "en": "Majestic solitary marathon swimmer migrating thousands of ocean leagues",
+      "vi": "Kình ngư bơi lội đường trường ngàn dặm, giao tiếp bằng những dải âm trầm vang xa hàng ngàn cây số"
+    },
+    "funFact": {
+      "en": "The largest animal ever known to have lived on planet Earth—its heart alone weighs as much as a small car!",
+      "vi": "Sinh vật lớn nhất từng tồn tại trong lịch sử Trái Đất—trái tim của nó nặng tương đương một chiếc xe hơi!"
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968475/wildlife-guardian/images/blue-whale.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "dugong",
+    "animalName": {
+      "en": "Dugong (Sea Cow)",
+      "vi": "Bò Biển (Nàng Tiên Cá)"
+    },
+    "scientificName": "Dugong dugon",
+    "status": {
+      "en": "Vulnerable",
+      "vi": "Sắp nguy cấp"
+    },
+    "category": {
+      "en": "Mammal",
+      "vi": "Động vật có vú"
+    },
+    "distribution": {
+      "en": "Indo-Pacific coastal waters; in Vietnam: Con Dao and Phu Quoc islands",
+      "vi": "Vùng duyên hải Ấn Độ Dương - Thái Bình Dương; tại VN: Vườn quốc gia Côn Đảo và Phú Quốc"
+    },
+    "habitat": {
+      "en": "Shallow, warm protected bays and luxuriant coastal seagrass meadows",
+      "vi": "Các vịnh biển nông ấm áp và thảm cỏ biển trù phú ven bờ"
+    },
+    "diet": {
+      "en": "Herbivore (strictly grazing on roots and succulent blades of sea grasses)",
+      "vi": "Động vật ăn thực vật biển (chuyên 'gặm' rễ và lá non của các đồng cỏ biển)"
+    },
+    "behavior": {
+      "en": "Placid, slow-moving aquatic grazer surfacing every few minutes to breathe",
+      "vi": "Hiền lành, bơi lội ung dung chậm rãi, cứ vài phút lại ngoi lên hít thở không khí"
+    },
+    "funFact": {
+      "en": "Ancient sailors mistook nursing female dugongs holding calves with their flippers for legendary mythical mermaids.",
+      "vi": "Các thủy thủ cổ đại khi thấy cá mẹ ôm con bằng vây bơi giữa làn sóng biển đã tưởng tượng ra hình bóng nàng tiên cá."
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968476/wildlife-guardian/images/dugong.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "irrawaddy-dolphin",
+    "animalName": {
+      "en": "Irrawaddy Dolphin",
+      "vi": "Cá Heo Irrawaddy"
+    },
+    "scientificName": "Orcaella brevirostris",
+    "status": {
+      "en": "Endangered",
+      "vi": "Nguy cấp"
+    },
+    "category": {
+      "en": "Mammal",
+      "vi": "Động vật có vú"
+    },
+    "distribution": {
+      "en": "Mekong River basin, Ayeyarwady River, and coastal Southeast Asia",
+      "vi": "Lưu vực sông Mê Kông, sông Ayeyarwady và các đầm phá ven biển Đông Nam Á"
+    },
+    "habitat": {
+      "en": "Large freshwater river pools, brackish delta mangroves, and shallow estuaries",
+      "vi": "Vũng sâu sông nước ngọt, rừng ngập mặn cửa sông và đầm phá ven biển"
+    },
+    "diet": {
+      "en": "Carnivore (freshwater bottom fish, estuary cephalopods, and shrimp)",
+      "vi": "Động vật ăn thịt (cá nước ngọt tầng đáy, mực cửa sông và tôm tép)"
+    },
+    "behavior": {
+      "en": "Famous for cooperative fishing partnerships with artisanal local fishermen",
+      "vi": "Nổi tiếng với tập tính phối hợp ăn ý cùng ngư dân địa phương để quây bắt cá"
+    },
+    "funFact": {
+      "en": "They can playfully squirt jets of water from their mouths up to 1.5 meters into the air to herd schooling fish.",
+      "vi": "Chúng có trò phun những vòi nước cao tới 1,5 mét lên không trung để lùa đàn cá vào góc hẹp."
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968478/wildlife-guardian/images/irrawaddy-dolphin.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "cheetah",
+    "animalName": {
+      "en": "Cheetah",
+      "vi": "Báo Săn"
+    },
+    "scientificName": "Acinonyx jubatus",
+    "status": {
+      "en": "Vulnerable",
+      "vi": "Sắp nguy cấp"
+    },
+    "category": {
+      "en": "Mammal",
+      "vi": "Động vật có vú"
+    },
+    "distribution": {
+      "en": "Eastern and Southern Africa, with a tiny relict population in Iran",
+      "vi": "Đông và Nam Phi, cùng quần thể nhỏ còn sót lại tại Iran"
+    },
+    "habitat": {
+      "en": "Vast open savannah grasslands, arid brush steppes, and semi-deserts",
+      "vi": "Thảo nguyên savan khoáng đạt, đồng cỏ bụi và bán hoang mạc"
+    },
+    "diet": {
+      "en": "Carnivore (Thomson's gazelles, impalas, springboks, and young hares)",
+      "vi": "Động vật ăn thịt (linh dương Thomson, linh dương impala, thỏ rừng)"
+    },
+    "behavior": {
+      "en": "Diurnal sprinter that uses unmatched acceleration to hunt by high-speed pursuit",
+      "vi": "Đi săn ban ngày, sử dụng gia tốc khủng khiếp để bứt tốc hạ gục con mồi trong vài giây"
+    },
+    "funFact": {
+      "en": "The fastest land animal on planet Earth—accelerating from 0 to 100 km/h in just 3 seconds, faster than most supercars!",
+      "vi": "Động vật chạy nhanh nhất hành tinh—tăng tốc từ 0 lên 100 km/h chỉ trong 3 giây, nhanh hơn cả siêu xe thể thao!"
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968481/wildlife-guardian/images/cheetah.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "black-rhinoceros",
+    "animalName": {
+      "en": "Black Rhinoceros",
+      "vi": "Tê Giác Đen"
+    },
+    "scientificName": "Diceros bicornis",
+    "status": {
+      "en": "Critically Endangered",
+      "vi": "Cực kỳ nguy cấp"
+    },
+    "category": {
+      "en": "Mammal",
+      "vi": "Động vật có vú"
+    },
+    "distribution": {
+      "en": "Eastern and Southern Africa (Kenya, Namibia, South Africa, Zimbabwe)",
+      "vi": "Đông và Nam Phi (Kenya, Namibia, Nam Phi, Zimbabwe)"
+    },
+    "habitat": {
+      "en": "Arid scrublands, thorn acacia savannas, and highland montane woodlands",
+      "vi": "Vùng cây bụi gai keo khô cằn, thảo nguyên bán sa mạc và đồi rừng"
+    },
+    "diet": {
+      "en": "Browser (acacia shoots, woody twigs, wild bushes, and succulent fruits)",
+      "vi": "Động vật ăn cành lá (nhặt cành cây bụi, chồi non có gai và quả mọng)"
+    },
+    "behavior": {
+      "en": "Solitary, fierce defender of territory with extraordinary hearing and smell",
+      "vi": "Sống đơn độc, tính khí dữ dằn bảo vệ lãnh thổ, thính giác và khứu giác cực kỳ tinh tường"
+    },
+    "funFact": {
+      "en": "Possesses a hooked, prehensile upper lip that grasps thorny acacia branches like a miniature trunk.",
+      "vi": "Chiếc môi trên hình mỏ khoằm khéo léo có thể uốn cong để vặt những cành gai nhọn hoắt như một chiếc vòi nhỏ."
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968484/wildlife-guardian/images/black-rhinoceros.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "chimpanzee",
+    "animalName": {
+      "en": "Chimpanzee",
+      "vi": "Tinh Tinh"
+    },
+    "scientificName": "Pan troglodytes",
+    "status": {
+      "en": "Endangered",
+      "vi": "Nguy cấp"
+    },
+    "category": {
+      "en": "Mammal",
+      "vi": "Động vật có vú"
+    },
+    "distribution": {
+      "en": "Equatorial forest belt of Central and West Africa",
+      "vi": "Vành đai rừng xích đạo Trung và Tây Phi"
+    },
+    "habitat": {
+      "en": "Tropical moist rainforests, secondary forests, and gallery woodlands",
+      "vi": "Rừng mưa nhiệt đới ẩm, rừng khộp thứ sinh và rừng ven sông"
+    },
+    "diet": {
+      "en": "Omnivore (ripe wild fruits, nuts, seeds, leaves, honey, and insects)",
+      "vi": "Động vật ăn tạp (trái cây chín, hạt cứng, mật ong rừng, mối và côn trùng)"
+    },
+    "behavior": {
+      "en": "Highly complex fission-fusion society utilizing sophisticated crafted tools",
+      "vi": "Xã hội bầy đàn phức tạp, biết chế tạo và sử dụng que gậy, đá ghè để lấy thức ăn"
+    },
+    "funFact": {
+      "en": "Our closest living evolutionary relatives, sharing nearly 99% of identical DNA sequence with human beings.",
+      "vi": "Họ hàng gần gũi nhất còn sống của loài người, chia sẻ gần 99% chuỗi DNA tương đồng."
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968487/wildlife-guardian/images/chimpanzee.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "sumatran-orangutan",
+    "animalName": {
+      "en": "Sumatran Orangutan",
+      "vi": "Đười Ươi Sumatra"
+    },
+    "scientificName": "Pongo abelii",
+    "status": {
+      "en": "Critically Endangered",
+      "vi": "Cực kỳ nguy cấp"
+    },
+    "category": {
+      "en": "Mammal",
+      "vi": "Động vật có vú"
+    },
+    "distribution": {
+      "en": "Aceh and North Sumatra provinces, Sumatra, Indonesia",
+      "vi": "Tỉnh Aceh và Bắc Sumatra, đảo Sumatra, Indonesia"
+    },
+    "habitat": {
+      "en": "Primary tropical lowland and peat swamp rainforest canopy",
+      "vi": "Tầng tán rừng nhiệt đới đất thấp và rừng đầm lầy than bùn"
+    },
+    "diet": {
+      "en": "Frugivore (wild figs, jackfruit, lianas, tree bark, and sweet sap)",
+      "vi": "Chủ yếu ăn trái cây rừng (sung dại, mít nài, dây leo rừng và mật hoa)"
+    },
+    "behavior": {
+      "en": "Almost exclusively arboreal ape that constructs a fresh leafy treetop mattress every night",
+      "vi": "Sống gần như trọn đời trên cây, mỗi tối đều kỳ công đan một chiếc giường lá mới tinh trên ngọn cao để ngủ"
+    },
+    "funFact": {
+      "en": "Their name originates from the Malay words 'Orang' (Person) and 'Hutan' (Forest)—literally meaning 'Person of the Forest'.",
+      "vi": "Tên gọi 'Orangutan' trong tiếng Mã Lai ghép từ 'Orang' (Người) và 'Hutan' (Rừng)—nghĩa là 'Người Của Rừng Xanh'."
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968489/wildlife-guardian/images/sumatran-orangutan.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "platypus",
+    "animalName": {
+      "en": "Platypus",
+      "vi": "Thú Mỏ Vịt"
+    },
+    "scientificName": "Ornithorhynchus anatinus",
+    "status": {
+      "en": "Near Threatened",
+      "vi": "Sắp bị đe dọa"
+    },
+    "category": {
+      "en": "Mammal",
+      "vi": "Động vật có vú"
+    },
+    "distribution": {
+      "en": "Eastern Australia and Tasmania",
+      "vi": "Miền Đông nước Úc và đảo Tasmania"
+    },
+    "habitat": {
+      "en": "Cool freshwater river systems, clear creeks, and highland lakes",
+      "vi": "Các dòng suối mát lành, sông ngòi trong vắt và hồ nước ngọt"
+    },
+    "diet": {
+      "en": "Carnivore (freshwater crayfish, shrimp, caddisfly larvae, and worms)",
+      "vi": "Động vật ăn thịt (tôm nước ngọt, ấu trùng cánh phù du, giun đáy suối)"
+    },
+    "behavior": {
+      "en": "Semi-aquatic bottom feeder detecting prey blindly underwater using electroreception",
+      "vi": "Bán thủy sinh, săn mồi dưới đáy sông khi nhắm nghiền mắt nhờ thụ quan cảm nhận xung điện sinh học"
+    },
+    "funFact": {
+      "en": "One of only five living species of monotremes—mammals that lay leathery eggs instead of giving live birth!",
+      "vi": "Một trong số rất ít loài thú đơn huyệt kỳ lạ trên thế giới—sinh con bằng cách đẻ trứng dẻo thay vì đẻ con!"
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968490/wildlife-guardian/images/platypus.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "koala",
+    "animalName": {
+      "en": "Koala",
+      "vi": "Gấu Túi Koala"
+    },
+    "scientificName": "Phascolarctos cinereus",
+    "status": {
+      "en": "Vulnerable",
+      "vi": "Sắp nguy cấp"
+    },
+    "category": {
+      "en": "Mammal",
+      "vi": "Động vật có vú"
+    },
+    "distribution": {
+      "en": "Eastern and southeastern Australian coastal regions",
+      "vi": "Dải ven biển miền Đông và Đông Nam nước Úc"
+    },
+    "habitat": {
+      "en": "Eucalypt woodlands and open temperate forests",
+      "vi": "Rừng thưa khuynh diệp (bạch đàn) và rừng ôn đới ven biển"
+    },
+    "diet": {
+      "en": "Herbivore (strictly toxic eucalyptus leaves containing volatile oils)",
+      "vi": "Động vật ăn cỏ (chuyên ăn lá bạch đàn có chứa độc tố và dầu cay nồng)"
+    },
+    "behavior": {
+      "en": "Sedentary marsupial that sleeps up to 20 hours a day to conserve energy",
+      "vi": "Thú có túi sống chậm rãi, ngủ tới 20 tiếng mỗi ngày để tiêu hóa thức ăn khó tiêu"
+    },
+    "funFact": {
+      "en": "Their fingerprints are so identical in whirls and loops to human fingerprints that they can confuse forensic crime scene detectives!",
+      "vi": "Dấu vân tay của Koala giống vân tay người đến mức dưới kính hiển vi chuyên gia giám định cũng khó phân biệt!"
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968492/wildlife-guardian/images/koala.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "gray-wolf",
+    "animalName": {
+      "en": "Gray Wolf",
+      "vi": "Sói Xám"
+    },
+    "scientificName": "Canis lupus",
+    "status": {
+      "en": "Least Concern",
+      "vi": "Ít lo ngại"
+    },
+    "category": {
+      "en": "Mammal",
+      "vi": "Động vật có vú"
+    },
+    "distribution": {
+      "en": "North America, Eurasia, and Northern Africa",
+      "vi": "Bắc Mỹ, đại lục Á - Âu và Bắc Phi"
+    },
+    "habitat": {
+      "en": "Taiga forests, tundra, open plains, and mountainous deserts",
+      "vi": "Rừng taiga râm mát, lãnh nguyên băng giá và thảo nguyên rộng lớn"
+    },
+    "diet": {
+      "en": "Carnivore (elk, moose, deer, caribou, and small rodents)",
+      "vi": "Động vật ăn thịt (nai sừng tấm, hươu đỏ, tuần lộc và gặm nhấm)"
+    },
+    "behavior": {
+      "en": "Master pack hunters with a disciplined hierarchical family structure",
+      "vi": "Săn mồi theo bầy đàn với tính kỷ luật thép và sự phối hợp chiến thuật xuất chúng"
+    },
+    "funFact": {
+      "en": "A pack's haunting choral howl can carry across 16 kilometers of wilderness to coordinate hunts and warn rival packs.",
+      "vi": "Tiếng hú đồng thanh của đàn sói có thể truyền xa tới 16 km qua đêm tối để gọi đàn và cảnh báo đối thủ."
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968494/wildlife-guardian/images/gray-wolf.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "jaguar",
+    "animalName": {
+      "en": "Jaguar",
+      "vi": "Báo Đốm Nam Mỹ"
+    },
+    "scientificName": "Panthera onca",
+    "status": {
+      "en": "Near Threatened",
+      "vi": "Sắp bị đe dọa"
+    },
+    "category": {
+      "en": "Mammal",
+      "vi": "Động vật có vú"
+    },
+    "distribution": {
+      "en": "Central and South America (Pantanal, Amazon Basin)",
+      "vi": "Trung và Nam Mỹ (vùng đất ngập nước Pantanal, lưu vực Amazon)"
+    },
+    "habitat": {
+      "en": "Dense tropical rainforests, flooded swamps, and riverbanks",
+      "vi": "Rừng mưa nhiệt đới rậm rạp, đầm lầy ngập nước và bãi bồi ven sông"
+    },
+    "diet": {
+      "en": "Carnivore (caimans, capybaras, giant anacondas, and river turtles)",
+      "vi": "Động vật ăn thịt (cá sấu caiman, chuột lang nước, trăn anaconda, rùa sông)"
+    },
+    "behavior": {
+      "en": "Solitary ambush hunter and exceptional swimmer that hunts freely in rivers",
+      "vi": "Thợ săn phục kích đơn độc, bơi lội cừ khôi và thường lặn xuống sông săn cá sấu"
+    },
+    "funFact": {
+      "en": "Possesses the most powerful bite force of any cat relative to size—capable of biting directly through crocodile armor and turtle shells!",
+      "vi": "Sở hữu lực cắn khủng khiếp nhất trong họ nhà mèo—đủ sức ngoạm thủng cả mai rùa cứng và hộp sọ cá sấu!"
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968495/wildlife-guardian/images/jaguar.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "philippine-eagle",
+    "animalName": {
+      "en": "Philippine Eagle (Monkey-eating Eagle)",
+      "vi": "Đại Bàng Philippines"
+    },
+    "scientificName": "Pithecophaga jefferyi",
+    "status": {
+      "en": "Critically Endangered",
+      "vi": "Cực kỳ nguy cấp"
+    },
+    "category": {
+      "en": "Bird",
+      "vi": "Chim"
+    },
+    "distribution": {
+      "en": "Endemic to four Philippine islands (Luzon, Samar, Leyte, Mindanao)",
+      "vi": "Đặc hữu 4 hòn đảo của Philippines (Luzon, Samar, Leyte, Mindanao)"
+    },
+    "habitat": {
+      "en": "Steep dipterocarp montane virgin rainforest canopy",
+      "vi": "Tầng tán rừng nguyên sinh họ Dầu trên các sườn núi dốc"
+    },
+    "diet": {
+      "en": "Carnivore (flying lemurs, macaque monkeys, palm civets, and monitor lizards)",
+      "vi": "Động vật ăn thịt (chồn bay, khỉ đuôi dài, cầy hương và kỳ đà)"
+    },
+    "behavior": {
+      "en": "Apex aerial ambush raptor pairing for life in expansive forest territories",
+      "vi": "Kẻ săn mồi trên không đỉnh cao, ghép đôi chung thủy trọn đời trên lãnh thổ rộng lớn"
+    },
+    "funFact": {
+      "en": "With a magnificent 2-meter wingspan and shaggy lion-like crest, it is considered the longest eagle species on Earth.",
+      "vi": "Sải cánh rộng 2 mét cùng chiếc mào xòe tựa bờm sư tử, được mệnh danh là loài đại bàng dài nhất thế giới."
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968496/wildlife-guardian/images/philippine-eagle.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "california-condor",
+    "animalName": {
+      "en": "California Condor",
+      "vi": "Kền Kền California"
+    },
+    "scientificName": "Gymnogyps californianus",
+    "status": {
+      "en": "Critically Endangered",
+      "vi": "Cực kỳ nguy cấp"
+    },
+    "category": {
+      "en": "Bird",
+      "vi": "Chim"
+    },
+    "distribution": {
+      "en": "Southwestern United States and Baja California, Mexico",
+      "vi": "Tây Nam Hoa Kỳ và bán đảo Baja California, Mexico"
+    },
+    "habitat": {
+      "en": "Rocky cliff gorges, coniferous mountain forests, and oak savannas",
+      "vi": "Hẻm vực núi đá cheo leo, rừng thông núi cao và savan cây sồi"
+    },
+    "diet": {
+      "en": "Scavenger (carrion of large mammals like deer, elk, cattle, and beached whales)",
+      "vi": "Động vật ăn xác thối (xác hươu, nai sừng tấm và xác sinh vật biển dạt bờ)"
+    },
+    "behavior": {
+      "en": "Effortless thermal glider soaring up to 4,500 meters without flapping wings for hours",
+      "vi": "Lao vút trên luồng nhiệt cao tới 4.500m mà không cần đập cánh suốt nhiều giờ liền"
+    },
+    "funFact": {
+      "en": "The largest wild land bird in North America with a colossal 3-meter wingspan, rescued from only 22 remaining individuals in 1987.",
+      "vi": "Loài chim bay trên cạn lớn nhất Bắc Mỹ với sải cánh 3 mét, từng chỉ còn đúng 22 cá thể sống sót vào năm 1987."
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968498/wildlife-guardian/images/california-condor.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "kakapo",
+    "animalName": {
+      "en": "Kakapo (Owl Parrot)",
+      "vi": "Vẹt Cú Kakapo"
+    },
+    "scientificName": "Strigops habroptilus",
+    "status": {
+      "en": "Critically Endangered",
+      "vi": "Cực kỳ nguy cấp"
+    },
+    "category": {
+      "en": "Bird",
+      "vi": "Chim"
+    },
+    "distribution": {
+      "en": "Predator-free offshore sanctuary islands of New Zealand",
+      "vi": "Các hòn đảo bảo tồn không có thú săn mồi của New Zealand"
+    },
+    "habitat": {
+      "en": "Native mossy beech and podocarp temperate rainforest floors",
+      "vi": "Thảm thực vật rừng sồi ôn đới nhiều rêu và cây lá kim cổ đại"
+    },
+    "diet": {
+      "en": "Herbivore (rimu tree fruit, fern roots, wild seeds, and moss tips)",
+      "vi": "Động vật ăn thực vật (quả cây rimu, rễ dương xỉ, hạt rừng và đọt rêu non)"
+    },
+    "behavior": {
+      "en": "Nocturnal, completely flightless ground-waddling parrot with solitary lek mating calls",
+      "vi": "Hoạt động về đêm, không biết bay, bước đi lạch bạch và phát ra tiếng gọi bạn tình rền vang như tiếng trống"
+    },
+    "funFact": {
+      "en": "The world's heaviest parrot (up to 4 kg) and can live for an astonishing 90 years; smells delightfully like sweet honey or beeswax!",
+      "vi": "Loài vẹt nặng nhất thế giới (tới 4 kg) và sống thọ tới 90 năm; cơ thể tỏa ra hương thơm ngọt ngào như sáp ong!"
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968499/wildlife-guardian/images/kakapo.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "spoon-billed-sandpiper",
+    "animalName": {
+      "en": "Spoon-billed Sandpiper",
+      "vi": "Rẽ Mỏ Thìa"
+    },
+    "scientificName": "Calidris pygmaea",
+    "status": {
+      "en": "Critically Endangered",
+      "vi": "Cực kỳ nguy cấp"
+    },
+    "category": {
+      "en": "Bird",
+      "vi": "Chim"
+    },
+    "distribution": {
+      "en": "Breeds in Chukotka (Russia); winters along coastal mudflats of Southeast Asia and Vietnam",
+      "vi": "Sinh sản tại vùng cực Chukotka (Nga); di cư mùa đông đến các bãi triều lầy ven biển Việt Nam"
+    },
+    "habitat": {
+      "en": "Tundra maritime spits in summer; intertidal coastal mudflats during winter",
+      "vi": "Đài nguyên ven biển mùa hè; bãi bùn bồi ngập triều ven biển mùa đông"
+    },
+    "diet": {
+      "en": "Carnivore (microscopic polychaete worms, tiny intertidal crustaceans, and mollusks)",
+      "vi": "Ăn giun nhiều tơ, giáp xác nhỏ và ấu trùng đáy bùn"
+    },
+    "behavior": {
+      "en": "Sweeps its spatula bill side-to-side through shallow mud puddles like a miniature dredge",
+      "vi": "Khua chiếc mỏ hình cái thìa sang hai bên trong bùn loãng như một chiếc máy vét lọc mồi siêu nhỏ"
+    },
+    "funFact": {
+      "en": "Fewer than 500 mature birds exist on Earth; each undertakes an epic 8,000-kilometer migration flyway twice a year.",
+      "vi": "Chỉ còn dưới 500 cá thể trưởng thành; mỗi năm chúng đều bay thiên di ròng rã 8.000 km qua khắp châu Á."
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968502/wildlife-guardian/images/spoon-billed-sandpiper.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "bengal-florican",
+    "animalName": {
+      "en": "Bengal Florican",
+      "vi": "Ô Tác Bengal"
+    },
+    "scientificName": "Houbaropsis bengalensis",
+    "status": {
+      "en": "Critically Endangered",
+      "vi": "Cực kỳ nguy cấp"
+    },
+    "category": {
+      "en": "Bird",
+      "vi": "Chim"
+    },
+    "distribution": {
+      "en": "Tonle Sap floodplain (Cambodia) and Gangetic plain grasslands",
+      "vi": "Vùng đồng bằng ngập lũ Biển Hồ (Campuchia) và bãi cỏ sông Hằng"
+    },
+    "habitat": {
+      "en": "Seasonally flooded natural tall alluvial grasslands",
+      "vi": "Đồng cỏ cao tự nhiên ngập nước theo mùa"
+    },
+    "diet": {
+      "en": "Omnivore (grasshoppers, crickets, beetles, seeds, and fresh tender shoots)",
+      "vi": "Động vật ăn tạp (châu chấu, dế mèn, sâu bọ cánh cứng, chồi thảo mộc)"
+    },
+    "behavior": {
+      "en": "Males perform spectacular vertical rocket leaps up to 2 meters high to court females",
+      "vi": "Con đực thực hiện những cú nhảy vụt thẳng lên không trung tới 2 mét vỗ cánh tán tỉnh con cái"
+    },
+    "funFact": {
+      "en": "One of the rarest bustards on Earth with fewer than 1,000 birds surviving amidst disappearing wetlands.",
+      "vi": "Một trong những loài chim ô tác hiếm nhất thế giới với dưới 1.000 cá thể khi vùng đất ngập nước thu hẹp dần."
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968503/wildlife-guardian/images/bengal-florican.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "edwards-pheasant",
+    "animalName": {
+      "en": "Edwards's Pheasant",
+      "vi": "Gà Lôi Lam Đuôi Trắng"
+    },
+    "scientificName": "Lophura edwardsi",
+    "status": {
+      "en": "Critically Endangered",
+      "vi": "Cực kỳ nguy cấp"
+    },
+    "category": {
+      "en": "Bird",
+      "vi": "Chim"
+    },
+    "distribution": {
+      "en": "Endemic to central Vietnam (Quang Binh and Quang Tri provinces)",
+      "vi": "Đặc hữu miền Trung Việt Nam (vùng rừng thấp Quảng Bình, Quảng Trị)"
+    },
+    "habitat": {
+      "en": "Lowland primary evergreen rainforests with thick vine undergrowth",
+      "vi": "Rừng mưa nhiệt đới thường xanh đất thấp có thảm cây bụi và dây leo rậm rạp"
+    },
+    "diet": {
+      "en": "Omnivore (fallen seeds, forest berries, termites, and small earthworms)",
+      "vi": "Động vật ăn tạp (hạt quả rụng, mối rừng, giun đất và chồi non)"
+    },
+    "behavior": {
+      "en": "Extremely secretive forest-floor skulker rarely seen in the wild since 2000",
+      "vi": "Sống chui lủi dưới thảm rừng ngập tán, cực kỳ hiếm thấy ngoài tự nhiên từ năm 2000"
+    },
+    "funFact": {
+      "en": "Males have magnificent metallic sapphire-blue plumage with a pure white tail and bright crimson facial skin.",
+      "vi": "Con đực khoác bộ lông xanh thẫm ánh kim lam rực rỡ, đuôi trắng muốt và vùng da mặt đỏ thắm như hoa đăng."
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968505/wildlife-guardian/images/edwards-pheasant.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "crested-ibis",
+    "animalName": {
+      "en": "Crested Ibis",
+      "vi": "Cò Quăm Mào"
+    },
+    "scientificName": "Nipponia nippon",
+    "status": {
+      "en": "Endangered",
+      "vi": "Nguy cấp"
+    },
+    "category": {
+      "en": "Bird",
+      "vi": "Chim"
+    },
+    "distribution": {
+      "en": "Shaanxi Province (China); reintroduced to Japan and South Korea",
+      "vi": "Tỉnh Thiểm Tây (Trung Quốc); tái thả tại Nhật Bản và Hàn Quốc"
+    },
+    "habitat": {
+      "en": "Tall pine forest ridges bordering traditional pesticide-free rice paddies",
+      "vi": "Rừng thông núi cao giáp những cánh đồng lúa nước không dùng hóa chất"
+    },
+    "diet": {
+      "en": "Carnivore (freshwater loaches, river crabs, frogs, and aquatic insects)",
+      "vi": "Ăn cá trạch đồng, cua đồng, ếch nhái và côn trùng thủy sinh"
+    },
+    "behavior": {
+      "en": "Nests in ancient towering trees and wades gracefully through shallow terraces",
+      "vi": "Làm tổ trên ngọn cây cổ thụ ngút ngàn, lội kiếm ăn thong thả trên ruộng bậc thang"
+    },
+    "funFact": {
+      "en": "In breeding season, it smears black cosmetic powder secreted from neck skin onto its wings to turn smoky gray!",
+      "vi": "Vào mùa sinh sản, chúng tự bôi bột màu đen từ cổ lên lông để hóa trang thành màu xám khói ngụy trang!"
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968508/wildlife-guardian/images/crested-ibis.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "snowy-owl",
+    "animalName": {
+      "en": "Snowy Owl",
+      "vi": "Cú Tuyết"
+    },
+    "scientificName": "Bubo scandiacus",
+    "status": {
+      "en": "Vulnerable",
+      "vi": "Sắp nguy cấp"
+    },
+    "category": {
+      "en": "Bird",
+      "vi": "Chim"
+    },
+    "distribution": {
+      "en": "Circumpolar Arctic tundra across North America and Eurasia",
+      "vi": "Vòng cung lãnh nguyên Bắc Cực qua Bắc Mỹ, Bắc Âu và Siberia"
+    },
+    "habitat": {
+      "en": "Treeless, windswept open arctic tundra and coastal dunes",
+      "vi": "Lãnh nguyên không có cây cối, cồn tuyết lộng gió Bắc Cực"
+    },
+    "diet": {
+      "en": "Carnivore (primarily lemmings; up to 1,600 lemmings per owl annually)",
+      "vi": "Động vật ăn thịt (chủ yếu là chuột lemming; ăn tới 1.600 con chuột mỗi năm)"
+    },
+    "behavior": {
+      "en": "Unlike most owls, they are diurnal hunters that thrive in the continuous 24-hour arctic summer daylight",
+      "vi": "Khác với các loài cú khác, chúng săn mồi cả ban ngày dưới ánh sáng mặt trời không lặn mùa hè Bắc Cực"
+    },
+    "funFact": {
+      "en": "Their dense layer of feathers covers even their feet and claws, insulating them down to -50°C!",
+      "vi": "Lớp lông vũ dày đặc bao phủ trọn vẹn cả bàn chân và móng vuốt, chống chọi được giá lạnh tới -50°C!"
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968509/wildlife-guardian/images/snowy-owl.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "emperor-penguin",
+    "animalName": {
+      "en": "Emperor Penguin",
+      "vi": "Chim Cánh Cụt Hoàng Đế"
+    },
+    "scientificName": "Aptenodytes forsteri",
+    "status": {
+      "en": "Near Threatened",
+      "vi": "Sắp bị đe dọa"
+    },
+    "category": {
+      "en": "Bird",
+      "vi": "Chim"
+    },
+    "distribution": {
+      "en": "Endemic strictly to the Antarctic continent and surrounding ice shelves",
+      "vi": "Đặc hữu tuyệt đối của bờ cõi băng tuyết Nam Cực"
+    },
+    "habitat": {
+      "en": "Antarctic pack ice and frozen coastal land-fast sea ice",
+      "vi": "Các thềm băng trôi kiên cố và biển đóng băng ven bờ Nam Cực"
+    },
+    "diet": {
+      "en": "Carnivore (antarctic silverfish, glacier squid, and krill swarms)",
+      "vi": "Động vật ăn thịt (cá bạc Nam Cực, mực băng và đàn nhuyễn thể krill)"
+    },
+    "behavior": {
+      "en": "Fathers balance eggs on their feet beneath a warm belly pouch during -60°C polar winters",
+      "vi": "Chim bố kiên cường ấp trứng trên mu bàn chân dưới lớp túi bụng suốt mùa đông -60°C trong khi chim mẹ đi săn"
+    },
+    "funFact": {
+      "en": "The tallest and heaviest penguin on Earth, capable of diving to an astonishing 535 meters beneath ice floes!",
+      "vi": "Loài cánh cụt to lớn nhất hành tinh, có thể lặn sâu tới 535 mét dưới làn nước băng giá đại dương!"
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968511/wildlife-guardian/images/emperor-penguin.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "scarlet-macaw",
+    "animalName": {
+      "en": "Scarlet Macaw",
+      "vi": "Vẹt Đuôi Dài Đỏ"
+    },
+    "scientificName": "Ara macao",
+    "status": {
+      "en": "Least Concern",
+      "vi": "Ít lo ngại"
+    },
+    "category": {
+      "en": "Bird",
+      "vi": "Chim"
+    },
+    "distribution": {
+      "en": "Humid tropical rainforests from Mexico to the Amazon Basin",
+      "vi": "Rừng nhiệt đới ẩm từ Mexico đến lưu vực sông Amazon"
+    },
+    "habitat": {
+      "en": "Canopy of primary evergreen rainforests and river gallery forests",
+      "vi": "Tầng tán rừng mưa nhiệt đới thường xanh và rừng hành lang ven sông"
+    },
+    "diet": {
+      "en": "Herbivore (hard-shelled seeds, palm nuts, wild figs, and nectar)",
+      "vi": "Ăn hạt vỏ cứng, hạt cọ rừng, quả sung hoang dã và đất sét chứa khoáng"
+    },
+    "behavior": {
+      "en": "Flies in devoted lifelong pairs with raucous, piercing vocal screeches",
+      "vi": "Bay lượn có đôi gắn bó trọn đời, cất tiếng kêu vang rộn rã khắp vòm rừng xanh"
+    },
+    "funFact": {
+      "en": "Their immensely powerful beak can exert 2,000 pounds of pressure per square inch—effortlessly cracking rock-hard Brazil nuts!",
+      "vi": "Chiếc mỏ cứng như thép có lực cắn cực mạnh, dễ dàng bửa đôi những quả hạch Brazil cứng như đá!"
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968512/wildlife-guardian/images/scarlet-macaw.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "peregrine-falcon",
+    "animalName": {
+      "en": "Peregrine Falcon",
+      "vi": "Cắt Lớn"
+    },
+    "scientificName": "Falco peregrinus",
+    "status": {
+      "en": "Least Concern",
+      "vi": "Ít lo ngại"
+    },
+    "category": {
+      "en": "Bird",
+      "vi": "Chim"
+    },
+    "distribution": {
+      "en": "Found across every continent except Antarctica",
+      "vi": "Có mặt ở khắp các lục địa trên thế giới trừ Nam Cực"
+    },
+    "habitat": {
+      "en": "Coastal cliffs, river gorges, mountain peaks, and skyscraper ledges",
+      "vi": "Vách đá ven biển, hẻm núi cao và các tòa nhà chọc trời đô thị"
+    },
+    "diet": {
+      "en": "Carnivore (medium-sized birds like pigeons, ducks, and shorebirds)",
+      "vi": "Động vật ăn thịt (bồ câu, vịt trời, chim biển săn bắt ngay giữa không trung)"
+    },
+    "behavior": {
+      "en": "Strikes prey in midair with a closed talon punch after a supersonic dive",
+      "vi": "Tung đòn hạ gục con mồi ngay trên không bằng cú bổ nhào tốc độ siêu thanh"
+    },
+    "funFact": {
+      "en": "The fastest animal in the entire animal kingdom—reaching terminal dive speeds of over 389 km/h!",
+      "vi": "Sinh vật chuyển động nhanh nhất trong thế giới động vật—đạt tốc độ bổ nhào kỷ lục hơn 389 km/h!"
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968514/wildlife-guardian/images/peregrine-falcon.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "great-hornbill",
+    "animalName": {
+      "en": "Great Hornbill",
+      "vi": "Hồng Hoàng (Phượng Hoàng Đất)"
+    },
+    "scientificName": "Buceros bicornis",
+    "status": {
+      "en": "Vulnerable",
+      "vi": "Sắp nguy cấp"
+    },
+    "category": {
+      "en": "Bird",
+      "vi": "Chim"
+    },
+    "distribution": {
+      "en": "Indian subcontinent and Southeast Asia (including Vietnam)",
+      "vi": "Tiểu lục địa Ấn Độ và Đông Nam Á (núi rừng nhiệt đới Việt Nam)"
+    },
+    "habitat": {
+      "en": "Dense primary rainforests with ancient giant nesting trees",
+      "vi": "Rừng mưa nguyên sinh rậm rạp có nhiều cây cổ thụ rỗng ruột"
+    },
+    "diet": {
+      "en": "Frugivore (primarily wild figs; also small lizards, frogs, and bats)",
+      "vi": "Thích ăn quả vả quả sung rừng; thỉnh thoảng ăn thằn lằn, ếch nhái"
+    },
+    "behavior": {
+      "en": "Female seals herself inside a tree hollow cavity with mud during incubation",
+      "vi": "Chim mái tự trát bùn bít kín cửa hốc cây để ấp trứng, chỉ chừa khe nhỏ nhận thức ăn từ chim trống"
+    },
+    "funFact": {
+      "en": "Its immense golden-yellow helmet casque acts as an acoustic soundboard, amplifying its whooshing flight beats like a miniature steam locomotive!",
+      "vi": "Chiếc sừng vàng óng trên mỏ hoạt động như hộp cộng hưởng, khiến tiếng vỗ cánh của nó rền vang như tàu hỏa!"
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968516/wildlife-guardian/images/great-hornbill.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "shoebill",
+    "animalName": {
+      "en": "Shoebill Stork",
+      "vi": "Cò Mỏ Giày"
+    },
+    "scientificName": "Balaeniceps rex",
+    "status": {
+      "en": "Vulnerable",
+      "vi": "Sắp nguy cấp"
+    },
+    "category": {
+      "en": "Bird",
+      "vi": "Chim"
+    },
+    "distribution": {
+      "en": "Central and Eastern Africa (Sudan, Uganda, Zambia wetlands)",
+      "vi": "Vùng đầm lầy Trung và Đông Phi (Sudan, Uganda, Zambia)"
+    },
+    "habitat": {
+      "en": "Large freshwater papyrus marshes and flood swamps",
+      "vi": "Đầm lầy lau sậy cói giấy papyrus nước ngọt mênh mông"
+    },
+    "diet": {
+      "en": "Carnivore (lungfish, senegal bichirs, tilapia, baby water monitors, and small caimans)",
+      "vi": "Ăn cá phổi châu Phi, cá cửu sừng, cá rô phi, rắn nước và cá sấu non"
+    },
+    "behavior": {
+      "en": "Stands statue-still for hours before lunging in a sudden explosive collapse strike",
+      "vi": "Đứng bất động như một bức tượng hóa thạch suốt nhiều giờ trước khi lao bổ úp sọt con mồi"
+    },
+    "funFact": {
+      "en": "Its prehistoric, dinosaur-like shoe beak ends in a sharp hook and can clatter as loud as a rapid machine gun!",
+      "vi": "Chiếc mỏ khổng lồ như chiếc guốc thời tiền sử có thể gõ vào nhau vang rền như tiếng súng máy!"
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968517/wildlife-guardian/images/shoebill.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "kiwi",
+    "animalName": {
+      "en": "North Island Brown Kiwi",
+      "vi": "Chim Kiwi Nâu"
+    },
+    "scientificName": "Apteryx mantelli",
+    "status": {
+      "en": "Vulnerable",
+      "vi": "Sắp nguy cấp"
+    },
+    "category": {
+      "en": "Bird",
+      "vi": "Chim"
+    },
+    "distribution": {
+      "en": "North Island of New Zealand",
+      "vi": "Đảo Bắc của New Zealand"
+    },
+    "habitat": {
+      "en": "Subtropical and temperate beech and podocarp forests",
+      "vi": "Rừng ôn đới ẩm nhiều thảm mục lá rụng"
+    },
+    "diet": {
+      "en": "Carnivore (earthworms, beetles, cicada nymphs, and fallen berries)",
+      "vi": "Ăn giun đất, bọ cánh cứng, ấu trùng ve sầu và quả rụng"
+    },
+    "behavior": {
+      "en": "Nocturnal ground sniffer probing damp loam soil with bill tip nostrils",
+      "vi": "Kiếm ăn ban đêm, dùng lỗ mũi nằm ngay chóp mỏ để đánh hơi giun ngầm dưới đất"
+    },
+    "funFact": {
+      "en": "The only bird on Earth with nostrils at the very tip of its beak; their egg takes up 20% of the female's body volume!",
+      "vi": "Loài chim duy nhất có lỗ mũi ở chóp mỏ; trứng của nó chiếm tới 20% thể tích cơ thể chim mẹ!"
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968519/wildlife-guardian/images/kiwi.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "bald-eagle",
+    "animalName": {
+      "en": "Bald Eagle",
+      "vi": "Đại Bàng Đầu Trắng"
+    },
+    "scientificName": "Haliaeetus leucocephalus",
+    "status": {
+      "en": "Least Concern",
+      "vi": "Ít lo ngại"
+    },
+    "category": {
+      "en": "Bird",
+      "vi": "Chim"
+    },
+    "distribution": {
+      "en": "North America (Canada, United States, and Northern Mexico)",
+      "vi": "Bắc Mỹ (Canada, Hoa Kỳ và miền Bắc Mexico)"
+    },
+    "habitat": {
+      "en": "Lakes, rivers, estuaries, and coastal waterways with large old-growth trees",
+      "vi": "Các hồ nước lớn, sông ngòi, vịnh ven biển có cây cổ thụ cao vút"
+    },
+    "diet": {
+      "en": "Carnivore (primarily salmon, trout, waterfowl, and carrion)",
+      "vi": "Động vật ăn thịt (cá hồi, cá hồi vân, vịt trời và mồi cướp được)"
+    },
+    "behavior": {
+      "en": "Monogamous apex flyer building the largest tree nests ever recorded for any animal",
+      "vi": "Chung thủy một vợ một chồng, xây nên những chiếc tổ chim khổng lồ nhất thế giới tự nhiên"
+    },
+    "funFact": {
+      "en": "Their massive stick nests can weigh over 2 metric tons and measure up to 3 meters across!",
+      "vi": "Tổ của chúng tích tụ qua nhiều năm có thể nặng tới hơn 2 tấn và rộng tới 3 mét!"
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968525/wildlife-guardian/images/bald-eagle.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "green-peafowl",
+    "animalName": {
+      "en": "Green Peafowl",
+      "vi": "Công Má Vàng (Công Xanh)"
+    },
+    "scientificName": "Pavo muticus",
+    "status": {
+      "en": "Endangered",
+      "vi": "Nguy cấp"
+    },
+    "category": {
+      "en": "Bird",
+      "vi": "Chim"
+    },
+    "distribution": {
+      "en": "Southeast Asia (in Vietnam: Yok Don and Cat Tien National Parks)",
+      "vi": "Đông Nam Á (tại VN: VQG Yok Đôn, Cát Tiên và rừng khộp Tây Nguyên)"
+    },
+    "habitat": {
+      "en": "Dry deciduous dipterocarp forests and riverbank thickets",
+      "vi": "Rừng khộp rụng lá cằn cỗi và thung lũng ven sông suối"
+    },
+    "diet": {
+      "en": "Omnivore (grass seeds, wild berries, crickets, lizards, and small snakes)",
+      "vi": "Động vật ăn tạp (hạt cỏ dại, quả mọng, dế mèn, thằn lằn và rắn nhỏ)"
+    },
+    "behavior": {
+      "en": "Elaborate courtship displays fanning a shimmering 2-meter emerald train with iridescent ocelli",
+      "vi": "Múa xòe chiếc đuôi dài 2 mét lấp lánh ngọc lục bảo với hàng chục 'con mắt' kỳ ảo để thu hút bạn tình"
+    },
+    "funFact": {
+      "en": "Much wilder, taller, and more elusive than the common Indian blue peafowl, it can fly surprisingly long distances.",
+      "vi": "Hoang dã và to lớn hơn công Ấn Độ, có khả năng bay vút qua những thung lũng sông rừng rộng lớn."
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968528/wildlife-guardian/images/green-peafowl.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "hawksbill-turtle",
+    "animalName": {
+      "en": "Hawksbill Sea Turtle",
+      "vi": "Đồi Mồi"
+    },
+    "scientificName": "Eretmochelys imbricata",
+    "status": {
+      "en": "Critically Endangered",
+      "vi": "Cực kỳ nguy cấp"
+    },
+    "category": {
+      "en": "Reptile",
+      "vi": "Bò sát"
+    },
+    "distribution": {
+      "en": "Tropical coral reefs of the Atlantic, Pacific, and Indian Oceans",
+      "vi": "Các rạn san hô nhiệt đới (Côn Đảo, Cù Lao Chàm, vịnh Nha Trang)"
+    },
+    "habitat": {
+      "en": "Complex coral reef crevices, rocky ledges, and coastal lagoons",
+      "vi": "Rạn san hô ngầm nhiều hốc đá và đầm phá ven biển nhiệt đới"
+    },
+    "diet": {
+      "en": "Carnivore (specialized in toxic glass sponges and soft corals)",
+      "vi": "Chuyên ăn bọt biển độc và san hô mềm mà các loài khác không thể ăn được"
+    },
+    "behavior": {
+      "en": "Uses its narrow, sharp beak to pluck marine sponges from deep coral cracks",
+      "vi": "Dùng chiếc mỏ nhọn khoằm như mỏ diều hâu để móc thức ăn từ khe nứt san hô"
+    },
+    "funFact": {
+      "en": "Their shell plates glow with biofluorescence under blue light, exhibiting vivid neon greens and fiery reds underwater!",
+      "vi": "Mai của đồi mồi phát huỳnh quang sinh học rực rỡ sắc xanh neon và đỏ lửa dưới tia sáng xanh biển sâu!"
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968531/wildlife-guardian/images/hawksbill-turtle.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "leatherback-turtle",
+    "animalName": {
+      "en": "Leatherback Sea Turtle",
+      "vi": "Rùa Da"
+    },
+    "scientificName": "Dermochelys coriacea",
+    "status": {
+      "en": "Vulnerable",
+      "vi": "Sắp nguy cấp"
+    },
+    "category": {
+      "en": "Reptile",
+      "vi": "Bò sát"
+    },
+    "distribution": {
+      "en": "Circumglobal across all tropical, temperate, and subarctic oceans",
+      "vi": "Khắp các đại dương nhiệt đới, ôn đới và cận cực thế giới"
+    },
+    "habitat": {
+      "en": "Pelagic open oceans and deep offshore continental shelf trenches",
+      "vi": "Vùng nước biển khơi đại dương và các vực biển thẳm"
+    },
+    "diet": {
+      "en": "Carnivore (gelatinous open-ocean jellyfish and salps; hundreds daily)",
+      "vi": "Động vật ăn thịt (chuyên ăn sứa biển khổng lồ nhờ gai họng hướng vào trong)"
+    },
+    "behavior": {
+      "en": "Deepest-diving reptile on Earth, descending to depths over 1,280 meters into absolute darkness",
+      "vi": "Bò sát lặn sâu nhất hành tinh, lao xuống độ sâu hơn 1.280 mét vào vùng tối vĩnh cửu"
+    },
+    "funFact": {
+      "en": "Lacks a bony shell—its carapace is made of tough, leathery skin embedded with thousands of tiny bone plates!",
+      "vi": "Không có mai xương cứng—lưng của nó bọc lớp da dai như da thuộc dẻo dai đính hàng ngàn tấm xương li ti!"
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968532/wildlife-guardian/images/leatherback-turtle.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "yangtze-giant-softshell-turtle",
+    "animalName": {
+      "en": "Yangtze Giant Softshell Turtle (Swinhoe's Turtle)",
+      "vi": "Giải Sin-hoe (Rùa Hoàn Kiếm)"
+    },
+    "scientificName": "Rafetus swinhoei",
+    "status": {
+      "en": "Critically Endangered",
+      "vi": "Cực kỳ nguy cấp"
+    },
+    "category": {
+      "en": "Reptile",
+      "vi": "Bò sát"
+    },
+    "distribution": {
+      "en": "Red River basin of northern Vietnam and Yangtze River (China)",
+      "vi": "Lưu vực sông Hồng, hồ Đồng Mô (Hà Nội) và sông Dương Tử (Trung Quốc)"
+    },
+    "habitat": {
+      "en": "Deep freshwater lowland river pools and expansive natural wetland lakes",
+      "vi": "Các vùng hồ đầm lầy nước ngọt sâu và khúc sông nước êm đềm"
+    },
+    "diet": {
+      "en": "Carnivore (freshwater fish, river crabs, snails, and water frogs)",
+      "vi": "Động vật ăn thịt (cá nước ngọt, cua đồng, ốc bươu và ếch nhái)"
+    },
+    "behavior": {
+      "en": "Mysterious subterranean burrower resting for hours beneath muddy lakebeds",
+      "vi": "Cực kỳ bí ẩn, vùi mình dưới lớp bùn sâu hàng giờ và chỉ nhô đầu thở thoảng qua"
+    },
+    "funFact": {
+      "en": "The most critically endangered turtle on Earth with fewer than 4 known individuals alive; sacred cultural icon of Vietnam's legendary Sword Lake.",
+      "vi": "Loài rùa mai mềm nguy cấp nhất hành tinh với chỉ vài cá thể còn sống; biểu tượng tâm linh gắn liền với truyền thuyết Hồ Gươm."
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968533/wildlife-guardian/images/yangtze-giant-softshell-turtle.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "gharial",
+    "animalName": {
+      "en": "Gharial",
+      "vi": "Cá Sấu Sông Hằng"
+    },
+    "scientificName": "Gavialis gangeticus",
+    "status": {
+      "en": "Critically Endangered",
+      "vi": "Cực kỳ nguy cấp"
+    },
+    "category": {
+      "en": "Reptile",
+      "vi": "Bò sát"
+    },
+    "distribution": {
+      "en": "Northern Indian subcontinent rivers (Chambal, Girwa)",
+      "vi": "Các con sông miền Bắc tiểu lục địa Ấn Độ (sông Chambal, sông Girwa)"
+    },
+    "habitat": {
+      "en": "Fast-flowing deep clear rivers with expansive sandy basking banks",
+      "vi": "Sông nước ngọt sâu, nước trong chảy xiết có các cồn cát trải dài"
+    },
+    "diet": {
+      "en": "Piscivore (specialized strictly on fast-swimming river fish)",
+      "vi": "Chuyên ăn cá nhờ chiếc mõm dài như kẹp nhíp quét ngang trong nước"
+    },
+    "behavior": {
+      "en": "Cannot walk upright on land; glides smoothly across sandbanks on its belly",
+      "vi": "Cơ chân yếu không thể đứng thẳng trên bờ, chỉ trượt bụng nhẹ nhàng trên cát"
+    },
+    "funFact": {
+      "en": "Males grow a bulbous hollow pot-like snout growth called a 'ghara' that acts as a musical resonator to whistle underwater bubbles!",
+      "vi": "Con đực có chiếc bướu hình chiếc bình gốm 'ghara' trên mũi dùng thổi bọt nước và huýt sáo vang vọng dưới nước!"
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968536/wildlife-guardian/images/gharial.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "siamese-crocodile",
+    "animalName": {
+      "en": "Siamese Crocodile",
+      "vi": "Cá Sấu Xiêm"
+    },
+    "scientificName": "Crocodylus siamensis",
+    "status": {
+      "en": "Critically Endangered",
+      "vi": "Cực kỳ nguy cấp"
+    },
+    "category": {
+      "en": "Reptile",
+      "vi": "Bò sát"
+    },
+    "distribution": {
+      "en": "Southeast Asia; in Vietnam: Bau Sau (Cat Tien National Park)",
+      "vi": "Đông Nam Á; tại VN: Bàu Sấu (Vườn Quốc Gia Cát Tiên, Đồng Nai)"
+    },
+    "habitat": {
+      "en": "Slow-moving freshwater swamps, oxbow marshes, and sheltered lakes",
+      "vi": "Đầm lầy nước ngọt tĩnh lặng, các bàu nước sâu và hồ tự nhiên"
+    },
+    "diet": {
+      "en": "Carnivore (freshwater fish, snakes, river frogs, and small mammals)",
+      "vi": "Động vật ăn thịt (cá nước ngọt, rắn nước, ếch nhái và thú nhỏ ven bờ)"
+    },
+    "behavior": {
+      "en": "Docile and non-aggressive towards humans compared to saltwater cousins",
+      "vi": "Tính tình trầm tĩnh, hiền lành hơn rất nhiều so với cá sấu nước mặn"
+    },
+    "funFact": {
+      "en": "Successfully reintroduced into Bau Sau wetland at Cat Tien National Park, where over 300 crocodiles now thrive in the wild.",
+      "vi": "Được tái thả thành công tại Bàu Sấu (Cát Tiên), nay đã sinh sôi đàn cá sấu hoang dã hơn 300 con bơi lội thanh bình."
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968538/wildlife-guardian/images/siamese-crocodile.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "marine-iguana",
+    "animalName": {
+      "en": "Marine Iguana",
+      "vi": "Kỳ Nhông Biển"
+    },
+    "scientificName": "Amblyrhynchus cristatus",
+    "status": {
+      "en": "Vulnerable",
+      "vi": "Sắp nguy cấp"
+    },
+    "category": {
+      "en": "Reptile",
+      "vi": "Bò sát"
+    },
+    "distribution": {
+      "en": "Endemic strictly to the Galapagos Islands",
+      "vi": "Đặc hữu duy nhất của quần đảo Galapagos (Ecuador)"
+    },
+    "habitat": {
+      "en": "Volcanic basalt sea reefs, wave-battered coastal lava rocks",
+      "vi": "Rạn đá núi lửa đen tuyền ven biển nơi sóng đánh dồn dập"
+    },
+    "diet": {
+      "en": "Herbivore (subtidal red and green marine algae scraped from underwater rocks)",
+      "vi": "Ăn rong tảo biển đỏ và xanh bám chặt trên các tảng đá ngầm dưới đáy biển"
+    },
+    "behavior": {
+      "en": "Dives into chilly ocean currents and sneezes out excess salt through nasal glands",
+      "vi": "Lặn sâu vào dòng hải lưu lạnh ngắt và hắt xì hơi tống muối mặn thừa qua mũi"
+    },
+    "funFact": {
+      "en": "The only lizard on planet Earth that lives and forages in the open sea; Charles Darwin described them as 'imps of darkness'!",
+      "vi": "Loài thằn lằn duy nhất trên Trái Đất biết bơi lặn kiếm ăn dưới biển sâu; Darwin từng gọi chúng là 'quỷ nhỏ của bóng đêm'!"
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968540/wildlife-guardian/images/marine-iguana.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "galapagos-giant-tortoise",
+    "animalName": {
+      "en": "Galapagos Giant Tortoise",
+      "vi": "Rùa Khổng Lồ Galapagos"
+    },
+    "scientificName": "Chelonoidis niger",
+    "status": {
+      "en": "Critically Endangered",
+      "vi": "Cực kỳ nguy cấp"
+    },
+    "category": {
+      "en": "Reptile",
+      "vi": "Bò sát"
+    },
+    "distribution": {
+      "en": "Galapagos Archipelago (Ecuador)",
+      "vi": "Quần đảo Galapagos (Ecuador)"
+    },
+    "habitat": {
+      "en": "Arid lowland lava plains and lush upland caldera meadows",
+      "vi": "Vùng đồng bằng dung nham khô hạn và đồng cỏ xanh miệng núi lửa"
+    },
+    "diet": {
+      "en": "Herbivore (prickly pear cactus pads, native grasses, leaves, and lichens)",
+      "vi": "Ăn xương rồng lê gai mọng nước, cỏ dại bản địa và địa y"
+    },
+    "behavior": {
+      "en": "Gentle ponderous behemoth basking in muddy wallows up to 16 hours daily",
+      "vi": "Di chuyển khoan thai nặng nề, dầm mình trong đầm bùn tới 16 tiếng mỗi ngày"
+    },
+    "funFact": {
+      "en": "Can weigh up to 417 kg and live well over 175 years, surviving up to a full year without a single drop of water or food!",
+      "vi": "Nặng tới 417 kg và sống thọ hơn 175 năm, có thể nhịn ăn nhịn uống suốt một năm ròng nhờ tích trữ mỡ cơ thể!"
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968543/wildlife-guardian/images/galapagos-giant-tortoise.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "king-cobra",
+    "animalName": {
+      "en": "King Cobra",
+      "vi": "Rắn Hổ Mang Chúa"
+    },
+    "scientificName": "Ophiophagus hannah",
+    "status": {
+      "en": "Vulnerable",
+      "vi": "Sắp nguy cấp"
+    },
+    "category": {
+      "en": "Reptile",
+      "vi": "Bò sát"
+    },
+    "distribution": {
+      "en": "South and Southeast Asia (including forests of Vietnam)",
+      "vi": "Nam và Đông Nam Á (khắp các vùng rừng rậm nhiệt đới Việt Nam)"
+    },
+    "habitat": {
+      "en": "Dense upland rainforests, bamboo thickets, and mangrove swamps",
+      "vi": "Rừng mưa nhiệt đới rậm rạp, rừng tre nứa và đầm lầy ngập mặn"
+    },
+    "diet": {
+      "en": "Carnivore / Ophiophage (strictly hunts other venomous and non-venomous snakes)",
+      "vi": "Chuyên săn lùng và ăn thịt các loài rắn khác (kể cả trăn và rắn độc)"
+    },
+    "behavior": {
+      "en": "Rears up a third of its length and hisses with a low bone-chilling dog-like growl",
+      "vi": "Có thể nâng cao 1/3 thân mình nhìn thẳng vào mắt người và phát ra tiếng rít gầm gừ như chó dữ"
+    },
+    "funFact": {
+      "en": "The longest venomous snake in the world (up to 5.85 meters); a single bite delivers enough neurotoxin to fell a full-grown Asian elephant!",
+      "vi": "Rắn độc dài nhất thế giới (tới 5,85 mét); một nhát cắn chứa lượng nọc độc thần kinh đủ hạ gục một con voi trưởng thành!"
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968544/wildlife-guardian/images/king-cobra.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "gila-monster",
+    "animalName": {
+      "en": "Gila Monster",
+      "vi": "Quái Vật Gila"
+    },
+    "scientificName": "Heloderma suspectum",
+    "status": {
+      "en": "Near Threatened",
+      "vi": "Sắp bị đe dọa"
+    },
+    "category": {
+      "en": "Reptile",
+      "vi": "Bò sát"
+    },
+    "distribution": {
+      "en": "Sonoran Desert and Mojave Desert (United States and Mexico)",
+      "vi": "Sa mạc Sonoran và Mojave (Hoa Kỳ và Mexico)"
+    },
+    "habitat": {
+      "en": "Arid desert foothills, canyon washes, and saguaro cactus forests",
+      "vi": "Vùng chân đồi sa mạc khô cằn, hẻm núi sỏi đá và rừng xương rồng saguaro"
+    },
+    "diet": {
+      "en": "Carnivore (bird eggs, newborn desert cottontails, small mice, and lizards)",
+      "vi": "Ăn trứng chim, thỏ con, chuột nhảy sa mạc và thằn lằn nhỏ"
+    },
+    "behavior": {
+      "en": "Spends up to 90% of its life underground in rock crevices to escape desert sun",
+      "vi": "Dành tới 90% cuộc đời trốn dưới các kẽ đá ngầm để tránh ánh nắng sa mạc"
+    },
+    "funFact": {
+      "en": "One of the few venomous lizards on Earth; a protein compound from its venom inspired a revolutionary modern medicine for type 2 diabetes!",
+      "vi": "Loài thằn lằn có nọc độc; hợp chất trong nọc của nó đã tạo cảm hứng bào chế thuốc điều trị tiểu đường đột phá!"
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968546/wildlife-guardian/images/gila-monster.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "thorny-devil",
+    "animalName": {
+      "en": "Thorny Devil",
+      "vi": "Thằn Lằn Gai Ma Quỷ"
+    },
+    "scientificName": "Moloch horridus",
+    "status": {
+      "en": "Least Concern",
+      "vi": "Ít lo ngại"
+    },
+    "category": {
+      "en": "Reptile",
+      "vi": "Bò sát"
+    },
+    "distribution": {
+      "en": "Arid scrub and red sand deserts of Western and Central Australia",
+      "vi": "Sa mạc cát đỏ và vùng cây bụi cằn cỗi Tây và Trung nước Úc"
+    },
+    "habitat": {
+      "en": "Spinifex sand plains and red dune desert ridges",
+      "vi": "Cồn cát đỏ hoang dã và trảng cỏ gai spinifex"
+    },
+    "diet": {
+      "en": "Myrmecophage (eats thousands of tiny black desert ants daily with a flicking tongue)",
+      "vi": "Chuyên ăn kiến đen sa mạc; liếm hàng ngàn con kiến mỗi ngày bằng chiếc lưỡi dính"
+    },
+    "behavior": {
+      "en": "Freezes in a slow, jerky rocking gait mimicking windblown desert thorns",
+      "vi": "Di chuyển giật cục đung đưa theo nhịp như một nhành gai khô lay động trước gió"
+    },
+    "funFact": {
+      "en": "Its skin has microscopic capillary channels that draw morning dew drops from its feet straight into its mouth automatically!",
+      "vi": "Lớp da có các rãnh mao dẫn siêu nhỏ tự động hút sương sớm từ bàn chân chảy ngược thẳng vào miệng như ống hút!"
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968548/wildlife-guardian/images/thorny-devil.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "panther-chameleon",
+    "animalName": {
+      "en": "Panther Chameleon",
+      "vi": "Tắc Kè Hoa Panther"
+    },
+    "scientificName": "Furcifer pardalis",
+    "status": {
+      "en": "Least Concern",
+      "vi": "Ít lo ngại"
+    },
+    "category": {
+      "en": "Reptile",
+      "vi": "Bò sát"
+    },
+    "distribution": {
+      "en": "Endemic to tropical eastern and northern Madagascar",
+      "vi": "Đặc hữu miền Đông và Bắc đảo Madagascar"
+    },
+    "habitat": {
+      "en": "Humid coastal lowland forests and lush tropical shrubberies",
+      "vi": "Rừng nhiệt đới ven biển ẩm ướt và lùm cây bụi xanh tươi"
+    },
+    "diet": {
+      "en": "Insectivore (crickets, locusts, mantises, and silkworms)",
+      "vi": "Động vật ăn côn trùng (dế, châu chấu, bọ ngựa, nhộng tằm)"
+    },
+    "behavior": {
+      "en": "Eyes move completely independently of each other in 360-degree panoramic vigilance",
+      "vi": "Hai mắt xoay độc lập 360 độ quan sát hai hướng khác nhau cùng một lúc"
+    },
+    "funFact": {
+      "en": "Its ballistic suction-tipped tongue launches at 0.007 seconds—faster than a fighter jet launch—reaching twice its body length!",
+      "vi": "Chiếc lưỡi bắn mồi siêu tốc chỉ mất 0,007 giây—nhanh hơn cả phản lực chiến đấu—với chiều dài gấp đôi thân hình!"
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968551/wildlife-guardian/images/panther-chameleon.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "black-mamba",
+    "animalName": {
+      "en": "Black Mamba",
+      "vi": "Rắn Mamba Đen"
+    },
+    "scientificName": "Dendroaspis polylepis",
+    "status": {
+      "en": "Least Concern",
+      "vi": "Ít lo ngại"
+    },
+    "category": {
+      "en": "Reptile",
+      "vi": "Bò sát"
+    },
+    "distribution": {
+      "en": "Sub-Saharan Africa across savannas and rocky hills",
+      "vi": "Khu vực hạ Sahara châu Phi khắp các vùng savan và đồi đá"
+    },
+    "habitat": {
+      "en": "Rocky outcrops, termitaria mounds, and dry open savannahs",
+      "vi": "Gò đá tai mèo, gò mối đất và thảo nguyên cây bụi khô"
+    },
+    "diet": {
+      "en": "Carnivore (bushbabies, hyraxes, birds, and desert rodents)",
+      "vi": "Động vật ăn thịt (chuột túi galago, thỏ đá hyrax, chim và gặm nhấm)"
+    },
+    "behavior": {
+      "en": "Fastest venomous snake on land, slithering up to 20 km/h with its head held high",
+      "vi": "Rắn độc bò nhanh nhất trên cạn, có thể lướt đi với tốc độ 20 km/h với chiếc đầu ngẩng cao"
+    },
+    "funFact": {
+      "en": "Its skin is actually brownish-gray; it gets its terrifying name from the inky, pitch-black interior of its gaping mouth!",
+      "vi": "Da của nó thực ra màu xám nâu; cái tên 'Mamba Đen' bắt nguồn từ vòm họng đen ngòm như mực khi nó há miệng đe dọa!"
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968553/wildlife-guardian/images/black-mamba.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "axolotl",
+    "animalName": {
+      "en": "Axolotl (Mexican Walking Fish)",
+      "vi": "Kỳ Dông Mễ (Khủng Long Sáu Sừng)"
+    },
+    "scientificName": "Ambystoma mexicanum",
+    "status": {
+      "en": "Critically Endangered",
+      "vi": "Cực kỳ nguy cấp"
+    },
+    "category": {
+      "en": "Amphibian",
+      "vi": "Lưỡng cư"
+    },
+    "distribution": {
+      "en": "Endemic to Lake Xochimilco canal network, Mexico City",
+      "vi": "Đặc hữu của hệ thống kênh hồ Xochimilco, Mexico City"
+    },
+    "habitat": {
+      "en": "High-altitude freshwater lakes and tranquil canal marshlands",
+      "vi": "Hồ nước ngọt vùng núi cao và các kênh đào đầm lầy thanh bình"
+    },
+    "diet": {
+      "en": "Carnivore (bloodworms, aquatic insects, crustacean daphnia, and tiny fish)",
+      "vi": "Ăn giun đỏ, côn trùng nước, giáp xác daphnia và cá con"
+    },
+    "behavior": {
+      "en": "Neotenic wonder retaining its larval feathery pink gills and aquatic form into adulthood",
+      "vi": "Hiện tượng giữ nguyên hình thái ấu trùng với chùm mang hồng mềm mại suốt đời mà không biến thái lên cạn"
+    },
+    "funFact": {
+      "en": "Possesses mythical regenerative superpowers—can completely regrow severed limbs, spinal cords, retinas, and even parts of its brain!",
+      "vi": "Bậc thầy tái sinh kỳ diệu—có thể mọc lại hoàn chỉnh các chi bị đứt, tủy sống, mắt và thậm chí cả một phần não bộ!"
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968555/wildlife-guardian/images/axolotl.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "chinese-giant-salamander",
+    "animalName": {
+      "en": "Chinese Giant Salamander",
+      "vi": "Kỳ Nhông Khổng Lồ Trung Quốc"
+    },
+    "scientificName": "Andrias davidianus",
+    "status": {
+      "en": "Critically Endangered",
+      "vi": "Cực kỳ nguy cấp"
+    },
+    "category": {
+      "en": "Amphibian",
+      "vi": "Lưỡng cư"
+    },
+    "distribution": {
+      "en": "Mountain streams of Yangtze and Yellow River basins",
+      "vi": "Các dòng suối miền núi thuộc lưu vực sông Dương Tử và Hoàng Hà"
+    },
+    "habitat": {
+      "en": "Fast-flowing, clear cold mountain rivers with dark karst rock caverns",
+      "vi": "Dòng suối nguồn núi đá trong vắt, nước lạnh có nhiều hốc hang tối tăm"
+    },
+    "diet": {
+      "en": "Carnivore (freshwater crabs, fish, smaller salamanders, and aquatic snails)",
+      "vi": "Động vật ăn thịt (cua suối, cá nguồn, ốc nước ngọt và thủy sinh)"
+    },
+    "behavior": {
+      "en": "Nocturnal apex stream predator with keen sensory nodes along its body to detect water vibrations",
+      "vi": "Săn mồi ban đêm, sở hữu hàng nút cảm biến dọc thân giúp phát hiện rung động nhỏ nhất trong nước"
+    },
+    "funFact": {
+      "en": "The largest living amphibian on Earth, reaching up to 1.8 meters in length; its vocal distress cry sounds startlingly like a human infant crying!",
+      "vi": "Loài lưỡng cư lớn nhất thế giới, dài tới 1,8 mét; tiếng kêu khi bị kích động nghe y hệt tiếng trẻ sơ sinh khóc!"
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968564/wildlife-guardian/images/chinese-giant-salamander.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "vietnamese-mossy-frog",
+    "animalName": {
+      "en": "Vietnamese Mossy Frog",
+      "vi": "Ếch Cây Sần Bắc Bộ (Ếch Rêu)"
+    },
+    "scientificName": "Theloderma corticale",
+    "status": {
+      "en": "Least Concern",
+      "vi": "Ít lo ngại"
+    },
+    "category": {
+      "en": "Amphibian",
+      "vi": "Lưỡng cư"
+    },
+    "distribution": {
+      "en": "Endemic to northern and north-central Vietnam (Tam Dao, Ba Be, Phong Nha)",
+      "vi": "Đặc hữu miền Bắc và Bắc Trung Bộ Việt Nam (Tam Đảo, Ba Bể, Phong Nha)"
+    },
+    "habitat": {
+      "en": "Primary evergreen rainforests on karst cliffs with flooded rock basins",
+      "vi": "Rừng nhiệt đới ẩm trên vách đá vôi karst có các hốc nước đọng rêu phong"
+    },
+    "diet": {
+      "en": "Insectivore (crickets, nocturnal moths, roaches, and flies)",
+      "vi": "Động vật ăn côn trùng (dế mèn, bướm đêm, cào cào và ruồi rừng)"
+    },
+    "behavior": {
+      "en": "Ultimate camouflage master; tucks in its legs and feigns death when touched",
+      "vi": "Bậc thầy ngụy trang tuyệt đỉnh; khi bị chạm vào nó co tròn chân và giả chết như một nắm rêu mục"
+    },
+    "funFact": {
+      "en": "Its mottled green-and-brown skin is covered in moss-like tubercles and ridges, blending 100% seamlessly into damp lichen-covered rocks!",
+      "vi": "Lớp da sần sùi mang màu xanh rêu xen nâu đất tựa như một mảng rêu rừng sống động, đánh lừa mọi kẻ săn mồi!"
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968568/wildlife-guardian/images/vietnamese-mossy-frog.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "golden-poison-frog",
+    "animalName": {
+      "en": "Golden Poison Frog",
+      "vi": "Ếch Độc Phi Tiêu Vàng"
+    },
+    "scientificName": "Phyllobates terribilis",
+    "status": {
+      "en": "Endangered",
+      "vi": "Nguy cấp"
+    },
+    "category": {
+      "en": "Amphibian",
+      "vi": "Lưỡng cư"
+    },
+    "distribution": {
+      "en": "Pacific coast rainforests of Colombia (Cauca and Choco)",
+      "vi": "Dải rừng mưa nhiệt đới ven bờ Thái Bình Dương thuộc Colombia"
+    },
+    "habitat": {
+      "en": "Ultra-wet primary lowland rainforests with torrential rains",
+      "vi": "Rừng mưa nhiệt đới nguyên sinh siêu ẩm ướt nơi lượng mưa khổng lồ"
+    },
+    "diet": {
+      "en": "Insectivore (tiny native brachyponera ants, forest termites, and mites)",
+      "vi": "Ăn kiến rừng bản địa, mối đất và bọ ve giàu alkaloid độc hại"
+    },
+    "behavior": {
+      "en": "Diurnal, boldly hopping on forest floors with no fear of predators due to extreme toxicity",
+      "vi": "Hoạt động ban ngày, vô tư nhảy nhót trên thảm rừng vì không loài thú nào dám bén mảng tới"
+    },
+    "funFact": {
+      "en": "The most poisonous vertebrate on Earth—the skin of a single tiny 5-cm frog contains enough batrachotoxin to kill 10 adult human beings!",
+      "vi": "Động vật có xương sống độc nhất hành tinh—chất độc trên da một con ếch 5cm đủ kết liễu 10 người trưởng thành!"
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968570/wildlife-guardian/images/golden-poison-frog.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "red-eyed-tree-frog",
+    "animalName": {
+      "en": "Red-eyed Tree Frog",
+      "vi": "Ếch Cây Mắt Đỏ"
+    },
+    "scientificName": "Agalychnis callidryas",
+    "status": {
+      "en": "Least Concern",
+      "vi": "Ít lo ngại"
+    },
+    "category": {
+      "en": "Amphibian",
+      "vi": "Lưỡng cư"
+    },
+    "distribution": {
+      "en": "Neotropical rainforests from southern Mexico to Colombia",
+      "vi": "Rừng mưa nhiệt đới từ Nam Mexico đến Colombia"
+    },
+    "habitat": {
+      "en": "Humid tropical canopy leaves overhanging slow woodland pools",
+      "vi": "Mặt dưới lá cây tầng tán rừng nhiệt đới ẩm ướt treo trên vũng nước"
+    },
+    "diet": {
+      "en": "Carnivore (moths, flies, crickets, and small katydids)",
+      "vi": "Ăn bướm đêm, cào cào, muỗi rừng và dế cây"
+    },
+    "behavior": {
+      "en": "Uses 'startle coloration'—flashing wide scarlet eyes and orange feet to momentarily freeze predators",
+      "vi": "Kỹ thuật dọa mắt: đột ngột mở trừng đôi mắt đỏ rực và giương bàn chân cam để làm giật mình kẻ săn mồi"
+    },
+    "funFact": {
+      "en": "During the day, they tuck their bright limbs under their bodies and close their three eyelids, transforming into a dull green leaf!",
+      "vi": "Ban ngày chúng giấu đôi chân cam dưới bụng và khép mí mắt lưới, hóa thân thành một chiếc lá xanh bình lặng!"
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968571/wildlife-guardian/images/red-eyed-tree-frog.png",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "hellbender",
+    "animalName": {
+      "en": "Hellbender (Snot Otter)",
+      "vi": "Kỳ Nhông Khổng Lồ Bắc Mỹ"
+    },
+    "scientificName": "Cryptobranchus alleganiensis",
+    "status": {
+      "en": "Vulnerable",
+      "vi": "Sắp nguy cấp"
+    },
+    "category": {
+      "en": "Amphibian",
+      "vi": "Lưỡng cư"
+    },
+    "distribution": {
+      "en": "Eastern and central United States (Appalachian rivers)",
+      "vi": "Miền Đông và Trung Hoa Kỳ (hệ thống sông suối dãy Appalachian)"
+    },
+    "habitat": {
+      "en": "Cold, pristine rocky river shallows with fast-moving oxygenated water",
+      "vi": "Các dòng sông đá cuội trong vắt, nước lạnh và giàu oxy hòa tan"
+    },
+    "diet": {
+      "en": "Carnivore (primarily river crayfish, small minnows, and stonefly larvae)",
+      "vi": "Động vật ăn thịt (chủ yếu là tôm hùm đất nước ngọt, cá nhỏ và ấu trùng)"
+    },
+    "behavior": {
+      "en": "Nocturnal riverbed dweller hiding under flat boulders during sunlight hours",
+      "vi": "Sống chui rúc dưới các phiến đá cuội đáy sông suốt ban ngày"
+    },
+    "funFact": {
+      "en": "Lacks functional lungs for underwater breathing—absorbs up to 90% of its oxygen directly through its wrinkled, wavy skin folds!",
+      "vi": "Thở dưới nước không dùng phổi—hấp thụ tới 90% oxy trực tiếp qua các nếp gấp da gợn sóng nhăn nheo!"
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968573/wildlife-guardian/images/hellbender.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "panamanian-golden-frog",
+    "animalName": {
+      "en": "Panamanian Golden Frog",
+      "vi": "Ếch Vàng Panama"
+    },
+    "scientificName": "Atelopus zeteki",
+    "status": {
+      "en": "Critically Endangered",
+      "vi": "Cực kỳ nguy cấp"
+    },
+    "category": {
+      "en": "Amphibian",
+      "vi": "Lưỡng cư"
+    },
+    "distribution": {
+      "en": "Endemic to cordillera mountain streams of central Panama",
+      "vi": "Đặc hữu vùng suối núi non miền Trung Panama"
+    },
+    "habitat": {
+      "en": "Cloud forests near fast-cascading rushing waterfalls",
+      "vi": "Rừng mây sương mù bao quanh các dòng thác nước chảy xiết"
+    },
+    "diet": {
+      "en": "Insectivore (tiny riverbank beetles, springtails, and flies)",
+      "vi": "Ăn bọ cánh cứng ven suối, bọ đuôi bật và ruồi nước"
+    },
+    "behavior": {
+      "en": "Communicates using 'semaphoring'—waving its forepaws like human sign language over roar of loud waterfalls",
+      "vi": "Giao tiếp bằng 'ngôn ngữ vẫy tay'—khoa bàn chân trước như người dùng thủ ngữ để bạn tình nhìn thấy qua tiếng thác gầm"
+    },
+    "funFact": {
+      "en": "Believed to bring good luck and wealth in Panamanian folklore; now sadly extinct in the wild and surviving only in specialized breeding sanctuaries.",
+      "vi": "Biểu tượng may mắn trong văn hóa Panama; nay đã tuyệt chủng ngoài tự nhiên và chỉ còn được nhân giống trong khu bảo tồn."
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968575/wildlife-guardian/images/panamanian-golden-frog.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "goliath-frog",
+    "animalName": {
+      "en": "Goliath Frog",
+      "vi": "Ếch Khổng Lồ Goliath"
+    },
+    "scientificName": "Conraua goliath",
+    "status": {
+      "en": "Endangered",
+      "vi": "Nguy cấp"
+    },
+    "category": {
+      "en": "Amphibian",
+      "vi": "Lưỡng cư"
+    },
+    "distribution": {
+      "en": "Restricted coastal rainforest rivers of Cameroon and Equatorial Guinea",
+      "vi": "Dòng sông rừng nhiệt đới hẹp ở Cameroon và Guinea Xích Đạo"
+    },
+    "habitat": {
+      "en": "Fast-flowing, highly oxygenated torrential forest cascades",
+      "vi": "Các dòng suối thác nước chảy cuồn cuộn có nhiều đá cuội rêu phong"
+    },
+    "diet": {
+      "en": "Carnivore (crabs, scorpions, river fish, smaller frogs, and young bats)",
+      "vi": "Động vật ăn thịt (cua suối, bọ cạp rừng, cá, ếch nhỏ và cả dơi non)"
+    },
+    "behavior": {
+      "en": "Capable of leaping up to 3 meters in a single bound to escape onto slippery boulders",
+      "vi": "Có thể bật nhảy xa tới 3 mét chỉ bằng một cú đạp chân dũng mãnh"
+    },
+    "funFact": {
+      "en": "The largest frog on Earth, growing up to 32 cm long and weighing over 3.3 kg; builds its own private stone ponds for its tadpoles!",
+      "vi": "Loài ếch lớn nhất Trái Đất, dài 32 cm và nặng hơn 3,3 kg; ếch đực tự khiêng đá xây hồ bơi riêng cho nòng nọc!"
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968577/wildlife-guardian/images/goliath-frog.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "whale-shark",
+    "animalName": {
+      "en": "Whale Shark",
+      "vi": "Cá Mập Voi"
+    },
+    "scientificName": "Rhincodon typus",
+    "status": {
+      "en": "Endangered",
+      "vi": "Nguy cấp"
+    },
+    "category": {
+      "en": "Fish",
+      "vi": "Cá"
+    },
+    "distribution": {
+      "en": "Tropical and warm-temperate seas around the globe",
+      "vi": "Vùng biển ấm nhiệt đới toàn cầu (thường xuất hiện tại biển Nam Trung Bộ Việt Nam)"
+    },
+    "habitat": {
+      "en": "Pelagic coastal waters and rich nutrient upwelling zones",
+      "vi": "Vùng biển khơi và các vùng nước trồi giàu sinh vật phù du"
+    },
+    "diet": {
+      "en": "Filter feeder (plankton, microscopic krill, fish roe, and small schooling anchovies)",
+      "vi": "Ăn lọc (sinh vật phù du, nhuyễn thể, trứng cá và cá cơm nhỏ)"
+    },
+    "behavior": {
+      "en": "Gentle giant gliding slowly near ocean surfaces with gaping mouth",
+      "vi": "Người khổng lồ hiền lành, bơi chậm rãi sát mặt biển há rộng khoang miệng hút nước lọc mồi"
+    },
+    "funFact": {
+      "en": "The largest living fish in the world (up to 18 meters long); each shark possesses a unique starry pattern of white spots as distinct as a star constellation!",
+      "vi": "Loài cá lớn nhất hành tinh (dài tới 18 mét); hoa văn đốm trắng trên lưng độc nhất vô nhị như các chòm sao trên bầu trời đêm!"
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968579/wildlife-guardian/images/whale-shark.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "mekong-giant-catfish",
+    "animalName": {
+      "en": "Mekong Giant Catfish",
+      "vi": "Cá Tra Dầu Mê Kông"
+    },
+    "scientificName": "Pangasianodon gigas",
+    "status": {
+      "en": "Critically Endangered",
+      "vi": "Cực kỳ nguy cấp"
+    },
+    "category": {
+      "en": "Fish",
+      "vi": "Cá"
+    },
+    "distribution": {
+      "en": "Endemic to the lower and middle Mekong River basin",
+      "vi": "Đặc hữu lưu vực sông Mê Kông (Việt Nam, Campuchia, Lào, Thái Lan)"
+    },
+    "habitat": {
+      "en": "Deep mainstem river channels and gravel rocky beds",
+      "vi": "Vực nước sâu của dòng chính sông Mê Kông có đáy sỏi đá"
+    },
+    "diet": {
+      "en": "Herbivore (grazes on benthic algae and water weed filaments on stones)",
+      "vi": "Động vật ăn thực vật (chuyên cạo rong tảo bám trên đá đáy sông)"
+    },
+    "behavior": {
+      "en": "Undertakes long annual upstream spawning migrations during monsoon floods",
+      "vi": "Thực hiện những chuyến bơi ngược dòng hàng trăm cây số vào mùa lũ để đẻ trứng"
+    },
+    "funFact": {
+      "en": "One of the largest freshwater fish in the world, reaching 3 meters in length and up to 300 kg, but completely toothless!",
+      "vi": "Một trong những loài cá nước ngọt khổng lồ nhất thế giới, dài tới 3 mét và nặng 300 kg nhưng hàm hoàn toàn không có răng!"
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968581/wildlife-guardian/images/mekong-giant-catfish.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "coelacanth",
+    "animalName": {
+      "en": "West Indian Ocean Coelacanth",
+      "vi": "Cá Vây Tay Tây Ấn Độ Dương"
+    },
+    "scientificName": "Latimeria chalumnae",
+    "status": {
+      "en": "Critically Endangered",
+      "vi": "Cực kỳ nguy cấp"
+    },
+    "category": {
+      "en": "Fish",
+      "vi": "Cá"
+    },
+    "distribution": {
+      "en": "Deep coastal waters off East Africa (Comoros, South Africa)",
+      "vi": "Vùng biển sâu Đông Phi (quần đảo Comoros, Nam Phi, Madagascar)"
+    },
+    "habitat": {
+      "en": "Steep submarine volcanic lava drop-offs at depths of 200 to 500 meters",
+      "vi": "Vách hang đá dung nham núi lửa ngầm ở độ sâu 200 đến 500 mét"
+    },
+    "diet": {
+      "en": "Carnivore (deep-sea cuttlefish, lanternfish, deep squids, and small sharks)",
+      "vi": "Động vật ăn thịt (mực biển sâu, cá lồng đèn, cá mập nhỏ)"
+    },
+    "behavior": {
+      "en": "Moves limb-like paired lobed fins alternately in a walking pattern underwater",
+      "vi": "Cặp vây có cấu trúc thịt như chi động vật, chèo nhịp nhàng như đang bước đi trong nước"
+    },
+    "funFact": {
+      "en": "A legendary 'living fossil' believed extinct for 66 million years along with dinosaurs until a live specimen was hauled up by a fisherman in 1938!",
+      "vi": "Hóa thạch sống huyền thoại từng bị cho là đã tuyệt chủng 66 triệu năm cùng khủng long cho đến khi bất ngờ bị đánh bắt năm 1938!"
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968582/wildlife-guardian/images/coelacanth.png",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "giant-manta-ray",
+    "animalName": {
+      "en": "Giant Oceanic Manta Ray",
+      "vi": "Cá Đuối Nón Khổng Lồ"
+    },
+    "scientificName": "Mobula birostris",
+    "status": {
+      "en": "Endangered",
+      "vi": "Nguy cấp"
+    },
+    "category": {
+      "en": "Fish",
+      "vi": "Cá"
+    },
+    "distribution": {
+      "en": "Tropical and subtropical waters of all oceans",
+      "vi": "Vùng nước nhiệt đới và cận nhiệt đới khắp các đại dương"
+    },
+    "habitat": {
+      "en": "Productive offshore pelagic waters, seamounts, and coral reef cleaning stations",
+      "vi": "Vùng nước khơi ven biển, các rạn san hô ngầm và trạm làm sạch biển"
+    },
+    "diet": {
+      "en": "Filter feeder (zooplankton, krill, and micro-pelagic fish larvae)",
+      "vi": "Ăn lọc sinh vật phù du và giáp xác nhỏ nhờ hai vây đầu uốn nếp"
+    },
+    "behavior": {
+      "en": "Performs breathtaking underwater somersaults and leaps completely out of waves",
+      "vi": "Thực hiện những vòng nhào lộn tuyệt mỹ dưới nước và đôi khi phóng vụt lên khỏi mặt biển"
+    },
+    "funFact": {
+      "en": "Has the largest brain of any cold-blooded fish and possesses self-awareness, passing the animal mirror recognition test!",
+      "vi": "Sở hữu bộ não lớn nhất trong các loài cá và có khả năng tự nhận biết bản thân khi nhìn vào gương soi!"
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968584/wildlife-guardian/images/giant-manta-ray.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "european-eel",
+    "animalName": {
+      "en": "European Eel",
+      "vi": "Lươn Châu Âu"
+    },
+    "scientificName": "Anguilla anguilla",
+    "status": {
+      "en": "Critically Endangered",
+      "vi": "Cực kỳ nguy cấp"
+    },
+    "category": {
+      "en": "Fish",
+      "vi": "Cá"
+    },
+    "distribution": {
+      "en": "Rivers across Europe and North Africa; breeds in Sargasso Sea",
+      "vi": "Sông ngòi khắp châu Âu; sinh sản bí ẩn tại biển Sargasso (Đại Tây Dương)"
+    },
+    "habitat": {
+      "en": "Freshwater streams, lakes, and muddy estuarine channels",
+      "vi": "Dòng suối nước ngọt, lòng hồ và kênh rạch bùn lầy cửa sông"
+    },
+    "diet": {
+      "en": "Carnivore (mollusks, aquatic insect larvae, worms, and small dead fish)",
+      "vi": "Động vật ăn thịt (nhuyễn thể, ấu trùng nước, giun và cá nhỏ)"
+    },
+    "behavior": {
+      "en": "Undergoes catadromous migration swimming 6,000 km across the Atlantic to spawn and die",
+      "vi": "Bơi di cư kỳ vĩ 6.000 km qua Đại Tây Dương để đẻ trứng duy nhất một lần rồi kết thúc vòng đời"
+    },
+    "funFact": {
+      "en": "Can absorb oxygen through its skin and slither across damp grassy meadows on rainy nights from pond to pond!",
+      "vi": "Có thể thở qua da và trườn bò qua những đồng cỏ đẫm sương đêm để di chuyển giữa các ao hồ!"
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968585/wildlife-guardian/images/european-eel.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "beluga-sturgeon",
+    "animalName": {
+      "en": "Beluga Sturgeon",
+      "vi": "Cá Tầm Beluga"
+    },
+    "scientificName": "Huso huso",
+    "status": {
+      "en": "Critically Endangered",
+      "vi": "Cực kỳ nguy cấp"
+    },
+    "category": {
+      "en": "Fish",
+      "vi": "Cá"
+    },
+    "distribution": {
+      "en": "Caspian Sea and Black Sea basins",
+      "vi": "Lưu vực biển Caspian và Biển Đen"
+    },
+    "habitat": {
+      "en": "Open brackish sea waters migrating up large freshwater rivers",
+      "vi": "Vùng nước lợ sâu di cư ngược dòng lên các con sông nước ngọt lớn"
+    },
+    "diet": {
+      "en": "Carnivore (anchovies, herrings, bottom gobies, and water mollusks)",
+      "vi": "Động vật ăn thịt (cá cơm, cá trích, cá bống bùn và động vật thân mềm)"
+    },
+    "behavior": {
+      "en": "Prehistoric armored giant that can live for well over 100 years",
+      "vi": "Người khổng lồ thời tiền sử bọc giáp xương có thể sống thọ hơn một thế kỷ"
+    },
+    "funFact": {
+      "en": "The largest freshwater fish on Earth, reaching 7 meters in length; famous for producing the world's most luxurious Beluga caviar.",
+      "vi": "Cá nước ngọt dài nhất hành tinh (tới 7 mét); cội nguồn của món trứng cá muối Caviar đắt đỏ bậc nhất thế giới."
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968587/wildlife-guardian/images/beluga-sturgeon.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "clownfish",
+    "animalName": {
+      "en": "Ocellaris Clownfish",
+      "vi": "Cá Hề Ocellaris"
+    },
+    "scientificName": "Amphiprion ocellaris",
+    "status": {
+      "en": "Least Concern",
+      "vi": "Ít lo ngại"
+    },
+    "category": {
+      "en": "Fish",
+      "vi": "Cá"
+    },
+    "distribution": {
+      "en": "Indo-Pacific coral reefs (including coastal waters of Vietnam)",
+      "vi": "Rạn san hô Ấn Độ Dương - Thái Bình Dương (vùng biển san hô Việt Nam)"
+    },
+    "habitat": {
+      "en": "Shallow, sunlit tropical coral reefs and sheltered coastal lagoons",
+      "vi": "Rạn san hô nông ngập tràn ánh nắng và các đầm phá ven bờ"
+    },
+    "diet": {
+      "en": "Omnivore (copepods, algae filaments, worm tentacles, and sea anemone scraps)",
+      "vi": "Ăn giáp xác chân chèo, vụn rong rêu và thức ăn thừa của hải quỳ"
+    },
+    "behavior": {
+      "en": "Lives in strict symbiotic harmony inside the venomous stinging tentacles of sea anemones",
+      "vi": "Sống cộng sinh thần kỳ giữa những xúc tu chứa nọc độc chết người của hải quỳ biển"
+    },
+    "funFact": {
+      "en": "Coated in a protective mucus shield that makes them completely immune to anemone stings; all clownfish are born male and can transform into females!",
+      "vi": "Tiết lớp chất nhầy đặc biệt để kháng nọc độc hải quỳ; sinh ra đều là con đực và có thể đổi giới tính thành con cái đầu đàn!"
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968590/wildlife-guardian/images/clownfish.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "arapaima",
+    "animalName": {
+      "en": "Arapaima (Pirarucu)",
+      "vi": "Cá Hải Tượng Long"
+    },
+    "scientificName": "Arapaima gigas",
+    "status": {
+      "en": "Data Deficient",
+      "vi": "Dữ liệu thiếu / Nguy cấp"
+    },
+    "category": {
+      "en": "Fish",
+      "vi": "Cá"
+    },
+    "distribution": {
+      "en": "Amazon River basin and floodplains of South America",
+      "vi": "Lưu vực sông Amazon và các đồng bằng ngập lũ Nam Mỹ"
+    },
+    "habitat": {
+      "en": "Oxygen-poor oxbow lakes, river backwaters, and flooded jungle forests",
+      "vi": "Hồ nước đọng thiếu oxy, khúc sông nước tù và rừng ngập lũ"
+    },
+    "diet": {
+      "en": "Carnivore (armored catfish, piranhas, water birds, and small tree monkeys)",
+      "vi": "Động vật ăn thịt (cá da trơn, cá piranha, chim nước và thú nhỏ rơi xuống nước)"
+    },
+    "behavior": {
+      "en": "Breathes atmospheric air by surfacing every 15 minutes with a loud coughing gulp",
+      "vi": "Phải ngoi lên thở không khí trời mỗi 15 phút một lần kèm tiếng đớp ục vang dội"
+    },
+    "funFact": {
+      "en": "Equipped with armor-like composite scales so exceptionally tough and flexible that piranha teeth cannot pierce them!",
+      "vi": "Khoác lớp vảy giáp cấu trúc sợi xoắn siêu cứng đến mức răng sắc nhọn của đàn cá piranha cũng không thể cắn thủng!"
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968595/wildlife-guardian/images/arapaima.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "largetooth-sawfish",
+    "animalName": {
+      "en": "Largetooth Sawfish",
+      "vi": "Cá Đuối Răng Cưa Lớn"
+    },
+    "scientificName": "Pristis pristis",
+    "status": {
+      "en": "Critically Endangered",
+      "vi": "Cực kỳ nguy cấp"
+    },
+    "category": {
+      "en": "Fish",
+      "vi": "Cá"
+    },
+    "distribution": {
+      "en": "Tropical coastal bays and large river estuaries globally",
+      "vi": "Vùng biển nhiệt đới, vịnh ven bờ và các cửa sông lớn toàn cầu"
+    },
+    "habitat": {
+      "en": "Muddy estuarine river deltas, brackish mangrove lagoons, and shallow coastal seas",
+      "vi": "Vùng đồng bằng cửa sông phù sa, rừng ngập mặn và bờ biển cạn"
+    },
+    "diet": {
+      "en": "Carnivore (mullets, catfishes, crabs, and bottom-dwelling shrimp)",
+      "vi": "Động vật ăn thịt (cá đối, cá da trơn, cua biển và tôm tầng đáy)"
+    },
+    "behavior": {
+      "en": "Swings its tooth-lined rostrum side to side like an underwater hedge trimmer to slash fish",
+      "vi": "Vung chiếc mũi răng cưa như chiếc lưỡi lam quét ngang xẻ đôi con mồi"
+    },
+    "funFact": {
+      "en": "Actually a modified ray, not a shark—its elongated saw is equipped with electro-receptors to locate crabs buried beneath deep silt.",
+      "vi": "Thực chất là loài cá đuối có hình thù kỳ lạ; chiếc cưa dài trang bị cảm biến điện sinh học dò mồi dưới lớp bùn sâu."
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968596/wildlife-guardian/images/largetooth-sawfish.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "leafy-seadragon",
+    "animalName": {
+      "en": "Leafy Seadragon",
+      "vi": "Rồng Biển Lá"
+    },
+    "scientificName": "Phycodurus eques",
+    "status": {
+      "en": "Least Concern",
+      "vi": "Ít lo ngại"
+    },
+    "category": {
+      "en": "Fish",
+      "vi": "Cá"
+    },
+    "distribution": {
+      "en": "Southern and western coastal waters of Australia",
+      "vi": "Vùng biển phía Nam và Tây nước Úc"
+    },
+    "habitat": {
+      "en": "Shallow, cold rocky reef waters carpeted in kelp and sea meadows",
+      "vi": "Rạn đá ngầm nước lạnh phủ đầy tảo bẹ và thảm cỏ biển"
+    },
+    "diet": {
+      "en": "Carnivore (tiny mysid shrimp, planktonic amphipods, and larval sea lice)",
+      "vi": "Hút các loài tôm nhỏ mysid và giáp xác li ti qua chiếc miệng hình ống"
+    },
+    "behavior": {
+      "en": "Drifts lazily like a loose piece of seaweed; propelled only by near-invisible translucent fins",
+      "vi": "Trôi bồng bềnh như một nhành tảo rách trôi dạt; bơi bằng cặp vây trong suốt gần như vô hình"
+    },
+    "funFact": {
+      "en": "The male carries the bright pink fertilized eggs on a spongy brood patch under his tail until they hatch!",
+      "vi": "Con đực lãnh trách nhiệm mang bọc trứng màu hồng rực dưới đuôi và ấp cho đến ngày rồng con chào đời!"
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968599/wildlife-guardian/images/leafy-seadragon.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "monarch-butterfly",
+    "animalName": {
+      "en": "Monarch Butterfly",
+      "vi": "Bướm Vua"
+    },
+    "scientificName": "Danaus plexippus",
+    "status": {
+      "en": "Vulnerable",
+      "vi": "Sắp nguy cấp"
+    },
+    "category": {
+      "en": "Insect",
+      "vi": "Côn trùng"
+    },
+    "distribution": {
+      "en": "North America; migrates across Canada, USA, and Mexico",
+      "vi": "Bắc Mỹ; di cư vĩ đại qua Canada, Hoa Kỳ và miền núi Mexico"
+    },
+    "habitat": {
+      "en": "Flowering meadows, milkweed grasslands, and high-altitude oyamel fir forests",
+      "vi": "Cánh đồng hoa dại, đồng cỏ bông tai và rừng thông oyamel núi cao"
+    },
+    "diet": {
+      "en": "Herbivore (caterpillars eat toxic milkweed; adults sip wildflower nectar)",
+      "vi": "Sâu bướm ăn lá cây bông tai độc; bướm trưởng thành hút mật hoa"
+    },
+    "behavior": {
+      "en": "Undertakes an unbelievable multigenerational 4,800-kilometer annual migration",
+      "vi": "Chuyến thiên di kỳ vĩ 4.800 km kéo dài qua 4 thế hệ liên tiếp để hoàn thành vòng lặp"
+    },
+    "funFact": {
+      "en": "Their brilliant orange-and-black pattern serves as an honest warning to birds: 'I taste awful and contain toxic cardiac poisons!'",
+      "vi": "Màu cam rực rỡ cảnh báo chim săn mồi: 'Ta chứa chất độc tim cực đắng, đừng dại mà ăn thịt!'."
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968602/wildlife-guardian/images/monarch-butterfly.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "atlas-moth",
+    "animalName": {
+      "en": "Atlas Moth",
+      "vi": "Bướm Khế (Bướm Đêm Atlas)"
+    },
+    "scientificName": "Attacus atlas",
+    "status": {
+      "en": "Least Concern",
+      "vi": "Ít lo ngại"
+    },
+    "category": {
+      "en": "Insect",
+      "vi": "Côn trùng"
+    },
+    "distribution": {
+      "en": "Tropical and subtropical forests of Southeast Asia (common in Vietnam)",
+      "vi": "Rừng nhiệt đới và cận nhiệt đới Đông Nam Á (bao gồm Việt Nam)"
+    },
+    "habitat": {
+      "en": "Lowland tropical broadleaf forests and agricultural fruit orchards",
+      "vi": "Rừng lá rộng nhiệt đới và vườn cây ăn trái đồng bằng"
+    },
+    "diet": {
+      "en": "Non-feeding adult (lacks mouthparts; survives entirely on fat stored from caterpillar stage)",
+      "vi": "Bướm trưởng thành không có miệng và không ăn uống gì, sống nhờ mỡ tích từ thời sâu bướm"
+    },
+    "behavior": {
+      "en": "Flutters unsteadily at night and rests completely motionless by day on tree trunks",
+      "vi": "Bay lảo đảo trong đêm và đậu bất động hoàn toàn suốt ban ngày ngụy trang trên thân cây"
+    },
+    "funFact": {
+      "en": "One of the largest lepidopterans on Earth with a 30-cm wingspan; wingtips mimic the menacing head of a deadly cobra to terrify birds!",
+      "vi": "Một trong những loài bướm khổng lồ nhất thế giới với sải cánh 30 cm; chóp cánh uốn lượn y hệt đầu một con rắn hổ mang!"
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968604/wildlife-guardian/images/atlas-moth.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "hercules-beetle",
+    "animalName": {
+      "en": "Hercules Beetle",
+      "vi": "Bọ Hung Hercules"
+    },
+    "scientificName": "Dynastes hercules",
+    "status": {
+      "en": "Least Concern",
+      "vi": "Ít lo ngại"
+    },
+    "category": {
+      "en": "Insect",
+      "vi": "Côn trùng"
+    },
+    "distribution": {
+      "en": "Rainforests of Central and South America and Lesser Antilles",
+      "vi": "Rừng nhiệt đới Trung và Nam Mỹ"
+    },
+    "habitat": {
+      "en": "Humid lowland and montane tropical rainforest floors",
+      "vi": "Rừng mưa nhiệt đới đất thấp và các đống mùn gỗ mục rữa"
+    },
+    "diet": {
+      "en": "Herbivore (rotting tropical fruits, sweet sap flows, and decaying wood)",
+      "vi": "Ăn trái cây chín rục, nhựa cây ngọt và xác gỗ mục"
+    },
+    "behavior": {
+      "en": "Males lock their enormous pincers in sumo-style wrestling bouts to fling rivals off logs",
+      "vi": "Con đực dùng cặp sừng gọng kìm khổng lồ đấu vật quyết liệt quẳng đối thủ khỏi khúc gỗ"
+    },
+    "funFact": {
+      "en": "The strongest creature on Earth relative to body size—capable of lifting an astounding 850 times its own body weight!",
+      "vi": "Sinh vật khỏe nhất hành tinh theo tỷ lệ cơ thể—có thể nâng vật nặng gấp 850 lần trọng lượng của chính nó!"
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968605/wildlife-guardian/images/hercules-beetle.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "titan-beetle",
+    "animalName": {
+      "en": "Titan Beetle",
+      "vi": "Bọ Cánh Cứng Khổng Lồ Titan"
+    },
+    "scientificName": "Titanus giganteus",
+    "status": {
+      "en": "Least Concern",
+      "vi": "Ít lo ngại"
+    },
+    "category": {
+      "en": "Insect",
+      "vi": "Côn trùng"
+    },
+    "distribution": {
+      "en": "Rainforests of the Amazon Basin (Brazil, Colombia, Peru, Ecuador)",
+      "vi": "Lưu vực sông Amazon (Brazil, Colombia, Peru, Ecuador)"
+    },
+    "habitat": {
+      "en": "Deep, undisturbed primary tropical rainforest canopies and leaf litter",
+      "vi": "Rừng mưa nhiệt đới nguyên sinh rậm rạp hoang sơ"
+    },
+    "diet": {
+      "en": "Adults do not feed; larvae feed on decaying subterranean tree wood for years",
+      "vi": "Ấu trùng ăn gỗ mục ngầm dưới đất nhiều năm; bướm trưởng thành sống chỉ để tìm bạn tình"
+    },
+    "behavior": {
+      "en": "Hisses menacingly and snaps its razor jaws when threatened",
+      "vi": "Phát ra tiếng xì cảnh báo dữ dội và giương cặp hàm bén ngót khi bị đe dọa"
+    },
+    "funFact": {
+      "en": "Can grow to nearly 17 cm long; its terrifying mandibles can snap a wooden pencil clean in two and tear through human flesh!",
+      "vi": "Dài tới 17 cm; cặp hàm uy lực của nó có thể cắn gãy đôi một chiếc bút chì gỗ trong chớp mắt!"
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968608/wildlife-guardian/images/titan-beetle.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "wallaces-giant-bee",
+    "animalName": {
+      "en": "Wallace's Giant Bee",
+      "vi": "Ong Khổng Lồ Wallace"
+    },
+    "scientificName": "Megachile pluto",
+    "status": {
+      "en": "Vulnerable",
+      "vi": "Sắp nguy cấp"
+    },
+    "category": {
+      "en": "Insect",
+      "vi": "Côn trùng"
+    },
+    "distribution": {
+      "en": "North Moluccan islands of Indonesia (Bacan, Halmahera)",
+      "vi": "Quần đảo Bắc Moluccas, Indonesia"
+    },
+    "habitat": {
+      "en": "Primary lowland rainforests hosting arboreal termite mounds",
+      "vi": "Rừng mưa nhiệt đới đất thấp nơi có các tổ mối đóng trên cây cao"
+    },
+    "diet": {
+      "en": "Herbivore (pollen and nectar gathered from diverse forest canopy blossoms)",
+      "vi": "Thu thập phấn hoa và hút mật từ các loài hoa trên tán cây rừng"
+    },
+    "behavior": {
+      "en": "Solitary female uses enormous beetle-like jaws to gather sticky tree resin to line its termite nest",
+      "vi": "Ong cái đơn độc dùng cặp hàm bọ hung khổng lồ thu thập nhựa cây dính để gia cố tổ trong gò mối"
+    },
+    "funFact": {
+      "en": "The largest bee on planet Earth with a staggering 6-centimeter wingspan—as large as a human thumb!",
+      "vi": "Loài ong lớn nhất hành tinh với sải cánh 6 cm—to bằng ngón tay cái của người lớn!"
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968610/wildlife-guardian/images/wallaces-giant-bee.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "orchid-mantis",
+    "animalName": {
+      "en": "Orchid Mantis",
+      "vi": "Bọ Ngựa Phong Lan"
+    },
+    "scientificName": "Hymenopus coronatus",
+    "status": {
+      "en": "Least Concern",
+      "vi": "Ít lo ngại"
+    },
+    "category": {
+      "en": "Insect",
+      "vi": "Côn trùng"
+    },
+    "distribution": {
+      "en": "Tropical rainforests of Southeast Asia (Vietnam, Malaysia, Indonesia)",
+      "vi": "Rừng nhiệt đới Đông Nam Á (Việt Nam, Malaysia, Indonesia)"
+    },
+    "habitat": {
+      "en": "Humid forest foliage, flower clusters, and flowering orchid canopies",
+      "vi": "Lùm cây ẩm ướt, khóm hoa dại và cành phong lan nở hoa"
+    },
+    "diet": {
+      "en": "Carnivore (flying bees, butterflies, moths, and hoverflies)",
+      "vi": "Động vật ăn thịt (ong mật, bướm, ruồi giả ong)"
+    },
+    "behavior": {
+      "en": "Master of aggressive mimicry—resembling a blooming flower so convincingly that pollinating insects fly directly into its waiting arms!",
+      "vi": "Ngụy trang chủ động bậc thầy—hóa thân thành bông hoa phong lan rực rỡ khiến ong bướm tự bay thẳng vào vòng tay phục kích!"
+    },
+    "funFact": {
+      "en": "Its petal-shaped lobed legs change subtly between pristine white and rosy pink depending on environmental humidity and light!",
+      "vi": "Các đốt chân xòe ra như cánh hoa phong lan có thể đổi sắc từ trắng muốt sang hồng thắm theo độ ẩm!"
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968612/wildlife-guardian/images/orchid-mantis.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "coconut-crab",
+    "animalName": {
+      "en": "Coconut Crab (Robber Crab)",
+      "vi": "Cua Dừa"
+    },
+    "scientificName": "Birgus latro",
+    "status": {
+      "en": "Vulnerable",
+      "vi": "Sắp nguy cấp"
+    },
+    "category": {
+      "en": "Crustacean",
+      "vi": "Động vật giáp xác"
+    },
+    "distribution": {
+      "en": "Islands across the Indian and central Pacific Oceans",
+      "vi": "Các hòn đảo nhiệt đới Ấn Độ Dương và Trung Thái Bình Dương"
+    },
+    "habitat": {
+      "en": "Coastal tropical island forests and subterranean rock burrows",
+      "vi": "Rừng cọ duyên hải nhiệt đới và các hang ngầm dưới rễ cây"
+    },
+    "diet": {
+      "en": "Omnivore (fleshy coconuts, pandanus fruits, fallen seeds, and dead crabs)",
+      "vi": "Ăn cùi dừa, quả dứa dại, trái cây rụng và chất hữu cơ mục"
+    },
+    "behavior": {
+      "en": "Nocturnal land giant capable of climbing vertical coconut palms up to 10 meters high",
+      "vi": "Leo thoăn thoắt lên cây dừa thẳng đứng cao tới 10 mét để cắt tỉa quả"
+    },
+    "funFact": {
+      "en": "The largest land-living arthropod in the world (up to 4 kg and 1 meter leg span); its monstrous pincers exert grip force equal to a lion's bite!",
+      "vi": "Động vật chân khớp trên cạn lớn nhất thế giới (nặng 4 kg, sải chân 1m); lực kẹp của càng khỏe tương đương lực cắn của một con sư tử!"
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968614/wildlife-guardian/images/coconut-crab.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "japanese-spider-crab",
+    "animalName": {
+      "en": "Japanese Spider Crab",
+      "vi": "Cua Nhện Nhật Bản"
+    },
+    "scientificName": "Macrocheira kaempferi",
+    "status": {
+      "en": "Least Concern",
+      "vi": "Ít lo ngại"
+    },
+    "category": {
+      "en": "Crustacean",
+      "vi": "Động vật giáp xác"
+    },
+    "distribution": {
+      "en": "Pacific Ocean coastal waters around the Japanese archipelago",
+      "vi": "Vùng biển Thái Bình Dương quanh quần đảo Nhật Bản"
+    },
+    "habitat": {
+      "en": "Deep submarine continental shelf trenches at depths of 150 to 600 meters",
+      "vi": "Vực biển sâu thềm lục địa ở độ sâu 150 đến 600 mét"
+    },
+    "diet": {
+      "en": "Scavenger / Carnivore (dead fish carcasses, mollusks, algae, and benthic invertebrates)",
+      "vi": "Ăn xác sinh vật biển chìm xuống đáy, động vật thân mềm và tảo biển"
+    },
+    "behavior": {
+      "en": "Stalks slowly across the ocean abyss on spindly stilts like an aquatic spider",
+      "vi": "Lặng lẽ sải từng bước dài như nhện trên nền cát tối tăm dưới đáy đại dương"
+    },
+    "funFact": {
+      "en": "Boasts the greatest leg span of any living arthropod on Earth—measuring up to an astonishing 3.8 meters from claw to claw!",
+      "vi": "Sở hữu sải chân dài nhất trong mọi loài chân khớp trên hành tinh—lên tới 3,8 mét từ đầu càng này sang càng kia!"
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968616/wildlife-guardian/images/japanese-spider-crab.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "tasmanian-giant-freshwater-crayfish",
+    "animalName": {
+      "en": "Tasmanian Giant Freshwater Crayfish",
+      "vi": "Tôm Hùm Nước Ngọt Tasmania"
+    },
+    "scientificName": "Astacopsis gouldi",
+    "status": {
+      "en": "Endangered",
+      "vi": "Nguy cấp"
+    },
+    "category": {
+      "en": "Crustacean",
+      "vi": "Động vật giáp xác"
+    },
+    "distribution": {
+      "en": "Endemic strictly to northern river catchments of Tasmania, Australia",
+      "vi": "Đặc hữu vùng sông ngòi phía Bắc đảo Tasmania, nước Úc"
+    },
+    "habitat": {
+      "en": "Cool, shady, pristine undisturbed rainforest streams with heavy tree canopy",
+      "vi": "Các dòng suối rừng mưa ôn đới râm mát, nước trong vắt và nhiều khúc gỗ chìm"
+    },
+    "diet": {
+      "en": "Omnivore (decaying submerged logs, rotting leaves, water insects, and small fish)",
+      "vi": "Ăn gỗ mục chìm dưới suối, lá rụng mục nát, côn trùng nước và cá chết"
+    },
+    "behavior": {
+      "en": "Extremely long-lived, slow-growing crustacean living in deep dark river pools",
+      "vi": "Sống chui rúc trong các vũng suối sâu tăm tối, tuổi thọ lên tới hơn 60 năm"
+    },
+    "funFact": {
+      "en": "The largest freshwater invertebrate on Earth, weighing up to 6 kg and growing up to 80 cm long with armor-like claws!",
+      "vi": "Động vật không xương sống nước ngọt lớn nhất hành tinh, nặng tới 6 kg và dài 80 cm với đôi càng khổng lồ kẹp gãy cành cây!"
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968619/wildlife-guardian/images/tasmanian-giant-freshwater-crayfish.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "triops",
+    "animalName": {
+      "en": "Triops (Dinosaur Shrimp)",
+      "vi": "Tôm Nòng Nọc Khủng Long"
+    },
+    "scientificName": "Triops longicaudatus",
+    "status": {
+      "en": "Least Concern",
+      "vi": "Ít lo ngại"
+    },
+    "category": {
+      "en": "Crustacean",
+      "vi": "Động vật giáp xác"
+    },
+    "distribution": {
+      "en": "Temporary seasonal freshwater pools worldwide",
+      "vi": "Các vũng nước mưa tạm thời theo mùa trên khắp thế giới"
+    },
+    "habitat": {
+      "en": "Ephemeral vernal freshwater pools and desert rain puddles",
+      "vi": "Các vũng nước mưa ngắn ngày trên sa mạc và đầm lầy xuân"
+    },
+    "diet": {
+      "en": "Omnivore (algae, mosquito larvae, protozoans, and organic sediment debris)",
+      "vi": "Ăn rong tảo, bọ gậy muỗi, sinh vật đơn bào và mùn hữu cơ"
+    },
+    "behavior": {
+      "en": "Races against time to hatch, mature, and lay resilient drought-proof eggs in just 20 days",
+      "vi": "Chạy đua với thời gian: nở, lớn và đẻ trứng chỉ trong vòng 20 ngày trước khi vũng nước bốc hơi cạn khô"
+    },
+    "funFact": {
+      "en": "Has survived virtually unchanged for over 300 million years—outliving the dinosaurs! Its microscopic eggs can stay dormant in dry dust for 25 years!",
+      "vi": "Hóa thạch sống tồn tại suốt 300 triệu năm không đổi; trứng của nó có thể ngủ đông trong bụi sa mạc khô khốc suốt 25 năm chờ cơn mưa rào!"
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968620/wildlife-guardian/images/triops.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "peacock-mantis-shrimp",
+    "animalName": {
+      "en": "Peacock Mantis Shrimp",
+      "vi": "Tôm Tít Công (Tôm Bọ Ngựa)"
+    },
+    "scientificName": "Odontodactylus scyllarus",
+    "status": {
+      "en": "Least Concern",
+      "vi": "Ít lo ngại"
+    },
+    "category": {
+      "en": "Crustacean",
+      "vi": "Động vật giáp xác"
+    },
+    "distribution": {
+      "en": "Indo-Pacific tropical coral reefs (common in coastal Vietnam)",
+      "vi": "Rạn san hô nhiệt đới Ấn Độ Dương - Thái Bình Dương (phổ biến tại biển Việt Nam)"
+    },
+    "habitat": {
+      "en": "U-shaped coral sand burrows at reef margins",
+      "vi": "Các hang ngầm hình chữ U tự đào dưới đáy cát san hô"
+    },
+    "diet": {
+      "en": "Carnivore (hard-shelled crabs, clams, sea snails, and hermit crabs)",
+      "vi": "Động vật ăn thịt (cua biển, nghêu sò dày vỏ, ốc biển và ốc mượn hồn)"
+    },
+    "behavior": {
+      "en": "Unleashes spring-loaded dactyl clubs at 80 km/h—the fastest punch in the animal kingdom!",
+      "vi": "Tung cú đấm búa chớp nhoáng với vận tốc 80 km/h—cú đấm uy lực và nhanh nhất thế giới tự nhiên!"
+    },
+    "funFact": {
+      "en": "Possesses the most sophisticated eyes known to science with 16 color photoreceptors (humans have only 3), seeing polarized and ultraviolet light!",
+      "vi": "Sở hữu đôi mắt kỳ diệu nhất khoa học với 16 loại thụ thể thị giác (con người chỉ có 3), nhìn thấu cả tia cực tím và phân cực!"
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968623/wildlife-guardian/images/peacock-mantis-shrimp.jpg",
+    "model3dUrl": "https://example.com/placeholder.glb"
+  },
+  {
+    "speciesId": "fiddler-crab",
+    "animalName": {
+      "en": "Fiddler Crab",
+      "vi": "Còng Gió (Cua Cầm Kê)"
+    },
+    "scientificName": "Uca pugilator",
+    "status": {
+      "en": "Least Concern",
+      "vi": "Ít lo ngại"
+    },
+    "category": {
+      "en": "Crustacean",
+      "vi": "Động vật giáp xác"
+    },
+    "distribution": {
+      "en": "Mangrove beaches and coastal salt marshes worldwide",
+      "vi": "Bãi bùn ngập mặn và bờ biển nhiệt đới toàn cầu (rất phổ biến tại VN)"
+    },
+    "habitat": {
+      "en": "Intertidal muddy sandflats and mangrove mangrove margins",
+      "vi": "Bãi triều phù sa ngập mặn và bờ biển cạn"
+    },
+    "diet": {
+      "en": "Detritivore (filters microscopic algae and organic sediment from mud)",
+      "vi": "Lọc mùn bã hữu cơ và vi tảo từ bùn cát bằng càng nhỏ"
+    },
+    "behavior": {
+      "en": "Males wave an enormous brightly colored claw in rhythmic synchronization like violinists",
+      "vi": "Con đực vẫy chiếc càng to khổng lồ như nhạc công vĩ cầm để khoe sức mạnh và dụ con cái"
+    },
+    "funFact": {
+      "en": "The male's single gigantic major claw can weigh up to half of its entire total body weight!",
+      "vi": "Chiếc càng đơn khổng lồ của con đực có thể nặng bằng một nửa tổng trọng lượng cả cơ thể nó!"
+    },
+    "thumbnailUrl": "https://res.cloudinary.com/dotlymsmk/image/upload/v1788968626/wildlife-guardian/images/fiddler-crab.jpg",
     "model3dUrl": "https://example.com/placeholder.glb"
   }
 ]
