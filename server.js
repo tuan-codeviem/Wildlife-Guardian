@@ -250,7 +250,7 @@ app.post("/api/posts", uploadFile, async (req, res) => {
       const prompt = `You are a content moderator for a wildlife social network.
 Analyze the post content and image (if provided).
 Flag the content if it contains:
-- Extreme blood, gore, violence, horror, dead bodies, or severe injuries (BOTH human and animal). This INCLUDES fake gore, theatrical blood, movie props, makeup, and mannequins. Allow normal veterinary/rescue pictures only if not excessively gory.
+- Extreme blood, gore, violence, horror, dead bodies, or severe injuries. This INCLUDES fake gore, theatrical blood, movie props, makeup, and mannequins.
 - Hate speech, harassment, severe toxicity, cursing, profanity, or illegal wildlife trade.
 - Sexually explicit content.
 - Spam or commercial advertisements.
@@ -258,6 +258,10 @@ Flag the content if it contains:
 IMPORTANT RULES:
 - Do NOT flag pictures of humans with animals (e.g. a woman hugging a puppy) as sensitive. Human presence is safe.
 - Do NOT flag normal non-gory animals as sensitive (e.g. monkeys, dogs, cats).
+
+CRITICAL MODERATION RULES FOR IMAGES (NEW):
+1. ANIMAL BLOOD IS ALLOWED: Since this is a wildlife rescue platform, pictures of injured animals, animal blood, or veterinary procedures are NORMAL and MUST BE ALLOWED (isSafe: true). Do NOT flag injured animals or animal blood.
+2. HUMAN BLOOD IS STRICTLY FORBIDDEN: Flag the content (isSafe: false) if it contains HUMAN blood, human gore, human injuries, horror, zombies, or dead human bodies. This INCLUDES fake human blood, Halloween makeup, theatrical gore, movie props, and mannequins resembling human gore.
 
 Return ONLY a valid JSON object with the exact following structure:
 {
@@ -290,7 +294,7 @@ Return ONLY a valid JSON object with the exact following structure:
           safetySettings: [
             { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_NONE' },
             { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_NONE' },
-            { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_NONE' },
+            { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_LOW_AND_ABOVE' },
             { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_NONE' }
           ]
         }
@@ -300,7 +304,8 @@ Return ONLY a valid JSON object with the exact following structure:
       console.log("🤖 Gemini AI trả lời:", responseText);
       
       const result = JSON.parse(responseText);
-      if (result.isSafe === false) {
+      // Nếu kết quả trả về false, HOẶC nếu trả về rỗng (do bị chặn bởi Google Safety) thì cắm cờ ngay
+      if (result.isSafe === false || responseText === "{}") {
         isSensitive = true;
         console.log(`🚩 Đã cắm cờ bài viết! Lý do: ${result.reason} [${result.violationType}]`);
       }

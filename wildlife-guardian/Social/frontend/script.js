@@ -190,11 +190,17 @@ document.addEventListener("DOMContentLoaded", () => {
     if (mobileMessagesBubble) mobileMessagesBubble.style.display = "none";
     if (mobileFriendsBubble) mobileFriendsBubble.style.display = "none";
 
+    const mobileAdminBubble = document.getElementById("mobileAdminBubble");
+    if (mobileAdminBubble) {
+        mobileAdminBubble.style.setProperty("display", "flex", "important");
+    }
+
     // 3. Inject Admin Moderation Queue in the sidebar
     const sidebarColumn = document.getElementById("sidebarColumn");
     if (sidebarColumn) {
        const modPanel = document.createElement("div");
        modPanel.className = "friend-requests-card"; // Reuse glassmorphism style
+       modPanel.id = "adminModPanel"; // Thêm ID để dễ target
        modPanel.style.marginTop = "20px";
        modPanel.innerHTML = `
           <h4 style="margin: 0 0 15px 0; font-size: 16px; color: var(--text-primary); display: flex; align-items: center; gap: 8px;">
@@ -218,6 +224,17 @@ window.loadModerationQueue = async function() {
   try {
      const response = await fetch(`${API_BASE_URL}/api/posts/admin/reported`);
      const posts = await response.json();
+     
+     const mobileAdminBadge = document.getElementById("mobileAdminBadge");
+     if (mobileAdminBadge) {
+         if (posts.length > 0) {
+             mobileAdminBadge.style.display = "flex";
+             mobileAdminBadge.innerText = posts.length;
+         } else {
+             mobileAdminBadge.style.display = "none";
+         }
+     }
+
      if (posts.length === 0) {
         queueContainer.innerHTML = `<p style="font-size: 13px; color: #888; text-align: center;" data-i18n="admin_no_flagged">No flagged posts.</p>`;
         if (typeof applyLanguage === "function") applyLanguage();
@@ -2382,6 +2399,9 @@ document.addEventListener("DOMContentLoaded", () => {
       if (messagesCard) messagesCard.classList.remove("active-tab");
       if (friendRequestsCard) friendRequestsCard.classList.remove("active-tab");
       
+      const adminModPanel = document.getElementById("adminModPanel");
+      if (adminModPanel) adminModPanel.classList.remove("active-tab");
+      
       const t = window.translations ? window.translations[getLang()] : null;
 
       if (type === "messages") {
@@ -2390,6 +2410,9 @@ document.addEventListener("DOMContentLoaded", () => {
       } else if (type === "friends") {
         if (friendRequestsCard) friendRequestsCard.classList.add("active-tab");
         if (mobileSidebarTitle) mobileSidebarTitle.innerText = ""; // Bỏ chữ to để tránh trùng lặp
+      } else if (type === "admin") {
+        if (adminModPanel) adminModPanel.classList.add("active-tab");
+        if (mobileSidebarTitle) mobileSidebarTitle.innerText = "";
       }
     };
 
@@ -2404,6 +2427,14 @@ document.addEventListener("DOMContentLoaded", () => {
       mobileFriendsBubble.addEventListener("click", (e) => {
         e.stopPropagation();
         openSidebar("friends");
+      });
+    }
+    
+    const mobileAdminBubble = document.getElementById("mobileAdminBubble");
+    if (mobileAdminBubble) {
+      mobileAdminBubble.addEventListener("click", (e) => {
+        e.stopPropagation();
+        openSidebar("admin");
       });
     }
 
