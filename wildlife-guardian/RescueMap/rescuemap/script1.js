@@ -544,7 +544,7 @@ function createReportCardHTML(report) {
     // Ép cả reporterUserId về String trước khi so sánh
     const reportOwnerIdStr = report.reporterUserId ? report.reporterUserId.toString().trim() : null;
     const isOwner = !!(currentUserId && reportOwnerIdStr && currentUserId === reportOwnerIdStr);
-    const deleteBtnHtml = isOwner ? `<button class="small-btn delete-btn rcard-delete" data-id="${report.id}"><i class="fas fa-trash-alt"></i> Xóa</button>` : '';
+    const deleteBtnHtml = isOwner ? `<button class="small-btn delete-btn rcard-delete" data-id="${report.id}"><i class="fas fa-trash-alt"></i> ${tr('rm_card_delete', 'Xóa')}</button>` : '';
 
     return `
     <div class="report-card ${st.class}" style="background: rgba(6,21,8,0.85); border: 1px solid rgba(255,255,255,0.09);">
@@ -565,7 +565,7 @@ function createReportCardHTML(report) {
         </div>
         <div class="report-card-actions">
             <button class="small-btn locate-btn rcard-locate" data-id="${report.id}" data-lat="${report.lat}" data-lng="${report.lng}">
-                <i class="fas fa-crosshairs"></i> Vị trí 3D
+                <i class="fas fa-crosshairs"></i> ${tr('rm_card_3d', 'Vị trí 3D')}
             </button>
             ${deleteBtnHtml}
         </div>
@@ -578,13 +578,16 @@ function renderReportsPanel() {
     container.innerHTML = '';
     const filtered = filterReports();
     if (filtered.length === 0) {
-        container.innerHTML = '<div style="text-align:center;padding:36px 16px;color:#94a3b8;"><i class="fas fa-binoculars" style="font-size:40px;color:rgba(34,197,94,0.28);margin-bottom:12px;display:block;"></i><h3 style="color:#f8fafc;font-size:15px;margin-bottom:6px;">Chưa có báo cáo nào</h3><p style="font-size:12.5px;line-height:1.6;">Nhấn <strong style="color:#f97316;">&#128680; Report Now</strong><br>trên thanh menu để báo cáo!</p></div>';
+        container.innerHTML = '<div style="text-align:center;padding:36px 16px;color:#94a3b8;"><i class="fas fa-binoculars" style="font-size:40px;color:rgba(34,197,94,0.28);margin-bottom:12px;display:block;"></i><h3 style="color:#f8fafc;font-size:15px;margin-bottom:6px;">' + tr('rm_no_reports', 'Chưa có báo cáo nào') + '</h3><p style="font-size:12.5px;line-height:1.6;">' + tr('rm_no_reports_sub', 'Nhấn <strong style="color:#f97316;">🚨 Report Now</strong><br>trên thanh menu để báo cáo!') + '</p></div>';
         return;
     }
     const heading = document.createElement('div');
     heading.style.cssText = 'font-size:12.5px;font-weight:700;color:#4ade80;border-bottom:1px solid rgba(255,255,255,0.08);padding-bottom:10px;margin-bottom:12px;display:flex;align-items:center;gap:7px;letter-spacing:0.3px;';
-    heading.innerHTML = '<i class="fas fa-list-ul" style="opacity:0.7;"></i> Danh sách báo cáo <span style="background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.3);color:#4ade80;border-radius:99px;padding:2px 9px;font-size:10.5px;margin-left:auto;">' + filtered.length + '</span>';
+    heading.innerHTML = '<i class="fas fa-list-ul" style="opacity:0.7;"></i> ' + tr('rm_heading_list', 'Danh sách báo cáo') + ' <span style="background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.3);color:#4ade80;border-radius:99px;padding:2px 9px;font-size:10.5px;margin-left:auto;">' + filtered.length + '</span>';
     container.appendChild(heading);
+
+    const fb = document.getElementById('floatingBadge');
+    if (fb) fb.textContent = filtered.length;
 
     filtered.forEach(function (report) {
         container.insertAdjacentHTML('beforeend', createReportCardHTML(report));
@@ -600,7 +603,7 @@ function renderReportsPanel() {
                 var lng = parseFloat(locBtn.dataset.lng);
                 if (isNaN(lat) || isNaN(lng)) { showToast('⚠️ Tọa độ không hợp lệ!', 'error'); return; }
                 var orig = locBtn.innerHTML;
-                locBtn.innerHTML = '<i class="fas fa-spinner fa-spin" style="font-size:11px;"></i> Đang bay...';
+                locBtn.innerHTML = '<i class="fas fa-spinner fa-spin" style="font-size:11px;"></i> ' + tr('rm_flying', 'Đang bay...');
                 locBtn.disabled = true; locBtn.style.opacity = '0.7';
                 window.setActiveTab('map');
                 function tryOpen(attempts) {
@@ -739,14 +742,15 @@ function initRealMap() {
             }
             @media (max-width: 768px) {
                 #interactiveMap {
-                    position: relative !important;
+                    position: absolute !important;
+                    top: 0 !important;
+                    left: 0 !important;
                     width: 100% !important;
-                    height: calc(65% - 68px - 4px) !important;
-                    margin-top: 68px !important;
-                    margin-bottom: 4px !important;
+                    height: 100% !important;
+                    margin: 0 !important;
+                    padding: 0 !important;
                     display: block !important;
-                    overflow: visible !important;
-                    flex: 0 0 calc(65% - 68px - 4px) !important;
+                    overflow: hidden !important;
                 }
             }
             #interactiveMap .cesium-viewer,

@@ -33,20 +33,114 @@
   <link rel="stylesheet" href="../../Home/css/nav.css">
 
   <style>
-    /* Đảm bảo thanh drag-handle luôn dính ở trên cùng khi người dùng cuộn nội dung */
-    #mobileDragHandle {
-      position: sticky !important;
-      top: 0 !important;
-      background: rgba(10, 25, 15, 0.95) !important;
-      backdrop-filter: blur(10px) !important;
-      z-index: 1000 !important;
-      border-radius: 24px 24px 0 0 !important;
-      padding: 8px 0 12px !important; /* Ép mỏng lại khoảng trống ở trên */
+    /* Thanh kéo di động trên mobile */
+    .mobile-drag-handle {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      height: 32px;
+      min-height: 32px;
+      padding: 0;
+      cursor: grab;
+      touch-action: none;
+      user-select: none;
+      -webkit-user-select: none;
+      background: transparent;
+      flex-shrink: 0;
     }
-    
-    /* Bỏ padding-top của panel để drag handle nằm sát trên cùng */
-    .floating-panel {
-      padding-top: 0 !important;
+    .mobile-drag-handle:active {
+      cursor: grabbing;
+    }
+    .handle-bar {
+      width: 44px;
+      height: 5px;
+      background: rgba(255, 255, 255, 0.4);
+      border-radius: 99px;
+      transition: width 0.2s ease, background-color 0.2s ease;
+    }
+    .mobile-drag-handle.dragging .handle-bar {
+      width: 56px;
+      background: #22c55e;
+    }
+
+    /* Nút thu gọn bảng nhanh trên header mobile */
+    .mobile-collapse-btn {
+      display: none;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      color: #94a3b8;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 13px;
+      transition: all 0.2s ease;
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+    .mobile-collapse-btn:hover,
+    .mobile-collapse-btn:active {
+      background: rgba(34, 197, 94, 0.2);
+      color: #22c55e;
+      border-color: rgba(34, 197, 94, 0.4);
+    }
+
+    /* Nút mở danh sách cứu hộ khi đã cất panel trên mobile (Full Map mode) */
+    .floating-open-panel-btn {
+      display: none;
+      position: fixed;
+      bottom: 22px;
+      left: 50%;
+      transform: translateX(-50%) translateY(30px);
+      z-index: 850;
+      background: rgba(4, 20, 10, 0.92);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(34, 197, 94, 0.45);
+      border-radius: 99px;
+      padding: 10px 20px;
+      color: #fff;
+      font-size: 13.5px;
+      font-weight: 600;
+      font-family: inherit;
+      align-items: center;
+      gap: 9px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.65), 0 0 18px rgba(34, 197, 94, 0.25);
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.2, 0.95, 0.3, 1), box-shadow 0.2s ease;
+    }
+    .floating-open-panel-btn:hover,
+    .floating-open-panel-btn:active {
+      background: rgba(8, 32, 16, 0.96);
+      border-color: #22c55e;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.75), 0 0 24px rgba(34, 197, 94, 0.4);
+    }
+    .floating-open-panel-btn .report-badge {
+      background: rgba(34, 197, 94, 0.2);
+      border: 1px solid rgba(34, 197, 94, 0.45);
+      color: #4ade80;
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 99px;
+    }
+    .floating-open-panel-btn.show {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @media (max-width: 768px) {
+      .floating-open-panel-btn {
+        display: flex;
+      }
+      .mobile-collapse-btn {
+        display: flex;
+      }
     }
   </style>
 </head>
@@ -125,7 +219,14 @@
 
     <!-- Floating "View Home" button on map -->
     <button id="viewHomeBtn" class="view-home-btn" title="Quay lại toàn cảnh quả địa cầu">
-      <i class="fas fa-globe-asia"></i> View Globe
+      <i class="fas fa-globe-asia"></i> <span data-i18n="rm_view_globe">View Globe</span>
+    </button>
+
+    <!-- Floating "Mở Danh Sách Cứu Hộ" Button khi Panel được cất đi (Mobile Full Map mode) -->
+    <button id="openRescueListBtn" class="floating-open-panel-btn" title="Mở danh sách cứu hộ">
+      <i class="fas fa-list-ul"></i>
+      <span data-i18n="rm_open_list">Danh sách cứu hộ</span>
+      <span class="report-badge" id="floatingBadge">46</span>
     </button>
 
     <div class="floating-panel" id="floatingPanel">
@@ -141,9 +242,12 @@
           <div class="panel-title-icon"><i class="fas fa-map-marked-alt"></i></div>
           <div>
             <h2>Rescue Map</h2>
-            <p>Theo dõi và báo cáo cứu hộ</p>
+            <p data-i18n="rm_subtitle">Theo dõi và báo cáo cứu hộ</p>
           </div>
         </div>
+        <button class="mobile-collapse-btn" id="mobileCollapseBtn" title="Cất bảng để xem toàn màn hình bản đồ">
+          <i class="fas fa-chevron-down"></i>
+        </button>
       </div>
 
       <!-- Search Bar -->
@@ -775,73 +879,287 @@
       }
     });
 
-    // Touch Swipe & Tap Logic for Drag Handle
-    const dragHandle = document.getElementById('mobileDragHandle');
-    if (dragHandle) {
+    // ========================================================
+    // REAL-TIME GESTURE DRAGGABLE BOTTOM SHEET ENGINE (MOBILE)
+    // ========================================================
+    (function initMobileBottomSheet() {
+      const panel = document.getElementById('floatingPanel');
+      const dragHandle = document.getElementById('mobileDragHandle');
+      const panelHeader = document.querySelector('.panel-header');
+      const panelScroll = document.querySelector('.panel-scroll');
+      const openBtn = document.getElementById('openRescueListBtn');
+      const collapseBtn = document.getElementById('mobileCollapseBtn');
+      const viewHomeBtn = document.getElementById('viewHomeBtn');
+      if (!panel || !dragHandle) return;
+
+      // Tính toán 3 nấc hít (Snap Points) chuẩn theo viewport
+      function getSnapPoints() {
+        const winH = window.innerHeight;
+        const navH = 68;
+        const maxH = winH - navH; // Chiều cao tối đa khi mở hết
+        
+        return {
+          FULL: 0, // Trải dài lên sát đáy navbar (y = 68)
+          HALF: Math.round(maxH * 0.55), // Nửa màn hình (~45% panel, 55% thấy map)
+          COLLAPSED: maxH + 40 // Cất hẳn xuống dưới đáy màn hình -> 100% Full Map sạch hoàn toàn
+        };
+      }
+
+      let currentTranslateY = 0;
+      let currentState = 'half'; // 'full' | 'half' | 'collapsed'
+      let isDragging = false;
       let startY = 0;
-      let currentY = 0;
-      let currentState = 'half'; // Khởi tạo với trạng thái 35%
+      let startTranslateY = 0;
+      let startTime = 0;
+      let lastMoveY = 0;
+      let lastMoveTime = 0;
+      let velocityY = 0;
 
-      dragHandle.addEventListener('touchstart', e => {
-        startY = e.touches[0].clientY;
-        currentY = startY;
+      function applyTransform(y, animate, duration = 0.35) {
+        if (animate) {
+          panel.style.transition = `transform ${duration}s cubic-bezier(0.2, 0.95, 0.3, 1)`;
+        } else {
+          panel.style.transition = 'none';
+        }
+        panel.style.transform = `translate3d(0, ${Math.round(y)}px, 0)`;
+        currentTranslateY = y;
+
+        // Tự động hiển thị nút nổi mở danh sách khi panel được cất xuống
+        if (openBtn && window.innerWidth <= 768) {
+          const snaps = getSnapPoints();
+          if (y >= snaps.HALF + (snaps.COLLAPSED - snaps.HALF) * 0.45) {
+            openBtn.classList.add('show');
+          } else {
+            openBtn.classList.remove('show');
+          }
+        }
+      }
+
+      function snapTo(state, animate = true) {
+        if (window.innerWidth > 768) {
+          panel.style.transform = '';
+          panel.style.transition = '';
+          if (openBtn) openBtn.classList.remove('show');
+          return;
+        }
+        const snaps = getSnapPoints();
+        currentState = state;
+        let targetY = snaps.HALF;
+        if (state === 'full') targetY = snaps.FULL;
+        else if (state === 'collapsed') targetY = snaps.COLLAPSED;
+        
+        applyTransform(targetY, animate);
+
+        if (openBtn) {
+          if (state === 'collapsed') {
+            openBtn.classList.add('show');
+          } else {
+            openBtn.classList.remove('show');
+          }
+        }
+      }
+
+      // Nút mở lại danh sách khi đã cất panel
+      if (openBtn) {
+        const doOpen = (e) => {
+          if (e) { e.preventDefault(); e.stopPropagation(); }
+          snapTo('half', true);
+        };
+        openBtn.addEventListener('click', doOpen);
+        openBtn.addEventListener('pointerdown', e => e.stopPropagation());
+        openBtn.addEventListener('touchstart', e => e.stopPropagation(), { passive: true });
+      }
+
+      // Nút thu gọn nhanh trên Header
+      if (collapseBtn) {
+        const doCollapse = (e) => {
+          if (e) { e.preventDefault(); e.stopPropagation(); }
+          snapTo('collapsed', true);
+        };
+        collapseBtn.addEventListener('click', doCollapse);
+        collapseBtn.addEventListener('pointerdown', e => e.stopPropagation());
+        collapseBtn.addEventListener('touchstart', e => e.stopPropagation(), { passive: true });
+      }
+
+      // Khi nhấn "View Globe" trên mobile, tự động cất panel để xem trọn quả địa cầu
+      if (viewHomeBtn) {
+        viewHomeBtn.addEventListener('click', () => {
+          if (window.innerWidth <= 768) {
+            snapTo('collapsed', true);
+          }
+        });
+      }
+
+      // Khởi tạo và cập nhật khi xoay ngang/dọc màn hình
+      function updateLayout() {
+        if (window.innerWidth <= 768) {
+          snapTo(currentState, false);
+        } else {
+          panel.style.transform = '';
+          panel.style.transition = '';
+          if (openBtn) openBtn.classList.remove('show');
+        }
+      }
+
+      window.addEventListener('resize', updateLayout);
+
+      // Xử lý kéo thả thời gian thực (60fps Unified Pointer/Touch Tracking)
+      function onDragStart(clientY, targetEl, pointerId) {
+        if (window.innerWidth > 768) return;
+        startY = clientY;
+        startTranslateY = currentTranslateY;
+        startTime = Date.now();
+        lastMoveY = startY;
+        lastMoveTime = startTime;
+        velocityY = 0;
+        isDragging = true;
+
+        panel.style.transition = 'none';
+        dragHandle.classList.add('dragging');
+
+        if (pointerId !== undefined && targetEl && targetEl.setPointerCapture) {
+          try {
+            targetEl.setPointerCapture(pointerId);
+          } catch (_) {}
+        }
+      }
+
+      function onDragMove(clientY) {
+        if (!isDragging || window.innerWidth > 768) return;
+        const currentY = clientY;
+        const deltaY = currentY - startY;
+        const snaps = getSnapPoints();
+
+        let newY = startTranslateY + deltaY;
+
+        // Hiệu ứng lò xo (Rubber-band) khi kéo vượt quá giới hạn
+        if (newY < snaps.FULL) {
+          newY = snaps.FULL + (newY - snaps.FULL) * 0.25;
+        } else if (newY > snaps.COLLAPSED) {
+          newY = snaps.COLLAPSED + (newY - snaps.COLLAPSED) * 0.25;
+        }
+
+        applyTransform(newY, false);
+
+        // Tính toán vận tốc vuốt
+        const now = Date.now();
+        const dt = now - lastMoveTime;
+        if (dt > 10) {
+          velocityY = (currentY - lastMoveY) / dt;
+          lastMoveY = currentY;
+          lastMoveTime = now;
+        }
+      }
+
+      function onDragEnd() {
+        if (!isDragging || window.innerWidth > 768) return;
+        isDragging = false;
+        dragHandle.classList.remove('dragging');
+
+        const totalDist = Math.abs(currentTranslateY - startTranslateY);
+        const totalTime = Date.now() - startTime;
+        const snaps = getSnapPoints();
+
+        // 1. Chạm nhanh (Tap / Click) vào thanh kéo để chuyển đổi nấc
+        if (totalDist < 8 && totalTime < 300) {
+          if (currentState === 'collapsed') snapTo('half', true);
+          else if (currentState === 'half') snapTo('full', true);
+          else snapTo('half', true);
+          return;
+        }
+
+        // 2. Lực quán tính khi vuốt nhanh (Flick / Velocity Snap)
+        if (velocityY < -0.35) {
+          // Vuốt mạnh LÊN TRÊN
+          if (currentTranslateY > snaps.HALF) snapTo('half', true);
+          else snapTo('full', true);
+          return;
+        } else if (velocityY > 0.35) {
+          // Vuốt mạnh XUỐNG DƯỚI
+          if (currentTranslateY < snaps.HALF) snapTo('half', true);
+          else snapTo('collapsed', true);
+          return;
+        }
+
+        // 3. Tự động hít vào nấc gần nhất theo vị trí hiện tại
+        const distFull = Math.abs(currentTranslateY - snaps.FULL);
+        const distHalf = Math.abs(currentTranslateY - snaps.HALF);
+        const distCollapsed = Math.abs(currentTranslateY - snaps.COLLAPSED);
+
+        if (distFull <= distHalf && distFull <= distCollapsed) {
+          snapTo('full', true);
+        } else if (distHalf <= distFull && distHalf <= distCollapsed) {
+          snapTo('half', true);
+        } else {
+          snapTo('collapsed', true);
+        }
+      }
+
+      // Hỗ trợ cả Pointer Events (chuột, bút cảm ứng, touch hiện đại) lẫn Touch Events thuần
+      const supportsPointer = 'PointerEvent' in window;
+
+      [dragHandle, panelHeader].forEach(el => {
+        if (!el) return;
+
+        if (supportsPointer) {
+          el.addEventListener('pointerdown', e => {
+            if (e.target.closest('button, input, a, .mobile-collapse-btn')) return;
+            if (e.button && e.button !== 0) return;
+            onDragStart(e.clientY, el, e.pointerId);
+          });
+          el.addEventListener('pointermove', e => {
+            if (isDragging) {
+              onDragMove(e.clientY);
+              if (e.cancelable) e.preventDefault();
+            }
+          });
+          el.addEventListener('pointerup', e => {
+            if (isDragging) {
+              try { el.releasePointerCapture(e.pointerId); } catch (_) {}
+              onDragEnd();
+            }
+          });
+          el.addEventListener('pointercancel', e => {
+            if (isDragging) {
+              try { el.releasePointerCapture(e.pointerId); } catch (_) {}
+              onDragEnd();
+            }
+          });
+        } else {
+          el.addEventListener('touchstart', e => {
+            if (e.target.closest('button, input, a, .mobile-collapse-btn')) return;
+            onDragStart(e.touches[0].clientY, el);
+          }, { passive: false });
+          el.addEventListener('touchmove', e => {
+            if (isDragging) {
+              onDragMove(e.touches[0].clientY);
+              if (e.cancelable) e.preventDefault();
+            }
+          }, { passive: false });
+          el.addEventListener('touchend', onDragEnd, { passive: true });
+          el.addEventListener('touchcancel', onDragEnd, { passive: true });
+        }
       });
 
-      dragHandle.addEventListener('touchmove', e => {
-        // Ngăn chặn cuộn trang mặc định khi vuốt trên thanh kéo
-        e.preventDefault(); 
-        currentY = e.touches[0].clientY;
-      });
+      // Cho phép cuộn từ đầu danh sách để kéo panel xuống khi đang mở Full
+      if (panelScroll) {
+        let scrollStartY = 0;
+        panelScroll.addEventListener('touchstart', e => {
+          scrollStartY = e.touches[0].clientY;
+        }, { passive: true });
 
-      dragHandle.addEventListener('touchend', e => {
-        const diffY = currentY - startY;
-        const panel = document.getElementById('floatingPanel');
-        const map = document.getElementById('interactiveMap');
-        if (!panel || !map || window.innerWidth > 768) return;
+        panelScroll.addEventListener('touchmove', e => {
+          if (window.innerWidth > 768) return;
+          const currentY = e.touches[0].clientY;
+          if (panelScroll.scrollTop <= 0 && currentY > scrollStartY && currentState === 'full') {
+            onDragStart(currentY, panelScroll);
+          }
+        }, { passive: false });
+      }
 
-        // Nếu vuốt lên (diffY âm)
-        if (diffY < -20) {
-          if (currentState === 'minimized') currentState = 'half';
-          else currentState = 'full';
-        } 
-        // Nếu vuốt xuống (diffY dương)
-        else if (diffY > 20) {
-          if (currentState === 'full') currentState = 'half';
-          else currentState = 'minimized';
-        }
-        // Nếu click/tap (di chuyển rất ít)
-        else if (Math.abs(diffY) < 10) {
-          if (currentState === 'full') currentState = 'half';
-          else if (currentState === 'half') currentState = 'full';
-          else currentState = 'half'; // từ minimized -> half
-        }
-
-        // Cập nhật giao diện bằng inline styles để ghi đè mọi CSS
-        if (currentState === 'full') {
-          panel.style.setProperty('height', 'calc(100% - 68px)', 'important');
-          panel.style.setProperty('flex', '1', 'important');
-          panel.style.setProperty('max-height', 'none', 'important');
-          panel.style.setProperty('margin-top', '68px', 'important'); // Tránh bị navbar che
-          map.style.setProperty('display', 'none', 'important');
-        } else if (currentState === 'half') {
-          panel.style.setProperty('height', '35%', 'important');
-          panel.style.setProperty('flex', '0 0 35%', 'important');
-          panel.style.setProperty('max-height', '35%', 'important');
-          panel.style.setProperty('margin-top', '0', 'important');
-          map.style.setProperty('display', 'block', 'important');
-          map.style.setProperty('height', 'calc(65% - 68px - 4px)', 'important');
-          map.style.setProperty('flex', '0 0 calc(65% - 68px - 4px)', 'important');
-        } else if (currentState === 'minimized') {
-          panel.style.setProperty('height', '44px', 'important');
-          panel.style.setProperty('flex', '0 0 44px', 'important');
-          panel.style.setProperty('max-height', '44px', 'important');
-          panel.style.setProperty('margin-top', '0', 'important');
-          map.style.setProperty('display', 'block', 'important');
-          map.style.setProperty('height', 'calc(100% - 68px - 44px)', 'important');
-          map.style.setProperty('flex', '1', 'important');
-        }
-      });
-    }
+      // Khởi động ở vị trí nửa màn hình (Half)
+      setTimeout(updateLayout, 100);
+    })();
   </script>
 </body>
 

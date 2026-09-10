@@ -803,80 +803,16 @@ html, body {
   z-index: 0 !important;
 }
 
-/* (3b) MOBILE OVERRIDE: On small screens, make .map-wrapper a flex column
-   so globe and panel share the viewport without overlapping.
-   This media query comes AFTER the CRITICAL block above in the cascade,
-   so !important rules here override the general ones above. */
-@media (max-width: 768px) {
-  /* Wrapper chứa cả globe + panel, chia theo chiều dọc */
-  .map-wrapper {
-    display: flex !important;
-    flex-direction: column !important;
-    overflow: visible !important;
-    background: transparent !important;
-  }
-
-  html, body {
-    overflow: hidden !important; /* giữ hidden để không có thanh scroll ngang */
-  }
-
-  /* Globe: cố định 65%, trừ đi navbar 68px và khoảng cách gap 4px */
-  #interactiveMap {
-    position: relative !important;
-    flex: 0 0 calc(65% - 68px - 4px) !important;
-    height: calc(65% - 68px - 4px) !important;
-    margin-top: 68px !important;
-    margin-bottom: 4px !important; /* Khoảng cách siêu nhỏ giữa quả cầu và rescue panel */
-    width: 100% !important;
-    top: auto !important;
-    left: auto !important;
-    overflow: visible !important;
-  }
-
-  /* Cesium canvas bên trong phải fill 100% của #interactiveMap */
-  #interactiveMap .cesium-viewer,
-  #interactiveMap .cesium-viewer-cesiumWidgetContainer,
-  #interactiveMap .cesium-widget,
-  #interactiveMap canvas {
-    width: 100% !important;
-    height: 100% !important;
-    position: absolute !important;
-    top: 0 !important;
-    left: 0 !important;
-  }
-
-  /* Panel: chiếm không gian dưới, scroll được bên trong */
-  .floating-panel {
-    position: relative !important;
-    width: 100% !important;
-    top: auto !important;
-    bottom: auto !important;
-    left: auto !important;
-    border-right: none !important;
-    border-top: 1px solid var(--glass-border) !important;
-    border-radius: var(--radius-lg) var(--radius-lg) 0 0 !important;
-    padding-top: 12px !important;
-    overflow-y: auto !important;
-    z-index: 100 !important;
-    box-shadow: 0 -4px 20px rgba(0,0,0,0.3) !important;
-  }
-
-  /* Nút View Globe: fixed, nằm ngay trên viền panel */
-  .view-home-btn {
-    position: fixed !important;
-    bottom: calc(45% + 15px) !important;
-    right: 16px !important;
-    top: auto !important;
-    z-index: 200 !important;
-  }
-
-  /* Trên mobile, .floating-panel đã cuộn toàn bộ, nên .panel-scroll không cần cuộn bên trong nữa để tránh 2 thanh cuộn */
-  .panel-scroll {
-    overflow-y: visible !important;
-    height: auto !important;
-    flex: none !important;
-    padding-bottom: 20px !important;
-  }
+/* Ensure Cesium canvas fills container */
+#interactiveMap .cesium-viewer,
+#interactiveMap .cesium-viewer-cesiumWidgetContainer,
+#interactiveMap .cesium-widget,
+#interactiveMap canvas {
+  width: 100% !important;
+  height: 100% !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
 }
 
 /* (4) CRITICAL: Cesium canvas must NOT have pointer-events blocked */
@@ -1715,121 +1651,166 @@ html, body {
 }
 
 @media (max-width: 768px) {
-  /* Override existing mobile layout to make Panel full screen by default */
+  html, body {
+    overflow: hidden !important;
+    height: 100% !important;
+    width: 100% !important;
+  }
+
   .map-wrapper {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    overflow: hidden !important;
+    background: #020c05 !important;
+  }
+
+  /* Globe is always mounted and visible underneath */
+  #interactiveMap {
+    display: block !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    z-index: 10 !important;
+    pointer-events: auto !important;
+  }
+
+  /* Floating Bottom Sheet */
+  .floating-panel {
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    top: auto !important;
+    width: 100% !important;
+    height: calc(100dvh - 68px) !important;
+    height: calc(100vh - 68px) !important;
+    max-height: calc(100dvh - 68px) !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border-radius: 24px 24px 0 0 !important;
+    border: 1px solid rgba(34, 197, 94, 0.25) !important;
+    border-bottom: none !important;
+    background: rgba(4, 20, 10, 0.94) !important;
+    backdrop-filter: blur(24px) !important;
+    -webkit-backdrop-filter: blur(24px) !important;
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.6) !important;
+    z-index: 900 !important;
     display: flex !important;
     flex-direction: column !important;
     overflow: hidden !important;
+    will-change: transform !important;
+    box-sizing: border-box !important;
+    pointer-events: auto !important;
   }
-  
-  #interactiveMap {
-    display: none !important;
-  }
-  
-  .floating-panel {
-    flex: 1 !important;
-    width: 100% !important;
-    height: 100% !important;
-    max-height: none !important;
-    margin-top: 0 !important;
-    padding-top: 68px !important;
-    border-radius: 0 !important;
-    border-top: none !important;
-    transition: all 0.3s ease !important;
-    position: relative !important;
-  }
-  
+
+  /* Mobile Drag Handle */
   .mobile-drag-handle {
     display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: 32px !important;
+    min-height: 32px !important;
+    padding: 0 !important;
+    cursor: grab !important;
+    touch-action: none !important;
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    background: transparent !important;
+    flex-shrink: 0 !important;
   }
-  
-  /* Tối ưu hóa không gian hiển thị các header trên mobile để có thêm chỗ cho danh sách */
+
+  .handle-bar {
+    width: 44px !important;
+    height: 5px !important;
+    background: rgba(255, 255, 255, 0.4) !important;
+    border-radius: 99px !important;
+    transition: width 0.2s ease, background-color 0.2s ease !important;
+  }
+
+  .mobile-drag-handle:active .handle-bar,
+  .mobile-drag-handle.dragging .handle-bar {
+    width: 56px !important;
+    background: #22c55e !important;
+  }
+
+  /* Compact Panel Header on Mobile */
   .panel-header {
-    padding: 4px 16px 2px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 2px 16px 8px !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    flex-shrink: 0 !important;
+    touch-action: none !important;
+    user-select: none !important;
+    -webkit-user-select: none !important;
   }
   .panel-title {
     gap: 8px !important;
   }
   .panel-title-icon {
-    width: 28px !important;
-    height: 28px !important;
-    font-size: 14px !important;
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 15px !important;
   }
   .panel-title h2 {
-    font-size: 16px !important;
+    font-size: 17px !important;
+    margin: 0 !important;
   }
   .panel-title p {
-    display: none !important; /* Ẩn dòng chữ phụ để tiết kiệm diện tích */
+    font-size: 12px !important;
+    color: #94a3b8 !important;
+    margin: 0 !important;
   }
+
   .panel-search {
-    padding: 2px 16px !important;
+    padding: 8px 16px 4px !important;
+    flex-shrink: 0 !important;
   }
   .search-glass {
-    padding: 2px 2px 2px 12px !important;
-  }
-  .search-glass button {
-    width: 28px !important;
-    height: 28px !important;
-    font-size: 12px !important;
+    padding: 6px 12px !important;
   }
   .search-glass input {
-    font-size: 13px !important;
+    font-size: 13.5px !important;
   }
+
   .panel-tabs {
     padding: 4px 16px !important;
+    flex-shrink: 0 !important;
   }
   .tab-btn {
-    padding: 4px 12px !important;
-    font-size: 12px !important;
+    padding: 6px 12px !important;
+    font-size: 12.5px !important;
   }
+
   .panel-legend {
-    padding: 2px 16px 6px !important;
+    padding: 4px 16px 6px !important;
+    flex-shrink: 0 !important;
   }
-  
+
   .panel-scroll {
+    flex: 1 !important;
     overflow-y: auto !important;
-    height: auto !important;
-    flex: 1 !important;
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior-y: contain !important;
+    padding: 8px 16px 40px !important;
   }
-  
+
   .view-home-btn {
-    display: none !important;
-  }
-  
-  /* State: Show Globe */
-  .map-wrapper.show-globe #interactiveMap {
-    display: block !important;
-    position: relative !important;
-    top: auto !important;
-    left: auto !important;
-    flex: 1 !important;
-    width: 100% !important;
-    height: calc(100% - 68px - 44px) !important;
-    margin-top: 68px !important;
-    opacity: 1 !important;
-    pointer-events: auto !important;
-    visibility: visible !important;
-    overflow: hidden !important;
-  }
-  
-  .map-wrapper.show-globe .floating-panel {
-    flex: 0 0 44px !important;
-    height: 44px !important;
-    max-height: 44px !important;
-    margin-top: 0 !important;
-    padding-top: 0 !important; /* KHÔI PHỤC PADDING KHI THU GỌN ĐỂ THẤY HANDLE */
-    overflow: hidden !important;
-    border-radius: 24px 24px 0 0 !important;
-    border-top: 1px solid var(--glass-border) !important;
-  }
-  
-  .map-wrapper.show-globe .panel-scroll,
-  .map-wrapper.show-globe .panel-header,
-  .map-wrapper.show-globe .panel-search,
-  .map-wrapper.show-globe .panel-tabs,
-  .map-wrapper.show-globe .panel-legend,
-  .map-wrapper.show-globe .panel-action-row {
-    opacity: 0 !important;
-    pointer-events: none !important;
+    position: fixed !important;
+    top: 80px !important;
+    right: 16px !important;
+    bottom: auto !important;
+    z-index: 50 !important;
+    display: flex !important;
   }
 }
