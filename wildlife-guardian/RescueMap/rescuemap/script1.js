@@ -114,8 +114,8 @@ function getSampleImage(animalType) {
 
 function getApiUrl(path) {
     const hostname = window.location.hostname;
-    if (hostname === 'localhost' || hostname === '127.0.0.1') {
-        return `http://${hostname}:3000${path}`;
+    if (hostname === 'localhost' || hostname === '127.0.0.1' || window.location.protocol === 'file:' || hostname === '') {
+        return `http://localhost:3000${path}`;
     }
     return `${window.location.origin}${path}`;
 }
@@ -125,10 +125,10 @@ function getApiUrl(path) {
 // ═══════════════════════════════════════════════════════════════
 async function reverseGeocode(lat, lng) {
     try {
-        // Gọi trực tiếp API OpenStreetMap từ Front-end thay vì gọi qua Server
-        const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=16&addressdetails=1`;
-        const res = await fetch(url);
+        const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=16&addressdetails=1&email=contact@wildlife-guardian.vn`;
+        const res = await fetch(url, { headers: { 'Accept-Language': 'vi' } });
         const data = await res.json();
+        
         if (data && data.address) {
             const a = data.address;
             const parts = [
@@ -196,6 +196,205 @@ async function resolveAddressesInBackground(reportsList) {
     }
 }
 
+window.showStatusNoteInput = function(id, newStatus) {
+    let currentUser = null;
+    try {
+        const rawUser = localStorage.getItem('currentUser');
+        if (rawUser) currentUser = JSON.parse(rawUser);
+    } catch (e) { }
+
+    if (localStorage.getItem('isLoggedIn') !== 'true' && !currentUser) {
+        return showToast("🚨 Cần đăng nhập để cập nhật trạng thái!", "error");
+    }
+
+    const btnRow = document.getElementById('status-btn-row-' + id);
+    if (!btnRow) return;
+    
+    if (!btnRow.dataset.originalHtml) {
+        btnRow.dataset.originalHtml = btnRow.innerHTML;
+    }
+    
+    const statusText = newStatus === 'emergency' ? 'Khẩn cấp' : (newStatus === 'progress' ? 'Đang cứu hộ' : 'Đã an toàn');
+    
+    btnRow.innerHTML = `
+        <div style="display: flex; flex-direction: column; gap: 8px; width: 100%;">
+            <input type="text" id="status-note-${id}" placeholder="Ghi chú cho trạng thái ${statusText}..." style="padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.5); color: white; font-size: 13px; width: 100%; box-sizing: border-box;">
+            <div style="display: flex; gap: 8px;">
+                <button onclick="window.submitReportStatus('${id}', '${newStatus}')" style="background: #16a34a; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; flex: 1; font-weight: bold; font-size: 12px;">Gửi</button>
+                <button onclick="window.cancelStatusInput('${id}')" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); padding: 6px 12px; border-radius: 6px; cursor: pointer; flex: 1; font-weight: bold; font-size: 12px;">Hủy</button>
+            </div>
+        </div>
+    `;
+    setTimeout(() => {
+        const input = document.getElementById(`status-note-${id}`);
+        if (input) input.focus();
+    }, 50);
+};
+
+window.cancelStatusInput = function(id) {
+    const btnRow = document.getElementById('status-btn-row-' + id);
+    if (btnRow && btnRow.dataset.originalHtml) {
+        btnRow.innerHTML = btnRow.dataset.originalHtml;
+    }
+};
+
+window.submitReportStatus = async function(id, newStatus) {
+    try {
+        const noteInput = document.getElementById(`status-note-${id}`);
+        const note = noteInput ? noteInput.value.trim() : "";
+
+        const btnRow = document.getElementById('status-btn-row-' + id);
+        if (btnRow) {
+            btnRow.style.opacity = '0.5';
+            btnRow.style.pointerEvents = 'none';
+        }
+
+
+        const response = await fetch(getApiUrl(`/api/rescuemap/${id}/status`), {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status: newStatus, statusNote: note })
+        });
+
+        let result;
+        const contentType = response.headers.get("content-type");
+        if (contentType && contentType.includes("application/json")) {
+            result = await response.json();
+        } else {
+            throw new Error(`Bạn chưa khởi động lại Server! Vui lòng tắt terminal và chạy lại 'node server.js'`);
+        }
+
+        if (response.ok && result.success) {
+            showToast("✅ " + result.message, "success");
+            if (typeof popupDiv !== 'undefined' && popupDiv) popupDiv.style.display = 'none';
+            fetchRescueReports();
+        } else {
+            showToast("❌ " + (result.message || "Cập nhật thất bại"), "error");
+            if (btnRow) {
+                btnRow.style.opacity = '1';
+                btnRow.style.pointerEvents = 'auto';
+            }
+        }
+    } catch (e) {
+        showToast("❌ Lỗi: " + e.message, "error");
+        const btnRow = document.getElementById('status-btn-row-' + id);
+        if (btnRow) {
+            btnRow.style.opacity = '1';
+            btnRow.style.pointerEvents = 'auto';
+        }
+    }
+};
+
+window.showRescueMessageInput = function(id, reporterId, animalName, currentStatus, currentNoteEncoded) {
+    let currentUser = null;
+    try {
+        const rawUser = localStorage.getItem('currentUser');
+        if (rawUser) currentUser = JSON.parse(rawUser);
+    } catch (e) { }
+
+    if (localStorage.getItem('isLoggedIn') !== 'true' && !currentUser) {
+        return showToast("🚨 Cần đăng nhập để gửi tin nhắn cứu trợ!", "error");
+    }
+
+    const container = document.getElementById('rescue-msg-container-' + id);
+    if (!container) return;
+    
+    if (!container.dataset.originalHtml) {
+        container.dataset.originalHtml = container.innerHTML;
+    }
+    
+    const decodedName = decodeURIComponent(animalName);
+    container.innerHTML = `
+        <div style="display: flex; flex-direction: column; gap: 8px; width: 100%;">
+            <p style="font-size: 13px; color: #e2e8f0; margin: 0; text-align: center;">Ghi chú gửi người đăng:</p>
+            <input type="text" id="rescue-msg-input-${id}" placeholder="Vd: Mình đang ở gần, mình sẽ đến..." style="padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.5); color: white; font-size: 13px; width: 100%; box-sizing: border-box;">
+            <div style="display: flex; gap: 8px;">
+                <button onclick="window.submitRescueMessage('${id}', '${reporterId}', '${animalName}', '${currentStatus}', '${currentNoteEncoded || ''}')" style="background: #f59e0b; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; flex: 1; font-weight: bold; font-size: 12px;"><i class="fas fa-paper-plane"></i> Gửi</button>
+                <button onclick="window.cancelRescueMessageInput('${id}')" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); padding: 6px 12px; border-radius: 6px; cursor: pointer; flex: 1; font-weight: bold; font-size: 12px;">Hủy</button>
+            </div>
+        </div>
+    `;
+    setTimeout(() => {
+        const input = document.getElementById(`rescue-msg-input-${id}`);
+        if (input) input.focus();
+    }, 50);
+};
+
+window.cancelRescueMessageInput = function(id) {
+    const container = document.getElementById('rescue-msg-container-' + id);
+    if (container && container.dataset.originalHtml) {
+        container.innerHTML = container.dataset.originalHtml;
+    }
+};
+
+window.submitRescueMessage = async function(id, reporterId, animalName, currentStatus, currentNoteEncoded) {
+    let currentUser = null;
+    try {
+        const rawUser = localStorage.getItem('currentUser');
+        if (rawUser) currentUser = JSON.parse(rawUser);
+    } catch (e) { }
+
+    const input = document.getElementById(`rescue-msg-input-${id}`);
+    const note = input ? input.value.trim() : "";
+    if (!note) {
+        return showToast("⚠️ Vui lòng nhập nội dung tin nhắn", "warning");
+    }
+
+    const container = document.getElementById('rescue-msg-container-' + id);
+    if (container) {
+        container.style.opacity = '0.5';
+        container.style.pointerEvents = 'none';
+    }
+
+    try {
+        const decodedName = decodeURIComponent(animalName);
+        const text = `[Từ Rescue Map - Báo cáo: ${decodedName}]\n${note}`;
+        
+        // 1. Gửi tin nhắn nội bộ (nếu báo cáo có tài khoản)
+        if (reporterId) {
+            await fetch(getApiUrl('/api/messages'), {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    sender: currentUser.userId || currentUser._id,
+                    receiver: reporterId,
+                    text: text
+                })
+            });
+        }
+
+        // 2. Cập nhật thêm ghi chú vào báo cáo để hiển thị trên bản đồ
+        const decodedCurrentNote = currentNoteEncoded ? decodeURIComponent(currentNoteEncoded) : "";
+        const userName = currentUser.fullName || 'Tình nguyện viên';
+        const appendedNote = decodedCurrentNote ? decodedCurrentNote + `\n[${userName} sẽ tới cứu]: ${note}` : `[${userName} sẽ tới cứu]: ${note}`;
+        
+        await fetch(getApiUrl(`/api/rescuemap/${id}/status`), {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status: currentStatus, statusNote: appendedNote })
+        });
+
+        showToast("✅ Đã gửi ghi chú đến người đăng!", "success");
+        if (container) {
+            container.innerHTML = `<p style="color: #34d399; font-size: 13px; text-align: center; margin: 0; padding: 8px;"><i class="fas fa-check-circle"></i> Đã gửi ghi chú</p>`;
+            container.style.opacity = '1';
+        }
+        
+        // Cập nhật lại bản đồ để hiện ghi chú mới
+        if (typeof fetchRescueReports === 'function') {
+            fetchRescueReports();
+        }
+    } catch (e) {
+        console.error("Lỗi gửi tin nhắn:", e);
+        showToast("❌ Lỗi gửi tin nhắn", "error");
+        if (container) {
+            container.style.opacity = '1';
+            container.style.pointerEvents = 'auto';
+            window.cancelRescueMessageInput(id);
+        }
+    }
+};
+
 async function fetchRescueReports() {
     try {
         const response = await fetch(getApiUrl(`/api/rescuemap?t=${new Date().getTime()}`), { cache: 'no-store' });
@@ -238,7 +437,8 @@ async function fetchRescueReports() {
                     _needGeocode: needGeocode,
                     reporterName: item.reportedBy?.fullName || item.reporter || "Khách",
                     reporterAvatar: item.reportedBy?.avatar || "",
-                    reporterUserId: item.reportedBy?.userId || null
+                    reporterUserId: item.reportedBy?.userId || null,
+                    statusNote: item.statusNote || ""
                 };
             }).filter(report => !isNaN(report.lat) && !isNaN(report.lng));
         } else {
@@ -411,8 +611,6 @@ function renderReportsPanel() {
                             destination: Cesium.Cartesian3.fromDegrees(lng, lat, 1200), duration: 2,
                             complete: function () {
                                 locBtn.innerHTML = orig; locBtn.disabled = false; locBtn.style.opacity = '1';
-                                window.drawRescueZone5m(lat, lng);
-                                window.fetchAndRenderNearbyRescuers(lat, lng, 5);
                                 var html = entity.properties && entity.properties.customHTML
                                     ? (typeof entity.properties.customHTML.getValue === 'function' ? entity.properties.customHTML.getValue() : entity.properties.customHTML)
                                     : null;
@@ -650,8 +848,7 @@ function setupCustomPopup() {
                     }
                 }
                 if (clickLat && clickLng) {
-                    window.drawRescueZone5m(clickLat, clickLng);
-                    window.fetchAndRenderNearbyRescuers(clickLat, clickLng, 5);
+                    // Đã tắt tự động quét theo yêu cầu user. Người dùng sẽ bấm nút trong popup.
                 }
             }
 
@@ -694,6 +891,15 @@ function renderMarkersToMap(reportsData) {
 
     if (reportsData.length === 0) return;
 
+    let myUserId = '';
+    try {
+        const rawUser = localStorage.getItem('currentUser');
+        if (rawUser) {
+            const userObj = JSON.parse(rawUser);
+            myUserId = userObj.userId || userObj._id || '';
+        }
+    } catch (e) { }
+
     const locationCount = {};
 
     reportsData.forEach(report => {
@@ -713,79 +919,116 @@ function renderMarkersToMap(reportsData) {
             ? report.photo
             : null;
 
+        const lat = report.lat;
+        const lng = report.lng;
+
         const helpersHtml = `
-            <div class="detail-item" style="flex-direction: column; align-items: flex-start; margin-bottom: 10px; background: rgba(239, 68, 68, 0.1); padding: 10px; border-radius: 12px; border: 1px solid rgba(239, 68, 68, 0.2); cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='rgba(239, 68, 68, 0.2)'" onmouseout="this.style.background='rgba(239, 68, 68, 0.1)'" onclick="window.open('https://env4wildlife.org/', '_blank')">
-                <div style="display:flex; justify-content:space-between; width:100%;">
-                    <span style="color: #f87171; font-weight: 700;"><i class="fas fa-phone-alt"></i> Hotline ENV (Miễn phí)</span>
-                    <i class="fas fa-external-link-alt" style="color: #fca5a5; font-size: 12px;"></i>
+            <div class="glass-card-item action-blue" onclick="window.drawRescueZone5m(${lat}, ${lng}); window.simulateSOSDispatch(null, '${report.id}', ${lat}, ${lng})">
+                <div class="glass-card-header">
+                    <span class="text-blue"><i class="fas fa-search-location"></i> Tìm Trạm / Đội Cứu Hộ</span>
+                    <i class="fas fa-arrow-right icon-sm"></i>
                 </div>
-                <div style="color: #fecaca; font-size: 12px; margin-top: 4px;">📞 <a href="tel:18001522" style="color: #f87171; font-weight: 700; text-decoration: none;" onclick="event.stopPropagation()">1800-1522</a> (Báo cáo vi phạm & Hỗ trợ)</div>
+                <div class="glass-card-desc">Phát tín hiệu SOS tìm các điểm hỗ trợ gần nhất xung quanh khu vực này.</div>
             </div>
         `;
 
         const clinicHtml = `
-            <div class="detail-item" style="flex-direction: column; align-items: flex-start; background: rgba(16, 185, 129, 0.1); padding: 10px; border-radius: 12px; border: 1px solid rgba(16, 185, 129, 0.2);">
-                <div style="display:flex; justify-content:space-between; width:100%;">
-                    <span style="color: #34d399; font-weight: 700;"><i class="fas fa-info-circle"></i> ${tr('rm_card_btn_guide', 'Sơ cứu nhanh')}</span>
+            <div class="glass-card-item action-green">
+                <div class="glass-card-header">
+                    <span class="text-green"><i class="fas fa-first-aid"></i> ${tr('rm_card_btn_guide', 'Hướng dẫn sơ cứu')}</span>
                 </div>
-                <div style="color: #a7f3d0; font-size: 12px; margin-top: 4px;">Giữ yên tĩnh, giữ ấm, KHÔNG tự ý cho ăn uống.</div>
+                <div class="glass-card-desc">Giữ yên tĩnh, giữ ấm, KHÔNG tự ý cho ăn uống.</div>
             </div>
         `;
 
         const popupContent = `
             <div class="rescue-popup dark-glass-theme">
                 <button class="close-btn"><i class="fas fa-times"></i></button>
-                <div class="rescue-header" style="${bgImage ? `background-image: url('${bgImage}');` : 'background-color: rgba(16, 185, 129, 0.1);'}">
+                <div class="rescue-header" style="${bgImage ? `background-image: url('${bgImage}');` : 'background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(2, 132, 199, 0.15));'}">
+                    <div class="header-overlay"></div>
                     ${!bgImage ? `
-                    <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; pointer-events:none;">
-                        <div style="text-align:center; opacity:0.8;">
-                            <i class="fas fa-paw" style="font-size:40px; color:#34d399;"></i>
-                        </div>
+                    <div class="header-placeholder">
+                        <i class="fas fa-paw"></i>
                     </div>` : ''}
-                    <span class="rescue-badge" style="color: ${statusColor}; background-color: ${badgeBg}; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">${statusText}</span>
-                    <div class="rescue-title-container">
-                        <h2 class="rescue-title"><i class="fas fa-paw"></i> ${escapeHtml(report.animal)}</h2>
+                    <div class="header-content">
+                        <span class="rescue-badge" style="color: ${statusColor}; background-color: ${badgeBg};">${statusText}</span>
+                        <h2 class="rescue-title">${escapeHtml(report.animal)}</h2>
                     </div>
                 </div>
 
                 <div class="rescue-details">
-                    <div class="detail-section">
-                        <div class="detail-title" style="color:#34d399;"><i class="fas fa-map-marker-alt"></i> ĐỊA ĐIỂM CỨU HỘ</div>
-                        <div class="detail-box">
-                            <div class="detail-item">
-                                <div class="detail-item-title"><i class="fas fa-location-arrow"></i> Vị trí</div>
-                                <div class="detail-item-value">${escapeHtml(report.location)}</div>
-                            </div>
-                            <div class="detail-item">
-                                <div class="detail-item-title"><i class="far fa-clock"></i> Thời gian</div>
-                                <div class="detail-item-value">${report.date}</div>
-                            </div>
+                    <!-- Location Info (Inline) -->
+                    <div class="info-row">
+                        <div class="info-icon"><i class="fas fa-map-marker-alt text-emerald"></i></div>
+                        <div class="info-text">
+                            <div class="info-label">Vị trí phát hiện</div>
+                            <div class="info-value">${escapeHtml(report.location)}</div>
+                        </div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-icon"><i class="far fa-clock text-amber"></i></div>
+                        <div class="info-text">
+                            <div class="info-label">Thời gian báo cáo</div>
+                            <div class="info-value">${report.date}</div>
                         </div>
                     </div>
 
-                    <div class="detail-section">
-                        <div class="detail-title" style="color:#fbbf24;"><i class="fas fa-info-circle"></i> MÔ TẢ TÌNH TRẠNG</div>
-                        <div class="detail-box" style="font-style: italic; font-size: 13px; color: #cbd5e1; border-left: 3px solid #fbbf24; background: rgba(251, 191, 36, 0.1);">
-                            ${escapeHtml(report.description || "Chưa có mô tả chi tiết.")}
+                    <!-- Description -->
+                    <div class="desc-box">
+                        <p>${escapeHtml(report.description || "Chưa có mô tả chi tiết.")}</p>
+                    </div>
+                    
+                    <!-- Update Status or Rescue Message -->
+                    ${(() => {
+                        const reporterId = report.reporterUserId ? String(report.reporterUserId) : '';
+                        const isAuthor = myUserId && reporterId && String(myUserId) === String(reporterId);
+                        
+                        if (isAuthor) {
+                            return `
+                            <div class="status-update-container" style="margin-top: 15px; margin-bottom: 15px; padding: 12px; background: rgba(255,255,255,0.05); border-radius: 8px; border: 1px dashed rgba(255,255,255,0.2);">
+                                <p style="font-size: 13px; color: #e2e8f0; margin-bottom: 10px; text-align: center; font-weight: 600;">Cập nhật trạng thái báo cáo:</p>
+                                <div id="status-btn-row-${report.id}" style="display: flex; gap: 8px; transition: all 0.3s ease;">
+                                    ${report.status !== 'emergency' ? `<button class="small-btn" onclick="window.showStatusNoteInput('${report.id}', 'emergency')" style="background: rgba(220, 38, 38, 0.2); border: 1px solid #dc2626; color: #ef4444; padding: 8px 10px; border-radius: 6px; cursor: pointer; flex: 1; font-size: 12px; font-weight: bold;"><i class="fas fa-exclamation-triangle"></i> Khẩn cấp</button>` : ''}
+                                    ${report.status !== 'progress' ? `<button class="small-btn" onclick="window.showStatusNoteInput('${report.id}', 'progress')" style="background: rgba(2, 132, 199, 0.2); border: 1px solid #0284c7; color: #3b82f6; padding: 8px 10px; border-radius: 6px; cursor: pointer; flex: 1; font-size: 12px; font-weight: bold;"><i class="fas fa-running"></i> Đang cứu hộ</button>` : ''}
+                                    ${report.status !== 'rescued' ? `<button class="small-btn" onclick="window.showStatusNoteInput('${report.id}', 'rescued')" style="background: rgba(22, 163, 74, 0.2); border: 1px solid #16a34a; color: #22c55e; padding: 8px 10px; border-radius: 6px; cursor: pointer; flex: 1; font-size: 12px; font-weight: bold;"><i class="fas fa-check-circle"></i> Đã an toàn</button>` : ''}
+                                </div>
+                            </div>`;
+                        } else if (myUserId) {
+                            return `
+                            <div id="rescue-msg-container-${report.id}" class="status-update-container" style="margin-top: 15px; margin-bottom: 15px; padding: 12px; background: rgba(255,255,255,0.05); border-radius: 8px; border: 1px dashed rgba(255,255,255,0.2);">
+                                <button class="small-btn glow-call-btn" onclick="window.showRescueMessageInput('${report.id}', '${reporterId}', '${encodeURIComponent(report.animal || '')}', '${report.status}', '${encodeURIComponent(report.statusNote || '')}')" style="width: 100%; background: linear-gradient(135deg, #f59e0b, #d97706); border: none; color: white; padding: 10px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: bold; display: flex; justify-content: center; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);">
+                                    <i class="fas fa-hands-helping"></i> Sẽ tới cứu
+                                </button>
+                            </div>`;
+                        } else {
+                            return `
+                            <div class="status-update-container" style="margin-top: 15px; margin-bottom: 15px; padding: 12px; background: rgba(255,255,255,0.05); border-radius: 8px; border: 1px dashed rgba(255,255,255,0.2); text-align: center;">
+                                <p style="font-size: 12px; color: #94a3b8; margin: 0;">(Đăng nhập để tham gia cứu hộ)</p>
+                            </div>`;
+                        }
+                    })()}
+
+                    ${report.statusNote ? `
+                    <!-- Status Note -->
+                    <div class="info-row" style="margin-top: -5px; margin-bottom: 15px; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px; border-left: 3px solid ${statusColor};">
+                        <div class="info-icon"><i class="fas fa-clipboard-list" style="color: ${statusColor};"></i></div>
+                        <div class="info-text">
+                            <div class="info-label">Ghi chú trạng thái</div>
+                            <div class="info-value" style="font-style: italic;">${escapeHtml(report.statusNote)}</div>
                         </div>
                     </div>
+                    ` : ''}
                     
-                    <div class="detail-section">
-                        <div class="detail-title" style="color:#10b981;"><i class="fas fa-first-aid"></i> HƯỚNG DẪN SƠ CỨU</div>
-                        <div class="detail-box" style="padding: 0; background: transparent; border: none;">${clinicHtml}</div>
-                    </div>
-
-                    <div class="detail-section">
-                        <div class="detail-title" style="color:#60a5fa;"><i class="fas fa-phone-volume"></i> LIÊN HỆ KHẨN CẤP</div>
-                        <div class="detail-box" style="padding: 0; background: transparent; border: none;">${helpersHtml}</div>
+                    <!-- Action Cards -->
+                    <div class="action-cards-container">
+                        ${clinicHtml}
+                        ${helpersHtml}
                     </div>
                     
-                    <hr style="border: 0; border-top: 1px dashed rgba(255,255,255,0.2); margin: 15px 0;">
-                    <div style="display: flex; gap: 8px; justify-content: space-between;">
-                        <button onclick="window.location.href='tel:${report.phone || ''}'" style="flex: 1; background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; padding: 12px; border-radius: 12px; cursor: pointer; font-size: 14px; font-weight: bold; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); transition: transform 0.2s;">
-                            <i class="fas fa-phone-volume"></i> ${tr('rm_card_btn_call', 'Gọi liên hệ khẩn cấp')}
-                        </button>
-                    </div>
+                    <!-- Call Button -->
+                    <button class="glow-call-btn" onclick="window.location.href='tel:${report.phone || ''}'">
+                        <i class="fas fa-phone-volume"></i> ${tr('rm_card_btn_call', 'Gọi liên hệ khẩn cấp')}
+                    </button>
                 </div>
             </div>
         `;
@@ -847,22 +1090,16 @@ function capturePhoto() {
     document.getElementById("scanOverlay").style.display = "none";
     stopCamera(); video.style.display = "none";
 
-    // YÊU CẦU: Ngay khi vừa chụp ảnh xong -> Vẽ ngay vùng khoanh vùng 5m màu đỏ nhạt & truy vấn người cứu trợ gần nhất
     if (currentLocation && currentLocation.lat && currentLocation.lng) {
-        window.drawRescueZone5m(currentLocation.lat, currentLocation.lng);
-        window.fetchAndRenderNearbyRescuers(currentLocation.lat, currentLocation.lng, 5, true);
+        // Không tìm kiếm tự động ở đây nữa
     } else {
         // Nếu chưa có tọa độ (đang fetch), thử lấy ngay lập tức
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((pos) => {
                 currentLocation = { lat: pos.coords.latitude, lng: pos.coords.longitude };
-                window.drawRescueZone5m(currentLocation.lat, currentLocation.lng);
-                window.fetchAndRenderNearbyRescuers(currentLocation.lat, currentLocation.lng, 5, true);
             }, () => {
                 // Fallback mặc định
                 currentLocation = currentLocation || { lat: 16.0545, lng: 108.2171 };
-                window.drawRescueZone5m(currentLocation.lat, currentLocation.lng);
-                window.fetchAndRenderNearbyRescuers(currentLocation.lat, currentLocation.lng, 5, true);
             }, { enableHighAccuracy: true, timeout: 5000 });
         }
     }
@@ -903,10 +1140,23 @@ async function fetchLocationAndAddress() {
         currentLocation = { lat: pos.coords.latitude, lng: pos.coords.longitude };
 
         try {
-            // Gọi trực tiếp API OpenStreetMap từ Front-end thay vì gọi qua Server
-            const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${currentLocation.lat}&lon=${currentLocation.lng}&zoom=18&addressdetails=1`);
+            // Sử dụng Nominatim API theo yêu cầu
+            const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${currentLocation.lat}&lon=${currentLocation.lng}&zoom=18&addressdetails=1&email=contact@wildlife-guardian.vn`;
+            const res = await fetch(url, { headers: { 'Accept-Language': 'vi' } });
             const data = await res.json();
-            currentAddress = data.display_name ? data.display_name : `${currentLocation.lat.toFixed(5)}, ${currentLocation.lng.toFixed(5)}`;
+            
+            if (data && data.address) {
+                const a = data.address;
+                const parts = [
+                    a.house_number,
+                    a.road || a.pedestrian || a.footway,
+                    a.suburb || a.neighbourhood || a.quarter,
+                    a.city || a.town || a.county || a.state
+                ].filter(Boolean);
+                currentAddress = parts.length > 0 ? parts.join(', ') : (data.display_name || `${currentLocation.lat.toFixed(5)}, ${currentLocation.lng.toFixed(5)}`);
+            } else {
+                currentAddress = data.display_name || `${currentLocation.lat.toFixed(5)}, ${currentLocation.lng.toFixed(5)}`;
+            }
         } catch (apiError) {
             currentAddress = `${currentLocation.lat.toFixed(5)}, ${currentLocation.lng.toFixed(5)}`;
         }
@@ -926,6 +1176,15 @@ async function fetchLocationAndAddress() {
 }
 
 async function submitReport() {
+    const lastReportTime = localStorage.getItem('lastReportTime');
+    if (lastReportTime) {
+        const timeDiff = Date.now() - parseInt(lastReportTime);
+        if (timeDiff < 30000) {
+            const secondsLeft = Math.ceil((30000 - timeDiff) / 1000);
+            return showToast(`⏳ Vui lòng đợi ${secondsLeft} giây trước khi gửi báo cáo tiếp theo!`, "error");
+        }
+    }
+
     let currentUser = null;
     try {
         const rawUser = localStorage.getItem('currentUser');
@@ -944,9 +1203,13 @@ async function submitReport() {
 
     const animalName = document.getElementById("animalName")?.value.trim() || "";
     const animalDesc = document.getElementById("animalDesc")?.value.trim() || "";
+    const phone = document.getElementById("reporterPhone")?.value.trim() || "";
 
     if (!animalName) {
         return showToast("Vui lòng nhập tên động vật!", "error");
+    }
+    if (!phone) {
+        return showToast("Vui lòng nhập số điện thoại liên hệ!", "error");
     }
     if (!currentLocation) {
         return showToast("Chưa lấy được vị trí GPS. Hãy thử lại!", "error");
@@ -995,6 +1258,7 @@ async function submitReport() {
         address: currentAddress || `${currentLocation.lat.toFixed(5)}, ${currentLocation.lng.toFixed(5)}`,
         date: new Date().toLocaleString("vi-VN"),
         photo: finalPhotoUrl,
+        phone: phone,
         reporter: currentUser ? currentUser.fullName : "Khách",
         reportedBy: currentUser ? {
             // Ép về String để đảm bảo nhất quán với schema { type: String }
@@ -1023,77 +1287,47 @@ async function submitReport() {
         }
 
         if (response.ok) {
+            localStorage.setItem('lastReportTime', Date.now().toString());
             showToast("✅ Báo cáo đã được lưu lên bản đồ!", "success");
 
-            const savedId = result && result.id ? result.id : null;
+            let savedId = result && (result._id || result.id) ? String(result._id || result.id) : null;
             const savedPhotoUrl = finalPhotoUrl;
 
-            // YÊU CẦU 2 & 3: Vẽ vòng tròn khoanh vùng 5 mét (Light Red) và hiển thị Người cứu trợ gần đây
-            if (currentLocation) {
-                window.drawRescueZone5m(currentLocation.lat, currentLocation.lng);
-                window.fetchAndRenderNearbyRescuers(currentLocation.lat, currentLocation.lng, 5);
-            }
+            if (submitBtn) { submitBtn.disabled = false; submitBtn.innerHTML = originalBtnHTML; }
 
-            await closeCameraModal();
+            // Đóng modal trước
+            window.closeCameraModal();
+
+            // Lấy dữ liệu mới nhất (chờ xử lý xong)
             await fetchRescueReports();
 
-            if (savedPhotoUrl && savedId) {
-                const newReport = reports.find(r => r.id === savedId);
-
-                if (newReport && !newReport.photo) {
-                    try {
-                        const patchRes = await fetch(getApiUrl(`/api/rescuemap/${savedId}/photo`), {
-                            method: 'PATCH',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ photo: savedPhotoUrl })
-                        });
-                        if (patchRes.ok) {
-                            newReport.photo = savedPhotoUrl;
-                        }
-                    } catch (e) { }
-                } else if (!newReport) {
-                    if (reports.length > 0) {
-                        const last = reports[reports.length - 1];
-                        if (!last.photo && last.id) {
-                            try {
-                                await fetch(getApiUrl(`/api/rescuemap/${last.id}/photo`), {
-                                    method: 'PATCH',
-                                    headers: { 'Content-Type': 'application/json' },
-                                    body: JSON.stringify({ photo: savedPhotoUrl })
-                                });
-                                last.photo = savedPhotoUrl;
-                            } catch (e) { }
-                        }
-                    }
-                }
-
-                renderReportsPanel();
-                if (viewer) renderMarkersToMap(filterReports());
+            // Fallback: nếu API server không trả về ID, lấy ID mới nhất vừa được tải về
+            if (!savedId && reports.length > 0) {
+                savedId = reports[0].id;
             }
 
-            if (viewer && currentLocation) {
+            // Tự động bay camera tới vị trí vừa báo cáo và mở bảng thông tin
+            if (viewer && currentLocation && savedId) {
                 window.setActiveTab("map");
                 viewer.camera.flyTo({
-                    destination: Cesium.Cartesian3.fromDegrees(currentLocation.lng, currentLocation.lat, 1500),
+                    destination: Cesium.Cartesian3.fromDegrees(currentLocation.lng, currentLocation.lat, 1200),
                     duration: 2,
                     complete: function () {
-                        if (reports.length > 0) {
-                            const newReport = reports[reports.length - 1];
-                            const entity = viewer.entities.getById(`report_${newReport.id}`);
-                            if (entity && popupDiv) {
-                                activeEntity = entity;
-                                const html = typeof entity.properties.customHTML.getValue === 'function'
-                                    ? entity.properties.customHTML.getValue()
-                                    : entity.properties.customHTML;
-                                popupDiv.innerHTML = html;
-                                popupDiv.style.display = 'block';
-                                const closeBtn = popupDiv.querySelector('.close-btn');
-                                if (closeBtn) closeBtn.onclick = () => { popupDiv.style.display = 'none'; activeEntity = null; };
-                            }
+                        const entity = viewer.entities.getById(`report_${savedId}`);
+                        if (entity && typeof popupDiv !== 'undefined' && popupDiv) {
+                            activeEntity = entity;
+                            const html = typeof entity.properties.customHTML.getValue === 'function'
+                                ? entity.properties.customHTML.getValue()
+                                : entity.properties.customHTML;
+                            popupDiv.innerHTML = html;
+                            popupDiv.style.display = 'block';
+                            const closeBtn = popupDiv.querySelector('.close-btn');
+                            if (closeBtn) closeBtn.onclick = () => { popupDiv.style.display = 'none'; activeEntity = null; };
                         }
                     }
                 });
             }
+
         } else {
             const errMsg = result?.error || result?.message || `HTTP ${response.status}`;
             if (submitBtn) { submitBtn.disabled = false; submitBtn.innerHTML = originalBtnHTML; }
@@ -1106,6 +1340,7 @@ async function submitReport() {
 }
 
 window.openCameraModal = async function (e, preselectedStatus = null) {
+    window._reportSubmittedInCurrentSession = false;
     if (e && typeof e.preventDefault === 'function') e.preventDefault();
     const modal = document.getElementById("cameraModal");
     if (!modal) return;
@@ -1119,6 +1354,10 @@ window.openCameraModal = async function (e, preselectedStatus = null) {
         if (statusEl) statusEl.value = preselectedStatus;
     }
     document.getElementById("previewSection").style.display = "none";
+
+    const sosDispatch = document.getElementById("sosDispatchSection");
+    if (sosDispatch) sosDispatch.style.display = "none";
+
     document.getElementById("captureBtn").style.display = "flex";
     document.getElementById("retakeBtn").style.display = "none";
     document.getElementById("locationInfo").style.display = "none";
@@ -1139,7 +1378,10 @@ window.openCameraModal = async function (e, preselectedStatus = null) {
 
 window.closeCameraModal = function () {
     const modal = document.getElementById("cameraModal");
-    if (modal) modal.classList.remove("open");
+    if (modal) {
+        modal.classList.remove("open");
+        modal.style.display = '';
+    }
     document.body.style.overflow = '';
     stopCamera();
 };
@@ -1270,7 +1512,7 @@ window.fetchAndRenderNearbyRescuers = async function (lat, lng, radiusMeters = 5
 
         nearbyList.innerHTML = `
             <div style="color: #38bdf8; font-size: 13px; font-weight: bold; padding: 6px 0; display: flex; align-items: center; gap: 8px;">
-                <i class="fas fa-search-location fa-beat"></i> Mở rộng quét 50km tìm Trạm thú y / Cứu trợ thực tế...
+                <i class="fas fa-search-location fa-beat"></i> Quét bán kính 10km tìm Trạm thú y / Cứu trợ...
             </div>`;
 
         await new Promise(resolve => setTimeout(resolve, 1500));
@@ -1302,6 +1544,7 @@ window.fetchAndRenderNearbyRescuers = async function (lat, lng, radiusMeters = 5
                 (
                   node["amenity"="veterinary"](around:50000,${lat},${lng});
                   node["amenity"="animal_shelter"](around:50000,${lat},${lng});
+                  node["shop"="pet"](around:50000,${lat},${lng});
                 );
                 out center 10;
             `;
@@ -1317,7 +1560,11 @@ window.fetchAndRenderNearbyRescuers = async function (lat, lng, radiusMeters = 5
                     dynamicRescuers = osmData.elements.map(el => {
                         const tags = el.tags || {};
                         let name = tags.name || "";
-                        if (!name) name = tags.amenity === 'veterinary' ? 'Phòng khám Thú y' : 'Trạm cứu hộ động vật';
+                        if (!name) {
+                            if (tags.amenity === 'veterinary') name = 'Phòng khám Thú y';
+                            else if (tags.shop === 'pet') name = 'Cửa hàng Thú cưng';
+                            else name = 'Trạm cứu hộ động vật';
+                        }
 
                         let address = [tags["addr:housenumber"], tags["addr:street"], tags["addr:city"], tags["addr:province"]].filter(Boolean).join(", ");
                         if (!address) address = "Chưa rõ địa chỉ cụ thể";
@@ -1339,12 +1586,7 @@ window.fetchAndRenderNearbyRescuers = async function (lat, lng, radiusMeters = 5
             console.warn("Lỗi khi fetch Overpass API:", err);
         }
 
-        // Nếu cả API nội bộ và OSM đều trống, mới dùng dữ liệu tổ chức lớn làm dự phòng cuối cùng
-        if (rescuers.length === 0 && dynamicRescuers.length === 0) {
-            dynamicRescuers = [
-                { _id: "env_hn", fullName: "Trung tâm Giáo dục Thiên nhiên (ENV)", address: "Việt Nam", phone: "1800 1522", location: { coordinates: [105.8542, 21.0285] }, status: "active", website: "https://env4wildlife.org/" }
-            ];
-        }
+        // Đã xóa fallback ENV theo yêu cầu của user
 
         let allRescuers = [...rescuers, ...dynamicRescuers];
 
@@ -1369,6 +1611,7 @@ window.fetchAndRenderNearbyRescuers = async function (lat, lng, radiusMeters = 5
         // Sắp xếp theo khoảng cách và chọn 2 trạm gần nhất
         uniqueRescuers.sort((a, b) => a.distanceKm - b.distanceKm);
         rescuers = uniqueRescuers.slice(0, 2);
+        window.nearestRescuer = rescuers.length > 0 ? rescuers[0] : null;
 
         // Tự động chuyển đổi tọa độ thành địa chỉ thật (Reverse Geocoding) cho những trạm thiếu thông tin
         for (const r of rescuers) {
@@ -1388,7 +1631,13 @@ window.fetchAndRenderNearbyRescuers = async function (lat, lng, radiusMeters = 5
 
         if (updateModalUI && nearbyBox && nearbyList) {
             if (rescuers.length > 0) {
-                nearbyBox.querySelector(".rm-nearby-header span").innerHTML = `🚨 Tìm thấy ${rescuers.length} Trạm cứu hộ / thú y gần nhất!`;
+                const nearestDistance = rescuers[0].distanceKm;
+                if (nearestDistance > 10) {
+                    nearbyBox.querySelector(".rm-nearby-header span").innerHTML = `⚠️ Không có trạm thú y nào trong bán kính 10km!`;
+                } else {
+                    nearbyBox.querySelector(".rm-nearby-header span").innerHTML = `🚨 Tìm thấy ${rescuers.length} Trạm cứu hộ / thú y gần nhất!`;
+                }
+
                 nearbyList.innerHTML = rescuers.map(r => `
                     <div class="rm-rescuer-item" style="display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:8px 12px; margin-top:6px; font-size:12.5px; color:#e2e8f0;">
                         <div style="flex: 1; padding-right: 8px;">
@@ -1401,13 +1650,22 @@ window.fetchAndRenderNearbyRescuers = async function (lat, lng, radiusMeters = 5
                     </div>
                 `).join('');
             } else {
-                nearbyBox.querySelector(".rm-nearby-header span").innerHTML = `🎯 Đã khoanh vùng hiện trường sự cố`;
-                nearbyList.innerHTML = `<div style="color: #cbd5e1; font-size: 12.5px; padding: 4px 0;">Đội phản ứng nhanh của ENV sẽ tiếp nhận tọa độ ngay khi bạn bấm Gửi!</div>`;
+                nearbyBox.querySelector(".rm-nearby-header span").innerHTML = `⚠️ Không có trạm thú y nào trong bán kính 10km!`;
+                nearbyList.innerHTML = `<div style="color: #cbd5e1; font-size: 12.5px; padding: 4px 0;">Không tìm thấy trạm thú y hoặc cứu hộ nào xung quanh khu vực này. Đội phản ứng nhanh sẽ tiếp nhận tọa độ khi bạn gửi báo cáo.</div>`;
             }
         }
 
         if (rescuers.length > 0) {
             showToast(`🎯 Hiển thị Trạm cứu hộ gần nhất: ${formatDistance(rescuers[0].distanceKm)}!`, "success");
+            
+            // Di chuyển camera tới vị trí trạm cứu hộ gần nhất (Bug 1 fix)
+            if (typeof viewer !== 'undefined' && viewer && rescuers[0].location && rescuers[0].location.coordinates) {
+                viewer.camera.flyTo({
+                    destination: Cesium.Cartesian3.fromDegrees(rescuers[0].location.coordinates[0], rescuers[0].location.coordinates[1], 800),
+                    duration: 1.5
+                });
+            }
+
             rescuers.forEach((rescuer, idx) => {
                 const rLat = rescuer.location?.coordinates?.[1] || lat;
                 const rLng = rescuer.location?.coordinates?.[0] || lng;
@@ -1456,8 +1714,8 @@ window.fetchAndRenderNearbyRescuers = async function (lat, lng, radiusMeters = 5
                         }
                     });
 
-                    // Tự động hiển thị popup cho người cứu trợ gần nhất
-                    if (idx === 0 && typeof popupDiv !== 'undefined' && popupDiv) {
+                    // Tự động hiển thị popup cho người cứu trợ gần nhất nếu người dùng chủ động bấm tìm (updateModalUI = true)
+                    if (updateModalUI && idx === 0 && typeof popupDiv !== 'undefined' && popupDiv) {
                         // Delay nhẹ để đè lên popup mặc định (nếu có)
                         setTimeout(() => {
                             activeEntity = newEntity;
@@ -1616,3 +1874,103 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 800);
     }
 });
+
+// ==========================================
+// MÔ PHỎNG ĐIỀU PHỐI SOS (UBER FOR RESCUE)
+// ==========================================
+window.simulateSOSDispatch = async function(savedPhotoUrl, savedId, lat, lng) {
+    // 0. Bật Modal nếu đang tắt (để gọi từ popup bản đồ)
+    const cameraModal = document.getElementById("cameraModal");
+    if (cameraModal) {
+        cameraModal.classList.add("open");
+        cameraModal.style.display = '';
+    }
+
+    const viewfinder = document.getElementById("cameraViewfinder");
+    if (viewfinder) viewfinder.style.display = "none";
+    
+    // 1. Chuyển UI sang màn hình Radar
+    const previewSec = document.getElementById("previewSection");
+    if (previewSec) previewSec.style.display = "none";
+
+    const sosSec = document.getElementById("sosDispatchSection");
+    if (sosSec) sosSec.style.display = "flex";
+
+    const sosTitle = document.getElementById("sosDispatchTitle");
+    if (sosTitle) sosTitle.textContent = "Đang phát sóng tín hiệu SOS...";
+
+    const sosSub = document.getElementById("sosDispatchSubtitle");
+    if (sosSub) sosSub.textContent = "Hệ thống đang quét các Trạm thú y và Đội cứu hộ trong bán kính 10km.";
+
+    const matchCard = document.getElementById("sosMatchCard");
+    if (matchCard) matchCard.style.display = "none";
+
+    // 2. Fetch danh sách báo cáo ngầm
+    await fetchRescueReports();
+
+    if (savedPhotoUrl && savedId) {
+        const newReport = reports.find(r => r.id === savedId);
+        if (newReport && !newReport.photo) {
+            try {
+                const patchRes = await fetch(getApiUrl(`/api/rescuemap/${savedId}/photo`), {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ photo: savedPhotoUrl })
+                });
+                if (patchRes.ok) {
+                    newReport.photo = savedPhotoUrl;
+                }
+            } catch (e) { }
+        } else if (!newReport) {
+            if (reports.length > 0) {
+                const last = reports[reports.length - 1];
+                if (!last.photo && last.id) {
+                    try {
+                        await fetch(getApiUrl(`/api/rescuemap/${last.id}/photo`), {
+                            method: 'PATCH',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ photo: savedPhotoUrl })
+                        });
+                        last.photo = savedPhotoUrl;
+                    } catch (e) { }
+                }
+            }
+        }
+        renderReportsPanel();
+        if (typeof viewer !== 'undefined' && viewer) renderMarkersToMap(filterReports());
+    }
+
+    // 3. Thực hiện fetch người cứu trợ và delay đếm ngược (đang quét)
+    if (lat && lng) {
+        await window.fetchAndRenderNearbyRescuers(lat, lng, 5, true);
+    }
+    await new Promise(resolve => setTimeout(resolve, 3000));
+
+    // 4. Đã tìm thấy người cứu trợ -> Hiển thị kết quả
+    if (sosTitle) sosTitle.textContent = "Đã tìm thấy Đội cứu trợ!";
+    if (sosSub) sosSub.textContent = "Tín hiệu SOS của bạn đã được tiếp nhận thành công.";
+
+    const matchName = document.getElementById("sosMatchName");
+    const matchAddress = document.getElementById("sosMatchAddress");
+    const matchEta = document.getElementById("sosMatchEta");
+
+    if (window.nearestRescuer) {
+        if (matchName) matchName.textContent = window.nearestRescuer.fullName;
+        if (matchAddress) matchAddress.innerHTML = `<i class="fas fa-map-marker-alt"></i> ` + escapeHtml(window.nearestRescuer.address || "Đang xác định");
+        const dist = window.nearestRescuer.distanceKm || 5;
+        const eta = Math.max(5, Math.round(dist * 3)); // Trung bình 3 phút / km
+        if (matchEta) matchEta.textContent = eta + " phút";
+    } else {
+        if (matchName) matchName.textContent = "Đội Phản Ứng Nhanh (Kiểm Lâm)";
+        if (matchAddress) matchAddress.innerHTML = `<i class="fas fa-map-marker-alt"></i> Trạm Kiểm Lâm Khu Vực`;
+        if (matchEta) matchEta.textContent = "15 phút";
+    }
+
+    if (matchCard) matchCard.style.display = "block";
+    window._lastSubmittedId = savedId;
+    window._reportSubmittedInCurrentSession = true;
+}
+
+window.finishSOSDispatch = function () {
+    window.closeCameraModal();
+}

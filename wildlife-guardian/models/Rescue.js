@@ -19,6 +19,7 @@ const rescueSchema = new mongoose.Schema({
     },
     date: String,           // Ngày giờ báo cáo
     phone: String,          // Số điện thoại
+    statusNote: String,     // Ghi chú trạng thái cứu hộ
     createdAt: { type: Date, default: Date.now }
 });
 
