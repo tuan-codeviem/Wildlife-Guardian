@@ -6,7 +6,8 @@ const path = require("path");
 const fs = require("fs");
 const zlib = require("zlib");
 const bcrypt = require("bcrypt"); // 🔐 Dùng để mã hóa mật khẩu
-require("dotenv").config();
+const envPath = fs.existsSync(path.join(__dirname, ".env")) ? path.join(__dirname, ".env") : path.join(__dirname, "../.env");
+require("dotenv").config({ path: envPath });
 
 // ===== GOOGLE AUTH SETUP =====
 const { OAuth2Client } = require("google-auth-library");
@@ -594,19 +595,19 @@ app.post("/api/login", async (req, res) => {
 app.post("/api/auth/google", async (req, res) => {
   try {
     const { credential } = req.body;
-    
+
     // Verify token từ Google
     const ticket = await googleClient.verifyIdToken({
       idToken: credential,
       audience: process.env.GOOGLE_CLIENT_ID,
     });
-    
+
     const payload = ticket.getPayload();
     const { email, name, picture, sub: googleId } = payload;
-    
+
     // Tìm user theo email hoặc googleId
     let user = await User.findOne({ $or: [{ email }, { googleId }] });
-    
+
     if (!user) {
       // Nếu chưa có, tạo user mới
       user = new User({
@@ -622,11 +623,11 @@ app.post("/api/auth/google", async (req, res) => {
       // Đã có user bằng email này nhưng chưa liên kết Google -> Cập nhật googleId
       user.googleId = googleId;
       if (user.avatar === "https://cdn-icons-png.flaticon.com/512/149/149071.png") {
-          user.avatar = picture; // Cập nhật avatar thật nếu đang dùng avatar mặc định
+        user.avatar = picture; // Cập nhật avatar thật nếu đang dùng avatar mặc định
       }
       await user.save();
     }
-    
+
     res.json({
       success: true,
       message: "Đăng nhập bằng Google thành công!",
@@ -974,6 +975,24 @@ app.delete("/api/rescuemap/:id", async (req, res) => {
   }
 });
 
+app.patch("/api/rescuemap/:id/status", async (req, res) => {
+  try {
+    const { status, statusNote } = req.body;
+    const updateData = { status };
+    if (statusNote !== undefined) {
+        updateData.statusNote = statusNote;
+    }
+    const rescue = await Rescue.findByIdAndUpdate(req.params.id, updateData, { new: true });
+    if (!rescue) {
+      return res.status(404).json({ success: false, message: "Không tìm thấy báo cáo!" });
+    }
+    res.json({ success: true, message: "Cập nhật trạng thái thành công!", data: rescue });
+  } catch (error) {
+    console.error("Lỗi cập nhật trạng thái:", error);
+    res.status(500).json({ success: false, error: "Lỗi cập nhật trạng thái" });
+  }
+});
+
 // ==========================================
 // 8. API CHATBOT AI
 // ==========================================
@@ -1002,7 +1021,7 @@ QUY TẮC BẮT BUỘC VỀ ĐỊNH DẠNG: Tuyệt đối không sử dụng b�
       return res.json({ success: true, text: response.text });
     } catch (geminiError) {
       console.warn("⚠️ Gemini bị lỗi hoặc quá tải, đang chuyển sang Groq Fallback...");
-      
+
       if (!process.env.GROQ_API_KEY) {
         throw new Error("Không có GROQ_API_KEY để dùng Fallback.");
       }
