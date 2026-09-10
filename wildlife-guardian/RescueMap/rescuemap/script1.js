@@ -1025,10 +1025,6 @@ function renderMarkersToMap(reportsData) {
                         ${helpersHtml}
                     </div>
                     
-                    <!-- Call Button -->
-                    <button class="glow-call-btn" onclick="window.location.href='tel:${report.phone || ''}'">
-                        <i class="fas fa-phone-volume"></i> ${tr('rm_card_btn_call', 'Gọi liên hệ khẩn cấp')}
-                    </button>
                 </div>
             </div>
         `;
