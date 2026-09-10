@@ -43,7 +43,7 @@ const translations = {
     btn_cancel: "Cancel",
     report_post_title: "Report post?",
     report_post_desc: "Are you sure you want to report this post?",
-    btn_report: "Report",
+    btn_report_post: "Report",
     del_comment_title: "Delete comment?",
     del_comment_desc: "Are you sure you want to delete this comment?",
     edit_post_title: "Edit post",
@@ -114,8 +114,8 @@ const translations = {
     lib_fullscreen: "Fullscreen",
     lib_taxonomy_title: "Taxonomy & Ecology",
     pixel_card_badge: "🎮 8-BIT GUARDIAN QUEST",
-    pixel_card_name: "Captain Sparky · Guardian Mascot",
-    pixel_card_quote: "Nature calls, Guardian! Rescue endangered species in our game to decrypt full 3D holographic dossiers!",
+    pixel_card_name: "An exclusive animal-protection game",
+    pixel_card_quote: "Join the effort to protect animals now to unlock 3D animal models!",
     pixel_card_btn: "🎮 Play Rescue Game",
     hero_badge: "Join the Movement",
     hero_title: "Protect Wildlife, Together.",
@@ -376,7 +376,7 @@ const translations = {
     btn_cancel: "Hủy",
     report_post_title: "Báo cáo bài viết?",
     report_post_desc: "Bạn có chắc chắn muốn báo cáo bài viết này vì vi phạm tiêu chuẩn cộng đồng?",
-    btn_report: "Báo cáo",
+    btn_report_post: "Báo cáo",
     del_comment_title: "Xóa bình luận?",
     del_comment_desc: "Bạn có chắc chắn muốn xóa bình luận này không?",
     edit_post_title: "Chỉnh sửa bài viết",
@@ -448,8 +448,8 @@ const translations = {
     lib_fullscreen: "Toàn Màn Hình",
     lib_taxonomy_title: "Phân Loại & Sinh Thái",
     pixel_card_badge: "🎮 NHIỆM VỤ CỨU HỘ 8-BIT",
-    pixel_card_name: "Đội Trưởng Sparky · Linh Vật Bảo Vệ",
-    pixel_card_quote: "Rừng già đang gọi, Hiệp sĩ! Hãy tham gia giải cứu động vật trong trò chơi để giải mã hồ sơ 3D độc quyền nhé!",
+    pixel_card_name: "Tựa game bảo vệ động vật độc quyền",
+    pixel_card_quote: "Hãy tham gia bảo vệ động vật ngay để mở khóa các mô hình động vật 3D!",
     pixel_card_btn: "🎮 Chơi Game Cứu Hộ Ngay",
     hero_badge: "Tham Gia Ngay",
     hero_title: "Bảo Vệ Động Vật, Cùng Nhau.",
@@ -699,7 +699,7 @@ function applyLanguage() {
   if (typeof loadPosts === "function") {
     const activeBtn = document.querySelector(".filter-btn.active");
     if (activeBtn) {
-        loadPosts(activeBtn.getAttribute("data-category") || "all posts");
+      loadPosts(activeBtn.getAttribute("data-category") || "all posts");
     }
   }
 
