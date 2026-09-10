@@ -1,0 +1,224 @@
+/* ═══════════════════════════════════════════════════════════════════
+   WILDLIFE GUARDIAN – theme.css
+   Global Unified Theme (Dark / Light Mode System)
+   WCAG AA Compliant · High Contrast · 60fps Smooth Transition
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ─── 1. INSTANT THEME SWITCHING HELPER (ZERO-LAG 60FPS) ─── */
+.theme-switching,
+.theme-switching *,
+.theme-switching *::before,
+.theme-switching *::after {
+  -webkit-transition: none !important;
+  -moz-transition: none !important;
+  -o-transition: none !important;
+  -ms-transition: none !important;
+  transition: none !important;
+}
+
+/* ─── 2. THEME TOGGLE BUTTON COMPONENT ─── */
+.theme-toggle-btn {
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  outline: none;
+  text-decoration: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Dark Mode Default State for Button (Golden Sun) */
+.theme-toggle-btn {
+  background: rgba(245, 158, 11, 0.12);
+  border: 1.5px solid rgba(245, 158, 11, 0.35);
+  color: #fbbf24;
+}
+
+.theme-toggle-btn:hover {
+  transform: rotate(20deg) scale(1.1);
+  background: rgba(245, 158, 11, 0.22);
+  border-color: #f59e0b;
+  color: #fef08a;
+  box-shadow: 0 0 18px rgba(245, 158, 11, 0.45);
+}
+
+/* Light Mode State for Button (Emerald Moon) */
+[data-theme="light"] .theme-toggle-btn {
+  background: rgba(16, 185, 129, 0.1);
+  border: 1.5px solid rgba(16, 185, 129, 0.3);
+  color: #064e3b;
+}
+
+[data-theme="light"] .theme-toggle-btn:hover {
+  transform: rotate(-20deg) scale(1.1);
+  background: rgba(16, 185, 129, 0.18);
+  border-color: #059669;
+  color: #059669;
+  box-shadow: 0 0 16px rgba(16, 185, 129, 0.3);
+}
+
+.theme-toggle-btn svg {
+  width: 19px;
+  height: 19px;
+  stroke: currentColor;
+  stroke-width: 2;
+  transition: transform 0.3s ease;
+}
+
+/* ─── 3. GLOBAL LIGHT SCROLLBAR ─── */
+[data-theme="light"] ::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+[data-theme="light"] ::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+[data-theme="light"] ::-webkit-scrollbar-thumb {
+  background: #94a3b8;
+  border-radius: 6px;
+  border: 2px solid #f1f5f9;
+}
+
+[data-theme="light"] ::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+/* ─── 4. NAVBAR LIGHT MODE OVERRIDES (WCAG AA) ─── */
+[data-theme="light"] .navbar {
+  background: rgba(255, 255, 255, 0.88) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.9) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04) !important;
+}
+
+[data-theme="light"] .navbar.scrolled {
+  background: rgba(255, 255, 255, 0.96) !important;
+  backdrop-filter: blur(25px) !important;
+  -webkit-backdrop-filter: blur(25px) !important;
+  border-bottom: 1px solid rgba(16, 185, 129, 0.2) !important;
+  box-shadow: 0 6px 24px rgba(6, 78, 59, 0.08) !important;
+}
+
+[data-theme="light"] .navbar .logo-text {
+  color: #064e3b !important;
+  text-shadow: none !important;
+}
+
+[data-theme="light"] .navbar .nav-item {
+  color: #1e293b !important;
+  font-weight: 550 !important;
+}
+
+[data-theme="light"] .navbar .nav-item:hover {
+  color: #059669 !important;
+  background: rgba(16, 185, 129, 0.08) !important;
+}
+
+[data-theme="light"] .navbar .nav-item.active {
+  color: #047857 !important;
+  background: #d1fae5 !important;
+  border: 1px solid #6ee7b7 !important;
+  font-weight: 600 !important;
+}
+
+/* Language Switcher in Light Mode */
+[data-theme="light"] .navbar .lang-switcher {
+  color: #064e3b !important;
+}
+
+[data-theme="light"] .navbar .lang-toggle-btn {
+  color: #064e3b !important;
+  border-color: rgba(16, 185, 129, 0.25) !important;
+  background: rgba(16, 185, 129, 0.06) !important;
+}
+
+[data-theme="light"] .navbar .lang-toggle-btn:hover {
+  background: rgba(16, 185, 129, 0.14) !important;
+  border-color: #10b981 !important;
+}
+
+[data-theme="light"] .navbar .lang-dropdown {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1) !important;
+}
+
+[data-theme="light"] .navbar .lang-dropdown a {
+  color: #1e293b !important;
+}
+
+[data-theme="light"] .navbar .lang-dropdown a:hover {
+  background: #f0fdf4 !important;
+  color: #059669 !important;
+}
+
+/* Login Button in Light Mode */
+[data-theme="light"] .navbar .btn-login {
+  color: #064e3b !important;
+  border: 1.5px solid #a7f3d0 !important;
+  background: rgba(16, 185, 129, 0.08) !important;
+  font-weight: 600 !important;
+}
+
+[data-theme="light"] .navbar .btn-login:hover {
+  background: #059669 !important;
+  color: #ffffff !important;
+  border-color: #059669 !important;
+  box-shadow: 0 4px 14px rgba(5, 150, 105, 0.3) !important;
+}
+
+/* Hamburger for Mobile */
+[data-theme="light"] .navbar .hamburger span {
+  background: #064e3b !important;
+}
+
+/* Mobile Nav Drawer */
+[data-theme="light"] .mobile-nav {
+  background: rgba(255, 255, 255, 0.98) !important;
+  border-top: 1px solid #e2e8f0 !important;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12) !important;
+}
+
+[data-theme="light"] .mobile-nav a {
+  color: #1e293b !important;
+  font-weight: 550 !important;
+}
+
+[data-theme="light"] .mobile-nav a:hover {
+  color: #059669 !important;
+  background: #f0fdf4 !important;
+}
+
+[data-theme="light"] .mobile-nav a.active-mobile {
+  color: #047857 !important;
+  background: #d1fae5 !important;
+  border-left: 3px solid #059669 !important;
+  font-weight: 600 !important;
+}
+
+/* Nav User Avatar / Profile Dropdown */
+[data-theme="light"] .navbar .user-profile-menu {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12) !important;
+}
+
+[data-theme="light"] .navbar .user-profile-menu a,
+[data-theme="light"] .navbar .user-profile-menu button {
+  color: #1e293b !important;
+}
+
+[data-theme="light"] .navbar .user-profile-menu a:hover,
+[data-theme="light"] .navbar .user-profile-menu button:hover {
+  background: #f0fdf4 !important;
+  color: #059669 !important;
+}

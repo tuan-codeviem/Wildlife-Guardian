@@ -24,6 +24,14 @@
   <link rel="stylesheet" href="../ChatBotAI/chatbot.css" />
   <!-- Emergency Rescue Notification System -->
   <link rel="stylesheet" href="../scripts/rescue-notif.css" />
+
+  <!-- Anti-FOUC Theme Initialization -->
+  <script>
+    (function () {
+      var savedTheme = localStorage.getItem("wg_theme") || localStorage.getItem("wg_species_theme") || "light";
+      document.documentElement.setAttribute("data-theme", savedTheme);
+    })();
+  </script>
 </head>
 
 <body>

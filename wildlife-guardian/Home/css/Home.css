@@ -2161,3 +2161,313 @@ button {
     justify-content: center;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   LIGHT THEME OVERRIDES ([data-theme="light"]) — HOME PAGE
+   WCAG AA Contrast Compliant · High Legibility & Premium Styling
+   ═══════════════════════════════════════════════════════════════════ */
+
+[data-theme="light"] body {
+  background: #f8fafc;
+  color: #1e293b;
+}
+
+/* ── Hero Light Mode ── */
+[data-theme="light"] .hero {
+  background: #f0fdf4;
+}
+
+[data-theme="light"] .hero-overlay {
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 50%, rgba(167, 243, 208, 0.45) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 80% at 80% 30%, rgba(187, 247, 208, 0.4) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 50% at 60% 80%, rgba(254, 215, 170, 0.25) 0%, transparent 60%),
+    linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 40%, #e6f7ef 100%);
+}
+
+[data-theme="light"] #hero-canvas {
+  opacity: 0.35;
+}
+
+[data-theme="light"] .hero-badge {
+  background: #dcfce7;
+  border-color: #86efac;
+  color: #15803d;
+  font-weight: 700;
+}
+
+[data-theme="light"] .hero-title {
+  color: #0f172a;
+}
+
+[data-theme="light"] .title-green {
+  background: linear-gradient(90deg, #059669, #10b981, #047857, #059669);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+[data-theme="light"] .hero-desc {
+  color: #334155;
+}
+
+[data-theme="light"] .hero-stats-row {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="light"] .hs-num {
+  color: #0f172a;
+}
+
+[data-theme="light"] .hs-lbl {
+  color: #475569;
+  font-weight: 600;
+}
+
+[data-theme="light"] .hs-sep {
+  background: #e2e8f0;
+}
+
+[data-theme="light"] .btn-ghost {
+  color: #1e293b;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1.5px solid #cbd5e1;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="light"] .btn-ghost:hover {
+  background: #ffffff;
+  border-color: #059669;
+  color: #059669;
+  box-shadow: 0 6px 20px rgba(5, 150, 105, 0.15);
+}
+
+[data-theme="light"] .float-badge {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .fb-text strong {
+  color: #0f172a;
+}
+
+[data-theme="light"] .fb-text small {
+  color: #475569;
+  font-weight: 600;
+}
+
+[data-theme="light"] .scroll-hint {
+  color: #475569;
+}
+
+[data-theme="light"] .sh-mouse {
+  border-color: #94a3b8;
+}
+
+[data-theme="light"] .sh-wheel {
+  background: #475569;
+}
+
+/* ── Stats Section Light Mode ── */
+[data-theme="light"] .stats-section {
+  background: #ffffff;
+  border-top: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+[data-theme="light"] .stats-bg-glow {
+  background: radial-gradient(ellipse 70% 120% at 50% 50%, rgba(16, 185, 129, 0.06) 0%, transparent 70%);
+}
+
+[data-theme="light"] .stats-label-top {
+  color: #059669;
+  font-weight: 700;
+}
+
+[data-theme="light"] .stat-item {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+}
+
+[data-theme="light"] .stat-item:hover {
+  background: #ffffff;
+  border-color: #86efac;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .stat-num {
+  color: #0f172a;
+}
+
+[data-theme="light"] .stat-label {
+  color: #475569;
+  font-weight: 600;
+}
+
+[data-theme="light"] .stat-track {
+  background: #e2e8f0;
+}
+
+/* ── Features Section Light Mode ── */
+[data-theme="light"] .section-features {
+  background: linear-gradient(180deg, #f8fafc 0%, #f0fdf4 100%);
+}
+
+[data-theme="light"] .feat-card {
+  background: #ffffff;
+  border-color: #e2e8f0;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+}
+
+[data-theme="light"] .feat-card:hover {
+  border-color: #86efac;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .feat-card--wide {
+  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+  border: 1px solid #a7f3d0;
+}
+
+[data-theme="light"] .feat-card--wide .fc-content h3 {
+  color: #064e3b;
+}
+
+[data-theme="light"] .feat-card--wide .fc-content p {
+  color: #1e293b;
+}
+
+[data-theme="light"] .feat-card--wide .fc-link {
+  color: #047857;
+  font-weight: 700;
+}
+
+[data-theme="light"] .feat-card--wide .fc-number {
+  color: rgba(6, 78, 59, 0.08);
+}
+
+/* ── Community & News Light Mode ── */
+[data-theme="light"] .section-comm {
+  background: #ffffff;
+}
+
+[data-theme="light"] .comm-card-v2,
+[data-theme="light"] .comm-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+}
+
+[data-theme="light"] .section-news {
+  background: linear-gradient(180deg, #f8fafc, #f0fdf4);
+}
+
+[data-theme="light"] .news-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+}
+
+[data-theme="light"] .news-card h3 {
+  color: #0f172a;
+}
+
+[data-theme="light"] .news-card p {
+  color: #475569;
+}
+
+[data-theme="light"] .news-feat-body {
+  background: #ffffff;
+  border-top: 1px solid #e2e8f0;
+}
+
+[data-theme="light"] .news-feat-body h3 {
+  color: #0f172a;
+}
+
+[data-theme="light"] .news-feat-body p {
+  color: #475569;
+}
+
+/* ── CTA Section Light Mode ── */
+[data-theme="light"] .section-cta {
+  background: #ecfdf5 !important;
+  border-top: 1px solid #d1fae5 !important;
+}
+
+[data-theme="light"] .cta-wave-top path {
+  fill: #ffffff !important;
+}
+
+[data-theme="light"] .cta-orbs {
+  opacity: 0.3 !important;
+}
+
+[data-theme="light"] .cta-badge {
+  background: #dcfce7 !important;
+  border: 1px solid #86efac !important;
+  color: #15803d !important;
+}
+
+[data-theme="light"] .section-cta h2,
+[data-theme="light"] .cta-inner h2,
+[data-theme="light"] .cta-title {
+  color: #0f172a !important;
+}
+
+[data-theme="light"] .section-cta p,
+[data-theme="light"] .cta-inner p,
+[data-theme="light"] .cta-desc {
+  color: #334155 !important;
+}
+
+[data-theme="light"] .cta-trust span {
+  color: #475569 !important;
+}
+
+[data-theme="light"] .cta-decor-grid span {
+  opacity: 0.07;
+}
+
+/* ── Footer Light Mode ── */
+[data-theme="light"] .site-footer {
+  background: #f8fafc !important;
+  border-top: 1px solid #e2e8f0 !important;
+}
+
+[data-theme="light"] .ft-logo span {
+  color: #0f172a !important;
+}
+
+[data-theme="light"] .ft-brand p {
+  color: #475569 !important;
+}
+
+[data-theme="light"] .ft-col h4 {
+  color: #0f172a !important;
+}
+
+[data-theme="light"] .ft-col a {
+  color: #475569 !important;
+}
+
+[data-theme="light"] .ft-col a:hover {
+  color: #059669 !important;
+}
+
+[data-theme="light"] .footer-bottom {
+  border-top: 1px solid #e2e8f0 !important;
+}
+
+[data-theme="light"] .footer-bottom span {
+  color: #475569 !important;
+}
+
+[data-theme="light"] .footer-bottom a {
+  color: #64748b !important;
+}
+
+[data-theme="light"] .footer-bottom a:hover {
+  color: #059669 !important;
+}

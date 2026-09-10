@@ -1483,3 +1483,215 @@ a.ci-value:hover { color: var(--clr-green-600); }
     text-align: center
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   LIGHT THEME OVERRIDES ([data-theme="light"]) — CONTACT PAGE
+   WCAG AA Contrast Compliant · High Legibility & Fresh Emerald Look
+   ═══════════════════════════════════════════════════════════════════ */
+
+[data-theme="light"] body {
+  background: #f8fafc;
+  color: #1e293b;
+}
+
+/* ── Hero Light Mode ── */
+[data-theme="light"] .ct-hero {
+  background: #f0fdf4;
+}
+
+[data-theme="light"] .ct-hero-overlay {
+  background:
+    radial-gradient(ellipse 80% 70% at 50% 40%, rgba(167, 243, 208, 0.45) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 60% at 80% 70%, rgba(187, 247, 208, 0.4) 0%, transparent 60%),
+    linear-gradient(160deg, #f0fdf4 0%, #ecfdf5 40%, #e6f7ef 100%);
+}
+
+[data-theme="light"] #ct-canvas {
+  opacity: 0.35;
+}
+
+[data-theme="light"] .ct-badge {
+  background: #dcfce7;
+  border-color: #86efac;
+  color: #15803d;
+  font-weight: 700;
+}
+
+[data-theme="light"] .ct-hero-title {
+  color: #0f172a;
+}
+
+[data-theme="light"] .title-green {
+  background: linear-gradient(90deg, #059669, #10b981, #047857, #059669);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+[data-theme="light"] .ct-hero-desc {
+  color: #334155;
+}
+
+[data-theme="light"] .ct-btn-ghost {
+  color: #1e293b;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1.5px solid #cbd5e1;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="light"] .ct-btn-ghost:hover {
+  background: #ffffff;
+  border-color: #059669;
+  color: #059669;
+}
+
+[data-theme="light"] .ct-pill {
+  background: rgba(255, 255, 255, 0.92);
+  border-color: #cbd5e1;
+  color: #334155;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+[data-theme="light"] .scroll-hint {
+  color: #475569;
+}
+
+[data-theme="light"] .sh-mouse {
+  border-color: #94a3b8;
+}
+
+[data-theme="light"] .sh-wheel {
+  background: #475569;
+}
+
+/* ── Team Section Light Mode ── */
+[data-theme="light"] .ct-team {
+  background: #f8fafc;
+}
+
+[data-theme="light"] .team-card {
+  background: #ffffff;
+  border-color: #e2e8f0;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+}
+
+[data-theme="light"] .team-card:hover {
+  border-color: #86efac;
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .tc-name {
+  color: #0f172a;
+}
+
+[data-theme="light"] .tc-role {
+  color: #059669;
+}
+
+[data-theme="light"] .tc-desc {
+  color: #475569;
+}
+
+[data-theme="light"] .tc-badge {
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+  color: #166534;
+}
+
+/* ── Contact Section Light Mode ── */
+[data-theme="light"] .ct-contact {
+  background: #ffffff;
+}
+
+[data-theme="light"] .ct-info-col {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+}
+
+[data-theme="light"] .ct-info-heading {
+  color: #0f172a;
+}
+
+[data-theme="light"] .ci-label {
+  color: #64748b;
+  font-weight: 700;
+}
+
+[data-theme="light"] .ci-value {
+  color: #1e293b;
+}
+
+[data-theme="light"] .ct-soc-btn {
+  background: #ffffff;
+  border-color: #e2e8f0;
+  color: #1e293b;
+}
+
+[data-theme="light"] .ct-soc-btn:hover {
+  background: #059669;
+  color: #ffffff;
+  border-color: #059669;
+}
+
+[data-theme="light"] .ct-form-col {
+  background: #ffffff;
+  border-color: #e2e8f0;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+}
+
+[data-theme="light"] .ct-form-heading {
+  color: #0f172a;
+}
+
+[data-theme="light"] .ct-label {
+  color: #1e293b;
+  font-weight: 700;
+}
+
+[data-theme="light"] .ct-input,
+[data-theme="light"] .ct-textarea,
+[data-theme="light"] .ct-select {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: #0f172a;
+}
+
+[data-theme="light"] .ct-input:focus,
+[data-theme="light"] .ct-textarea:focus,
+[data-theme="light"] .ct-select:focus {
+  background: #ffffff;
+  border-color: #10b981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+}
+
+/* ── Footer Light Mode ── */
+[data-theme="light"] .site-footer {
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+}
+
+[data-theme="light"] .ft-logo span {
+  color: #0f172a;
+}
+
+[data-theme="light"] .ft-brand p {
+  color: #475569;
+}
+
+[data-theme="light"] .ft-col h4 {
+  color: #0f172a;
+}
+
+[data-theme="light"] .ft-col a {
+  color: #475569;
+}
+
+[data-theme="light"] .ft-col a:hover {
+  color: #059669;
+}
+
+[data-theme="light"] .footer-bottom {
+  border-top: 1px solid #e2e8f0;
+  color: #64748b;
+}
+

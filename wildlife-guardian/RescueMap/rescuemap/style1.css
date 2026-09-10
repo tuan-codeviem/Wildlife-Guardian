@@ -1814,3 +1814,210 @@ html, body {
     display: flex !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   LIGHT THEME OVERRIDES ([data-theme="light"]) — RESCUE MAP
+   Note: Cesium 3D Globe (#interactiveMap) is intentionally kept dark!
+   Only UI Panels, Cards, Modals, Buttons & Overlays switch to Light.
+   ═══════════════════════════════════════════════════════════════════ */
+
+[data-theme="light"] {
+  --bg-deep:       #f8fafc;
+  --bg-base:       #f0fdf4;
+  --bg-surface:    #ffffff;
+  --bg-gradient:   linear-gradient(135deg, #f8fafc 0%, #f0fdf4 100%);
+
+  --text-light:    #0f172a;
+  --text-body:     #1e293b;
+  --text-muted:    #475569;
+  --text-subtle:   #64748b;
+
+  --glass-bg:      rgba(255, 255, 255, 0.94);
+  --glass-bg-card: #ffffff;
+  --glass-border:  #e2e8f0;
+  --glass-border-g:rgba(16, 185, 129, 0.35);
+}
+
+/* ── Floating Left Panel in Light Mode ── */
+[data-theme="light"] .floating-panel {
+  background: rgba(255, 255, 255, 0.94) !important;
+  backdrop-filter: blur(25px) !important;
+  -webkit-backdrop-filter: blur(25px) !important;
+  border-right: 1px solid #e2e8f0 !important;
+  box-shadow: 6px 0 40px rgba(0, 0, 0, 0.08) !important;
+}
+
+[data-theme="light"] .panel-header {
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+
+[data-theme="light"] .panel-title h2 {
+  color: #0f172a !important;
+}
+
+[data-theme="light"] .panel-title p {
+  color: #475569 !important;
+}
+
+[data-theme="light"] .panel-search {
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+
+[data-theme="light"] .search-glass {
+  background: #f8fafc !important;
+  border: 1px solid #cbd5e1 !important;
+}
+
+[data-theme="light"] .search-glass input {
+  color: #0f172a !important;
+}
+
+[data-theme="light"] .search-glass input::placeholder {
+  color: #64748b !important;
+}
+
+[data-theme="light"] .panel-tabs {
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+
+[data-theme="light"] .tab-btn {
+  background: #f1f5f9 !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #475569 !important;
+}
+
+[data-theme="light"] .tab-btn:hover {
+  background: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+[data-theme="light"] .tab-btn.active {
+  background: #059669 !important;
+  border-color: #059669 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(5, 150, 105, 0.35) !important;
+}
+
+[data-theme="light"] .tab-btn.emergency-tab.active {
+  background: #dc2626 !important;
+  border-color: #dc2626 !important;
+  color: #ffffff !important;
+}
+
+[data-theme="light"] .tab-btn.progress-tab.active {
+  background: #2563eb !important;
+  border-color: #2563eb !important;
+  color: #ffffff !important;
+}
+
+[data-theme="light"] .panel-legend {
+  border-bottom: 1px solid #e2e8f0 !important;
+  color: #475569 !important;
+}
+
+/* ── Report Cards in Light Mode ── */
+[data-theme="light"] .report-card {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #1e293b !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+}
+
+[data-theme="light"] .report-card:hover {
+  background: #f0fdf4 !important;
+  border-color: #86efac !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08) !important;
+}
+
+[data-theme="light"] .report-card h4,
+[data-theme="light"] .report-card .rc-name {
+  color: #0f172a !important;
+}
+
+[data-theme="light"] .report-card p,
+[data-theme="light"] .report-card .rc-desc {
+  color: #475569 !important;
+}
+
+[data-theme="light"] .report-card .rc-time,
+[data-theme="light"] .report-card .rc-meta {
+  color: #64748b !important;
+}
+
+/* ── Helpers Section in Light Mode ── */
+[data-theme="light"] .helpers-section {
+  background: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+}
+
+[data-theme="light"] .helpers-section .section-header {
+  border-bottom: 1px solid #e2e8f0 !important;
+  color: #047857 !important;
+}
+
+[data-theme="light"] .helper-card {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #1e293b !important;
+}
+
+[data-theme="light"] .helper-card:hover {
+  background: #f0fdf4 !important;
+  border-color: #86efac !important;
+}
+
+/* ── Map Controls & Buttons in Light Mode ── */
+[data-theme="light"] .view-home-btn {
+  background: rgba(255, 255, 255, 0.94) !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #0f172a !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08) !important;
+}
+
+[data-theme="light"] .view-home-btn:hover {
+  background: #ffffff !important;
+  border-color: #059669 !important;
+  color: #059669 !important;
+}
+
+[data-theme="light"] .handle-bar {
+  background: rgba(0, 0, 0, 0.25) !important;
+}
+
+[data-theme="light"] .mobile-collapse-btn {
+  background: rgba(0, 0, 0, 0.06) !important;
+  border-color: rgba(0, 0, 0, 0.12) !important;
+  color: #475569 !important;
+}
+
+[data-theme="light"] .floating-open-panel-btn {
+  background: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
+}
+
+/* ── Modals in Light Mode ── */
+[data-theme="light"] .rm-modal {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #1e293b !important;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.18) !important;
+}
+
+[data-theme="light"] .rm-modal-header {
+  background: #ffffff !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+[data-theme="light"] .rm-modal-title {
+  color: #0f172a !important;
+}
+
+[data-theme="light"] .rm-modal-close {
+  background: #f1f5f9 !important;
+  border-color: #cbd5e1 !important;
+  color: #475569 !important;
+}
+

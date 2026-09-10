@@ -22,10 +22,19 @@
   -->
   <link rel="stylesheet" href="css/nav.css" />
   <link rel="stylesheet" href="css/Contact.css" />
+  <link rel="stylesheet" href="../Home/css/theme.css" />
   <link rel="stylesheet" href="../ChatBotAI/chatbot.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <!-- Hệ thống thông báo cứu hộ khẩn cấp -->
+  <!-- Emergency Rescue Notification System -->
   <link rel="stylesheet" href="../scripts/rescue-notif.css">
+
+  <!-- Anti-FOUC Theme Initialization -->
+  <script>
+    (function () {
+      var savedTheme = localStorage.getItem("wg_theme") || localStorage.getItem("wg_species_theme") || "dark";
+      document.documentElement.setAttribute("data-theme", savedTheme);
+    })();
+  </script>
 </head>
 
 <body>
@@ -50,6 +59,9 @@
       <a href="../Game/GameUnity.html" data-i18n="nav_game">Game</a>
       <a href="Contact.html" class="active-mobile" data-i18n="nav_contact">Contact Us</a>
       <div class="mobile-actions">
+        <button id="mobileThemeToggleBtn" class="theme-toggle-btn" title="Chuyển chế độ Sáng / Tối" aria-label="Toggle theme">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        </button>
         <button class="btn-report" data-i18n="btn_report" onclick="window.location.href='../RescueMap/rescuemap/index.html?action=report'">🚨 Report Now</button>
         <button class="btn-login" style="justify-content: center" data-i18n="btn_login">→ Log in</button>
       </div>
@@ -76,6 +88,10 @@
         <a href="Contact.html" class="nav-item active" data-i18n="nav_contact">Contact Us</a>
       </div>
       <div class="nav-actions">
+        <!-- Theme Toggle Button -->
+        <button id="themeToggleBtn" class="theme-toggle-btn" title="Chuyển chế độ Sáng / Tối" aria-label="Toggle theme">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        </button>
         <div class="lang-switcher"
           style="display: flex; align-items: center; gap: 6px; color: white; font-weight: 600; margin-right: 10px;">
           <span class="lang-text">EN</span>
@@ -609,6 +625,7 @@
        SCRIPTS
   ══════════════════════════════════════════════════════════ -->
   <script src="js/nav.js"></script>
+  <script src="../Home/js/theme.js"></script>
   <script src="js/Contact.js"></script>
 
   <!-- BẢNG DROPDOWN TÀI KHOẢN (AVATAR GÓC TRÊN PHẢI) -->

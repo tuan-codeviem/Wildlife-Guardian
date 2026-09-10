@@ -47,9 +47,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // Theme Toggle Elements
   const themeToggleBtn = document.getElementById("themeToggleBtn");
   const mobileThemeToggleBtn = document.getElementById("mobileThemeToggleBtn");
+  const THEME_KEY = "wg_theme";
+  const LEGACY_THEME_KEY = "wg_species_theme";
 
   function initTheme() {
-    const savedTheme = localStorage.getItem("wg_species_theme") || "light";
+    const savedTheme = localStorage.getItem(THEME_KEY) || localStorage.getItem(LEGACY_THEME_KEY) || "light";
     setTheme(savedTheme);
   }
 
@@ -58,7 +60,8 @@ document.addEventListener('DOMContentLoaded', () => {
     document.documentElement.classList.add("theme-switching");
 
     document.documentElement.setAttribute("data-theme", theme);
-    localStorage.setItem("wg_species_theme", theme);
+    localStorage.setItem(THEME_KEY, theme);
+    localStorage.setItem(LEGACY_THEME_KEY, theme);
     updateThemeIcon(theme);
 
     // 2. Force browser reflow to apply new colors instantly in 1 frame (16ms)
@@ -70,6 +73,8 @@ document.addEventListener('DOMContentLoaded', () => {
         document.documentElement.classList.remove("theme-switching");
       });
     });
+
+    window.dispatchEvent(new CustomEvent("wg-theme-changed", { detail: { theme } }));
   }
 
   function updateThemeIcon(theme) {
@@ -105,6 +110,14 @@ document.addEventListener('DOMContentLoaded', () => {
   if (mobileThemeToggleBtn) {
     mobileThemeToggleBtn.addEventListener("click", toggleTheme);
   }
+
+  window.addEventListener("storage", (e) => {
+    if ((e.key === THEME_KEY || e.key === LEGACY_THEME_KEY) && e.newValue) {
+      if (e.newValue !== document.documentElement.getAttribute("data-theme")) {
+        setTheme(e.newValue);
+      }
+    }
+  });
 
   initTheme();
 
