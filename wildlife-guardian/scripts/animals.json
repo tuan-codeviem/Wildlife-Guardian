@@ -350,7 +350,7 @@
     "scientificName": "Harpia harpyja",
     "status": {
       "en": "Near Threatened",
-      "vi": "Sắp bị đe dọa"
+      "vi": "Gần bị đe dọa"
     },
     "category": {
       "en": "Bird",
@@ -654,7 +654,7 @@
     "scientificName": "Erinaceus europaeus",
     "status": {
       "en": "Near Threatened",
-      "vi": "Sắp bị đe dọa"
+      "vi": "Gần bị đe dọa"
     },
     "category": {
       "en": "Mammal",
@@ -1452,7 +1452,7 @@
     "scientificName": "Ornithorhynchus anatinus",
     "status": {
       "en": "Near Threatened",
-      "vi": "Sắp bị đe dọa"
+      "vi": "Gần bị đe dọa"
     },
     "category": {
       "en": "Mammal",
@@ -1566,7 +1566,7 @@
     "scientificName": "Panthera onca",
     "status": {
       "en": "Near Threatened",
-      "vi": "Sắp bị đe dọa"
+      "vi": "Gần bị đe dọa"
     },
     "category": {
       "en": "Mammal",
@@ -1908,7 +1908,7 @@
     "scientificName": "Aptenodytes forsteri",
     "status": {
       "en": "Near Threatened",
-      "vi": "Sắp bị đe dọa"
+      "vi": "Gần bị đe dọa"
     },
     "category": {
       "en": "Bird",
@@ -2516,7 +2516,7 @@
     "scientificName": "Heloderma suspectum",
     "status": {
       "en": "Near Threatened",
-      "vi": "Sắp bị đe dọa"
+      "vi": "Gần bị đe dọa"
     },
     "category": {
       "en": "Reptile",
@@ -3238,7 +3238,7 @@
     "scientificName": "Arapaima gigas",
     "status": {
       "en": "Data Deficient",
-      "vi": "Dữ liệu thiếu / Nguy cấp"
+      "vi": "Thiếu dữ liệu (DD)"
     },
     "category": {
       "en": "Fish",

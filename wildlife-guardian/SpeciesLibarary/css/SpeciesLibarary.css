@@ -909,9 +909,6 @@ body,
   cursor: pointer;
   box-shadow: var(--sl-shadow-md);
   transition: transform 0.35s var(--sl-ease), border-color 0.2s ease, background-color 0.2s ease;
-  will-change: transform;
-  content-visibility: auto;
-  contain-intrinsic-size: 280px 400px;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -920,6 +917,7 @@ body,
     border-color: #34d399;
     box-shadow: 0 20px 45px -8px rgba(16, 185, 129, 0.18), 0 6px 16px rgba(0, 0, 0, 0.04);
     transition: transform 0.35s var(--sl-ease), border-color 0.2s ease, box-shadow 0.25s ease;
+    will-change: transform;
   }
 }
 
@@ -927,13 +925,30 @@ body,
   position: absolute;
   inset: 0;
   overflow: hidden;
+  background: #112017;
+}
+
+.sl-card-img-wrap::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(52, 211, 153, 0.08), transparent);
+  transform: translateX(-100%);
+  animation: slCardPulse 2s infinite ease-in-out;
+  pointer-events: none;
+}
+
+@keyframes slCardPulse {
+  100% { transform: translateX(100%); }
 }
 
 .sl-card-img {
+  position: relative;
+  z-index: 1;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.6s var(--sl-ease), filter 0.4s ease;
+  transition: transform 0.6s var(--sl-ease);
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -997,6 +1012,7 @@ body,
 .iucn-pill.vu { background: rgba(217, 119, 6, 0.95); color: #fff; }
 .iucn-pill.nt { background: rgba(2, 132, 199, 0.92); color: #fff; }
 .iucn-pill.lc { background: rgba(5, 150, 105, 0.92); color: #fff; }
+.iucn-pill.dd { background: rgba(100, 116, 139, 0.92); color: #fff; }
 
 /* 3D Hologram Badge */
 .holo-3d-badge {

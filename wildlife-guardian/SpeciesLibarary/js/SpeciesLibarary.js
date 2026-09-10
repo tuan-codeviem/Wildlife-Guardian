@@ -207,6 +207,18 @@ document.addEventListener('DOMContentLoaded', () => {
     if (unlockedCountEl) unlockedCountEl.textContent = unlockedCount;
   }
 
+  // ─── HELPER: CLOUDINARY & CDN IMAGE AUTO-OPTIMIZER ───
+  function getOptimizedImageUrl(url, width = 600) {
+    if (!url) return defaultPlaceholder;
+    if (url.includes('res.cloudinary.com') && url.includes('/upload/') && !url.includes('/upload/w_')) {
+      return url.replace('/upload/', `/upload/w_${width},c_fill,q_auto,f_auto/`);
+    }
+    if (url.includes('images.unsplash.com') && !url.includes('w=')) {
+      return `${url}&w=${width}&auto=format&fit=crop&q=80`;
+    }
+    return url;
+  }
+
   // ─── 3. CARD ELEMENT FACTORY (100% 3D BADGES & ASYNC DECODING) ───
   function createCardElement(animal) {
     const lang = (localStorage.getItem("appLang") || "EN").toLowerCase();
@@ -215,7 +227,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const category = animal.category?.[lang] || animal.category?.en || "Wildlife";
 
     const catKey = (animal.category?.en || "").toLowerCase().replace(/s$/, '');
-    const thumbUrl = animal.thumbnailUrl || catPlaceholders[catKey] || defaultPlaceholder;
+    const rawThumb = animal.thumbnailUrl || catPlaceholders[catKey] || defaultPlaceholder;
+    const thumbUrl = getOptimizedImageUrl(rawThumb, 600);
 
     // Status Tag Info
     let statusText = category;
@@ -226,7 +239,8 @@ document.addEventListener('DOMContentLoaded', () => {
       if (enStatus.includes("critically")) statusClass = "cr";
       else if (enStatus.includes("endangered")) statusClass = "en";
       else if (enStatus.includes("vulnerable")) statusClass = "vu";
-      else if (enStatus.includes("near") || enStatus.includes("threatened")) statusClass = "nt";
+      else if (enStatus.includes("near")) statusClass = "nt";
+      else if (enStatus.includes("deficient")) statusClass = "dd";
       else statusClass = "lc";
     }
 
@@ -238,7 +252,7 @@ document.addEventListener('DOMContentLoaded', () => {
       card.dataset.id = animal.speciesId;
       card.innerHTML = `
         <div class="sl-card-img-wrap">
-          <img class="sl-card-img" src="${thumbUrl}" alt="${name}" loading="lazy" decoding="async" onerror="this.src='${defaultPlaceholder}'" />
+          <img class="sl-card-img" src="${thumbUrl}" alt="${name}" decoding="async" onerror="this.src='${defaultPlaceholder}'" />
         </div>
         <div class="sl-card-scrim"></div>
         <div class="sl-card-top">
@@ -281,7 +295,7 @@ document.addEventListener('DOMContentLoaded', () => {
       card.dataset.id = animal.speciesId;
       card.innerHTML = `
         <div class="sl-card-img-wrap">
-          <img class="sl-card-img" src="${thumbUrl}" alt="${name}" loading="lazy" decoding="async" onerror="this.src='${defaultPlaceholder}'" />
+          <img class="sl-card-img" src="${thumbUrl}" alt="${name}" decoding="async" onerror="this.src='${defaultPlaceholder}'" />
         </div>
         <div class="sl-card-scrim"></div>
         <div class="sl-card-top">
@@ -356,7 +370,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (entries[0] && entries[0].isIntersecting) {
         renderNextBatch();
       }
-    }, { rootMargin: "400px" });
+    }, { rootMargin: "1400px" });
     sentinelObserver.observe(sentinel);
   }
 
@@ -435,7 +449,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (currentIucn === "cr") statusMatch = enStatus.includes("critically");
         else if (currentIucn === "en") statusMatch = enStatus.includes("endangered") && !enStatus.includes("critically");
         else if (currentIucn === "vu") statusMatch = enStatus.includes("vulnerable");
-        else if (currentIucn === "nt") statusMatch = enStatus.includes("near") || enStatus.includes("threatened");
+        else if (currentIucn === "nt") statusMatch = enStatus.includes("near");
         else if (currentIucn === "lc") statusMatch = enStatus.includes("least") || enStatus.includes("concern");
       }
 
@@ -559,7 +573,8 @@ document.addEventListener('DOMContentLoaded', () => {
       if (enStatus.includes("critically")) statusClass = "cr";
       else if (enStatus.includes("endangered")) statusClass = "en";
       else if (enStatus.includes("vulnerable")) statusClass = "vu";
-      else if (enStatus.includes("near") || enStatus.includes("threatened")) statusClass = "nt";
+      else if (enStatus.includes("near")) statusClass = "nt";
+      else if (enStatus.includes("deficient")) statusClass = "dd";
       else statusClass = "lc";
     }
 
@@ -654,9 +669,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
       } else if (animal.isUnlocked && !has3D) {
         // Unlocked 2D Specimen View (For species without 3D model)
+        const modalImg = getOptimizedImageUrl(animal.thumbnailUrl || defaultPlaceholder, 1200);
         modalHero.innerHTML = `
           <div class="locked-hero-wrap">
-            <img class="locked-hero-img" src="${animal.thumbnailUrl || defaultPlaceholder}" alt="${animal.animalName?.[lang] || 'Specimen'}" />
+            <img class="locked-hero-img" src="${modalImg}" alt="${animal.animalName?.[lang] || 'Specimen'}" />
             <div class="locked-cta-overlay">
               <div class="locked-badge-pill" style="background: rgba(16, 185, 129, 0.25); border: 1px solid rgba(16, 185, 129, 0.6); color: #10b981;">
                 <i class="fa-solid fa-circle-check"></i>
@@ -667,9 +683,10 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
       } else {
         // Locked Preview Mode (Always indicates 3D model to be unlocked via rescue game)
+        const modalImg = getOptimizedImageUrl(animal.thumbnailUrl || defaultPlaceholder, 1200);
         modalHero.innerHTML = `
           <div class="locked-hero-wrap">
-            <img class="locked-hero-img" src="${animal.thumbnailUrl || defaultPlaceholder}" alt="${animal.animalName?.[lang] || 'Specimen'}" />
+            <img class="locked-hero-img" src="${modalImg}" alt="${animal.animalName?.[lang] || 'Specimen'}" />
             <div class="locked-cta-overlay">
               <div class="locked-badge-pill">
                 <i class="fa-solid fa-lock"></i>
