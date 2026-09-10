@@ -133,18 +133,18 @@
 
           <div class="hero-stats-row">
             <div class="hs-item">
-              <span class="hs-num">35K+</span>
-              <span class="hs-lbl" data-i18n="stat_guardians">Guardians</span>
+              <span class="hs-num" id="heroGuardians">58+</span>
+              <span class="hs-lbl" data-i18n="stat_guardians">Active Guardians</span>
             </div>
             <div class="hs-sep"></div>
             <div class="hs-item">
-              <span class="hs-num">2.1K</span>
-              <span class="hs-lbl" data-i18n="stat_rescued">Rescued</span>
+              <span class="hs-num" id="heroRescues">46</span>
+              <span class="hs-lbl" data-i18n="stat_rescued">Rescue Reports</span>
             </div>
             <div class="hs-sep"></div>
             <div class="hs-item">
-              <span class="hs-num">136</span>
-              <span class="hs-lbl" data-i18n="stat_communities">Communities</span>
+              <span class="hs-num" id="heroSpecies">100</span>
+              <span class="hs-lbl" data-i18n="stat_species">Catalogued Species</span>
             </div>
           </div>
         </div>
@@ -160,25 +160,26 @@
             <div class="float-badge fb-left">
               <div class="fb-icon green-fb">
                 <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M16 7h6v6" />
-                  <path d="m22 7-8.5 8.5-5-5L2 17" />
+                  <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6" />
+                  <line x1="8" y1="2" x2="8" y2="18" />
+                  <line x1="16" y1="6" x2="16" y2="22" />
                 </svg>
               </div>
               <div class="fb-text">
-                <strong>+247</strong>
-                <small data-i18n="badge_rescues">Rescues this month</small>
+                <strong>Live</strong>
+                <small data-i18n="badge_map">Live Satellite 3D Map</small>
               </div>
             </div>
             <div class="float-badge fb-right">
               <div class="fb-icon orange-fb">
                 <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path
-                    d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5" />
+                  <circle cx="12" cy="12" r="10" />
+                  <polyline points="12 6 12 12 16 14" />
                 </svg>
               </div>
               <div class="fb-text">
-                <strong>1.2K</strong>
-                <small data-i18n="badge_vets">Vets online</small>
+                <strong>24/7</strong>
+                <small data-i18n="badge_online">24/7 Active & Online</small>
               </div>
             </div>
           </div>
@@ -205,14 +206,13 @@
             <div class="stat-glow-ring"></div>
             <div class="stat-icon">
               <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                <path d="M16 3.128a4 4 0 0 1 0 7.744" />
-                <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-                <circle cx="9" cy="7" r="4" />
+                <circle cx="12" cy="12" r="10" />
+                <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+                <path d="M2 12h20" />
               </svg>
             </div>
-            <div class="stat-num" data-count="12960">0</div>
-            <div class="stat-label" data-i18n="impact_guardians">Active Guardians</div>
+            <div class="stat-num" id="statContinents" data-count="7">0</div>
+            <div class="stat-label" data-i18n="impact_continents">Châu Lục Phủ Sóng</div>
             <div class="stat-track">
               <div class="stat-fill"></div>
             </div>
@@ -222,12 +222,13 @@
             <div class="stat-glow-ring"></div>
             <div class="stat-icon">
               <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 7v14" />
                 <path
-                  d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5" />
+                  d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z" />
               </svg>
             </div>
-            <div class="stat-num" data-count="2120">0</div>
-            <div class="stat-label" data-i18n="impact_rescued">Animals Rescued</div>
+            <div class="stat-num" id="statSpecies" data-count="100">0</div>
+            <div class="stat-label" data-i18n="impact_species">Loài Sinh Vật Quý Hiếm</div>
             <div class="stat-track">
               <div class="stat-fill"></div>
             </div>
@@ -237,13 +238,14 @@
             <div class="stat-glow-ring"></div>
             <div class="stat-icon">
               <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="12" cy="12" r="10" />
-                <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
-                <path d="M2 12h20" />
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                <path d="M16 3.128a4 4 0 0 1 0 7.744" />
+                <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                <circle cx="9" cy="7" r="4" />
               </svg>
             </div>
-            <div class="stat-num" data-count="136">0</div>
-            <div class="stat-label" data-i18n="impact_communities">Communities</div>
+            <div class="stat-num" id="statGuardians" data-count="58">0</div>
+            <div class="stat-label" data-i18n="impact_guardians">Người Bảo Vệ Đồng Hành</div>
             <div class="stat-track">
               <div class="stat-fill"></div>
             </div>
@@ -253,13 +255,11 @@
             <div class="stat-glow-ring"></div>
             <div class="stat-icon">
               <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M12 7v14" />
-                <path
-                  d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z" />
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
               </svg>
             </div>
-            <div class="stat-num" data-count="100">0</div>
-            <div class="stat-label" data-i18n="impact_species">Species Documented</div>
+            <div class="stat-num" id="statEmergency" data-static="24/7">24/7</div>
+            <div class="stat-label" data-i18n="impact_sos">Tiếp Nhận Cứu Hộ & SOS</div>
             <div class="stat-track">
               <div class="stat-fill"></div>
             </div>

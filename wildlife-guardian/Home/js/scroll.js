@@ -239,9 +239,41 @@
 
 
   /* ══════════════════════════════════════════════════
-     5. STAT ITEMS — STRICTLY ONE-WAY
+     5. STAT ITEMS — STRICTLY ONE-WAY & LIVE STATS
   ══════════════════════════════════════════════════ */
+  async function fetchLiveStats() {
+    try {
+      const res = await fetch("/api/stats/overview");
+      if (!res.ok) return;
+      const data = await res.json();
+      if (data.guardians) {
+        const el = document.getElementById("statGuardians");
+        if (el) el.dataset.count = data.guardians;
+        const heroGuardians = document.getElementById("heroGuardians");
+        if (heroGuardians) heroGuardians.textContent = `${data.guardians}+`;
+      }
+      if (data.rescues) {
+        const heroRescues = document.getElementById("heroRescues");
+        if (heroRescues) heroRescues.textContent = data.rescues;
+      }
+      if (data.species) {
+        const el = document.getElementById("statSpecies");
+        if (el) el.dataset.count = data.species;
+        const heroSpecies = document.getElementById("heroSpecies");
+        if (heroSpecies) heroSpecies.textContent = data.species;
+      }
+      if (data.continents) {
+        const el = document.getElementById("statContinents");
+        if (el) el.dataset.count = data.continents;
+      }
+    } catch {
+      // Fallback: retains default data-count values
+    }
+  }
+
   function initCounters() {
+    fetchLiveStats();
+
     const io = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         const el = entry.target;
@@ -251,10 +283,14 @@
           setTimeout(() => {
             el.classList.add('visible');
             const numEl = el.querySelector('.stat-num');
-            const target = parseInt(numEl?.dataset.count || 0);
             if (numEl && !el.dataset.counted) {
               el.dataset.counted = 'y';
-              countUp(numEl, target, 1400);
+              if (numEl.dataset.static) {
+                numEl.textContent = numEl.dataset.static;
+              } else {
+                const target = parseInt(numEl.dataset.count || 0);
+                countUp(numEl, target, 1400);
+              }
             }
             el.dataset.done = 'y';
           }, delay);
@@ -267,6 +303,10 @@
   }
 
   function countUp(el, target, dur) {
+    if (el.dataset.static) {
+      el.textContent = el.dataset.static;
+      return;
+    }
     const TICK = 33;
     const steps = Math.round(dur / TICK);
     let step = 0;

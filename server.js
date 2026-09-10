@@ -248,8 +248,35 @@ app.post("/api/users/:id/unlock", async (req, res) => {
 // ==========================================
 // 5. CÁC API BÀI VIẾT (POSTS) & KIỂM DUYỆT TỰ ĐỘNG
 // ==========================================
-
-// Đã loại bỏ các danh sách từ khóa cứng cứng nhắc, chuyển toàn bộ quyền kiểm duyệt cho Gemini 2.5 Flash.
+// API: THỐNG KÊ TỔNG QUAN (LIVE STATS CHO TRANG CHỦ)
+// ==========================================
+app.get("/api/stats/overview", async (req, res) => {
+  try {
+    const [userCount, speciesCount, rescueCount] = await Promise.all([
+      User.countDocuments(),
+      Species.countDocuments(),
+      Rescue.countDocuments()
+    ]);
+    res.json({
+      success: true,
+      continents: 7,
+      species: speciesCount || 100,
+      guardians: userCount || 58,
+      rescues: rescueCount || 44,
+      support: "24/7"
+    });
+  } catch (error) {
+    console.error("❌ Lỗi tải thống kê tổng quan:", error.message);
+    res.json({
+      success: false,
+      continents: 7,
+      species: 100,
+      guardians: 58,
+      rescues: 44,
+      support: "24/7"
+    });
+  }
+});
 
 // Tải bài viết
 app.get("/api/posts", async (req, res) => {
