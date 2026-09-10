@@ -8,8 +8,13 @@ async function initAdmin() {
     await mongoose.connect(process.env.MONGO_URI);
     console.log("Connected to MongoDB");
 
-    const email = "admin@gmail.com";
-    const password = "1";
+    const email = process.env.ADMIN_EMAIL;
+    const password = process.env.ADMIN_PASSWORD;
+
+    if (!email || !password) {
+      console.error("Lỗi: Bạn cần cấu hình ADMIN_EMAIL và ADMIN_PASSWORD trong file .env!");
+      process.exit(1);
+    }
     const hashedPassword = await bcrypt.hash(password, 10);
 
     let admin = await User.findOne({ email });

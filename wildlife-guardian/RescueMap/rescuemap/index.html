@@ -23,14 +23,32 @@
 
   <!-- Styles -->
   <link rel="stylesheet" href="../../Home/css/nav.css">
-  <link rel="stylesheet" href="style1.css?v=4">
-  <link rel="stylesheet" href="style2.css?v=4">
+  <link rel="stylesheet" href="style1.css?v=11">
+  <link rel="stylesheet" href="style2.css?v=11">
   <link rel="stylesheet" href="../../ChatBotAI/chatbot.css">
   <!-- Hệ thống thông báo cứu hộ khẩn cấp -->
   <link rel="stylesheet" href="../../scripts/rescue-notif.css">
 
   <!-- Navbar CSS (shared from Home) -->
   <link rel="stylesheet" href="../../Home/css/nav.css">
+
+  <style>
+    /* Đảm bảo thanh drag-handle luôn dính ở trên cùng khi người dùng cuộn nội dung */
+    #mobileDragHandle {
+      position: sticky !important;
+      top: 0 !important;
+      background: rgba(10, 25, 15, 0.95) !important;
+      backdrop-filter: blur(10px) !important;
+      z-index: 1000 !important;
+      border-radius: 24px 24px 0 0 !important;
+      padding: 8px 0 12px !important; /* Ép mỏng lại khoảng trống ở trên */
+    }
+    
+    /* Bỏ padding-top của panel để drag handle nằm sát trên cùng */
+    .floating-panel {
+      padding-top: 0 !important;
+    }
+  </style>
 </head>
 
 <body>
@@ -51,7 +69,8 @@
       <a href="../../Game/GameUnity.html" data-i18n="nav_game">Game</a>
       <a href="../../Contact/Contact.html" data-i18n="nav_contact">Contact Us</a>
       <div class="mobile-actions">
-        <button class="btn-report" data-i18n="btn_report" onclick="openPrioritySelectModal(event)">🚨 Report Now</button>
+        <button class="btn-report" data-i18n="btn_report" onclick="openPrioritySelectModal(event)">🚨 Report
+          Now</button>
         <button class="btn-login" data-i18n="btn_login">→ Log in</button>
       </div>
     </div>
@@ -72,7 +91,8 @@
         <a href="../../Home/Home.html" class="nav-item" data-i18n="nav_home">Home</a>
         <a href="index.html" class="nav-item active" data-i18n="nav_rescue">Rescue Map</a>
         <a href="../../Social/frontend/index.html" class="nav-item" data-i18n="nav_social">Social</a>
-        <a href="../../SpeciesLibarary/SpeciesLibarary.html" class="nav-item" data-i18n="nav_species">Species Library</a>
+        <a href="../../SpeciesLibarary/SpeciesLibarary.html" class="nav-item" data-i18n="nav_species">Species
+          Library</a>
         <a href="../../Game/GameUnity.html" class="nav-item" data-i18n="nav_game">Game</a>
         <a href="../../Contact/Contact.html" class="nav-item" data-i18n="nav_contact">Contact Us</a>
       </div>
@@ -91,7 +111,8 @@
             </svg>
           </button>
         </div>
-        <button class="btn-report" data-i18n="btn_report" onclick="openPrioritySelectModal(event)">🚨 Report Now</button>
+        <button class="btn-report" data-i18n="btn_report" onclick="openPrioritySelectModal(event)">🚨 Report
+          Now</button>
         <button class="btn-login" data-i18n="btn_login">→ Log in</button>
         <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
       </div>
@@ -109,6 +130,11 @@
 
     <div class="floating-panel" id="floatingPanel">
 
+      <!-- Drag Handle for Mobile -->
+      <div class="mobile-drag-handle" id="mobileDragHandle">
+        <div class="handle-bar"></div>
+      </div>
+
       <!-- Panel Header -->
       <div class="panel-header">
         <div class="panel-title">
@@ -124,7 +150,8 @@
       <div class="panel-search">
         <div class="search-glass">
           <i class="fas fa-search"></i>
-          <input type="text" id="searchInput" placeholder="Tìm động vật, địa điểm..." autocomplete="off" data-i18n="rm_search_ph">
+          <input type="text" id="searchInput" placeholder="Tìm động vật, địa điểm..." autocomplete="off"
+            data-i18n="rm_search_ph">
           <button id="searchBtn" title="Tìm kiếm"><i class="fas fa-arrow-right"></i></button>
         </div>
       </div>
@@ -157,16 +184,22 @@
           <div class="first-aid-list" style="padding: 12px; display: flex; flex-direction: column; gap: 10px;">
             <div style="background: #f8fafc; border-left: 4px solid #f59e0b; padding: 10px 12px; border-radius: 8px;">
               <h4 style="margin: 0 0 4px 0; color: #b45309; font-size: 13px;"><i
-                  class="fas fa-exclamation-triangle"></i> <span data-i18n="rm_fa_1_title">1. Giữ khoảng cách an toàn</span></h4>
-              <p style="margin: 0; font-size: 12px; color: #475569;" data-i18n="rm_fa_1_desc">Đừng vội tiếp cận. Động vật hoang dã khi hoảng sợ có thể tấn công. Hãy quan sát từ xa.</p>
+                  class="fas fa-exclamation-triangle"></i> <span data-i18n="rm_fa_1_title">1. Giữ khoảng cách an
+                  toàn</span></h4>
+              <p style="margin: 0; font-size: 12px; color: #475569;" data-i18n="rm_fa_1_desc">Đừng vội tiếp cận. Động
+                vật hoang dã khi hoảng sợ có thể tấn công. Hãy quan sát từ xa.</p>
             </div>
             <div style="background: #f0fdf4; border-left: 4px solid #10b981; padding: 10px 12px; border-radius: 8px;">
-              <h4 style="margin: 0 0 4px 0; color: #047857; font-size: 13px;"><i class="fas fa-box-open"></i> <span data-i18n="rm_fa_2_title">2. Chuẩn bị hộp tối</span></h4>
-              <p style="margin: 0; font-size: 12px; color: #475569;" data-i18n="rm_fa_2_desc">Dùng hộp các-tông có lỗ thoáng khí. Lót vải mềm bên trong để tạo không gian tối và yên tĩnh.</p>
+              <h4 style="margin: 0 0 4px 0; color: #047857; font-size: 13px;"><i class="fas fa-box-open"></i> <span
+                  data-i18n="rm_fa_2_title">2. Chuẩn bị hộp tối</span></h4>
+              <p style="margin: 0; font-size: 12px; color: #475569;" data-i18n="rm_fa_2_desc">Dùng hộp các-tông có lỗ
+                thoáng khí. Lót vải mềm bên trong để tạo không gian tối và yên tĩnh.</p>
             </div>
             <div style="background: #eff6ff; border-left: 4px solid #3b82f6; padding: 10px 12px; border-radius: 8px;">
-              <h4 style="margin: 0 0 4px 0; color: #1d4ed8; font-size: 13px;"><i class="fas fa-ban"></i> <span data-i18n="rm_fa_3_title">3. KHÔNG tự ý cho ăn</span></h4>
-              <p style="margin: 0; font-size: 12px; color: #475569;" data-i18n="rm_fa_3_desc">Cho ăn sai cách hoặc ép uống nước có thể làm con vật sặc hoặc tử vong ngay lập tức.</p>
+              <h4 style="margin: 0 0 4px 0; color: #1d4ed8; font-size: 13px;"><i class="fas fa-ban"></i> <span
+                  data-i18n="rm_fa_3_title">3. KHÔNG tự ý cho ăn</span></h4>
+              <p style="margin: 0; font-size: 12px; color: #475569;" data-i18n="rm_fa_3_desc">Cho ăn sai cách hoặc ép
+                uống nước có thể làm con vật sặc hoặc tử vong ngay lập tức.</p>
             </div>
             <div
               style="background: #fef2f2; border-left: 4px solid #ef4444; padding: 10px 12px; border-radius: 8px; cursor: pointer; transition: 0.2s;"
@@ -174,10 +207,11 @@
               onclick="window.open('https://env4wildlife.org/', '_blank')">
               <h4
                 style="margin: 0 0 4px 0; color: #b91c1c; font-size: 13px; display: flex; justify-content: space-between;">
-                <span><i class="fas fa-phone-volume"></i> <span data-i18n="rm_fa_4_title">4. Gọi chuyên gia</span></span> <i class="fas fa-external-link-alt"
-                  style="color: #fca5a5; font-size: 11px;"></i>
+                <span><i class="fas fa-phone-volume"></i> <span data-i18n="rm_fa_4_title">4. Gọi chuyên
+                    gia</span></span> <i class="fas fa-external-link-alt" style="color: #fca5a5; font-size: 11px;"></i>
               </h4>
-              <p style="margin: 0; font-size: 12px; color: #475569;"><span data-i18n="rm_fa_4_desc1">Liên hệ ngay đường dây nóng </span><a href="tel:18001522"
+              <p style="margin: 0; font-size: 12px; color: #475569;"><span data-i18n="rm_fa_4_desc1">Liên hệ ngay đường
+                  dây nóng </span><a href="tel:18001522"
                   style="color: #ef4444; font-weight: 700; text-decoration: none;" onclick="event.stopPropagation()">ENV
                   (1800-1522)</a><span data-i18n="rm_fa_4_desc2"> hoặc trạm cứu hộ gần nhất để được hỗ trợ.</span></p>
             </div>
@@ -216,15 +250,17 @@
         </button>
       </div>
       <div class="priority-modal-body">
-        <p class="priority-desc">Vui lòng chọn tình trạng hiện tại của động vật để hệ thống sắp xếp quy trình cứu trợ nhanh nhất:</p>
-        
+        <p class="priority-desc">Vui lòng chọn tình trạng hiện tại của động vật để hệ thống sắp xếp quy trình cứu trợ
+          nhanh nhất:</p>
+
         <div class="priority-cards">
           <!-- Nhóm 1: Khẩn cấp (Không cần đăng nhập) -->
           <div class="priority-card emergency-card" onclick="selectReportPriority('emergency')">
             <div class="priority-icon">🚨</div>
             <div class="priority-info">
               <h4>Nhóm 1: Khẩn Cấp (Emergency)</h4>
-              <p>Động vật bị thương nặng, nguy hiểm tính mạng. <b>Không yêu cầu đăng nhập</b> để ghim tọa độ & thông tin ngay lập tức.</p>
+              <p>Động vật bị thương nặng, nguy hiểm tính mạng. <b>Không yêu cầu đăng nhập</b> để ghim tọa độ & thông tin
+                ngay lập tức.</p>
             </div>
             <div class="priority-action"><i class="fas fa-chevron-right"></i></div>
           </div>
@@ -234,20 +270,13 @@
             <div class="priority-icon">⏳</div>
             <div class="priority-info">
               <h4>Nhóm 2: Đang Xử Lý (In Progress)</h4>
-              <p>Đã có người hỗ trợ sơ cứu hoặc đang đợi đội cứu hộ di chuyển. <b>Yêu cầu đăng nhập</b> để cập nhật tiến độ.</p>
+              <p>Đã có người hỗ trợ sơ cứu hoặc đang đợi đội cứu hộ di chuyển. <b>Yêu cầu đăng nhập</b> để cập nhật tiến
+                độ.</p>
             </div>
             <div class="priority-action"><i class="fas fa-chevron-right"></i></div>
           </div>
 
-          <!-- Nhóm 2: Đã an toàn (Yêu cầu đăng nhập) -->
-          <div class="priority-card safe-card" onclick="selectReportPriority('rescued')">
-            <div class="priority-icon">✅</div>
-            <div class="priority-info">
-              <h4>Nhóm 2: Đã An Toàn (Safe / Rescued)</h4>
-              <p>Động vật đã thoát hiểm an toàn hoặc đã được tiếp nhận. <b>Yêu cầu đăng nhập</b> để lưu hồ sơ hoàn tất.</p>
-            </div>
-            <div class="priority-action"><i class="fas fa-chevron-right"></i></div>
-          </div>
+
         </div>
       </div>
     </div>
@@ -264,7 +293,7 @@
           <i class="fas fa-camera"></i>
           <span><span data-i18n="rm_modal_title">Báo cáo Động vật Cần Cứu hộ</span></span>
         </div>
-        <button class="rm-modal-close" onclick="closeCameraModal()">
+        <button class="rm-modal-close" onclick="window.closeCameraModal()">
           <i class="fas fa-times"></i>
         </button>
       </div>
@@ -283,7 +312,8 @@
             <span class="corner br"></span>
           </div>
           <div class="scan-line"></div>
-          <div class="scan-label"><i class="fas fa-camera"></i> <span data-i18n="rm_scan_label">Hướng camera vào động vật</span></div>
+          <div class="scan-label"><i class="fas fa-camera"></i> <span data-i18n="rm_scan_label">Hướng camera vào động
+              vật</span></div>
         </div>
 
         <!-- Captured photo preview -->
@@ -336,7 +366,6 @@
             <select id="animalStatus" class="rm-input rm-select">
               <option value="emergency" data-i18n="rm_opt_emergency">🚨 Khẩn cấp – Cần hỗ trợ ngay</option>
               <option value="progress" data-i18n="rm_opt_progress">⏳ Đang xử lý – Đã có người giúp</option>
-              <option value="rescued" data-i18n="rm_opt_rescued">✅ Đã cứu – An toàn</option>
             </select>
             <label class="rm-label rm-label-active" for="animalStatus" data-i18n="rm_lbl_status">Tình trạng *</label>
           </div>
@@ -370,20 +399,45 @@
           <span id="addressText" data-i18n="rm_loc_fetching">Đang lấy địa chỉ...</span>
         </div>
 
-        <!-- Nearby Rescuers Box (Auto-appears right when photo is taken) -->
-        <div id="nearbyRescuersBox" class="rm-nearby-rescuers" style="display:none;">
-          <div class="rm-nearby-header">
-            <i class="fas fa-satellite-dish fa-spin" style="color: #ef4444;"></i>
-            <span>Đang quét bán kính 5m màu đỏ nhạt tìm Người cứu trợ...</span>
-          </div>
-          <div id="nearbyRescuersList" class="rm-nearby-list"></div>
-        </div>
+
 
         <!-- Submit Button -->
         <button id="submitReportBtn" class="rm-btn-submit">
           <i class="fas fa-paper-plane"></i>
           <span data-i18n="rm_btn_submit">Gửi báo cáo cứu hộ</span>
         </button>
+      </div>
+
+      <!-- SOS Dispatch Section (shown after submitting) -->
+      <div id="sosDispatchSection" class="rm-sos-dispatch" style="display:none;">
+        <div class="sos-radar-container">
+          <div class="sos-radar-ring ring-1"></div>
+          <div class="sos-radar-ring ring-2"></div>
+          <div class="sos-radar-ring ring-3"></div>
+          <div class="sos-radar-center">
+            <i class="fas fa-broadcast-tower"></i>
+          </div>
+        </div>
+        <h3 id="sosDispatchTitle" class="sos-dispatch-title">Đang phát sóng tín hiệu SOS...</h3>
+        <p id="sosDispatchSubtitle" class="sos-dispatch-subtitle">Hệ thống đang quét các Trạm thú y và Đội cứu hộ trong
+          bán kính 10km.</p>
+
+        <div id="sosMatchCard" class="sos-match-card" style="display:none;">
+          <div class="match-card-header">
+            <div class="match-badge">✅ Đã tiếp nhận</div>
+            <div class="match-eta"><i class="fas fa-route"></i> ETA: <span id="sosMatchEta">-- phút</span></div>
+          </div>
+          <div class="match-card-body">
+            <div class="match-icon"><i class="fas fa-ambulance"></i></div>
+            <div class="match-info">
+              <h4 id="sosMatchName">Đội Cứu Hộ / Trạm Thú Y</h4>
+              <p id="sosMatchAddress"><i class="fas fa-map-marker-alt"></i> Đang tải địa chỉ...</p>
+              <p class="match-status-text">Đội cứu hộ đang di chuyển tới vị trí của động vật. Vui lòng giữ an toàn!</p>
+            </div>
+          </div>
+          <button class="match-action-btn" onclick="window.finishSOSDispatch()"><i class="fas fa-map"></i> Quay lại Bản đồ
+            3D</button>
+        </div>
       </div>
     </div>
   </div>
@@ -394,13 +448,13 @@
        chatbot.css (../../ChatBotAI/chatbot.css) provides all styling.
        z-index: 9999 is set in chatbot.css automatically.
   ========================================== -->
-  
+
 
   <script type="importmap">{"imports":{"@google/genai":"https://esm.run/@google/genai"}}</script>
   <script type="module" src="../../ChatBotAI/chatbotai.js"></script>
   <script src="../../Home/js/language_EN_VI.js"></script>
   <script src="../../Home/js/nav.js"></script>
-  <script src="./script1.js?v=3"></script>
+  <script src="./script1.js?v=16"></script>
   <!-- Hệ thống thông báo cứu hộ khẩn cấp -->
   <script src="../../scripts/rescue-notif.js"></script>
 
@@ -512,7 +566,7 @@
         btn.style.alignItems = "center";
         btn.style.justifyContent = "center";
         btn.style.alignSelf = "center";
-        
+
         btn.onclick = (e) => {
           e.preventDefault();
           e.stopPropagation();
@@ -669,23 +723,23 @@
               me.fullName = data.user.fullName;
               me.avatar = data.user.avatar;
               localStorage.setItem("currentUser", JSON.stringify(me));
-              
+
               saveProfileBtn.innerText = t.saved_successfully || "Cập nhật thành công!";
               saveProfileBtn.style.backgroundColor = "#10b981";
-              
+
               setTimeout(() => {
                 document.getElementById("profileSetupModal").style.display = "none";
                 saveProfileBtn.innerText = t.btn_save_profile;
                 saveProfileBtn.style.backgroundColor = "#16a34a";
                 saveProfileBtn.disabled = false;
-                
+
                 // Update avatar in navbar dropdown
                 const dropdownAvatar = document.getElementById("dropdownAvatar");
                 if (dropdownAvatar) dropdownAvatar.src = me.avatar || "https://cdn-icons-png.flaticon.com/512/149/149071.png";
-                
+
                 const dropdownName = document.getElementById("dropdownName");
                 if (dropdownName) dropdownName.innerText = me.fullName || "User";
-                
+
                 // Update all avatar buttons in header
                 const avatarBtnImgs = document.querySelectorAll(".avatar-btn img");
                 avatarBtnImgs.forEach(img => {
@@ -720,6 +774,74 @@
         });
       }
     });
+
+    // Touch Swipe & Tap Logic for Drag Handle
+    const dragHandle = document.getElementById('mobileDragHandle');
+    if (dragHandle) {
+      let startY = 0;
+      let currentY = 0;
+      let currentState = 'half'; // Khởi tạo với trạng thái 35%
+
+      dragHandle.addEventListener('touchstart', e => {
+        startY = e.touches[0].clientY;
+        currentY = startY;
+      });
+
+      dragHandle.addEventListener('touchmove', e => {
+        // Ngăn chặn cuộn trang mặc định khi vuốt trên thanh kéo
+        e.preventDefault(); 
+        currentY = e.touches[0].clientY;
+      });
+
+      dragHandle.addEventListener('touchend', e => {
+        const diffY = currentY - startY;
+        const panel = document.getElementById('floatingPanel');
+        const map = document.getElementById('interactiveMap');
+        if (!panel || !map || window.innerWidth > 768) return;
+
+        // Nếu vuốt lên (diffY âm)
+        if (diffY < -20) {
+          if (currentState === 'minimized') currentState = 'half';
+          else currentState = 'full';
+        } 
+        // Nếu vuốt xuống (diffY dương)
+        else if (diffY > 20) {
+          if (currentState === 'full') currentState = 'half';
+          else currentState = 'minimized';
+        }
+        // Nếu click/tap (di chuyển rất ít)
+        else if (Math.abs(diffY) < 10) {
+          if (currentState === 'full') currentState = 'half';
+          else if (currentState === 'half') currentState = 'full';
+          else currentState = 'half'; // từ minimized -> half
+        }
+
+        // Cập nhật giao diện bằng inline styles để ghi đè mọi CSS
+        if (currentState === 'full') {
+          panel.style.setProperty('height', 'calc(100% - 68px)', 'important');
+          panel.style.setProperty('flex', '1', 'important');
+          panel.style.setProperty('max-height', 'none', 'important');
+          panel.style.setProperty('margin-top', '68px', 'important'); // Tránh bị navbar che
+          map.style.setProperty('display', 'none', 'important');
+        } else if (currentState === 'half') {
+          panel.style.setProperty('height', '35%', 'important');
+          panel.style.setProperty('flex', '0 0 35%', 'important');
+          panel.style.setProperty('max-height', '35%', 'important');
+          panel.style.setProperty('margin-top', '0', 'important');
+          map.style.setProperty('display', 'block', 'important');
+          map.style.setProperty('height', 'calc(65% - 68px - 4px)', 'important');
+          map.style.setProperty('flex', '0 0 calc(65% - 68px - 4px)', 'important');
+        } else if (currentState === 'minimized') {
+          panel.style.setProperty('height', '44px', 'important');
+          panel.style.setProperty('flex', '0 0 44px', 'important');
+          panel.style.setProperty('max-height', '44px', 'important');
+          panel.style.setProperty('margin-top', '0', 'important');
+          map.style.setProperty('display', 'block', 'important');
+          map.style.setProperty('height', 'calc(100% - 68px - 44px)', 'important');
+          map.style.setProperty('flex', '1', 'important');
+        }
+      });
+    }
   </script>
 </body>
 

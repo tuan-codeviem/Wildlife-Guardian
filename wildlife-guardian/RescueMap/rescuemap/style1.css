@@ -845,12 +845,9 @@ html, body {
     left: 0 !important;
   }
 
-  /* Panel: chiếm 35% dưới, scroll được bên trong */
+  /* Panel: chiếm không gian dưới, scroll được bên trong */
   .floating-panel {
     position: relative !important;
-    flex: 0 0 35% !important;
-    height: 35% !important;
-    max-height: 35% !important;
     width: 100% !important;
     top: auto !important;
     bottom: auto !important;
@@ -1324,3 +1321,515 @@ html, body {
   gap: 8px !important;
 }
 
+/* ==========================================
+   SOS DISPATCH (UBER FOR RESCUE)
+========================================== */
+.rm-sos-dispatch {
+  text-align: center;
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+}
+
+.sos-radar-container {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  margin: 0 auto 30px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sos-radar-center {
+  width: 50px;
+  height: 50px;
+  background: #ef4444;
+  border-radius: 50%;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 24px;
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.6);
+}
+
+.sos-radar-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 2px solid rgba(239, 68, 68, 0.8);
+  opacity: 0;
+}
+
+.sos-radar-ring.ring-1 { width: 100%; height: 100%; animation: radarWave 2s infinite linear; }
+.sos-radar-ring.ring-2 { width: 100%; height: 100%; animation: radarWave 2s infinite linear 0.6s; }
+.sos-radar-ring.ring-3 { width: 100%; height: 100%; animation: radarWave 2s infinite linear 1.2s; }
+
+@keyframes radarWave {
+  0% { width: 50px; height: 50px; opacity: 1; border-width: 3px; }
+  100% { width: 200px; height: 200px; opacity: 0; border-width: 1px; }
+}
+
+.sos-dispatch-title {
+  color: #fca5a5;
+  font-size: 20px;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.sos-dispatch-subtitle {
+  color: #94a3b8;
+  font-size: 14px;
+  max-width: 280px;
+  line-height: 1.5;
+}
+
+.sos-match-card {
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  border-radius: 16px;
+  padding: 20px;
+  width: 100%;
+  max-width: 350px;
+  margin-top: 20px;
+  text-align: left;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  animation: slideUpFade 0.5s ease;
+}
+
+@keyframes slideUpFade {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.match-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  border-bottom: 1px dashed rgba(255,255,255,0.1);
+  padding-bottom: 10px;
+}
+
+.match-badge {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.match-eta {
+  color: #fbbf24;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.match-card-body {
+  display: flex;
+  gap: 15px;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.match-icon {
+  width: 48px;
+  height: 48px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  color: #34d399;
+}
+
+.match-info h4 {
+  color: #fff;
+  margin: 0 0 5px 0;
+  font-size: 16px;
+}
+
+.match-info p {
+  color: #cbd5e1;
+  font-size: 12px;
+  margin: 0 0 5px 0;
+  line-height: 1.4;
+}
+
+.match-status-text {
+  color: #34d399 !important;
+  font-weight: 600;
+  margin-top: 8px !important;
+}
+
+.match-action-btn {
+  width: 100%;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  color: var(--text-light);
+}
+
+/* ==========================================
+   NEARBY RESCUERS BOX (5M LIGHT RED ZONE)
+========================================== */
+.rm-nearby-rescuers {
+  background: rgba(239, 68, 68, 0.08) !important;
+  border: 1px solid rgba(239, 68, 68, 0.4) !important;
+  border-radius: 12px !important;
+  padding: 14px !important;
+  margin-bottom: 16px !important;
+  animation: pulseRedBorder 2s infinite !important;
+  box-shadow: 0 4px 20px rgba(239, 68, 68, 0.15) !important;
+}
+
+@keyframes pulseRedBorder {
+  0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+}
+
+.rm-nearby-header {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  color: #fca5a5 !important;
+  margin-bottom: 10px !important;
+}
+
+.rm-nearby-list {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+}
+
+/* ==========================================
+   SOS DISPATCH (UBER FOR RESCUE)
+========================================== */
+.rm-sos-dispatch {
+  text-align: center;
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+}
+
+.sos-radar-container {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  margin: 0 auto 30px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sos-radar-center {
+  width: 50px;
+  height: 50px;
+  background: #ef4444;
+  border-radius: 50%;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 24px;
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.6);
+}
+
+.sos-radar-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 2px solid rgba(239, 68, 68, 0.8);
+  opacity: 0;
+}
+
+.sos-radar-ring.ring-1 { width: 100%; height: 100%; animation: radarWave 2s infinite linear; }
+.sos-radar-ring.ring-2 { width: 100%; height: 100%; animation: radarWave 2s infinite linear 0.6s; }
+.sos-radar-ring.ring-3 { width: 100%; height: 100%; animation: radarWave 2s infinite linear 1.2s; }
+
+@keyframes radarWave {
+  0% { width: 50px; height: 50px; opacity: 1; border-width: 3px; }
+  100% { width: 200px; height: 200px; opacity: 0; border-width: 1px; }
+}
+
+.sos-dispatch-title {
+  color: #fca5a5;
+  font-size: 20px;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.sos-dispatch-subtitle {
+  color: #94a3b8;
+  font-size: 14px;
+  max-width: 280px;
+  line-height: 1.5;
+}
+
+.sos-match-card {
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  border-radius: 16px;
+  padding: 20px;
+  width: 100%;
+  max-width: 350px;
+  margin-top: 20px;
+  text-align: left;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  animation: slideUpFade 0.5s ease;
+}
+
+@keyframes slideUpFade {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.match-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  border-bottom: 1px dashed rgba(255,255,255,0.1);
+  padding-bottom: 10px;
+}
+
+.match-badge {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.match-eta {
+  color: #fbbf24;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.match-card-body {
+  display: flex;
+  gap: 15px;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.match-icon {
+  width: 48px;
+  height: 48px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  color: #34d399;
+}
+
+.match-info h4 {
+  color: #fff;
+  margin: 0 0 5px 0;
+  font-size: 16px;
+}
+
+.match-info p {
+  color: #cbd5e1;
+  font-size: 12px;
+  margin: 0 0 5px 0;
+  line-height: 1.4;
+}
+
+.match-status-text {
+  color: #34d399 !important;
+  font-weight: 600;
+  margin-top: 8px !important;
+}
+
+.match-action-btn {
+  width: 100%;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.match-action-btn:hover {
+  background: #2563eb;
+}
+
+/* ==========================================
+   MOBILE DRAG HANDLE & BOTTOM SHEET
+========================================== */
+.mobile-drag-handle {
+  display: none;
+  width: 100%;
+  padding: 16px 0 26px; /* 16 + 2 + 26 = 44px */
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  z-index: 10;
+  touch-action: none; /* Ngăn trình duyệt chặn sự kiện cuộn */
+}
+.handle-bar {
+  width: 36px;
+  height: 2px;
+  background: rgba(255,255,255,0.4);
+  border-radius: 2px;
+  position: relative;
+}
+.handle-bar::after {
+  content: '';
+  position: absolute;
+  top: 6px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: rgba(255,255,255,0.4);
+  border-radius: 2px;
+}
+
+@media (max-width: 768px) {
+  /* Override existing mobile layout to make Panel full screen by default */
+  .map-wrapper {
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+  }
+  
+  #interactiveMap {
+    display: none !important;
+  }
+  
+  .floating-panel {
+    flex: 1 !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-height: none !important;
+    margin-top: 0 !important;
+    padding-top: 68px !important;
+    border-radius: 0 !important;
+    border-top: none !important;
+    transition: all 0.3s ease !important;
+    position: relative !important;
+  }
+  
+  .mobile-drag-handle {
+    display: flex !important;
+  }
+  
+  /* Tối ưu hóa không gian hiển thị các header trên mobile để có thêm chỗ cho danh sách */
+  .panel-header {
+    padding: 4px 16px 2px !important;
+  }
+  .panel-title {
+    gap: 8px !important;
+  }
+  .panel-title-icon {
+    width: 28px !important;
+    height: 28px !important;
+    font-size: 14px !important;
+  }
+  .panel-title h2 {
+    font-size: 16px !important;
+  }
+  .panel-title p {
+    display: none !important; /* Ẩn dòng chữ phụ để tiết kiệm diện tích */
+  }
+  .panel-search {
+    padding: 2px 16px !important;
+  }
+  .search-glass {
+    padding: 2px 2px 2px 12px !important;
+  }
+  .search-glass button {
+    width: 28px !important;
+    height: 28px !important;
+    font-size: 12px !important;
+  }
+  .search-glass input {
+    font-size: 13px !important;
+  }
+  .panel-tabs {
+    padding: 4px 16px !important;
+  }
+  .tab-btn {
+    padding: 4px 12px !important;
+    font-size: 12px !important;
+  }
+  .panel-legend {
+    padding: 2px 16px 6px !important;
+  }
+  
+  .panel-scroll {
+    overflow-y: auto !important;
+    height: auto !important;
+    flex: 1 !important;
+  }
+  
+  .view-home-btn {
+    display: none !important;
+  }
+  
+  /* State: Show Globe */
+  .map-wrapper.show-globe #interactiveMap {
+    display: block !important;
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    flex: 1 !important;
+    width: 100% !important;
+    height: calc(100% - 68px - 44px) !important;
+    margin-top: 68px !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    visibility: visible !important;
+    overflow: hidden !important;
+  }
+  
+  .map-wrapper.show-globe .floating-panel {
+    flex: 0 0 44px !important;
+    height: 44px !important;
+    max-height: 44px !important;
+    margin-top: 0 !important;
+    padding-top: 0 !important; /* KHÔI PHỤC PADDING KHI THU GỌN ĐỂ THẤY HANDLE */
+    overflow: hidden !important;
+    border-radius: 24px 24px 0 0 !important;
+    border-top: 1px solid var(--glass-border) !important;
+  }
+  
+  .map-wrapper.show-globe .panel-scroll,
+  .map-wrapper.show-globe .panel-header,
+  .map-wrapper.show-globe .panel-search,
+  .map-wrapper.show-globe .panel-tabs,
+  .map-wrapper.show-globe .panel-legend,
+  .map-wrapper.show-globe .panel-action-row {
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+}

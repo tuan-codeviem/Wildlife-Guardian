@@ -494,7 +494,7 @@
     "model3dUrl": "https://res.cloudinary.com/dotlymsmk/raw/upload/v1788965851/wildlife-guardian/models/Armadillo.glb"
   },
   {
-    "speciesId": "polar-bear",
+    "speciesId": "Polar Bear",
     "animalName": {
       "en": "Polar Bear",
       "vi": "Gấu Bắc Cực"
@@ -532,7 +532,7 @@
     "model3dUrl": "https://res.cloudinary.com/dotlymsmk/raw/upload/v1788965855/wildlife-guardian/models/polar-bear.glb"
   },
   {
-    "speciesId": "reindeer",
+    "speciesId": "Reindeer",
     "animalName": {
       "en": "Reindeer",
       "vi": "Tuần Lộc"
@@ -570,7 +570,7 @@
     "model3dUrl": "https://res.cloudinary.com/dotlymsmk/raw/upload/v1788965857/wildlife-guardian/models/reindeer.glb"
   },
   {
-    "speciesId": "tank-crab",
+    "speciesId": "Crab",
     "animalName": {
       "en": "Tank Crab (Brown Land Crab)",
       "vi": "Cua Xe Tăng"
@@ -608,7 +608,7 @@
     "model3dUrl": "https://res.cloudinary.com/dotlymsmk/raw/upload/v1788965858/wildlife-guardian/models/tank-crab.glb"
   },
   {
-    "speciesId": "rusty-patched-bumblebee",
+    "speciesId": "BumbleBee",
     "animalName": {
       "en": "Rusty Patched Bumblebee",
       "vi": "Ong Bầu Vằn Rỉ Sắt"
@@ -646,7 +646,7 @@
     "model3dUrl": "https://res.cloudinary.com/dotlymsmk/raw/upload/v1788965857/wildlife-guardian/models/rusty-patched-bumblebee.glb"
   },
   {
-    "speciesId": "european-hedgehog",
+    "speciesId": "HedgeHog",
     "animalName": {
       "en": "European Hedgehog",
       "vi": "Nhím Gai Châu Âu"
