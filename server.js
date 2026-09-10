@@ -40,7 +40,8 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(cors()); // Bắt buộc phải có để Frontend và Backend nói chuyện được với nhau
-app.use(express.json()); // Giúp server đọc được dữ liệu dạng chữ
+app.use(express.json({ limit: '50mb' })); // Giúp server đọc được dữ liệu dạng chữ, nới lỏng dung lượng 50MB cho ảnh Base64
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 // Xử lý file tĩnh bình thường
 app.use(express.static(".")); // Để chạy được file HTML/CSS/JS
@@ -105,6 +106,26 @@ const uploadFile = (req, res, next) => {
     next();
   });
 };
+
+// Middleware riêng cho /api/upload vì frontend gửi field name là "image"
+const uploadImageFile = (req, res, next) => {
+  const uploader = upload.single("image");
+  uploader(req, res, function (err) {
+    if (err) {
+      console.error("❌ Lỗi Multer/Cloudinary (Image):", err);
+      return res.status(400).json({ message: "Lỗi tải ảnh lên Cloudinary: " + err.message });
+    }
+    next();
+  });
+};
+
+app.post("/api/upload", uploadImageFile, (req, res) => {
+  if (req.file) {
+    res.json({ secure_url: req.file.path });
+  } else {
+    res.status(400).json({ error: "Không nhận được file ảnh" });
+  }
+});
 
 // ==========================================
 // 4.5 API THƯ VIỆN ĐỘNG VẬT (SPECIES)
