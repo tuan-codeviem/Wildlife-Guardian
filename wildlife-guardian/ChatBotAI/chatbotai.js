@@ -95,14 +95,21 @@ const inputEl = document.getElementById("cwInput");
 const sendBtn = document.getElementById("cwSend");
 
 /* ════════════════════════════════════════════════════
-   DRAGGABLE
+   DRAGGABLE (BUTTON & HEADER ONLY)
 ════════════════════════════════════════════════════ */
 let isDragging = false;
+let dragMoved = false;
+let hasBeenDragged = false;
 let startX, startY, offsetX, offsetY;
 
 function onDragStart(e) {
-    // Ignore clicks inside text input or message area
-    if (e.target.closest("input") || e.target.closest(".cw-msgs")) return;
+    // Chỉ cho phép kéo thả từ nút tròn (khi đóng) hoặc thanh tiêu đề cwHeader (khi mở)
+    const isBtn = e.target.closest("#chatbotBtn");
+    const isHeader = e.target.closest("#cwHeader");
+    if (!isBtn && !isHeader) return;
+
+    // Tuyệt đối không kéo thả khi bấm nút Close, Input, hoặc khu vực tin nhắn
+    if (e.target.closest("#cwClose") || e.target.closest("input") || e.target.closest(".cw-msgs")) return;
 
     const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
     const clientY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
@@ -113,11 +120,9 @@ function onDragStart(e) {
     offsetX = clientX - rect.left;
     offsetY = clientY - rect.top;
     isDragging = false;
+    dragMoved = false;
 
     document.body.style.userSelect = "none";
-    if (chatbotContainer) chatbotContainer.classList.add("is-dragging");
-
-    // Ngăn iframe/canvas Unity nuốt mất sự kiện chuột khi kéo
     document.querySelectorAll('iframe, canvas').forEach(el => el.style.pointerEvents = 'none');
 
     if (e.type.includes('touch')) {
@@ -133,58 +138,46 @@ function onDragMove(e) {
     const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
     const clientY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
 
-    if (Math.abs(clientX - startX) > 3 || Math.abs(clientY - startY) > 3) {
+    if (Math.abs(clientX - startX) > 4 || Math.abs(clientY - startY) > 4) {
         isDragging = true;
+        dragMoved = true;
+        hasBeenDragged = true;
+        if (chatbotContainer) chatbotContainer.classList.add("is-dragging");
     }
     if (isDragging) {
         if (e.type.includes('touch')) e.preventDefault();
-        chatbotContainer.style.left = `${clientX - offsetX}px`;
-        chatbotContainer.style.top = `${clientY - offsetY}px`;
+        const rect = chatbotContainer.getBoundingClientRect();
+        const pad = 12;
+        let newLeft = clientX - offsetX;
+        let newTop = clientY - offsetY;
+
+        // Giới hạn trong màn hình
+        newLeft = Math.max(pad, Math.min(window.innerWidth - rect.width - pad, newLeft));
+        newTop = Math.max(pad, Math.min(window.innerHeight - rect.height - pad, newTop));
+
+        chatbotContainer.style.left = `${newLeft}px`;
+        chatbotContainer.style.top = `${newTop}px`;
         chatbotContainer.style.bottom = "auto";
         chatbotContainer.style.right = "auto";
-        clampToViewport();
     }
 }
 
 function onDragEnd() {
     document.body.style.userSelect = "";
     if (chatbotContainer) chatbotContainer.classList.remove("is-dragging");
-
-    // Khôi phục lại sự kiện chuột cho Game Unity
     document.querySelectorAll('iframe, canvas').forEach(el => el.style.pointerEvents = '');
     document.removeEventListener("mousemove", onDragMove);
     document.removeEventListener("mouseup", onDragEnd);
     document.removeEventListener("touchmove", onDragMove);
     document.removeEventListener("touchend", onDragEnd);
+
+    setTimeout(() => {
+        dragMoved = false;
+        isDragging = false;
+    }, 60);
 }
 
-function clampToViewport() {
-    const activeEl = (chatWindow && (
-        chatWindow.classList.contains("active") || chatWindow.style.display !== "none"
-    )) ? chatWindow : openBtn;
-
-    const rect = chatbotContainer.getBoundingClientRect();
-    const activeRect = activeEl ? activeEl.getBoundingClientRect() : rect;
-    let x = rect.left;
-    let y = rect.top;
-    let moved = false;
-    
-    const PAD = 15; // Safe padding
-
-    if (activeRect.right > window.innerWidth - PAD) { x -= (activeRect.right - (window.innerWidth - PAD)); moved = true; }
-    if (activeRect.bottom > window.innerHeight - PAD) { y -= (activeRect.bottom - (window.innerHeight - PAD)); moved = true; }
-    if (activeRect.left < PAD) { x += (PAD - activeRect.left); moved = true; }
-    if (activeRect.top < PAD) { y += (PAD - activeRect.top); moved = true; }
-
-    if (moved || chatbotContainer.style.left !== "") {
-        chatbotContainer.style.left = x + "px";
-        chatbotContainer.style.top = y + "px";
-        chatbotContainer.style.bottom = "auto";
-        chatbotContainer.style.right = "auto";
-    }
-}
-
-// Attach drag events
+// Gán sự kiện kéo thả
 if (chatbotContainer) {
     chatbotContainer.addEventListener("mousedown", onDragStart);
     chatbotContainer.addEventListener("touchstart", onDragStart, { passive: false });
@@ -193,34 +186,141 @@ if (chatbotContainer) {
 /* ════════════════════════════════════════════════════
    OPEN / CLOSE
 ════════════════════════════════════════════════════ */
+function openChatWindow() {
+    if (!chatWindow) return;
+    chatWindow.classList.add("active");
+    if (openBtn) {
+        openBtn.style.opacity = "0";
+        openBtn.style.pointerEvents = "none";
+        openBtn.style.transform = "scale(0.85)";
+    }
+
+    // Nếu người dùng đã từng kéo thả, điều chỉnh hướng mở cửa sổ thông minh
+    if (hasBeenDragged && chatbotContainer) {
+        const rect = chatbotContainer.getBoundingClientRect();
+        if (rect.top < 400) {
+            chatWindow.style.bottom = "auto";
+            chatWindow.style.top = "76px";
+        } else {
+            chatWindow.style.top = "auto";
+            chatWindow.style.bottom = "76px";
+        }
+        if (rect.left < 380) {
+            chatWindow.style.right = "auto";
+            chatWindow.style.left = "0px";
+        } else {
+            chatWindow.style.left = "auto";
+            chatWindow.style.right = "0px";
+        }
+    } else {
+        // Trạng thái mặc định: KHÔNG can thiệp style.top/left, giữ nguyên CSS bottom: 28px; right: 28px
+        chatWindow.style.top = "";
+        chatWindow.style.bottom = "";
+        chatWindow.style.left = "";
+        chatWindow.style.right = "";
+    }
+
+    setTimeout(() => {
+        if (inputEl) inputEl.focus();
+        if (chatBox) chatBox.scrollTop = chatBox.scrollHeight;
+    }, 60);
+}
+
+function closeChatWindow() {
+    if (!chatWindow) return;
+    chatWindow.classList.remove("active");
+    if (openBtn) {
+        openBtn.style.opacity = "1";
+        openBtn.style.pointerEvents = "auto";
+        openBtn.style.transform = "scale(1)";
+        openBtn.style.display = "flex";
+    }
+}
+
 if (openBtn && chatWindow) {
-    openBtn.addEventListener("click", () => {
-        if (!isDragging) {
-            chatWindow.classList.add("active");
-            if (openBtn) {
-                openBtn.style.opacity = "0";
-                openBtn.style.pointerEvents = "none";
-            }
-            clampToViewport();
-            setTimeout(clampToViewport, 50); // Bắt ngay khi DOM bắt đầu render class active
-            setTimeout(clampToViewport, 360); // Đảm bảo clamp sau khi animation kết thúc
-            if (chatBox) chatBox.scrollTop = chatBox.scrollHeight;
+    openBtn.addEventListener("click", (e) => {
+        if (!isDragging && !dragMoved) {
+            openChatWindow();
         }
     });
 }
 
 if (closeBtn && chatWindow) {
-    closeBtn.addEventListener("click", () => {
-        if (!isDragging) {
-            chatWindow.classList.remove("active");
-            if (openBtn) {
-                openBtn.style.opacity = "1";
-                openBtn.style.pointerEvents = "auto";
-                openBtn.style.display = "flex";
-            }
-            clampToViewport();
-        }
+    closeBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        closeChatWindow();
     });
+}
+
+// Đóng cửa sổ bằng phím Escape
+document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && chatWindow && chatWindow.classList.contains("active")) {
+        closeChatWindow();
+    }
+});
+
+// Resize dọn dẹp vị trí
+window.addEventListener("resize", () => {
+    if (!hasBeenDragged && chatbotContainer) {
+        chatbotContainer.style.top = "";
+        chatbotContainer.style.left = "";
+        chatbotContainer.style.bottom = "";
+        chatbotContainer.style.right = "";
+    }
+});
+
+/* ════════════════════════════════════════════════════
+   MESSAGE FORMATTING & SMART RESPONSES
+════════════════════════════════════════════════════ */
+function formatMessage(text) {
+    if (!text) return '';
+    let html = text
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+    html = html.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" class="chat-link" target="_blank">$1</a>');
+    html = html.replace(/\n/g, '<br>');
+    return html;
+}
+
+function getSmartFallbackResponse(userMessage, lang) {
+    const isVi = (lang === "VI");
+    const lower = (userMessage || '').toLowerCase();
+
+    // 1. Báo cáo khẩn cấp
+    if (lower.includes('báo cáo') || lower.includes('khẩn cấp') || lower.includes('cứu hộ') || lower.includes('report') || lower.includes('rescue')) {
+        return isVi
+            ? `🚨 <strong>Báo cáo động vật khẩn cấp:</strong><br>Bạn hãy nhấn nút <strong>🚨 Report Now</strong> trên thanh menu hoặc vào trang <a href="../RescueMap/rescuemap/index.html?action=report" class="chat-link">Rescue Map (Bản đồ cứu hộ)</a>. Tại đó bạn chỉ cần bật camera chụp ảnh, hệ thống sẽ tự lấy vị trí GPS và thông báo đến trạm cứu hộ gần nhất!`
+            : `🚨 <strong>Emergency Wildlife Report:</strong><br>Click the <strong>🚨 Report Now</strong> button on the menu or visit the <a href="../RescueMap/rescuemap/index.html?action=report" class="chat-link">Rescue Map</a> to take a photo, detect your GPS coordinates, and notify the nearest rescue team!`;
+    }
+
+    // 2. Mạng xã hội / Cộng đồng
+    if (lower.includes('cộng đồng') || lower.includes('giao lưu') || lower.includes('social') || lower.includes('bài viết') || lower.includes('community')) {
+        return isVi
+            ? `🌍 <strong>Cộng đồng Wildlife Guardian:</strong><br>Hãy ghé thăm trang <a href="../Social/frontend/index.html" class="chat-link">Social (Mạng xã hội)</a> để cùng chia sẻ hình ảnh, thảo luận câu chuyện bảo tồn và kết nối với hàng nghìn tình nguyện viên khác!`
+            : `🌍 <strong>Wildlife Community:</strong><br>Visit our <a href="../Social/frontend/index.html" class="chat-link">Social Hub</a> to share rescue stories, discuss conservation efforts, and connect with guardians worldwide!`;
+    }
+
+    // 3. Game
+    if (lower.includes('game') || lower.includes('chơi') || lower.includes('học') || lower.includes('play')) {
+        return isVi
+            ? `🎮 <strong>Trải nghiệm Game 3D Unity:</strong><br>Bạn có thể vào mục <a href="../Game/GameUnity.html" class="chat-link">Game</a> để tham gia cuộc phiêu lưu tương tác giải cứu động vật hoang dã cực kỳ thú vị và hấp dẫn!`
+            : `🎮 <strong>Interactive 3D Game:</strong><br>Check out our <a href="../Game/GameUnity.html" class="chat-link">Game Section</a> to play an immersive Unity 3D wildlife rescue adventure!`;
+    }
+
+    // 4. Thư viện loài
+    if (lower.includes('loài') || lower.includes('thư viện') || lower.includes('tra cứu') || lower.includes('species') || lower.includes('động vật')) {
+        return isVi
+            ? `📚 <strong>Thư viện các loài động vật:</strong><br>Bạn có thể tra cứu thông tin sinh học, hình ảnh và tình trạng bảo tồn sách đỏ của hàng trăm loài tại <a href="../SpeciesLibarary/SpeciesLibarary.html" class="chat-link">Species Library</a>!`
+            : `📚 <strong>Species Library:</strong><br>Explore detailed profiles, Red List conservation statuses, and biological facts for hundreds of species at the <a href="../SpeciesLibarary/SpeciesLibarary.html" class="chat-link">Species Library</a>!`;
+    }
+
+    // Mặc định
+    return isVi
+        ? `🦅 <strong>Phoenix AI đã nhận được câu hỏi của bạn!</strong><br>Hiện tại kết nối máy chủ đang bận một chút, bạn có thể tham khảo nhanh các mục trên thanh điều hướng như <strong>Rescue Map</strong>, <strong>Species Library</strong> hoặc thử gửi lại câu hỏi sau ít phút nhé! 😊`
+        : `🦅 <strong>Phoenix AI received your question!</strong><br>The server connection is temporarily busy. You can explore our main features on the top navigation bar like <strong>Rescue Map</strong> and <strong>Species Library</strong>, or try asking again in a moment! 😊`;
 }
 
 /* ════════════════════════════════════════════════════
@@ -256,7 +356,7 @@ async function sendMessage() {
     inputEl.value = "";
 
     // Show user message
-    appendMessage("user", userMessage);
+    appendMessage("user", formatMessage(userMessage));
 
     // Show loading dots
     const loadEl = appendMessage("bot", '<span class="typing"><span></span><span></span><span></span></span>');
@@ -267,7 +367,7 @@ async function sendMessage() {
         : "1. Luôn trả lời bằng Tiếng Anh (English).";
 
     try {
-                const res = await fetch(`${API_BASE_URL}/api/chatbot`, {
+        const res = await fetch(`${API_BASE_URL}/api/chatbot`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ userMessage, languageRule })
@@ -275,22 +375,18 @@ async function sendMessage() {
         const response = await res.json();
         if (!response.success) throw new Error(response.error || 'Server error');
 
-        // Replace loading with actual response
         const bubble = loadEl.querySelector(".msg-bubble");
-        if (bubble) bubble.textContent = response.text;
+        if (bubble) bubble.innerHTML = formatMessage(response.text);
         chatBox.scrollTop = chatBox.scrollHeight;
 
     } catch (error) {
-        console.error("Chatbot API Error:", error);
-
+        console.warn("Chatbot API Error / Offline:", error);
         const lang = window.currentLang || localStorage.getItem("lang") || "EN";
-        const friendlyErrorMsg = lang === "VI"
-            ? "Oops! Xin lỗi bạn, hiện tại máy chủ đang hơi quá tải hoặc mất kết nối. Bạn có thể vui lòng đặt lại câu hỏi sau một lát được không? 😓"
-            : "Oops! Sorry, the server is currently experiencing high demand or disconnected. Could you please try asking your question again in a moment? 😓";
+        const smartReply = getSmartFallbackResponse(userMessage, lang);
 
         const bubble = loadEl.querySelector(".msg-bubble");
         if (bubble) {
-            bubble.textContent = friendlyErrorMsg;
+            bubble.innerHTML = smartReply;
         }
         chatBox.scrollTop = chatBox.scrollHeight;
     }
@@ -312,10 +408,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (quickRepliesBox && chatInput) {
         const scrollHint = document.querySelector(".qr-scroll-hint");
 
-        // Function to check if scrolled to end
         const checkScroll = () => {
             if (!scrollHint) return;
-            // Cho khoảng dung sai 2px
             if (quickRepliesBox.scrollWidth - quickRepliesBox.clientWidth <= quickRepliesBox.scrollLeft + 2) {
                 scrollHint.classList.add("hidden");
             } else {
@@ -323,35 +417,23 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         };
 
-        // Check initially
         checkScroll();
-
-        // Listen to scroll events
         quickRepliesBox.addEventListener("scroll", checkScroll);
 
-        // Hỗ trợ cuộn ngang bằng con lăn chuột (Tăng cường UX)
+        // Hỗ trợ cuộn ngang bằng con lăn chuột
         quickRepliesBox.addEventListener("wheel", (evt) => {
             evt.preventDefault();
             quickRepliesBox.scrollLeft += evt.deltaY;
-            // Không cần gọi checkScroll ở đây vì sự kiện "scroll" sẽ tự bắt
         });
 
         const qrButtons = quickRepliesBox.querySelectorAll(".qr-btn");
         qrButtons.forEach(btn => {
-            btn.addEventListener("click", () => {
-                // Lấy nội dung chữ, loại bỏ các icon emoji (⚡🌍🎮📚)
+            btn.addEventListener("click", (e) => {
+                e.stopPropagation();
                 let text = btn.textContent.replace(/[⚡🌍🎮📚]/g, "").trim();
-
-                // Điền vào ô input
                 chatInput.value = text;
-
-                // Kích hoạt animation phản hồi
                 btn.classList.add("selected");
-
-                // Tự động gửi tin nhắn luôn cho tiện
                 sendMessage();
-
-                // Gỡ animation sau khi hoàn thành
                 setTimeout(() => {
                     btn.classList.remove("selected");
                 }, 400);
