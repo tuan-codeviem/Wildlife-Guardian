@@ -1293,11 +1293,68 @@ app.patch("/api/rescuemap/:id/status", async (req, res) => {
 });
 
 // ==========================================
-// 8. API CHATBOT AI
+// 8. API CHATBOT AI (CÓ RATE LIMIT & CHỐNG SPAM)
 // ==========================================
+const chatbotRateLimits = new Map();
+
+// Dọn dẹp cache rate limit sau mỗi 5 phút để tối ưu bộ nhớ
+setInterval(() => {
+  const now = Date.now();
+  for (const [ip, record] of chatbotRateLimits.entries()) {
+    if (now - record.lastRequestTime > 300000) {
+      chatbotRateLimits.delete(ip);
+    }
+  }
+}, 300000);
+
 app.post("/api/chatbot", async (req, res) => {
   try {
     const { userMessage, languageRule } = req.body;
+    if (!userMessage || !userMessage.trim()) {
+      return res.status(400).json({ success: false, error: "Tin nhắn không được để trống" });
+    }
+
+    // 🛡️ BẢO VỆ CHỐNG SPAM (COOLDOWN & RATE LIMIT THEO IP)
+    const clientIp = req.headers["x-forwarded-for"]?.split(",")[0].trim() || req.socket.remoteAddress || "unknown_ip";
+    const now = Date.now();
+    const COOLDOWN_MS = 4000; // Mỗi IP phải đợi ít nhất 4 giây giữa 2 câu hỏi
+    const MAX_PER_MINUTE = 15; // Tối đa 15 câu / 1 phút
+
+    let clientRecord = chatbotRateLimits.get(clientIp);
+    if (!clientRecord) {
+      clientRecord = { lastRequestTime: 0, count: 0, windowStart: now };
+      chatbotRateLimits.set(clientIp, clientRecord);
+    }
+
+    // 1. Kiểm tra Cooldown liên tiếp
+    const timeSinceLast = now - clientRecord.lastRequestTime;
+    if (timeSinceLast < COOLDOWN_MS) {
+      const waitSec = Math.ceil((COOLDOWN_MS - timeSinceLast) / 1000);
+      const isVi = !languageRule || languageRule.includes("Tiếng Việt");
+      const msg = isVi
+        ? `⏳ Bạn gửi câu hỏi quá nhanh! Vui lòng đợi ${waitSec} giây nữa rồi gửi tiếp nhé.`
+        : `⏳ You are asking too fast! Please wait ${waitSec} seconds before sending again.`;
+      return res.json({ success: true, text: msg });
+    }
+
+    // 2. Kiểm tra giới hạn số câu hỏi trong 1 phút
+    if (now - clientRecord.windowStart > 60000) {
+      clientRecord.windowStart = now;
+      clientRecord.count = 0;
+    }
+    clientRecord.count++;
+
+    if (clientRecord.count > MAX_PER_MINUTE) {
+      const isVi = !languageRule || languageRule.includes("Tiếng Việt");
+      const msg = isVi
+        ? `🛑 Bạn đã hỏi quá nhiều câu trong 1 phút. Hãy nghỉ ngơi một lát rồi quay lại nhé!`
+        : `🛑 You have reached the question limit for this minute. Please take a short break!`;
+      return res.json({ success: true, text: msg });
+    }
+
+    // Cập nhật thời điểm gửi mới nhất
+    clientRecord.lastRequestTime = now;
+
     const systemPrompt = `Bạn là Phoenix AI, trợ lý ảo của trang web Wildlife Guardian.
 QUY TẮC BẮT BUỘC VỀ ĐỊNH DẠNG: Tuyệt đối không sử dụng bất kỳ định dạng Markdown nào trong câu trả lời. Không sử dụng dấu sao (*) để in đậm, in nghiêng hay làm gạch đầu dòng. Chỉ trả lời bằng văn bản thuần túy (Plain text). Nếu cần liệt kê, hãy dùng dấu gạch ngang (-). Trả lời ngắn gọn, súc tích và thân thiện.
         ${languageRule}

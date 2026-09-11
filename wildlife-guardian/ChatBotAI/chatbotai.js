@@ -349,11 +349,30 @@ function appendMessage(role, html) {
     return wrap;
 }
 
+let isBotThinking = false;
+let lastUserSendTime = 0;
+
 async function sendMessage() {
     if (!inputEl || !chatBox) return;
+    if (isBotThinking) return; // Không cho gửi khi bot đang suy nghĩ
+
     const userMessage = inputEl.value.trim();
     if (!userMessage) return;
+
+    // Chặn gửi quá nhanh (cooldown 3 giây tại client)
+    const now = Date.now();
+    if (now - lastUserSendTime < 3000) {
+        return;
+    }
+    lastUserSendTime = now;
+    isBotThinking = true;
+
     inputEl.value = "";
+    if (sendBtn) {
+        sendBtn.disabled = true;
+        sendBtn.style.opacity = "0.5";
+        sendBtn.style.cursor = "not-allowed";
+    }
 
     // Show user message
     appendMessage("user", formatMessage(userMessage));
@@ -381,14 +400,22 @@ async function sendMessage() {
 
     } catch (error) {
         console.warn("Chatbot API Error / Offline:", error);
-        const lang = window.currentLang || localStorage.getItem("lang") || "EN";
-        const smartReply = getSmartFallbackResponse(userMessage, lang);
+        const currentLanguage = window.currentLang || localStorage.getItem("lang") || "EN";
+        const smartReply = getSmartFallbackResponse(userMessage, currentLanguage);
 
         const bubble = loadEl.querySelector(".msg-bubble");
         if (bubble) {
             bubble.innerHTML = smartReply;
         }
         chatBox.scrollTop = chatBox.scrollHeight;
+    } finally {
+        isBotThinking = false;
+        if (sendBtn) {
+            sendBtn.disabled = false;
+            sendBtn.style.opacity = "";
+            sendBtn.style.cursor = "";
+        }
+        if (inputEl) inputEl.focus();
     }
 }
 
