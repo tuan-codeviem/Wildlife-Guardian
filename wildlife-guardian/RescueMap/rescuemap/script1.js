@@ -121,33 +121,78 @@ function getApiUrl(path) {
 }
 
 // ═══════════════════════════════════════════════════════════════
-// REVERSE GEOCODE
+// REVERSE GEOCODE & ADDRESS UTILS
 // ═══════════════════════════════════════════════════════════════
+function isCoordinateString(str) {
+    if (!str || typeof str !== 'string') return true;
+    const s = str.trim();
+    if (!s) return true;
+    const BAD = ['chưa rõ địa chỉ', 'chưa rõ', 'undefined', 'null', 'không rõ', 'đang xác định vị trí...', 'đang xác định...'];
+    if (BAD.includes(s.toLowerCase())) return true;
+    // Check if string matches coordinates format (e.g., "16.0545, 108.2171", "16.0545°N, 108.2171°E", "16.05450, 108.21710")
+    const coordPattern = /^-?\d+(\.\d+)?(°\s*[NS])?[,\s]+-?\d+(\.\d+)?(°\s*[EW])?$/i;
+    if (coordPattern.test(s)) return true;
+    if (/^-?\d+\.\d+°[NS]/i.test(s)) return true;
+    return false;
+}
+
 async function reverseGeocode(lat, lng) {
+    if (isNaN(lat) || isNaN(lng)) return "Chưa rõ địa chỉ";
+
+    // 1. Thử Nominatim OpenStreetMap trước (kèm timeout 3.5s)
     try {
-        const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=16&addressdetails=1&email=contact@wildlife-guardian.vn`;
-        const res = await fetch(url, { headers: { 'Accept-Language': 'vi' } });
-        const data = await res.json();
-        
-        if (data && data.address) {
-            const a = data.address;
-            const parts = [
-                a.house_number,
-                a.road || a.pedestrian || a.footway,
-                a.suburb || a.neighbourhood || a.quarter,
-                a.city || a.town || a.county || a.state
-            ].filter(Boolean);
-            return parts.length > 0
-                ? parts.join(', ')
-                : (data.display_name || `${lat.toFixed(5)}, ${lng.toFixed(5)}`);
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 3500);
+        const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=17&addressdetails=1&email=contact@wildlife-guardian.vn`;
+        const res = await fetch(url, { headers: { 'Accept-Language': 'vi' }, signal: controller.signal });
+        clearTimeout(timeoutId);
+        if (res.ok) {
+            const data = await res.json();
+            if (data && data.address) {
+                const a = data.address;
+                const parts = [
+                    a.house_number,
+                    a.road || a.pedestrian || a.footway,
+                    a.suburb || a.neighbourhood || a.quarter,
+                    a.city || a.town || a.county || a.state
+                ].filter(Boolean);
+                if (parts.length > 0) return parts.join(', ');
+                if (data.display_name) return data.display_name;
+            }
         }
-        return `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
-    } catch {
-        return `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
+    } catch (e) {
+        // Fallback sang API thứ 2
     }
+
+    // 2. Fallback: BigDataCloud Reverse Geocoding API (miễn phí, hỗ trợ tiếng Việt, không bị rate-limit browser)
+    try {
+        const controller2 = new AbortController();
+        const timeoutId2 = setTimeout(() => controller2.abort(), 3500);
+        const bdcUrl = `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}&localityLanguage=vi`;
+        const res2 = await fetch(bdcUrl, { signal: controller2.signal });
+        clearTimeout(timeoutId2);
+        if (res2.ok) {
+            const data2 = await res2.json();
+            const parts2 = [];
+            if (data2.locality) parts2.push(data2.locality);
+            if (data2.city && data2.city !== data2.locality) parts2.push(data2.city);
+            if (data2.principalSubdivision && data2.principalSubdivision !== data2.city) parts2.push(data2.principalSubdivision);
+            if (data2.countryName) parts2.push(data2.countryName);
+            if (parts2.length > 0) {
+                return parts2.join(', ');
+            }
+        }
+    } catch (e2) {
+        // Dự phòng cuối cùng
+    }
+
+    return `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
 }
 
 function updateCardAddress(reportId, newAddress) {
+    if (!newAddress || isCoordinateString(newAddress)) return;
+
+    // 1. Cập nhật các element trong panel danh sách
     const locEls = document.querySelectorAll(`[data-report-id="${reportId}"]`);
     locEls.forEach(el => {
         el.style.transition = 'opacity 0.3s ease';
@@ -167,10 +212,39 @@ function updateCardAddress(reportId, newAddress) {
             }, 2000);
         }, 300);
     });
+
+    // 2. Cập nhật dữ liệu báo cáo trong bộ nhớ
     const r = reports.find(x => x.id === reportId);
     if (r) {
         r.location = newAddress;
         r._needGeocode = false;
+    }
+
+    // 3. Cập nhật Cesium 3D Entity popup customHTML
+    if (typeof viewer !== 'undefined' && viewer && viewer.entities) {
+        const ent = viewer.entities.getById(`report_${reportId}`);
+        if (ent && ent.properties) {
+            let currentHtml = typeof ent.properties.customHTML?.getValue === 'function'
+                ? ent.properties.customHTML.getValue()
+                : ent.properties.customHTML;
+            if (currentHtml) {
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = currentHtml;
+                const locVal = tempDiv.querySelector(`[data-popup-loc-id="${reportId}"]`) || tempDiv.querySelector('.info-row .info-value');
+                if (locVal) {
+                    locVal.textContent = newAddress;
+                    ent.properties.customHTML = tempDiv.innerHTML;
+                }
+            }
+        }
+    }
+
+    // 4. Nếu popup hiện tại đang mở trên màn hình thì cập nhật ngay
+    if (typeof popupDiv !== 'undefined' && popupDiv && popupDiv.style.display !== 'none') {
+        const activeLoc = popupDiv.querySelector(`[data-popup-loc-id="${reportId}"]`);
+        if (activeLoc) {
+            activeLoc.textContent = newAddress;
+        }
     }
 }
 
@@ -180,18 +254,20 @@ async function resolveAddressesInBackground(reportsList) {
     );
     if (needResolve.length === 0) return;
     for (const report of needResolve) {
-        await new Promise(r => setTimeout(r, 1500));
+        await new Promise(r => setTimeout(r, 400));
         const addr = await reverseGeocode(report.lat, report.lng);
-        updateCardAddress(report.id, addr);
+        if (addr && !isCoordinateString(addr)) {
+            updateCardAddress(report.id, addr);
 
-        if (report.id) {
-            try {
-                await fetch(getApiUrl(`/api/rescuemap/${report.id}/address`), {
-                    method: 'PATCH',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ address: addr })
-                });
-            } catch (e) { console.warn("Lỗi lưu address vào DB:", e); }
+            if (report.id) {
+                try {
+                    await fetch(getApiUrl(`/api/rescuemap/${report.id}/address`), {
+                        method: 'PATCH',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ address: addr })
+                    });
+                } catch (e) { console.warn("Lỗi lưu address vào DB:", e); }
+            }
         }
     }
 }
@@ -406,8 +482,7 @@ async function fetchRescueReports() {
                 const lngVal = item.location && item.location.lng !== undefined ? parseFloat(item.location.lng) : NaN;
 
                 const rawAddr = (item.address || '').trim();
-                const BAD = ['', 'chưa rõ địa chỉ', 'chưa rõ', 'undefined', 'null', 'không rõ'];
-                const hasAddr = rawAddr && !BAD.includes(rawAddr.toLowerCase());
+                const hasAddr = rawAddr && !isCoordinateString(rawAddr);
 
                 let displayAddr;
                 let needGeocode = false;
@@ -479,7 +554,7 @@ async function fetchRescueReports() {
         }
         tryAddMarkers(5);
 
-        setTimeout(() => resolveAddressesInBackground([...reports]), 1500);
+        setTimeout(() => resolveAddressesInBackground([...reports]), 400);
 
     } catch (error) {
         console.error("❌ Lỗi khi tải dữ liệu từ DB:", error);
@@ -508,7 +583,7 @@ function createReportCardHTML(report) {
         ? report.photo
         : fallbackSrc;
 
-    const isCoords = /^-?\d+\.\d+°[NS]/.test(report.location || '');
+    const isCoords = isCoordinateString(report.location);
     const addrText = escapeHtml(report.location || 'Đang xác định...');
     const addressHTML = isCoords
         ? `<i class="fas fa-circle-notch fa-spin" style="font-size:9px;opacity:0.5;"></i> <span data-report-id="${report.id}" style="font-style:italic;color:#94a3b8;">${addrText}</span>`
@@ -966,7 +1041,7 @@ function renderMarkersToMap(reportsData) {
                         <div class="info-icon"><i class="fas fa-map-marker-alt text-emerald"></i></div>
                         <div class="info-text">
                             <div class="info-label">Vị trí phát hiện</div>
-                            <div class="info-value">${escapeHtml(report.location)}</div>
+                            <div class="info-value" data-popup-loc-id="${report.id}">${escapeHtml(report.location)}</div>
                         </div>
                     </div>
                     <div class="info-row">
@@ -1140,23 +1215,7 @@ async function fetchLocationAndAddress() {
         currentLocation = { lat: pos.coords.latitude, lng: pos.coords.longitude };
 
         try {
-            // Sử dụng Nominatim API theo yêu cầu
-            const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${currentLocation.lat}&lon=${currentLocation.lng}&zoom=18&addressdetails=1&email=contact@wildlife-guardian.vn`;
-            const res = await fetch(url, { headers: { 'Accept-Language': 'vi' } });
-            const data = await res.json();
-            
-            if (data && data.address) {
-                const a = data.address;
-                const parts = [
-                    a.house_number,
-                    a.road || a.pedestrian || a.footway,
-                    a.suburb || a.neighbourhood || a.quarter,
-                    a.city || a.town || a.county || a.state
-                ].filter(Boolean);
-                currentAddress = parts.length > 0 ? parts.join(', ') : (data.display_name || `${currentLocation.lat.toFixed(5)}, ${currentLocation.lng.toFixed(5)}`);
-            } else {
-                currentAddress = data.display_name || `${currentLocation.lat.toFixed(5)}, ${currentLocation.lng.toFixed(5)}`;
-            }
+            currentAddress = await reverseGeocode(currentLocation.lat, currentLocation.lng);
         } catch (apiError) {
             currentAddress = `${currentLocation.lat.toFixed(5)}, ${currentLocation.lng.toFixed(5)}`;
         }

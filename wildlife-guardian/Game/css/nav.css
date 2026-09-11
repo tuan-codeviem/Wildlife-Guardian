@@ -272,6 +272,11 @@ body {
   justify-content: center
 }
 
+.mobile-actions .theme-toggle-btn,
+.mobile-actions #mobileThemeToggleBtn {
+  display: none !important;
+}
+
 .mobile-only-buttons {
   display: none
 }
