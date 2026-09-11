@@ -13,9 +13,75 @@ require("dotenv").config({ path: envPath });
 const { OAuth2Client } = require("google-auth-library");
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
-// ===== GOOGLE GEN AI SETUP =====
+// ===== GOOGLE GEN AI SETUP (MULTI-KEY ROTATION CHỐNG HẾT QUOTA) =====
 const { GoogleGenAI } = require("@google/genai");
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+
+// Lấy danh sách toàn bộ các Gemini API keys được cấu hình
+function getGeminiKeys() {
+  const keys = [];
+  // 1. Hỗ trợ nhiều key cách nhau bằng dấu phẩy trong GEMINI_API_KEY (VD: key1,key2,key3)
+  if (process.env.GEMINI_API_KEY) {
+    process.env.GEMINI_API_KEY.split(",").forEach(k => {
+      const trimmed = k.trim();
+      if (trimmed) keys.push(trimmed);
+    });
+  }
+  // 2. Hỗ trợ đặt tên biến riêng biệt trên Azure: GEMINI_API_KEY_2, GEMINI_API_KEY_3...
+  [
+    "GEMINI_API_KEY_2",
+    "GEMINI_API_KEY_3",
+    "GEMINI_BACKUP_KEY_1",
+    "GEMINI_BACKUP_KEY_2"
+  ].forEach(varName => {
+    if (process.env[varName] && process.env[varName].trim()) {
+      keys.push(process.env[varName].trim());
+    }
+  });
+
+  return [...new Set(keys)];
+}
+
+let currentGeminiKeyIndex = 0;
+
+// Hàm gọi Gemini tự động xoay vòng qua các key dự phòng nếu key hiện tại bị chạm trần Quota (429)
+async function generateGeminiContent({ model = "gemini-2.5-flash", contents, config }) {
+  const keys = getGeminiKeys();
+  if (keys.length === 0) {
+    throw new Error("Không có GEMINI_API_KEY nào được cấu hình.");
+  }
+
+  let lastError = null;
+  const startIndex = currentGeminiKeyIndex;
+
+  for (let i = 0; i < keys.length; i++) {
+    const keyIdx = (startIndex + i) % keys.length;
+    const apiKey = keys[keyIdx];
+
+    try {
+      const client = new GoogleGenAI({ apiKey });
+      const response = await client.models.generateContent({
+        model,
+        contents,
+        config
+      });
+
+      // Nếu thành công, giữ keyIdx này làm key ưu tiên cho các lần tiếp theo
+      currentGeminiKeyIndex = keyIdx;
+      return response;
+    } catch (err) {
+      lastError = err;
+      const isQuotaLimit = err.message && (
+        err.message.includes("429") ||
+        err.message.includes("RESOURCE_EXHAUSTED") ||
+        err.message.includes("quota")
+      );
+      console.warn(`⚠️ Gemini Key #${keyIdx + 1} gặp sự cố${isQuotaLimit ? " (Chạm trần Quota 429)" : ""}. Đang thử Key dự phòng tiếp theo...`);
+    }
+  }
+
+  // Nếu tất cả các Key đều thất bại
+  throw lastError;
+}
 
 // ===== GROQ AI SETUP (FALLBACK) =====
 const Groq = require("groq-sdk");
@@ -384,7 +450,7 @@ Return ONLY a valid JSON object with the exact following structure:
         parts.push({ inlineData: { mimeType: req.file.mimetype || 'image/jpeg', data: base64 } });
       }
 
-      const aiResponse = await ai.models.generateContent({
+      const aiResponse = await generateGeminiContent({
         model: 'gemini-2.5-flash',
         contents: [{ role: 'user', parts: parts }],
         config: {
@@ -1369,7 +1435,7 @@ QUY TẮC BẮT BUỘC VỀ ĐỊNH DẠNG: Tuyệt đối không sử dụng b�
 
     try {
       // THỬ DÙNG GEMINI TRƯỚC
-      const response = await ai.models.generateContent({
+      const response = await generateGeminiContent({
         model: 'gemini-2.5-flash',
         contents: userMessage,
         config: { systemInstruction: systemPrompt }
