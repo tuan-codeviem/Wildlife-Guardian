@@ -1318,7 +1318,7 @@ QUY TẮC BẮT BUỘC VỀ ĐỊNH DẠNG: Tuyệt đối không sử dụng b�
           { role: "system", content: systemPrompt },
           { role: "user", content: userMessage }
         ],
-        model: "llama-3.1-8b-instant", // Groq fast model
+        model: "qwen/qwen3.8-27b", // Groq fast model
         temperature: 0.7,
         max_tokens: 1024,
       });
