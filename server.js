@@ -410,9 +410,22 @@ Return ONLY a valid JSON object with the exact following structure:
     } catch (aiError) {
       console.error("⚠️ Lỗi khi gọi Gemini AI:", aiError.message);
       
-      // Bất kỳ lỗi gì từ AI (bị chặn do Google Safety ngầm, lỗi mạng, lỗi API) đều an toàn cắm cờ để Admin duyệt tay
-      isSensitive = true;
-      console.log("🚩 Đã cắm cờ do Gemini xảy ra lỗi hoặc từ chối phản hồi (có thể ảnh quá kinh dị bị Google chặn)!");
+      // Chỉ cắm cờ nếu thực sự nghi vấn bị Google Safety chặn nội dung nhạy cảm
+      // Nếu là lỗi hạn mức (429, RESOURCE_EXHAUSTED) hoặc lỗi mạng/API thì vẫn cho phép hiển thị bình thường
+      const isQuotaOrNetwork = aiError.message && (
+        aiError.message.includes("429") || 
+        aiError.message.includes("RESOURCE_EXHAUSTED") || 
+        aiError.message.includes("fetch failed") ||
+        aiError.message.includes("quota")
+      );
+
+      if (!isQuotaOrNetwork) {
+        isSensitive = true;
+        console.log("🚩 Đã cắm cờ do Gemini nghi vấn vi phạm chính sách an toàn!");
+      } else {
+        isSensitive = false;
+        console.log("ℹ️ Gemini chạm hạn mức Quota hoặc lỗi mạng -> Cho phép bài viết hiển thị bình thường.");
+      }
     }
     console.log("🔗 Link ảnh chuẩn bị lưu vào Database:", imageUrl);
 

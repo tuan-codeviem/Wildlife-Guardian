@@ -5,7 +5,7 @@ const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 async function test() {
   // Use a known horror image URL
-  const testUrl = "https://th.bing.com/th/id/OIP.wR2L4zZ_eLw1wD0Kq_YnGwHaEK?rs=1&pid=ImgDetMain";
+  const testUrl = "https://images.unsplash.com/photo-1540573133985-87b6da6d54a9?w=400";
   
   console.log("Fetching image from Bing...");
   const resp = await fetch(testUrl);
